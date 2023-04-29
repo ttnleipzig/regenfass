@@ -1,5 +1,13 @@
 #include <Arduino.h>
 
+//Lora and TTN
+//------------
+#ifdef LORE_ENABLED
+  #include "loraFunctions.h"
+#endif
+
+//Distance Sensors
+//----------------
 #ifdef SENSOR_TYPE_HCSR04
 #include <HCSR04.h>
 
@@ -46,7 +54,14 @@ void setup () {
     sensor.setDistanceMode(VL53L1X::Long);
     sensor.setMeasurementTimingBudget(50000);
     sensor.startContinuous(50);
-#endif
+  #endif
+
+  #ifdef LORE_ENABLED
+    loraSetup();
+  #endif
+
+  Serial.println("Started");
+
 
     Serial.println("Started");
 }
@@ -61,6 +76,13 @@ void loop()
     sensor.read();
     distance = sensor.ranging_data.range_mm / 10.0;
 #endif
+
+  #ifdef LORE_ENABLED
+    if(distance <= 10){
+      publish2TTN();
+    }
+    loraLoop();
+  #endif
 
   // Print to serial every 500 miliseconds
   unsigned long current_time = millis();
