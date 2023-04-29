@@ -27,14 +27,17 @@ DallasTemperature sensors(&oneWire);
 
 float distance = -1;
 
-void setup()
-{
+unsigned long last_print_time = 0;
 
-#ifdef WAIT_SERIAL
-    while (!Serial)
-    {
-    }
-#endif
+
+void setup () {
+
+  #ifdef WAIT_SERIAL
+  while (!Serial) {}
+  #endif
+  
+  Serial.begin(115200);  // We initialize serial connection so that we could print values from sensor.
+  Serial.println("Starting...");
 
     Serial.begin(115200); // We initialize serial connection so that we could print values from sensor.
     Serial.println("Starting...");
@@ -74,6 +77,10 @@ void loop()
     sensor.read();
     distance = sensor.ranging_data.range_mm / 10.0;
 
+  // Print to serial every 500 miliseconds
+  unsigned long current_time = millis();
+  if (current_time - last_print_time >= 500) {
+    last_print_time = current_time;
     Serial.printf("Distance: %f cm\n", distance);
 #elif SENSOR_TYPE_DS18B20
   sensors.requestTemperatures(); 
