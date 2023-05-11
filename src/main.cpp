@@ -1,9 +1,9 @@
 #include <Arduino.h>
+#include <LoRa_E220.h>
 
 #ifdef SENSOR_TYPE_HCSR04
-#include <HCSR04.h>
+//#include <HCSR04.h>
 
-<<<<<<< HEAD
 #define DISTANCE_MAX 400
 
 UltraSonicDistanceSensor distanceSensor(SENSOR_TYPE_HCSR04_PIN_TRIGGER, SENSOR_TYPE_HCSR04_PIN_ECHO, DISTANCE_MAX);
@@ -46,17 +46,7 @@ void setup()
     sensor.startContinuous(50);
 #endif
 
-    Serial.println("Started");
-=======
-#include <LoRa_E220.h>
-
-// https://registry.platformio.org/libraries/xreef/EByte%20LoRa%20E220%20library/examples/01_getConfiguration/01_getConfiguration.ino
-LoRa_E220 e220ttl(&Serial1, 2, 4, 6); //  RX AUX M0 M1
-
-UltraSonicDistanceSensor distanceSensor(5, 18);  // Initialize sensor that uses digital pins 13 and 12.
-
-void setup () {
-    Serial.begin(9600);  // We initialize serial connection so that we could print values from sensor.
+    Serial.begin(115200);  // We initialize serial connection so that we could print values from sensor.
 
     while(!Serial){};
 	delay(500);
@@ -87,25 +77,8 @@ void setup () {
 
 	c.close();
 	cMi.close();
->>>>>>> 8deb890 (include LORA, WIP)
 }
 
-void loop()
-{
-
-// Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
-#ifdef SENSOR_TYPE_HCSR04
-    distance = distanceSensor.measureDistanceCm();
-#elif SENSOR_TYPE_VL53L1X
-    sensor.read();
-    distance = sensor.ranging_data.range_mm / 10.0;
-#endif
-
-    Serial.printf("Distance: %f cm\n", distance);
-    delay(500);
-}
-<<<<<<< HEAD
-=======
 
 void printParameters(struct Configuration configuration) {
 	Serial.println("----------------------------------------");
@@ -133,6 +106,8 @@ void printParameters(struct Configuration configuration) {
 
 	Serial.println("----------------------------------------");
 }
+
+
 void printModuleInformation(struct ModuleInformation moduleInformation) {
 	Serial.println("----------------------------------------");
 	Serial.print(F("HEAD: "));  Serial.print(moduleInformation.COMMAND, HEX);Serial.print(" ");Serial.print(moduleInformation.STARTING_ADDRESS, HEX);Serial.print(" ");Serial.println(moduleInformation.LENGHT, DEC);
@@ -142,4 +117,18 @@ void printModuleInformation(struct ModuleInformation moduleInformation) {
 	Serial.print(F("Features : "));  Serial.println(moduleInformation.features, HEX);
 	Serial.println("----------------------------------------");
 }
->>>>>>> 8deb890 (include LORA, WIP)
+
+void loop()
+{
+
+// Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
+#ifdef SENSOR_TYPE_HCSR04
+    distance = distanceSensor.measureDistanceCm();
+#elif SENSOR_TYPE_VL53L1X
+    sensor.read();
+    distance = sensor.ranging_data.range_mm / 10.0;
+#endif
+
+    Serial.printf("Distance: %f cm\n", distance);
+    delay(500);
+}
