@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../platformio-examples"
+		},
+		{
+			"name": "ttn-leipzig-esp-32-devkit-v2",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
