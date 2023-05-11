@@ -2,7 +2,7 @@
 #include <LoRa_E220.h>
 
 #ifdef SENSOR_TYPE_HCSR04
-//#include <HCSR04.h>
+#include <HCSR04.h>
 
 #define DISTANCE_MAX 400
 
@@ -18,67 +18,10 @@ VL53L1X sensor;
 
 float distance = -1;
 
-void setup()
-{
+#include <LoRa_E220.h>
 
-#ifdef WAIT_SERIAL
-    while (!Serial)
-    {
-    }
-#endif
-
-    Serial.begin(115200); // We initialize serial connection so that we could print values from sensor.
-    Serial.println("Starting...");
-
-#ifdef SENSOR_TYPE_VL53L1X
-    Wire.begin();
-    Wire.setClock(400000); // use 400 kHz I2C
-
-    sensor.setTimeout(500);
-    if (!sensor.init())
-    {
-        Serial.println("Failed to detect and initialize VL53L1X sensor!");
-        while (1)
-            ;
-    }
-    sensor.setDistanceMode(VL53L1X::Long);
-    sensor.setMeasurementTimingBudget(50000);
-    sensor.startContinuous(50);
-#endif
-
-    Serial.begin(115200);  // We initialize serial connection so that we could print values from sensor.
-
-    while(!Serial){};
-	delay(500);
-
-	Serial.println();
-
-	// Startup all pins and UART
-	e220ttl.begin();
-
-	ResponseStructContainer c;
-	c = e220ttl.getConfiguration();
-	// It's important get configuration pointer before all other operation
-	Configuration configuration = *(Configuration*) c.data;
-	Serial.println(c.status.getResponseDescription());
-	Serial.println(c.status.code);
-
-	printParameters(configuration);
-
-	ResponseStructContainer cMi;
-	cMi = e220ttl.getModuleInformation();
-	// It's important get information pointer before all other operation
-	ModuleInformation mi = *(ModuleInformation*)cMi.data;
-
-	Serial.println(cMi.status.getResponseDescription());
-	Serial.println(cMi.status.code);
-
-	printModuleInformation(mi);
-
-	c.close();
-	cMi.close();
-}
-
+// https://registry.platformio.org/libraries/xreef/EByte%20LoRa%20E220%20library/examples/01_getConfiguration/01_getConfiguration.ino
+LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 
 void printParameters(struct Configuration configuration) {
 	Serial.println("----------------------------------------");
@@ -116,6 +59,72 @@ void printModuleInformation(struct ModuleInformation moduleInformation) {
 	Serial.print(F("Version  : "));  Serial.println(moduleInformation.version, HEX);
 	Serial.print(F("Features : "));  Serial.println(moduleInformation.features, HEX);
 	Serial.println("----------------------------------------");
+}
+
+void setup()
+{
+
+#ifdef WAIT_SERIAL
+    while (!Serial)
+    {
+    }
+#endif
+
+    Serial.begin(115200); // We initialize serial connection so that we could print values from sensor.
+    Serial.println("Starting...");
+
+#ifdef SENSOR_TYPE_VL53L1X
+    Wire.begin();
+    Wire.setClock(400000); // use 400 kHz I2C
+
+    sensor.setTimeout(500);
+    if (!sensor.init())
+    {
+        Serial.println("Failed to detect and initialize VL53L1X sensor!");
+        while (1)
+            ;
+    }
+    sensor.setDistanceMode(VL53L1X::Long);
+    sensor.setMeasurementTimingBudget(50000);
+    sensor.startContinuous(50);
+#endif
+
+	delay(500);
+
+	Serial.println();
+
+	// Startup all pins and UART
+	e220ttl.begin();
+
+	Serial.println("after begin");
+
+	ResponseStructContainer c;
+	c = e220ttl.getConfiguration();
+	
+	Serial.println("after get config");
+
+	// It's important get configuration pointer before all other operation
+	Configuration configuration = *(Configuration*) c.data;
+
+	Serial.println("after c.data");
+
+	Serial.println(c.status.getResponseDescription());
+	Serial.println(c.status.code);
+
+	printParameters(configuration);
+
+	ResponseStructContainer cMi;
+	cMi = e220ttl.getModuleInformation();
+	// It's important get information pointer before all other operation
+	ModuleInformation mi = *(ModuleInformation*)cMi.data;
+
+	Serial.println(cMi.status.getResponseDescription());
+	Serial.println(cMi.status.code);
+
+	printModuleInformation(mi);
+
+	c.close();
+	cMi.close();
 }
 
 void loop()
