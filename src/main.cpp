@@ -2,9 +2,7 @@
 
 //Lora and TTN
 //------------
-#ifdef LORE_ENABLED
-  #include "loraFunctions.h"
-#endif
+#include "loraFunctions.h"
 
 //Distance Sensors
 //----------------
@@ -88,6 +86,6 @@ void loop()
   unsigned long current_time = millis();
   if (current_time - last_print_time >= 500) {
     last_print_time = current_time;
-    Serial.printf("Distance: %f cm\n", distance);
+    //Serial.printf("Distance: %f cm\n", distance);
   }
 }

@@ -16,13 +16,13 @@ static const u1_t PROGMEM APPEUI[8]={ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 void os_getArtEui (u1_t* buf) { memcpy_P(buf, APPEUI, 8);}
 
 // This should also be in little endian format, see above.
-static const u1_t PROGMEM DEVEUI[8]={ 0x7A, 0xCD, 0x05, 0xD0, 0x7E, 0xD5, 0x99, 0x70 };
+static const u1_t PROGMEM DEVEUI[8]={ 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x05, 0xE6, 0xA0 };
 void os_getDevEui (u1_t* buf) { memcpy_P(buf, DEVEUI, 8);}
 
 // This key should be in big endian format (or, since it is not really a
 // number but a block of memory, endianness does not really apply). In
 // practice, a key taken from ttnctl can be copied as-is.
-static const u1_t PROGMEM APPKEY[16] = { 0x3F, 0x5D, 0xB5, 0xEC, 0x09, 0xF3, 0x6C, 0x32, 0x00, 0xB6, 0xF9, 0x00, 0xB8, 0xB9, 0xA7, 0x75 };
+static const u1_t PROGMEM APPKEY[16] = { 0x19, 0x12, 0x7E, 0x49, 0x37, 0x76, 0xD7, 0xFB, 0x11, 0x5D, 0x6A, 0x60, 0x8C, 0x78, 0x8B, 0x7F };
 void os_getDevKey (u1_t* buf) {  memcpy_P(buf, APPKEY, 16);}
 
 static uint8_t mydata[] = "Hello, world!";
@@ -44,16 +44,16 @@ public:
 
   // set SPI pins to board configuration, pins may come from pins_arduino.h
   virtual void begin(void) override {
-    SPI.begin(RFM95W_SCK_PIN, RFM95W_MISO_PIN, RFM95W_MOSI_PIN, RFM95W_NSS_PIN);
+    SPI.begin(LORA_SCK_PIN, LORA_MISO_PIN, LORA_MOSI_PIN, LORA_NSS_PIN);
   }
 };
 
 static MyHalConfig_t myHalConfig{};
 static const lmic_pinmap myPinmap = {
-    .nss = RFM95W_NSS_PIN,
+    .nss = LORA_NSS_PIN,
     .rxtx = LMIC_UNUSED_PIN,
-  	.rst = RFM95W_RESET_PIN,
-	.dio = {/*dio0*/ RFM95W_DIO0_PIN, /*dio1*/ RFM95W_DIO1_PIN, /*dio2*/ RFM95W_DIO2_PIN},
+  	.rst = LORA_RESET_PIN,
+	.dio = {/*dio0*/ LORA_DIO0_PIN, /*dio1*/ LORA_DIO1_PIN, /*dio2*/ LORA_DIO2_PIN},
     // .rxtx_rx_active = LMIC_UNUSED_PIN,
     // .rssi_cal = 10,
     // .spi_freq = 8000000, // 8MHz
