@@ -1,40 +1,19 @@
+// Libraries
 #include <Arduino.h>
 
-//Lora and TTN
-//------------
-#ifdef LORE_ENABLED
-  #include "loraFunctions.h"
-#endif
-
-//Distance Sensors
-//----------------
+// Sensors
 #ifdef SENSOR_TYPE_HCSR04
-#include <HCSR04.h>
-
-#define DISTANCE_MAX 400
-
-UltraSonicDistanceSensor distanceSensor(SENSOR_TYPE_HCSR04_PIN_TRIGGER, SENSOR_TYPE_HCSR04_PIN_ECHO, DISTANCE_MAX);
-
+#include "sensors/sensor-hcsr04.h"
 #elif SENSOR_TYPE_VL53L1X
-#include <Wire.h>
-#include <VL53L1X.h>
-VL53L1X sensor;
-
-#elif SENSOR_TYPE_DS18B20
-#include <OneWire.h>
-#include <DallasTemperature.h>
-
-OneWire oneWire(SENSOR_TYPE_DS18B20_DATA_PIN);
-
-// Pass our oneWire reference to Dallas Temperature.
-DallasTemperature sensors(&oneWire);
-
+#include "sensors/sensor-vl53l1x.h"
 #else
 #warning "Sensor type not selected. Add SENSOR_TYPE_HCSR04 or SENSOR_TYPE_VL53L1X in your environment build_plags in platformio.ini"
 #endif
 
+// Main variables
 float distance = -1;
 
+/*
 unsigned long last_print_time = 0;
 
 
@@ -43,7 +22,7 @@ void setup () {
   #ifdef WAIT_SERIAL
   while (!Serial) {}
   #endif
-  
+
   Serial.begin(115200);  // We initialize serial connection so that we could print values from sensor.
   Serial.println("Starting...");
 
@@ -75,17 +54,32 @@ void setup () {
 
 #ifdef SENSOR_TYPE_DS18B20
     sensors.begin();
-#endif
+*/
 
+// Main functions
+void setup()
+{
+#ifdef WAIT_SERIAL
+    while (!Serial)
+    {
+    }
+#endif
+    Serial.begin(115200);
+    Serial.println("Starting ...");
+
+// Initialize the sensor
+#ifdef SENSOR_TYPE_HCSR04
+    Sensor::HCSR04::setup();
+#elif SENSOR_TYPE_VL53L1X
+    Sensor:: ::setup();
+#endif
     Serial.println("Started");
 }
 
 void loop()
 {
-
-// Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
-#ifdef SENSOR_TYPE_HCSR04
-    distance = distanceSensor.measureDistanceCm();
+/*
+distance = distanceSensor.measureDistanceCm();
 
     Serial.printf("Distance: %f cm\n", distance);
 #elif SENSOR_TYPE_VL53L1X
@@ -99,6 +93,31 @@ void loop()
     loraLoop();
   #endif
 
+  // Print to serial every 500 miliseconds
+  unsigned long current_time = millis();
+  if (current_time - last_print_time >= 500) {
+    last_print_time = current_time;
+    Serial.printf("Distance: %f cm\n", distance);
+#elif SENSOR_TYPE_DS18B20
+  sensors.requestTemperatures();
+  float temperatureC = sensors.getTempCByIndex(0);
+  float temperatureF = sensors.getTempFByIndex(0);
+  Serial.print(temperatureC);
+  Serial.println("ºC");
+  Serial.print(temperatureF);
+  Serial.println("ºF");
+#endif
+
+*/
+
+// Read the distance
+#ifdef SENSOR_TYPE_HCSR04
+    distance = Sensor::HCSR04::measureDistanceCm();
+#elif SENSOR_TYPE_VL53L1X
+    distance = Sensor::VL53L1X::measureDistanceCm();
+#endif
+
+    // Print the distance
   // Print to serial every 500 miliseconds
   unsigned long current_time = millis();
   if (current_time - last_print_time >= 500) {
