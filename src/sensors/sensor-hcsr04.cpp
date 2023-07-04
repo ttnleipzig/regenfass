@@ -9,12 +9,6 @@ namespace Sensor
 {
     namespace HCSR04
     {
-
-        void setup()
-        {
-            Serial.println("Starting HCSR04 sensor");
-        }
-
         /**
          * @brief Do a measurement using the sensor and print the distance in centimeters.
          *
@@ -24,5 +18,14 @@ namespace Sensor
         {
             return distanceSensor.measureDistanceCm();
         }
-    } // namespace HCSR04
+
+        void setup()
+        {
+            Serial.println("Setup: HCSR04 sensor");
+        }
+        void loop()
+        {
+            Serial.println("Loop: HCSR04 sensor");
+        }
+    }
 } // namespace Sensor
