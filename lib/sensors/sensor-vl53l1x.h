@@ -5,11 +5,11 @@
 #include <VL53L1X.h>
 VL53L1X sensor;
 
-#elif SENSOR_TYPE_DS18B20
+#elif SENSOR_DS18B20
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-OneWire oneWire(SENSOR_TYPE_DATA_PIN);
+OneWire oneWire(SENSOR_DATA_PIN);
 
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);

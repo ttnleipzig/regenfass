@@ -2,7 +2,7 @@
 #include <HCSR04.h>
 
 // Create the sensor object
-UltraSonicDistanceSensor distanceSensor(SENSOR_TYPE_PIN_TRIGGER, SENSOR_TYPE_PIN_ECHO, SENSOR_TYPE_DISTANCE_MAX);
+UltraSonicDistanceSensor distanceSensor(SENSOR_PIN_TRIGGER, SENSOR_PIN_ECHO, SENSOR_MAX_DISTANCE);
 
 // Function to initialize the sensor
 namespace Sensor
