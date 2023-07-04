@@ -13,22 +13,21 @@ OneWire oneWire(SENSOR_DATA_PIN);
 
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
-
-
 */
 
-// Function to initialize the sensor VL53L1X
+// Sensor VL53L1X
 namespace Sensor
 {
     namespace VL53L1X
     {
-        void setup();
-
         /**
          * @brief Do a measurement using the sensor and print the distance in centimeters.
          *
          * @return float
          */
-        float measureDistanceCm();
+        float
+        measureDistanceCm();
+        void setup();
+        void loop();
     } // namespace VL53L1X
 } // namespace Sensor
