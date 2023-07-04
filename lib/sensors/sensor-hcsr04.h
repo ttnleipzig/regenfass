@@ -7,14 +7,14 @@ namespace Sensor
     namespace HCSR04
     {
 
-#ifndef SENSOR_TYPE_PIN_TRIGGER
-#define SENSOR_TYPE_PIN_TRIGGER 5
+#ifndef SENSOR_PIN_TRIGGER
+#define SENSOR_PIN_TRIGGER 5
 #endif
-#ifndef SENSOR_TYPE_PIN_ECHO
-#define SENSOR_TYPE_PIN_ECHO 18
+#ifndef SENSOR_PIN_ECHO
+#define SENSOR_PIN_ECHO 18
 #endif
-#ifndef SENSOR_TYPE_DISTANCE_MAX
-#define SENSOR_TYPE_DISTANCE_MAX 40
+#ifndef SENSOR_MAX_DISTANCE
+#define SENSOR_MAX_DISTANCE 40
 #endif
 
         void setup();
