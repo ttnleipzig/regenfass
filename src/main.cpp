@@ -2,17 +2,13 @@
 #include <Arduino.h>
 
 // Sensors
-#ifdef SENSOR_HCSR04
+#if SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"
-#endif
-#ifdef SENSOR_VL53L1X
+#elif SENSOR_VL53L1X
 #include "sensors/sensor-vl53l1x.h"
-#endif
-/*
 #else
-#warning "Sensor type not selected. Add SENSOR_HCSR04 or SENSOR_VL53L1X in your environment build_flags in platformio.ini"
+#error "Sensor type not selected. Add SENSOR_HCSR04 or SENSOR_VL53L1X in your environment build_flags in platformio.ini"
 #endif
-*/
 
 // Global variables
 float distance = -1;
@@ -72,7 +68,7 @@ void setup()
     Serial.println("Starting ...");
 
 // Initialize the sensor
-#ifdef SENSOR_HCSR04
+#if SENSOR_HCSR04
     Sensor::HCSR04::setup();
 #elif SENSOR_VL53L1X
     Sensor::VL53L1X::setup();
@@ -83,7 +79,7 @@ void setup()
 
 void loop()
 {
-#ifdef SENSOR_HCSR04
+#if SENSOR_HCSR04
     Sensor::HCSR04::loop();
 #elif SENSOR_VL53L1X
     Sensor::VL53L1X::loop();
