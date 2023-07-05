@@ -1,14 +1,40 @@
-# Regenfass
+# 🌈 Regenfass
 
 Regenfass is a demonstration for advanced programming techniques in C++ with LoRaWAN.
 
-## Features
+## 🚀 Features
 
-* LoRaWAN 1.0.2
-* OTAA
-* Messure the water level with different sensors
-* Support for different microcontrollers
-* Support for different LoRaWAN modules
+* [ ] LoRaWAN 1.0.2, OTAA
+* [ ] Support for different microcontrollers
+* [ ] Support for different LoRaWAN modules
+
+### 🗳️ Microcontrollers
+
+### 📟 Display
+
+* [ ] Show the water level
+* [ ] Show the battery level
+* [ ] Show the signal strength
+
+### 🌡️  Sensors
+
+* [x] Messure the water level with different sensors
+* [ ] Support for different sensors
+
+### 🔴 Button
+
+* [ ] Short press: Send a message instantly
+* [ ] Long press: Turn on/off the display
+* [ ] Double press: Turn on/off the sleep mode
+* [ ] Triple press: Reset the device
+
+### 🔋 Battery
+
+* [ ] Support for different battery types
+* [ ] Battery level indicator
+* [ ] Low battery warning
+* [ ] Sleep mode with wake up on button press
+* [ ] Solar panel support
 
 ## 👩‍💻 Contributing
 
