@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 // Library for the sensor VL53L3X
 #include <Wire.h>
 #include <VL53L1X.h>
@@ -23,7 +25,7 @@ namespace Sensor
 
         void setup()
         {
-            Serial.println("Setup: VL53L1X sensor");
+            Serial.println("Setup: Sensor VL53L1X");
             Wire.begin();
             Wire.setClock(400000); // use 400 kHz I2C
 

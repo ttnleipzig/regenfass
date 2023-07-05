@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 // Library for HCSR04 sensor
 #include <HCSR04.h>
 
@@ -16,16 +18,20 @@ namespace Sensor
          */
         float measureDistanceCm()
         {
-            return distanceSensor.measureDistanceCm();
+            float distance = distanceSensor.measureDistanceCm();
+            return distance;
         }
 
         void setup()
         {
-            Serial.println("Setup: HCSR04 sensor");
+            Serial.println("Setup: Sensor HCSR04");
         }
         void loop()
         {
-            Serial.println("Loop: HCSR04 sensor");
+            float distance = measureDistanceCm();
+            Serial.print("HCSR04: ");
+            Serial.print(distance);
+            Serial.println(" cm");
         }
     }
 } // namespace Sensor
