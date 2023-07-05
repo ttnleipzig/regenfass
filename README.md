@@ -36,11 +36,13 @@ Regenfass is a demonstration for advanced programming techniques in C++ with LoR
 
 ## 📦 Hardware
 
+We build binary releases for different hardware. The following table shows the current status. There are many of them, because you can combine different microcontrollers, LoRaWAN modules, displays and sensors.
+
 ### 🗳️ Microcontrollers
 
  We support different microcontrollers. The following table shows the current status.
 
-| Microcontroller | Status | 
+| Microcontroller | Status |
 | --------------- | ------ |
 | Heltec WiFi LoRa 32 V2 | ✅ |
 | Heltec WiFi LoRa 32 V3 | ✅ |
