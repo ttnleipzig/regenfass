@@ -1,6 +1,6 @@
 # 🌈 Regenfass
 
-Regenfass is a demonstration for advanced programming techniques in **C++** with **LoRaWAN** on the **The Things Network** (TTN).
+Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN).
 
 Our documentation is the best place for
 [getting started](https://regenfass.ttn-leipzig.de).
