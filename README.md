@@ -8,8 +8,6 @@ Regenfass is a demonstration for advanced programming techniques in C++ with LoR
 * [ ] Support for different microcontrollers
 * [ ] Support for different LoRaWAN modules
 
-### 🗳️ Microcontrollers
-
 ### 📟 Display
 
 * [ ] Show the water level
@@ -35,6 +33,49 @@ Regenfass is a demonstration for advanced programming techniques in C++ with LoR
 * [ ] Low battery warning
 * [ ] Sleep mode with wake up on button press
 * [ ] Solar panel support
+
+## 📦 Hardware
+
+### 🗳️ Microcontrollers
+
+ We support different microcontrollers. The following table shows the current status.
+
+| Microcontroller | Status | 
+| --------------- | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅ |
+| Heltec WiFi LoRa 32 V3 | ✅ |
+| STM32 | ⏳ |
+| ESP32 | ⏳ |
+
+### 📡 LoRaWAN Modules
+
+We support different LoRaWAN modules. The following table shows the current status.
+
+| Module | Status |
+| ------ | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅ |
+| Heltec WiFi LoRa 32 V3 | ✅ |
+| Dragino LoRa Shield | ⏳ |
+| Dragino LoRa/GPS HAT | ⏳ |
+
+### 📟 Display
+
+We support different displays. The following table shows the current status.
+
+| Display | Status |
+| ------- | ------ |
+| SSD1306 | ✅ |
+| SH1106 | ⏳ |
+
+### 🌡️ Sensors
+
+We support different sensors. The following table shows the current status.
+
+| Sensor | Status |
+| ------ | ------ |
+| HC-SR04 | ✅ |
+| VL53L1X | ⏳ |
+| DS18B20 | ⏳ |
 
 ## 👩‍💻 Contributing
 
