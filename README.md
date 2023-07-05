@@ -93,4 +93,4 @@ You can find the documentation on [regenfass.ttn-leipzig.de](https://regenfass.t
 
 ## 📜 License
 
-This project is licensed under the CC BY-NC-SA 4.0 License - see the [LICENSE](https://creativecommons.org/licenses/by-nc-sa/4.0/) for details.
+This project is licensed under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)  License.
