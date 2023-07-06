@@ -1,28 +1,51 @@
-#include <U8x8lib.h>
+#include <Wire.h>
+#include "HT_SSD1306Wire.h"
+#include "../assets/bitmaps.h"
 
-U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/15, /* data=*/4, /* reset=*/16);
+#ifdef Wireless_Stick_V3
+SSD1306Wire display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_64_32, RST_OLED); // addr , freq , i2c group , resolution , rst
+#else
+SSD1306Wire display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_128_64, RST_OLED); // addr , freq , i2c group , resolution , rst
+#endif
 
 namespace Board
 {
     namespace HeltecWifiLora32V3
     {
 
+        void VextON(void)
+        {
+            pinMode(Vext, OUTPUT);
+            digitalWrite(Vext, LOW);
+        }
+
+        void VextOFF(void) // Vext default OFF
+        {
+            pinMode(Vext, OUTPUT);
+            digitalWrite(Vext, HIGH);
+        }
+
         void setupDisplay()
         {
-            u8x8.begin();
-            u8x8.setPowerSave(0);
+            VextON();
+            delay(100);
+
+            display.init();
+            display.clear();
+            display.display();
+            display.setContrast(255);
+            /*
+            display.setTextAlignment(TEXT_ALIGN_CENTER);
+            display.setFont(ArialMT_Plain_16);
+            display.drawString(display.getWidth() / 2, display.getHeight() / 2 - 16 / 2, "Super Dirk");
+            */
+            display.drawXbm(0, 0, LOGO_WIDTH, LOGO_HEIGHT, LOGO_BITMAP);
+
+            display.display();
         }
 
         void loopDisplay()
         {
-            u8x8.setFont(u8x8_font_chroma48medium8_r);
-            u8x8.drawString(0, 1, "Hello World!");
-            u8x8.setInverseFont(1);
-            u8x8.drawString(0, 0, "012345678901234567890123456789");
-            u8x8.setInverseFont(0);
-            // u8x8.drawString(0,8,"Line 8");
-            // u8x8.drawString(0,9,"Line 9");
-            u8x8.refreshDisplay();
         }
 
         void setup()
@@ -35,5 +58,6 @@ namespace Board
         {
             loopDisplay();
         }
+
     } // namespace HeltecV3
 } // namespace Board
