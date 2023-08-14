@@ -1,12 +1,13 @@
 #include "Arduino.h"
 #include <Wire.h>
-#include "HT_SSD1306Wire.h"
+#include "SSD1306Wire.h"
 #include "../assets/bitmaps.h"
 
 #ifdef Wireless_Stick_V3
 SSD1306Wire display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_64_32, RST_OLED); // addr , freq , i2c group , resolution , rst
 #else
-SSD1306Wire display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_128_64, RST_OLED); // addr , freq , i2c group , resolution , rst
+// SSD1306Wire display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_128_64, RST_OLED); // addr , freq , i2c group , resolution , rst
+SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED);
 #endif
 
 namespace Board
@@ -63,9 +64,12 @@ namespace Board
         void loopDisplay()
         {
         }
+
+        uint8_t appData[64];           // Declare appData array
+        const uint8_t appDataSize = 4; // AppDataSize max value is 64
+
         void prepareTxFrame(uint8_t port)
         {
-            appDataSize = 4; // AppDataSize max value is 64
             // Format the data to bytes
             appData[0] = 0x00;
             appData[1] = 0x01;
@@ -75,64 +79,10 @@ namespace Board
 
         void setupLora()
         {
-            if (mcuStarted == 0)
-            {
-                LoRaWAN.displayMcuInit();
-            }
-            Serial.begin(115200);
-            while (!Serial)
-                ;
-            SPI.begin(SCK, MISO, MOSI, SS);
-            Mcu.init(SS, RST_LoRa, DIO0, DIO1, license);
-            deviceState = DEVICE_STATE_INIT;
         }
 
         void loopLora()
         {
-            switch (deviceState)
-            {
-            case DEVICE_STATE_INIT:
-            {
-#if (LORAWAN_DEVEUI_AUTO)
-                LoRaWAN.generateDeveuiByChipID();
-#endif
-                LoRaWAN.init(loraWanClass, loraWanRegion);
-                break;
-            }
-            case DEVICE_STATE_JOIN:
-            {
-                LoRaWAN.displayJoining();
-                LoRaWAN.join();
-                break;
-            }
-            case DEVICE_STATE_SEND:
-            {
-                LoRaWAN.displaySending();
-                prepareTxFrame(appPort);
-                LoRaWAN.send(loraWanClass);
-                deviceState = DEVICE_STATE_CYCLE;
-                break;
-            }
-            case DEVICE_STATE_CYCLE:
-            {
-                // Schedule next packet transmission
-                txDutyCycleTime = appTxDutyCycle + randr(-APP_TX_DUTYCYCLE_RND, APP_TX_DUTYCYCLE_RND);
-                LoRaWAN.cycle(txDutyCycleTime);
-                deviceState = DEVICE_STATE_SLEEP;
-                break;
-            }
-            case DEVICE_STATE_SLEEP:
-            {
-                LoRaWAN.displayAck();
-                LoRaWAN.sleep(loraWanClass, debugLevel);
-                break;
-            }
-            default:
-            {
-                deviceState = DEVICE_STATE_INIT;
-                break;
-            }
-            }
         }
 
         void setup()

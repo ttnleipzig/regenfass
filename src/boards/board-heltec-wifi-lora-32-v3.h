@@ -1,5 +1,3 @@
-
-
 namespace Board
 {
     namespace HeltecWifiLora32V3
