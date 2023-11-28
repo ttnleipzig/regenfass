@@ -29,7 +29,7 @@ namespace Sensor
         void loop()
         {
             float distance = measureDistanceCm();
-            Serial.print("HCSR04: ");
+            Serial.print("HCSR04:\t");
             Serial.print(distance);
             Serial.println(" cm");
         }
