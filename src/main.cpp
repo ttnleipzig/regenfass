@@ -17,10 +17,118 @@
 #include "button/button.h"
 #endif
 
-// Board
-#ifdef BOARD_HELTEC_WIFI_LORA_32_V3
-#include "boards/board-heltec-wifi-lora-32-v3.h"
+// Display SD1306
+#ifdef DISPLAY_SD1306
+#include "displays/display-sd1306.h"
 #endif
+
+// Main functions
+void setup()
+{
+    Serial.begin(115200);
+#ifdef WAIT_SERIAL
+    while (!Serial)
+    {
+    }
+#endif
+    Serial.println("\n\n🌈\tStarting regenfass\n");
+
+// Sensors
+#if SENSOR_HCSR04
+    Sensor::HCSR04::setup();
+#elif SENSOR_VL53L1X
+    Sensor::VL53L1X::setup();
+#endif
+
+// Button
+#ifdef BUTTON_PIN
+    Button::setup();
+#endif
+
+// Display SD1306
+#ifdef DISPLAY_SD1306
+    Display::SD1306::setup();
+#endif
+}
+
+void loop()
+{
+// Sensor
+#if SENSOR_HCSR04
+    Sensor::HCSR04::loop();
+#elif SENSOR_VL53L1X
+    Sensor::VL53L1X::loop();
+#endif
+
+// Button
+#ifdef BUTTON_PIN
+    Button::loop();
+#endif
+
+// Display SD1306
+#ifdef DISPLAY_SD1306
+    Display::SD1306::loop();
+#endif
+    delay(500);
+}
+
+/*
+
+TAKEN FROM LOOP:
+
+distance = distanceSensor.measureDistanceCm();
+
+    Serial.printf("Distance: %f cm\n", distance);
+#elif SENSOR_VL53L1X
+    sensor.read();
+    distance = sensor.ranging_data.range_mm / 10.0;
+
+  #ifdef LORE_ENABLED
+    if(distance <= 10){
+      publish2TTN();
+    }
+    loraLoop();
+  #endif
+
+  // Print to serial every 500 miliseconds
+  unsigned long current_time = millis();
+  if (current_time - last_print_time >= 500) {
+    last_print_time = current_time;
+    Serial.printf("Distance: %f cm\n", distance);
+#elif SENSOR_DS18B20
+  sensors.requestTemperatures();
+  float temperatureC = sensors.getTempCByIndex(0);
+  float temperatureF = sensors.getTempFByIndex(0);
+  Serial.print(temperatureC);
+  Serial.println("ºC");
+  Serial.print(temperatureF);
+  Serial.println("ºF");
+#endif
+
+
+// Read the distance
+#if SENSOR_HCSR04
+    distance = Sensor::HCSR04::measureDistanceCm();
+#elif SENSOR_VL53L1X
+    distance = Sensor::VL53L1X::measureDistanceCm();
+#endif
+
+    // Print the distance
+  // Print to serial every 500 miliseconds
+  unsigned long current_time = millis();
+  if (current_time - last_print_time >= 500) {
+    last_print_time = current_time;
+    Serial.printf("Distance: %f cm\n", distance);
+#elif SENSOR_DS18B20
+  sensors.requestTemperatures();
+  float temperatureC = sensors.getTempCByIndex(0);
+  float temperatureF = sensors.getTempFByIndex(0);
+  Serial.print(temperatureC);
+  Serial.println("ºC");
+  Serial.print(temperatureF);
+  Serial.println("ºF");
+#endif
+*/
 
 /*
 // Global variables
@@ -67,108 +175,3 @@ void setup () {
 #ifdef SENSOR_DS18B20
     sensors.begin();
 */
-
-// Main functions
-void setup()
-{
-    Serial.begin(115200);
-#ifdef WAIT_SERIAL
-    while (!Serial)
-    {
-    }
-#endif
-    Serial.println("\n\n🌈 Starting regenfass\n");
-
-// Sensors
-#if SENSOR_HCSR04
-    Sensor::HCSR04::setup();
-#elif SENSOR_VL53L1X
-    Sensor::VL53L1X::setup();
-#endif
-
-// Board
-#ifdef BOARD_HELTEC_WIFI_LORA_32_V3
-    Board::HeltecWifiLora32V3::setup();
-#endif
-
-// Button
-#ifdef BUTTON_PIN
-    Button::setup();
-#endif
-}
-
-void loop()
-{
-    // Sensor
-#if SENSOR_HCSR04
-    Sensor::HCSR04::loop();
-#elif SENSOR_VL53L1X
-    Sensor::VL53L1X::loop();
-#endif
-
-// Board
-#ifdef BOARD_HELTEC_WIFI_LORA_32_V3
-    Board::HeltecWifiLora32V3::loop();
-#endif
-
-// Button
-#ifdef BUTTON_PIN
-    Button::loop();
-#endif
-    /*
-    distance = distanceSensor.measureDistanceCm();
-
-        Serial.printf("Distance: %f cm\n", distance);
-    #elif SENSOR_VL53L1X
-        sensor.read();
-        distance = sensor.ranging_data.range_mm / 10.0;
-
-      #ifdef LORE_ENABLED
-        if(distance <= 10){
-          publish2TTN();
-        }
-        loraLoop();
-      #endif
-
-      // Print to serial every 500 miliseconds
-      unsigned long current_time = millis();
-      if (current_time - last_print_time >= 500) {
-        last_print_time = current_time;
-        Serial.printf("Distance: %f cm\n", distance);
-    #elif SENSOR_DS18B20
-      sensors.requestTemperatures();
-      float temperatureC = sensors.getTempCByIndex(0);
-      float temperatureF = sensors.getTempFByIndex(0);
-      Serial.print(temperatureC);
-      Serial.println("ºC");
-      Serial.print(temperatureF);
-      Serial.println("ºF");
-    #endif
-
-
-    // Read the distance
-    #if SENSOR_HCSR04
-        distance = Sensor::HCSR04::measureDistanceCm();
-    #elif SENSOR_VL53L1X
-        distance = Sensor::VL53L1X::measureDistanceCm();
-    #endif
-
-        // Print the distance
-      // Print to serial every 500 miliseconds
-      unsigned long current_time = millis();
-      if (current_time - last_print_time >= 500) {
-        last_print_time = current_time;
-        Serial.printf("Distance: %f cm\n", distance);
-    #elif SENSOR_DS18B20
-      sensors.requestTemperatures();
-      float temperatureC = sensors.getTempCByIndex(0);
-      float temperatureF = sensors.getTempFByIndex(0);
-      Serial.print(temperatureC);
-      Serial.println("ºC");
-      Serial.print(temperatureF);
-      Serial.println("ºF");
-    #endif
-    */
-
-    delay(500);
-}
