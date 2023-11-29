@@ -25,14 +25,16 @@ namespace Sensor
 
         void setup()
         {
-            Serial.println("Setup:\tSensor VL53L1X");
+            if (DEBUG_LEVEL > 0)
+                Serial.println("Setup:\tSensor VL53L1X");
             Wire.begin();
             Wire.setClock(400000); // use 400 kHz I2C
 
             sensor.setTimeout(500);
             if (!sensor.init())
             {
-                Serial.println("Failed to detect and initialize VL53L1X sensor!");
+                if (DEBUG_LEVEL > 0)
+                    Serial.println("Failed to detect and initialize VL53L1X sensor!");
                 while (1)
                     ;
             }
@@ -43,7 +45,7 @@ namespace Sensor
 
         void loop()
         {
-            if (DEBUG)
+            if (DEBUG_LEVEL > 2)
                 Serial.println("Loop:\tVL53L1X");
         }
 

@@ -25,7 +25,7 @@ namespace Display
         void setup()
         {
             Serial.println("Setup: Display SD1306");
-            delay(100);
+            delay(10);
 
             u8x8.begin();
             u8x8.setFont(u8x8_font_amstrad_cpc_extended_f);

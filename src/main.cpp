@@ -36,7 +36,7 @@ void setup()
     Serial.println("*********************************************************\n");
 
     // Debugging
-    if (DEBUG)
+    if (DEBUG_LEVEL > 0)
         Serial.println("Debug:\tenabled");
     else
         Serial.println("Debug:\tdisabled");
@@ -77,7 +77,6 @@ void loop()
 #ifdef DISPLAY_SD1306
     Display::SD1306::loop();
 #endif
-    delay(500);
 }
 
 /*
