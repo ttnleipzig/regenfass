@@ -31,7 +31,9 @@ void setup()
     {
     }
 #endif
-    Serial.println("\n\n🌈\tStarting regenfass\n");
+    Serial.println("\n\n*********************************************************");
+    Serial.println("🌈\tStarting regenfass");
+    Serial.println("*********************************************************\n");
 
     // Debugging
     if (DEBUG)
@@ -79,7 +81,6 @@ void loop()
 }
 
 /*
-
 TAKEN FROM LOOP:
 
 distance = distanceSensor.measureDistanceCm();
@@ -110,7 +111,6 @@ distance = distanceSensor.measureDistanceCm();
   Serial.print(temperatureF);
   Serial.println("ºF");
 #endif
-
 
 // Read the distance
 #if SENSOR_HCSR04
