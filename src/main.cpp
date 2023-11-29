@@ -33,6 +33,12 @@ void setup()
 #endif
     Serial.println("\n\n🌈\tStarting regenfass\n");
 
+    // Debugging
+    if (DEBUG)
+        Serial.println("Debug:\tenabled");
+    else
+        Serial.println("Debug:\tdisabled");
+
 // Sensors
 #if SENSOR_HCSR04
     Sensor::HCSR04::setup();

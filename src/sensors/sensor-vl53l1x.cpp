@@ -25,7 +25,7 @@ namespace Sensor
 
         void setup()
         {
-            Serial.println("Setup: Sensor VL53L1X");
+            Serial.println("Setup:\tSensor VL53L1X");
             Wire.begin();
             Wire.setClock(400000); // use 400 kHz I2C
 
@@ -43,7 +43,8 @@ namespace Sensor
 
         void loop()
         {
-            Serial.println("Loop: VL53L1X");
+            if (DEBUG)
+                Serial.println("Loop:\tVL53L1X");
         }
 
     } // namespace VL53L1X
