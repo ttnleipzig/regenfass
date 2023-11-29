@@ -24,7 +24,7 @@ namespace Sensor
         /* @deprecated */
         void setup()
         {
-            Serial.println("Setup: Sensor HCSR04");
+            Serial.println("Setup:\tSensor HCSR04");
         }
         void loop()
         {

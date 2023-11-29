@@ -11,19 +11,18 @@ namespace Display
 {
     namespace SD1306
     {
-
         void setup()
         {
-            Serial.println("Setup: Display SD1306");
+            Serial.println("Setup:\tDisplay SD1306");
             delay(100);
-
             u8g2.begin();
             u8g2.setFont(u8g2_font_ncenB14_tr);
         }
 
         void loop()
         {
-            Serial.println("Loop:\tDisplay SD1306");
+            if (DEBUG)
+                Serial.println("Loop:\tDisplay SD1306");
             u8g2.firstPage();
             do
             {
