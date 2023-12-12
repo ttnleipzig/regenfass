@@ -13,8 +13,7 @@ namespace Display
     {
         void setup()
         {
-            if(DEBUG_LEVEL > 0)
-                Serial.println("Setup:\tDisplay SD1306");
+            log_i("Setup:\tDisplay SD1306");
             delay(10);
             u8g2.begin();
             u8g2.setFont(u8g2_font_ncenB14_tr);
@@ -22,8 +21,7 @@ namespace Display
 
         void loop()
         {
-            if (DEBUG_LEVEL > 2)
-                Serial.println("Loop:\tDisplay SD1306");
+            log_d("Loop:\tDisplay SD1306");
             u8g2.firstPage();
             do
             {
