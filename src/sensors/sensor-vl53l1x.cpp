@@ -25,7 +25,7 @@ namespace Sensor
 
         void setup()
         {
-            log_i("Setup:\tSensor VL53L1X");
+            log_i("Setup sensor VL53L1X");
             Wire.begin();
             Wire.setClock(400000); // use 400 kHz I2C
 
@@ -43,7 +43,7 @@ namespace Sensor
 
         void loop()
         {
-            log_v("Loop:\tVL53L1X");
+            log_v("VL53L1X");
         }
 
     } // namespace VL53L1X

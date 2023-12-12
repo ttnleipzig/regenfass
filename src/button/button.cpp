@@ -5,15 +5,15 @@ namespace Button
 {
     void setup()
     {
-        log_i("Setup:\tButton");
+        log_d("Setup onboard button");
         pinMode(BUTTON_PIN, INPUT_PULLUP);
     }
     void loop()
     {
         // Check if the button is pressed
         if (digitalRead(0) == LOW)
-            log_d("Button:\tpressed");
+            log_v("pressed");
         else
-            log_v("Button:\treleased");
+            log_v("released");
     }
 } // namespace Button

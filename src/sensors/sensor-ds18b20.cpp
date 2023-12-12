@@ -17,11 +17,11 @@ namespace Sensor
 
         void setup()
         {
-            log_i("Setup:\tDS18B20 sensor");
+            log_i("DS18B20 sensor");
         }
         void loop()
         {
-            log_v("Loop:\tDS18B20 sensor");
+            log_v("DS18B20 sensor");
         }
     } // namespace DS18B20
 } // namespace Sensor

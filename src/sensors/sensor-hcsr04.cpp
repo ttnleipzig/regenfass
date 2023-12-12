@@ -24,7 +24,7 @@ namespace Sensor
         /* @deprecated */
         void setup()
         {
-            log_i("Setup:\tSensor HCSR04");
+            log_i("Setup HCSR04 sensor");
         }
 
         void loop()
