@@ -82,6 +82,18 @@ We support different sensors. The following table shows the current status.
 | VL53L1X | ⏳ |
 | DS18B20 | ⏳ |
 
+## 🛠️ Configurations
+
+Some settings we can not put into the binary releases, because this data belongs to you and in some case there are sensitive data.
+The following table shows the current status.
+
+| Configuration | Status |
+| ------------- | ------ |
+| LoRa App Key | ⏳ |
+| LoRa App Eui | ⏳ |
+| LoRa Dev Eui | ⏳ |
+| LoRa Region |  |
+
 ## 👩‍💻 Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
