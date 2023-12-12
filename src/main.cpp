@@ -37,7 +37,7 @@ void setup()
     Serial.println("*********************************************************\033[0m\n");
 
     // Debugging
-    if (CORE_DEBUG_LEVEL > 0)
+    if (CORE_DEBUG_LEVEL > 1)
         log_w("Debug:\tenabled");
     else
         log_i("Debug:\tdisabled");
