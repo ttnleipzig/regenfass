@@ -6,9 +6,12 @@ namespace Lora
     {
         void setup()
         {
-            if (DEBUG_LEVEL > 0)
-                Serial.println("Setup:\tLora WAN");
+            log_i("Setup:\tLora WAN");
         };
-        void loop(){};
+        
+        void loop()
+        {
+            log_v("Loop:\tLora WAN");
+        };
     }
 }
