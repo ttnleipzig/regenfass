@@ -214,7 +214,7 @@ void onEvent (ev_t ev) {
 
 void loraSetup(){
 
-	log_d("Setting up lora...");
+	log_d("Setting up LoRa");
 	// LMIC init
   	os_init_ex(&myPinmap);
 
