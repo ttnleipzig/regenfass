@@ -1,4 +1,4 @@
-# 🌈 Regenfass
+# 🌈 regenfass
 
 Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN).
 
@@ -11,7 +11,7 @@ Our documentation is the best place for
 * [ ] Support for different microcontrollers
 * [ ] Support for different LoRaWAN modules
 
-### 📟 Display
+### 📟 Display content
 
 * [ ] Show the water level
 * [ ] Show the battery level
@@ -63,7 +63,7 @@ We support different LoRaWAN modules. The following table shows the current stat
 | Dragino LoRa Shield | ⏳ |
 | Dragino LoRa/GPS HAT | ⏳ |
 
-### 📟 Display
+### 📟 Display modules
 
 We support different displays. The following table shows the current status.
 

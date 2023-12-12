@@ -5,15 +5,15 @@ namespace Button
 {
     void setup()
     {
-        Serial.println("Setup: Button");
+        log_i("Setup:\tButton");
         pinMode(BUTTON_PIN, INPUT_PULLUP);
     }
     void loop()
     {
         // Check if the button is pressed
         if (digitalRead(0) == LOW)
-        {
-            Serial.println("Button: pressed");
-        }
+            log_d("Button:\tpressed");
+        else
+            log_v("Button:\treleased");
     }
 } // namespace Button

@@ -17,11 +17,11 @@ namespace Sensor
 
         void setup()
         {
-            Serial.println("Setup: DS18B20 sensor");
+            log_i("Setup:\tDS18B20 sensor");
         }
         void loop()
         {
-            Serial.println("Loop: DS18B20 sensor");
+            log_v("Loop:\tDS18B20 sensor");
         }
     } // namespace DS18B20
 } // namespace Sensor
