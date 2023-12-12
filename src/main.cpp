@@ -1,5 +1,6 @@
 // Libraries
 #include <Arduino.h>
+#include <esp32-hal-log.h>
 
 // Sensors
 #if SENSOR_HCSR04
@@ -31,15 +32,15 @@ void setup()
     {
     }
 #endif
-    Serial.println("\n\n*********************************************************");
+    Serial.println("\033[32m\n\n*********************************************************");
     Serial.println("🌈\tStarting regenfass");
-    Serial.println("*********************************************************\n");
+    Serial.println("*********************************************************\033[0m\n");
 
     // Debugging
-    if (DEBUG_LEVEL > 0)
-        Serial.println("Debug:\tenabled");
+    if (CORE_DEBUG_LEVEL > 0)
+        log_w("Debug:\tenabled");
     else
-        Serial.println("Debug:\tdisabled");
+        log_i("Debug:\tdisabled");
 
 // Sensors
 #if SENSOR_HCSR04
