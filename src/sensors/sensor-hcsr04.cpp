@@ -24,18 +24,14 @@ namespace Sensor
         /* @deprecated */
         void setup()
         {
-            if (DEBUG_LEVEL > 0)
-                Serial.println("Setup:\tSensor HCSR04");
+            log_i("Setup:\tSensor HCSR04");
         }
+
         void loop()
         {
             float distance = measureDistanceCm();
-            if (DEBUG_LEVEL > 2)
-            {
-                Serial.print("HCSR04:\t");
-                Serial.print(distance);
-                Serial.println(" cm");
-            }
+            // Output float mesurement to serial console with 2 decimal places
+            log_v("HCSR04:\t%.2f cm", distance);
         }
     }
 } // namespace Sensor
