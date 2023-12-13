@@ -92,7 +92,7 @@ The following table shows the current status.
 | LoRa App Key | ⏳ |
 | LoRa App Eui | ⏳ |
 | LoRa Dev Eui | ⏳ |
-| LoRa Region |  |
+| LoRa Region | ⏳ |
 
 ## 👩‍💻 Contributing
 
