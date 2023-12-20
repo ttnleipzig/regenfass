@@ -31,11 +31,11 @@
 // void os_getDevKey(u1_t *buf) { memcpy_P(buf, APPKEY, 16); }
 
 // Die LMICPP-Arduino braucht den Kram als Strings!
-constexpr char const appEui[] = "ABCABCABCABCABCA";
+constexpr char const appEui[] = "70B3D57ED002556F";
 // Device EUI in string format.
-constexpr char const devEui[] = "DEFDEFDEFDEFDEFD";
+constexpr char const devEui[] = "00BDAB364E4A3FC1";
 // Application key in string format.
-constexpr char const appKey[] = "FFEEFFEEFFEEFFEEFFEEFFEEFFEEFFEE";
+constexpr char const appKey[] = "38ECBE230A8DCE03A86094A60F555233";
 
 static uint8_t mydata[] = "Hello, world!";
 uint8_t payload[34];
