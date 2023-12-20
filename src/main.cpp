@@ -3,14 +3,14 @@
 #include <esp32-hal-log.h>
 
 // Sensors
-#if SENSOR_HCSR04
+#if FEATURE_SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"
 #elif SENSOR_VL53L1X
 #include "sensors/sensor-vl53l1x.h"
 #elif SENSOR_DS18B20
 #include "sensors/sensor-ds18b20.h"
 #else
-#error "Sensor type not selected. Add SENSOR_HCSR04, SENSOR_DS18B20 or SENSOR_VL53L1X in your environment build_flags in platformio.ini"
+#error "Sensor type not selected. Add FEATURE_SENSOR_HCSR04, SENSOR_DS18B20 or SENSOR_VL53L1X in your environment build_flags in platformio.ini"
 #endif
 
 // Button
@@ -19,12 +19,12 @@
 #endif
 
 // Display SD1306
-#ifdef DISPLAY_SD1306
+#ifdef FEATURE_DISPLAY_SD1306
 #include "displays/display-sd1306.h"
 #endif
 
 // LoRaWAN
-#ifdef LORAWAN_ENABLED
+#ifdef FEATURE_LORAWAN_ENABLED
 #include "lora/lora-wan.h"
 #endif
 
@@ -49,7 +49,7 @@ void setup()
     Serial.println("\n\n\n");
 
 // Sensors
-#if SENSOR_HCSR04
+#if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::setup();
 #elif SENSOR_VL53L1X
     Sensor::VL53L1X::setup();
@@ -61,12 +61,12 @@ void setup()
 #endif
 
 // Display SD1306
-#ifdef DISPLAY_SD1306
+#ifdef FEATURE_FEATURE_DISPLAY_SD1306
     Display::SD1306::setup();
 #endif
 
 // LoRaWAN
-#ifdef LORAWAN_ENABLED
+#ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
 #endif
 }
@@ -74,7 +74,7 @@ void setup()
 void loop()
 {
 // Sensor
-#if SENSOR_HCSR04
+#if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::loop();
 #elif SENSOR_VL53L1X
     Sensor::VL53L1X::loop();
@@ -86,12 +86,12 @@ void loop()
 #endif
 
 // Display SD1306
-#ifdef DISPLAY_SD1306
+#ifdef FEATURE_DISPLAY_SD1306
     Display::SD1306::loop();
 #endif
 
 // LoRaWAN
-#ifdef LORAWAN_ENABLED
+#ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::loop();
 #endif
 }
