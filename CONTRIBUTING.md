@@ -65,3 +65,11 @@ The debug level can be set in the `platformio.ini` file.
 ```ini
 [env:heltec_wifi_lora_32_V3_HCSR04]
 ```
+
+## Semantic versioning
+
+We follow [semantic versioning](https://semver.org/) for this project.
+
+## Semantic release
+
+We use [semantic-release](https://github.com/semantic-release/semantic-release) for this project.
