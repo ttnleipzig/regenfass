@@ -1,20 +1,5 @@
 #pragma once
 
-/*
-#include <Wire.h>
-#include <VL53L1X.h>
-VL53L1X sensor;
-
-#elif SENSOR_DS18B20
-#include <OneWire.h>
-#include <DallasTemperature.h>
-
-OneWire oneWire(SENSOR_PIN_DATA);
-
-// Pass our oneWire reference to Dallas Temperature.
-DallasTemperature sensors(&oneWire);
-*/
-
 // Sensor VL53L1X
 namespace Sensor
 {
