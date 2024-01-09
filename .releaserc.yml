@@ -1,6 +1,6 @@
 branches:
   - main
-  - refs/tags/.*
+  - refs/tags/*
 tagFormat: ${version}
 plugins:
   - "@semantic-release/release-notes-generator"
