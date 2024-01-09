@@ -5,12 +5,14 @@
 // Sensors
 #if FEATURE_SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"
-#elif SENSOR_VL53L1X
-#include "sensors/sensor-vl53l1x.h"
-#elif SENSOR_DS18B20
+#endif
+
+// #if FEATURE_SENSOR_VL53L1X
+// #include "sensors/sensor-vl53l1x.h"
+// #endif
+
+#if FEATURE_SENSOR_DS18B20
 #include "sensors/sensor-ds18b20.h"
-#else
-#error "Sensor type not selected. Add FEATURE_SENSOR_HCSR04, SENSOR_DS18B20 or SENSOR_VL53L1X in your environment build_flags in platformio.ini"
 #endif
 
 // Button
@@ -51,8 +53,10 @@ void setup()
 // Sensors
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::setup();
-#elif SENSOR_VL53L1X
-    Sensor::VL53L1X::setup();
+#endif
+
+#if FEATURE_SENSOR_VL53L1X
+//    Sensor::VL53L1X::setup();
 #endif
 
 // Button
@@ -76,9 +80,11 @@ void loop()
 // Sensor
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::loop();
-#elif SENSOR_VL53L1X
-    Sensor::VL53L1X::loop();
 #endif
+
+//#if FEATURE_SENSOR_VL53L1X
+//    Sensor::VL53L1X::loop();
+//#endif
 
 // Button
 #ifdef BUTTON_PIN
@@ -94,4 +100,5 @@ void loop()
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::loop();
 #endif
+    delay(6000);
 }

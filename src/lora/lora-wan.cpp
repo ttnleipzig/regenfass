@@ -37,7 +37,7 @@ constexpr char const devEui[] = "00BDAB364E4A3FC1";
 // Application key in string format.
 constexpr char const appKey[] = "38ECBE230A8DCE03A86094A60F555233";
 
-static uint8_t mydata[] = "Hello, world!";
+static uint8_t mydata[] = "Hello, dirk!";
 uint8_t payload[34];
 
 // Schedule TX every this many seconds (might become longer due to duty
