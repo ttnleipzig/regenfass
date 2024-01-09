@@ -72,4 +72,8 @@ We follow [semantic versioning](https://semver.org/) for this project.
 
 ## Semantic release
 
-We use [semantic-release](https://github.com/semantic-release/semantic-release) for this project.
+We use [semantic-release](https://github.com/semantic-release/semantic-release) for this project. This is how it works:
+
+1. A new version is released by pushing a tag to the repository
+2. The CI pipeline runs semantic-release
+3. The CI pipeline creates a new release on GitHub
