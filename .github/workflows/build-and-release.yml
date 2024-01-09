@@ -2,6 +2,8 @@ name: PlatformIO CI
 
 on: [push, pull_request]
 
+permissions:
+  contents: read # for checkout
 
 jobs:
   build:
@@ -10,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [ "heltec_wifi_lora_32_V3_HCSR04" ]
+        environment: ["heltec_wifi_lora_32_V3_HCSR04"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -21,7 +23,7 @@ jobs:
           key: ${{ runner.os }}-pio
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
       - name: Build firmware
@@ -54,3 +56,25 @@ jobs:
             *.bin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release_semantic:
+    name: Release semantique
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

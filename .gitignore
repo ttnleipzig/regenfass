@@ -10,6 +10,8 @@
 
 !/CONTRIBUTING.md
 !/.gitignore
+!/.editorconfig
+!/.releaserc.yml
 !/platformio.ini
 !/README.md
 !/LICENSE.md
