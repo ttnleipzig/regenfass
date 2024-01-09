@@ -1,8 +1,11 @@
 #include <Arduino.h>
 
 // Library for the sensor VL53L3X
+
+#if FEATURE_SENSOR_VL53L1X
 #include <Wire.h>
 #include <VL53L1X.h>
+
 
 // Create the sensor object
 VL53L1X sensor;
@@ -48,3 +51,5 @@ namespace Sensor
 
     } // namespace VL53L1X
 } // namespace Sensor
+
+#endif
