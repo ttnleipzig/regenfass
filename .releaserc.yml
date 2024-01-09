@@ -1,12 +1,11 @@
 branches:
   - main
-  - refs/tags/*
+  - refs/tags/0.0.8
 tagFormat: ${version}
 plugins:
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/github"
-  -
-    - "@semantic-release/commit-analyzer"
+  - - "@semantic-release/commit-analyzer"
     - preset: "angular"
       releaseRules:
         - type: "docs"
