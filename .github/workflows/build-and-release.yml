@@ -5,7 +5,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Build Enviornments
+    name: Build Environments
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
