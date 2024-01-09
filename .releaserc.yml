@@ -1,7 +1,7 @@
 branches:
   - main
   - refs/tags/0.0.8
-tagFormat: ${version}
+# tagFormat: ${version}
 plugins:
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/github"
