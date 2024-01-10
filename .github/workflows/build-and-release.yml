@@ -66,16 +66,19 @@ jobs:
     if: github.ref =='refs/heads/main'
     steps:
       - uses: google-github-actions/release-please-action@v4
+        name: Create Release
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: simple
-
-#      - name: Upload Release Artifact
-#        if: ${{ steps.release.outputs.release_created }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: gh release upload ${{ steps.release.outputs.tag_name }} firmware-release
       - uses: actions/download-artifact@v2
-        if: ${{ steps.release.outputs.release_created }}
+        name: Download Release Artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: firmware-release
+
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} ./firmware-release/*.bin
