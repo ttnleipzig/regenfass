@@ -60,25 +60,16 @@ jobs:
   #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   #
 
-  release_semantic:
-    name: Release semantique
+  release:
     runs-on: ubuntu-latest
-    needs: [build]
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: google-github-actions/release-please-action@v4
         with:
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+          # I did!
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          # this is a built-in strategy in release-please, see "Action Inputs"
+          # for more options
+          release-type: simple
