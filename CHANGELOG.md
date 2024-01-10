@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/v0.0.1...v0.0.2) (2024-01-10)
+
+
+### Bug Fixes
+
+* **#11:** Use different way to upload the artifacts ([22644cd](https://github.com/ttnleipzig/regenfass/commit/22644cd8a5080bedae2349a0184f6d9a64622097))
+
 ## 0.0.1 (2024-01-10)
 
 
