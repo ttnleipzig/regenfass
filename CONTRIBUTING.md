@@ -108,3 +108,13 @@ It collects all commits since the last release in a release pull request.
 Use the [conventional commit](#conventional-commits) message format for your commits like it is described above.
 Please write your messages very easy to understand for none developers and a bit more
 verbose as useally because it will be used for the Changelog and Release-Notes.
+
+### Workflow for your new feature
+
+1. Create a new branch `feature/sensor-xvz`
+2. Develop your feature in your feature branch
+3. Create a pull request from your feature branch to the `main` branch
+4. Address any review comments
+5. Merge the pull request once it is approved and delete your feature branch
+6. If not allready done, *please release* will automatically create a new release pull request. This pull request will include your changes.
+7. To create a new release, you have to merge the release pull request into the master
