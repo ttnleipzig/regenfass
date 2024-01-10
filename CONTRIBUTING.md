@@ -118,3 +118,31 @@ verbose as useally because it will be used for the Changelog and Release-Notes.
 5. Merge the pull request once it is approved and delete your feature branch
 6. If not allready done, *please release* will automatically create a new release pull request. This pull request will include your changes.
 7. To create a new release, you have to merge the release pull request into the master
+
+```mermaid
+graph LR;
+    A((Create new branch))-->B-->Q;
+    B[/Create Pull Request/]-->C;
+    Q[[Build binary]]-->B;
+    C(Review)-->D;
+    D((Merge in Master));
+```
+
+### Workflow for new releases
+
+1. Merge everthing into the main branch
+2. An release pull request will be created automatically by the GitHub Actions workflow
+3. Check the release pull request and merge it into the main branch
+
+```mermaid
+---
+title: Workflow for new releases
+---
+graph LR;
+    A((Merge to main))-->B-->Q;
+    B[[Creates Release Pull Request]]-->C;
+    Q(Build binary)-->B;
+    C(Merge Release Pull request into main)-->D;
+    D[[Creates Tag and Release]]-->E;
+    E[[Uploads binaries to release]];
+```
