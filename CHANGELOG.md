@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/ttnleipzig/regenfass/compare/v0.1.3...v0.1.4) (2024-01-11)
+
+
+### Bug Fixes
+
+* **#11:** Use uploads to release pages ([e192327](https://github.com/ttnleipzig/regenfass/commit/e192327acd3badfe80932ccc133db0e68f70b99f))
+
 ## [0.1.3](https://github.com/ttnleipzig/regenfass/compare/v0.1.2...v0.1.3) (2024-01-11)
 
 
