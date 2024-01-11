@@ -39,7 +39,7 @@ jobs:
             ls -R .pio/build
       - uses: actions/upload-artifact@v4
         with:
-          name: firmaware-${{ matrix.environment }}
+          name: firmware-${{ matrix.environment }}
           path: .pio/build/${{ matrix.environment }}/*.bin
           compression-level: 8
 
@@ -73,8 +73,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: firmaware
-          pattern: firmaware-*
+          path: firmware
+          pattern: firmware-*
           merge-multiple: true
       - name: Display contents of firmware directory
         run: | 
