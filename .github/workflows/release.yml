@@ -82,8 +82,8 @@ jobs:
       - uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload-url }}
-          asset_path: ./firmware/${{ matrix.environment }}.bin
-          asset_name: ${{ matrix.environment }}.bin
+          asset_path: ./firmware/firmware.bin
+          asset_name: regenfass-${{ matrix.environment }}.bin
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
