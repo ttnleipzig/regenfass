@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: write
+  contents: write
+  packages: write
+
+jobs:
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ["heltec_wifi_lora_32_V3_HCSR04"]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Build firmware
+        run: pio run -e ${{ matrix.environment }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.environment }}
+          path: .pio/build/${{ matrix.environment }}/*.bin
+          compression-level: 8
+
+
+  release:
+    name: 📦 Release
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      upload-url: ${{ steps.release.outputs.upload_url }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          release-type: simple
+      - name: Print the release URL if present
+        if: ${{ steps.release.outputs.upload_url }}
+        run: |
+          echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
+
+
+  upload:
+    name: 💾 Upload Artifacts
+    runs-on: ubuntu-latest
+    if: ${{ needs.release.outputs.upload-url }}
+    needs: release
+    strategy:
+      matrix:
+        environment: ["heltec_wifi_lora_32_V3_HCSR04"]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          pattern: firmware-*
+          merge-multiple: true
+
+      - uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload-url }}
+          asset_path: ./firmware/${{ matrix.environment }}.bin
+          asset_name: regenfass-${{ matrix.environment }}.bin
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
