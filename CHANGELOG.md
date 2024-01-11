@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/ttnleipzig/regenfass/compare/v0.1.5...v0.1.6) (2024-01-11)
+
+
+### Bug Fixes
+
+* **#11:** Use uploads to release pages firmaware ([96b2bc3](https://github.com/ttnleipzig/regenfass/commit/96b2bc3f148cb272c61f1509741a8c61e2135f66))
+
 ## [0.1.5](https://github.com/ttnleipzig/regenfass/compare/v0.1.4...v0.1.5) (2024-01-11)
 
 
