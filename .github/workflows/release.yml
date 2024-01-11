@@ -34,6 +34,9 @@ jobs:
         run: pip install --upgrade platformio
       - name: Build firmware
         run: pio run -e ${{ matrix.environment }}
+      - name: Display contents of .pio/build directory
+        run: | 
+            ls -R .pio/build
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.environment }}
@@ -70,8 +73,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: firmware
-          pattern: firmware-*
+          path: ${{ matrix.environment }}
+          pattern: ${{ matrix.environment }}-*
           merge-multiple: true
       - name: Display contents of firmware directory
         run: | 
