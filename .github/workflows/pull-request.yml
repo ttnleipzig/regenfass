@@ -7,9 +7,9 @@ on:
       - fix/*
 
 permissions:
-  contents: read # for checkout
+  contents: read
   packages: write
-  actions: write # for cache
+  actions: write
 
 jobs:
   build:
