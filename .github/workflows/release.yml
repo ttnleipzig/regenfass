@@ -73,6 +73,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: firmware
           path: ${{ matrix.environment }}
           pattern: ${{ matrix.environment }}-*
           merge-multiple: true
