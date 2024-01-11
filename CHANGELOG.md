@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.0](https://github.com/ttnleipzig/regenfass/compare/v0.0.2...v0.1.0) (2024-01-11)
+
+
+### Features
+
+* Add release please for automated release pull requests and releases ([bfe9f90](https://github.com/ttnleipzig/regenfass/commit/bfe9f90e913d41d1fe2c34259ab5153d55535584))
+
+
+### Bug Fixes
+
+* **#11:** try to download the artifact before upload it ([cf29939](https://github.com/ttnleipzig/regenfass/commit/cf29939803aaa3866e61fa33288635d4036625cd))
+
 ## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/v0.0.1...v0.0.2) (2024-01-10)
 
 
