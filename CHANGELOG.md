@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/ttnleipzig/regenfass/compare/v0.1.0...v0.1.1) (2024-01-11)
+
+
+### Bug Fixes
+
+* **#11:** List artefacts before upload ([fb469fb](https://github.com/ttnleipzig/regenfass/commit/fb469fba9c583ad8d9783f46fd6cf24233329f9d))
+
 ## [0.1.0](https://github.com/ttnleipzig/regenfass/compare/v0.0.2...v0.1.0) (2024-01-11)
 
 
