@@ -34,6 +34,17 @@ jobs:
         run: pip install --upgrade platformio
       - name: Build firmware
         run: pio run -e ${{ matrix.environment }}
+
+
+      - name: 💾 Upload artifacts
+        uses: gavv/pull-request-artifacts@v2
+        with:
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/bundle/debug/app-debug.aab
+
       - uses: actions/upload-artifact@v2
         with:
           name: firmware-${{ matrix.environment }}
