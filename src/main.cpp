@@ -30,6 +30,8 @@
 #include "lora/lora-wan.h"
 #endif
 
+unsigned long last_print_time = 0;
+
 // Main functions
 void setup()
 {
@@ -72,33 +74,42 @@ void setup()
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
+    Lora::Wan::publish2TTN(); // Initial Send to Trigger OTAA Join
 #endif
 }
 
 void loop()
 {
+// Publish Something, or Lora Does Noting
+    unsigned long current_time = millis();
+    if (current_time - last_print_time >= 20000)
+    {
+        Lora::Wan::publish2TTN();
+        last_print_time = current_time;
+    }
+
 // Sensor
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::loop();
 #endif
 
 //#if FEATURE_SENSOR_VL53L1X
-//    Sensor::VL53L1X::loop();
+    //    Sensor::VL53L1X::loop();
 //#endif
 
 // Button
 #ifdef BUTTON_PIN
-    Button::loop();
+     Button::loop();
 #endif
 
 // Display SD1306
-#ifdef FEATURE_DISPLAY_SD1306
-    Display::SD1306::loop();
-#endif
+// #FIXME: Display-Code is to slow and interferes with LoRa / LMIC-Timings
+// #ifdef FEATURE_DISPLAY_SD1306
+//     Display::SD1306::loop();
+// #endif
 
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::loop();
 #endif
-    delay(6000);
 }
