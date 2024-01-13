@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/v0.0.1...v0.0.2) (2024-01-13)
+
+
+### Bug Fixes
+
+* Get LoRa to Send Something ([adf0532](https://github.com/ttnleipzig/regenfass/commit/adf05322a41812dce6180033f9ecc52c1fd52781))
+
 ## [0.0.1](https://github.com/ttnleipzig/regenfass/compare/v0.1.6...v0.0.1) (2024-01-11)
 
 
