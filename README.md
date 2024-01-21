@@ -120,3 +120,7 @@ This project is licensed under the [CC BY-NC-SA 4.0](https://creativecommons.org
 ## 🙏 Contribute
 
 You are very welcome to contribute. Start by reading the [](CONTRIBUTING.md).
+
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/bd10769e15da93a3e5b1d06a6a005d248df1c61c.svg "Repobeats analytics image")
