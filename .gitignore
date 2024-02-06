@@ -12,6 +12,7 @@
 !/.gitignore
 !/.editorconfig
 !/.releaserc.yml
+!/app
 !/platformio.ini
 !/README.md
 !/LICENSE.md

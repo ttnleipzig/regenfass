@@ -1,0 +1,9 @@
+@tailwind base;
+/* @import "./styles-custom.css"; */
+
+@tailwind components;
+/* @import "./components/button.css"; */
+
+@tailwind utilities;
+
+@tailwind form;
