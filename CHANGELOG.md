@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/ttnleipzig/regenfass/compare/v0.0.2...v0.1.0) (2024-02-06)
+
+
+### Features
+
+* Add installation web page ([e0cbf4c](https://github.com/ttnleipzig/regenfass/commit/e0cbf4cfaf9559abe53b56a6116d12e469862eee))
+
 ## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/v0.0.1...v0.0.2) (2024-01-13)
 
 
