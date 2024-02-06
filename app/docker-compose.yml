@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  app:
+    image: nginx
+    container_name: regenfass-www
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8020:80"
