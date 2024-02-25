@@ -5,7 +5,9 @@
 	"private": true,
 	"scripts": {
 		"build": "postcss ./public/_style.css -o ./public/style.css",
-		"dev": "pnpm run build --watch --verbose"
+		"css:dev": "pnpm run build --watch --verbose",
+		"dev": "concurrently -n 'css,http' 'pnpm run css:dev' 'pnpm run start'",
+		"start": "serve ."
 	},
 	"keywords": [],
 	"author": "",
@@ -13,9 +15,11 @@
 	"license": "AGPL-3.0-only",
 	"devDependencies": {
 		"autoprefixer": "^10.4.17",
+		"concurrently": "^8.2.2",
 		"cssnano": "^6.0.5",
 		"postcss": "^8.4.35",
 		"postcss-cli": "^11.0.0",
+		"serve": "^14.2.1",
 		"tailwindcss": "^3.4.1"
 	}
 }
