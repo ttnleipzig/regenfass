@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html
+	lang="en"
+	class="h-full bg-slate-100 text-gray-800 dark:bg-slate-900 dark:text-gray-100 shadow-[inset_0px_-4px_50px_#46464610] dark:shadow-[inset_0px_-4px_144px_#46466644]"
+>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>regenfass - installer</title>
+		<meta
+			name="description"
+			content="Regenfass web installer. Install the software directly from the website."
+		/>
+		<meta name="author" content="TTN Leipzig" />
+		<link rel="icon" type="image/png" href="/public/regenfass.png" />
+		<link rel="stylesheet" href="/public/style.css" />
+		<script
+			type="module"
+			src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"
+		></script>
+
+		<!-- opengraph -->
+		<meta property="og:title" content="regenfass - installer" />
+		<meta
+			property="og:description"
+			content="Regenfass web installer. Install the software directly from the website."
+		/>
+		<meta property="og:image" content="/public/regenfass-opengraph.png" />
+		<meta property="og:url" content="https://regenfass.ttn-leipzig.de/" />
+		<meta property="og:site_name" content="regenfass" />
+		<meta property="og:type" content="website" />
+
+		<!-- jsonld for a product page -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org/",
+				"@type": "Product",
+				"name": "regenfass",
+				"sku": "regenfass",
+				"description": "Regenfass web installer. Install the software directly from the website.",
+				"image": "https://regenfass.ttn-leipzig.de/public/regenfass-opengraph.png",
+				"url": "https://regenfass.eu",
+				"brand": {
+					"@type": "Organization",
+					"name": "TTN Leipzig",
+					"url": "https://ttn-leipzig.de",
+					"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+					"sameAs": [
+						"https://twitter.com/ttnleipzig",
+						"https://github.com/ttnleipzig"
+					]
+				},
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "EUR",
+					"availability": "https://schema.org/InStock",
+					"url": "https://regenfass.eu",
+					"seller": {
+						"@type": "Organization",
+						"name": "TTN Leipzig",
+						"url": "https://ttn-leipzig.de",
+						"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+						"sameAs": [
+							"https://twitter.com/ttnleipzig",
+							"https://github.com/ttnleipzig"
+						],
+						"contactPoint": {
+							"@type": "ContactPoint",
+							"contactType": "user support",
+							"email": "info@regenfass.eu",
+							"url": "https://docs.regenfass.eu"
+						}
+					}
+				},
+				"aggregateRating": {
+					"@type": "AggregateRating",
+					"ratingValue": "5",
+					"reviewCount": "1"
+				},
+				"review": {
+					"@type": "Review",
+					"reviewRating": {
+						"@type": "Rating",
+						"ratingValue": "5",
+						"bestRating": "5"
+					},
+					"author": {
+						"@type": "Person",
+						"name": "André Lademan",
+						"url": "https://andrelademann.de",
+						"sameAs": [
+							"https://twitter.com/vergissberlin",
+							"https://github.com/vergissberlin"
+						]
+					}
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="max-w-screen-lg px-3 py-6 mx-auto">
+			<div
+				class="flex flex-col gap-y-3 sm:flex-row sm:items-center sm:justify-between"
+			>
+				<a href="/demo/astro-boilerplate">
+					<div
+						class="flex items-center text-2xl font-bold text-transparent bg-gradient-to-br from-sky-700 to-cyan-100 bg-clip-text"
+					>
+						rRgenfass
+					</div>
+				</a>
+				<nav>
+					<ul
+						class="flex font-medium text-gray-800 gap-x-3 dark:text-gray-400"
+					>
+						<li>
+							<a
+								href="https://regenfass.ttn-leipzig.de/"
+								class="py-2 pr-2 hover:text-slate-500 dark:hover:text-white hover:underline"
+								>Docs</a
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/ttnleipzig"
+								class="p-2 hover:text-slate-500 dark:hover:text-white hover:underline"
+								>GitHub</a
+							>
+						</li>
+						<li>
+							<a
+								href="https://twitter.com/ttn-leipzig"
+								class="p-2 hover:text-slate-500 dark:hover:text-white hover:underline"
+								>Matrix</a
+							>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<div class="max-w-screen-lg px-3 py-6 mx-auto">
+			<div
+				class="flex flex-col items-center md:flex-row md:justify-between md:gap-x-24"
+			>
+				<div>
+					<h1 class="text-3xl font-bold">Hi there! 👋</h1>
+					<p class="mt-6 text-xl leading-9">
+						This project is about a smart water tank. It measures
+						the water level and sends the data to a server. The
+						server can be used to control the water pump. The pump
+						can be controlled via a web interface or via a telegram
+						bot. It uses a HC-SR04 ultrasonic sensor to measure the
+						water level. The data is sent to
+						<span
+							class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text"
+							>The Things Network</span
+						>
+						via a
+						<span
+							class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text"
+							>LoRaWAN</span
+						>
+						gateway.
+					</p>
+				</div>
+				<div class="hidden shrink-0 lg:block">
+					<img
+						src="public/regenfass.png"
+						alt="Avatar image"
+						loading="lazy"
+					/>
+				</div>
+			</div>
+		</div>
+		<div class="max-w-screen-lg px-3 py-6 mx-auto">
+			<span class="relative inline-flex">
+				<h2 class="mb-6 text-2xl font-bold">Installation</h2>
+				<span class="absolute top-0 right-0 flex w-3 h-3 -mt-1 -mr-4">
+					<span
+						class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-sky-400"
+					></span>
+					<span
+						class="relative inline-flex w-3 h-3 rounded-full bg-sky-500"
+					></span>
+				</span>
+			</span>
+			<div class="flex flex-col gap-6">
+				<div
+					class="flex flex-col items-center gap-x-8 rounded-md bg-sky-200 dark:bg-slate-800 p-3 md:flex-row dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]"
+				>
+					<div>
+						<div
+							class="flex flex-col items-center gap-y-2 md:flex-row"
+						>
+							<div class="text-xl font-semibold">
+								Instructions
+							</div>
+						</div>
+						<p class="mt-3 text-gray-700 dark:text-gray-400">
+							Lorem ipsum dolor sit amet, consectetur adipiscing
+							elit. Suspendisse bibendum. Nunc non posuere
+							consectetur, justo erat semper enim, non hendrerit
+							dui odio id enim.
+						</p>
+						<p class="text-center">
+							<select
+								title="Select the micro controller type"
+								name="type"
+								id="type"
+								class="p-6 mr-0 bg-white rounded-l-lg dark:bg-slate-700"
+								style="margin-right: -4px"
+							>
+								<option value="heltec" selected>
+									Helltec LoRa32
+								</option>
+								<option value="esp32-generic">
+									Generic ESP32
+								</option>
+							</select>
+							<esp-web-install-button
+								manifest="/manifest_heltec.json"
+							>
+								<button
+									slot="activate"
+									type="button"
+									class="px-12 py-5 my-5 ml-0 text-lg font-medium rounded-r-lg shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-600/50"
+								>
+									Install
+								</button>
+								<span slot="unsupported"
+									>Ah snap, your browser doesn't work!</span
+								>
+								<span slot="not-allowed"
+									>Ah snap, you are not allowed to use this on
+									HTTP!</span
+								>
+							</esp-web-install-button>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="max-w-screen-lg px-3 py-6 mx-auto">
+			<div
+				class="flex flex-col items-center justify-between gap-6 sm:flex-row"
+			>
+				<div class="sm:w-7/12">
+					<div class="text-3xl font-bold">
+						Subscribe to the
+						<span
+							class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text"
+							>update newsletters</span
+						>
+					</div>
+					<p class="mt-3 dark:text-gray-300">
+						If you would like to be informed about software updates,
+						you can subscribe to this newsletter.
+					</p>
+				</div>
+				<div class="w-full sm:w-5/12">
+					<form
+						class="flex px-4 py-2 bg-white rounded-full dark:bg-slate-800 focus-within:ring-2 focus-within:ring-cyan-600 hover:ring-2 hover:ring-cyan-600"
+					>
+						<input
+							type="email"
+							class="w-full appearance-none dark:bg-slate-800 focus:outline-none"
+							placeholder="your@email-address.iot"
+						/>
+						<button
+							class="px-3 py-1 ml-2 text-sm font-medium rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-600/50"
+							type="submit"
+						>
+							Subscribe
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="max-w-screen-lg px-3 py-6 mx-auto">
+			<div
+				class="pt-5 text-sm antialiased text-gray-400 border-t border-gray-300 dark:border-gray-600 dark:text-gray-300"
+			>
+				<p>
+					TTN Leipzig, André Lademan, Hardenbergstraße 48, 04275
+					Leipzig, Germany, Europe, United Nations, Milky Way
+				</p>
+				<p>
+					Powered by
+					<a
+						href="https://esphome.github.io/esp-web-tools/"
+						target="_blank"
+						class="hover:text-slate-500 dark:hover:text-white hover:underline"
+						>ESP Web Tools</a
+					>
+				</p>
+			</div>
+		</div>
+
+		<script>
+			document
+				.getElementById("type")
+				.addEventListener("change", (event) => {
+					const button = document.querySelector(
+						"esp-web-install-button"
+					);
+					button.setAttribute(
+						"manifest",
+						`./manifest_${event.target.value}.json`
+					);
+				});
+		</script>
+	</body>
+</html>
