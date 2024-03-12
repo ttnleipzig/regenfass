@@ -85,6 +85,14 @@ namespace Lora
 
         void setup()
         {
+
+            /*
+            Setup the LMIC credentials dynamically
+            LMIC.setDevEui(devEui);
+            LMIC.setArtEui(appEui);
+            LMIC.setDevKey(appKey);
+            */
+
             log_i("Setup LoraWAN");
             SPI.begin(LORA_SCK_PIN, LORA_MISO_PIN, LORA_MOSI_PIN, LORA_NSS_PIN);
 
@@ -113,7 +121,7 @@ namespace Lora
 
             log_d("Setting up LoRa done");
         };
-        
+
         void loop()
         {
             log_i("LoRa WAN");
