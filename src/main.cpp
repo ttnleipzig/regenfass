@@ -20,6 +20,9 @@
 #include "button/button.h"
 #endif
 
+// Confuration
+#include "config/config.h"
+
 // Display SD1306
 #ifdef FEATURE_DISPLAY_SD1306
 #include "displays/display-sd1306.h"
@@ -52,6 +55,9 @@ void setup()
         Serial.println("Debug:\tdisabled");
     Serial.println("\n\n\n");
 
+    // Configuration
+    Config::T::setup();
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::setup();
@@ -80,7 +86,7 @@ void setup()
 
 void loop()
 {
-// Publish Something, or Lora Does Noting
+    // Publish Something, or Lora Does Noting
     unsigned long current_time = millis();
     if (current_time - last_print_time >= 20000)
     {
@@ -93,13 +99,13 @@ void loop()
     Sensor::HCSR04::loop();
 #endif
 
-//#if FEATURE_SENSOR_VL53L1X
-    //    Sensor::VL53L1X::loop();
-//#endif
+// #if FEATURE_SENSOR_VL53L1X
+//     Sensor::VL53L1X::loop();
+// #endif
 
 // Button
 #ifdef BUTTON_PIN
-     Button::loop();
+    Button::loop();
 #endif
 
 // Display SD1306

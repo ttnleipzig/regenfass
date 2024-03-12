@@ -4,6 +4,7 @@
 		"Vagrantfile": "ruby",
 		"iterator": "cpp",
 		"istream": "cpp",
-		"ostream": "cpp"
+		"ostream": "cpp",
+		"optional": "cpp"
 	}
 }
