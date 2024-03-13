@@ -36,9 +36,8 @@ jobs:
         with:
           node-version: 18
       - run: npm install -g pnpm
-      - run: cd ./installer
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - run: cd ./installer && pnpm install --frozen-lockfile
+      - run: cd ./installer && pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
