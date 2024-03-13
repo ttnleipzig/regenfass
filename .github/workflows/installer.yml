@@ -31,6 +31,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
+          cache-dependency-path: "./installer/pnpm-lock.yaml"
       - run: cd installer
       - run: ls -la && pwd
       - run: cd ./installer && pnpm install --frozen-lockfile
