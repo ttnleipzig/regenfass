@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Installer e2e tests
 on:
   push:
     branches: [main, master]
@@ -15,13 +15,13 @@ jobs:
         with:
           version: 8
 
+      - name: Change into installer
+        run: cd installer
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: pnpm
-          cache-dependency-path: ./installer/pnpm-lock.yaml
-      - name: Change into installer
-        run: cd installer
 
       - name: Install dependencies
         run: pnpm install
