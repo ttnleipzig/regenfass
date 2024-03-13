@@ -17,6 +17,8 @@ jobs:
 
       - name: Change into installer
         run: cd installer
+      - name: Where
+        run: pwd
 
       - uses: actions/setup-node@v4
         with:
