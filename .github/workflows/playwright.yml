@@ -20,6 +20,9 @@ jobs:
           node-version: lts/*
           cache: pnpm
           cache-dependency-path: ./installer/pnpm-lock.yaml
+      - name: Change into installer
+        run: cd installer
+
       - name: Install dependencies
         run: pnpm install
 
