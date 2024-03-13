@@ -36,6 +36,8 @@ jobs:
         with:
           node-version: 18
       - run: npm install -g pnpm
+      - run: cd installer
+      - run: ls -la && pwd
       - run: cd ./installer && pnpm install --frozen-lockfile
       - run: cd ./installer && pnpm build
       - name: Setup Pages
