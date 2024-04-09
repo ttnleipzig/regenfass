@@ -1,4 +1,4 @@
-name: Installer e2e tests
+name: Installer - tests
 on:
   push:
     branches: [main, master]
