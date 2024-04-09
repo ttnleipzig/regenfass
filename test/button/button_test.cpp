@@ -1,31 +1,37 @@
-#include "unity.h"
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+
 #include "button.h"
 
-void setUp(void) {
-    // Dieser Code wird vor jedem Test ausgeführt
-}
+using ::testing::Return;
 
-void tearDown(void) {
-    // Dieser Code wird nach jedem Test ausgeführt
-}
+class MockArduino : public Arduino {
+public:
+    MOCK_METHOD(void, pinMode, (int, int), (override));
+    MOCK_METHOD(int, digitalRead, (int), (override));
+};
 
-void test_button_setup(void) {
-    // Teste die setup Funktion
+TEST(ButtonTest, Setup) {
+    MockArduino arduino;
+    EXPECT_CALL(arduino, pinMode(BUTTON_PIN, INPUT_PULLUP));
+
     Button::setup();
-    TEST_ASSERT_EQUAL_INT(INPUT_PULLUP, getPinMode(BUTTON_PIN));
 }
 
-void test_button_loop(void) {
-    // Teste die loop Funktion
-    // Hier müssen wir einen Weg finden, den digitalen Pin zu simulieren
-    // Da dies von der spezifischen Hardware abhängt, ist es hier nicht dargestellt
+TEST(ButtonTest, LoopPressed) {
+    MockArduino arduino;
+    EXPECT_CALL(arduino, digitalRead(0)).WillOnce(Return(LOW));
+
+    Button::loop();
+
+    // Check that log_v("pressed") was called
 }
 
-int main(void) {
-    UNITY_BEGIN();
-    RUN_TEST(test_button_setup);
-    RUN_TEST(test_button_loop);
-    UNITY_END();
+TEST(ButtonTest, LoopReleased) {
+    MockArduino arduino;
+    EXPECT_CALL(arduino, digitalRead(0)).WillOnce(Return(HIGH));
 
-    return 0;
+    Button::loop();
+
+    // Check that log_v("released") was called
 }
