@@ -1,4 +1,4 @@
-name: Installer - Deploy
+name: Installer - deploy
 
 on:
   push:
