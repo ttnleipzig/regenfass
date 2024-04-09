@@ -1,0 +1,23 @@
+#include <Arduino.h>
+#include <unity.h>
+#include <SPI.h>
+
+// Die Funktion, die du testen möchtest
+int add(int a, int b) {
+    return a + b;
+}
+
+void test_add() {
+    TEST_ASSERT_EQUAL(5, add(2, 3));
+    TEST_ASSERT_EQUAL(-1, add(2, -3));
+}
+
+void setup() {
+    UNITY_BEGIN();
+    RUN_TEST(test_add);
+    UNITY_END();
+}
+
+void loop() {
+    // Nichts zu tun hier, da es sich um Unittests handelt
+}
