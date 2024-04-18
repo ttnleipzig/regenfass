@@ -56,7 +56,7 @@ void setup()
     Serial.println("\n\n\n");
 
     // Configuration
-    Config::T::setup();
+    Configuration::Configurator::setup();
 
 // Sensors
 #if FEATURE_SENSOR_HCSR04

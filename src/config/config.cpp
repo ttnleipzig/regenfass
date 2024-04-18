@@ -3,82 +3,68 @@
 
 namespace Configuration
 {
-    static std::optional<Line> read(Stream &stream)
-    {
-        std::string line;
-        if (!readLine(stream, line))
-        {
-            return std::nullopt;
-        }
-
-        if (line.find('=') != std::string::npos)
-        {
-            auto key = line.substr(0, line.find('='));
-            auto value = line.substr(line.find('=') + 1);
-            return Line{Type::SET, std::make_pair(key, value)};
-        }
-        else if (line.find('?') != std::string::npos)
-        {
-            auto key = line.substr(0, line.find('?'));
-            return Line{Type::GET, key};
-        }
-        else if (line.find('!') != std::string::npos)
-        {
-            auto key = line.substr(0, line.find('!'));
-            return Line{Type::ACTION, key};
-        }
-
-        return std::nullopt;
-    }
+    Config Configurator::_config;
 
     void Configurator::setup()
     {
         if (!configExists())
         {
-            Serial.println("Config file not found.");
-            // 1. Blink LED
-
-            // 2. Open Serial Port and listen to configurations
-
-            // 3. Save configurations to file
-
-            return;
+            Serial.println("No configuration found. Creating default configuration.");
         }
-
-        Serial.println("Config file found.");
-        // 1. Read configurations from file
-        auto fd = LittleFS.open("/config.scp", "r");
-        T::Configurator::startReading(fd);
-        fd.close();
-
-        // 2. Set LoRaWAN credentials to global variables
+        else
+        {
+            Serial.println("Configuration found. Loading configuration.");
+            loadConfig();
+        }
     }
 
     bool Configurator::configExists()
     {
-        if (!LittleFS.begin())
-        {
-            Serial.println("LittleFS could not be initialised.");
-            return false;
-        }
+        return LittleFS.exists("config.scp");
+    }
 
-        return LittleFS.exists("/config.scp"));
-    };
-
-    void Configurator::startReading(Stream &stream)
+    Config Configurator::loadConfig()
     {
-        while (stream.available())
-        {
-            // 1. Parse line and set LoRaWAN credentials
-            auto kv = Config::parseLine(stream);
-            if (!kv.has_value())
-            {
-                Serial.print(Line{Line::Type::SET, std::make_pair("error", "Invalid configuration file")});
-                Serial.print(Line{Line::Type::ACTION, "report_error"});
-                continue;
-            }
+        Config config;
 
-            auto [key, value] = kv.value();
+        File file = LittleFS.open("config.scp", "r");
+        if (!file)
+        {
+            Serial.println("Failed to open configuration file.");
+            return config;
         }
+
+        while (file.available())
+        {
+            // split by line
+            auto line = file.readStringUntil('\n');
+            auto l = Line::parse(std::string(line.c_str()));
+            if (l.has_value())
+            {
+                config.apply(l.value());
+            }
+            else
+            {
+                Serial.printf("Failed to parse line: %s", line);
+            }
+        }
+
+        file.close();
+
+        return config;
+    }
+
+    void Configurator::writeConfig()
+    {
+        File file = LittleFS.open("config.scp", "w");
+        if (!file)
+        {
+            Serial.println("Failed to open configuration file.");
+            return;
+        }
+
+        _config.write(file);
+
+        file.close();
     }
 }

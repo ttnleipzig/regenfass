@@ -1,6 +1,22 @@
 # S(imple)C(onfiguration)P(rotocol)
 
-## Set value
+## Run tests
+
+Tests are written in C++ using [Catch2](https://github.com/catchorg/Catch2).
+
+```bash
+make run-tests
+```
+
+## Protocol specification
+
+### Operator order
+
+1. Set value
+2. Query key
+3. Run action
+
+### Set value
 
 ```plain
 <KEY>=<VALUE>\n
@@ -12,7 +28,7 @@
   `- key as a string (can't contain `=` and `\n`)
 ```
 
-## Query key
+### Query key
 
 ```plain
 <KEY>?\n
@@ -21,7 +37,7 @@
    `- Key to retrieve
 ```
 
-## Run action
+### Run action
 
 ```plain
 <ACTION>!\n
@@ -29,6 +45,3 @@
    |    `- Run this action
    `- Action to run
 ```
-
-
-
