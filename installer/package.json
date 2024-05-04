@@ -12,19 +12,19 @@
 	},
 	"keywords": [],
 	"author": "",
-	"packageManager": "pnpm@8.15.2",
+	"packageManager": "pnpm@9.0.6",
 	"license": "AGPL-3.0-only",
 	"devDependencies": {
-		"autoprefixer": "^10.4.17",
+		"autoprefixer": "^10.4.19",
 		"concurrently": "^8.2.2",
-		"cssnano": "^6.0.5",
-		"postcss": "^8.4.35",
+		"cssnano": "^6.1.2",
+		"postcss": "^8.4.38",
 		"postcss-cli": "^11.0.0",
-		"serve": "^14.2.1",
-		"tailwindcss": "^3.4.1"
+		"serve": "^14.2.3",
+		"tailwindcss": "^3.4.3"
 	},
 	"dependencies": {
-		"@playwright/test": "^1.42.1",
-		"@types/node": "^20.11.27"
+		"@playwright/test": "^1.43.1",
+		"@types/node": "^20.12.8"
 	}
 }

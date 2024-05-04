@@ -4,9 +4,11 @@
     "home_assistant_domain": "esphome",
     "funding_url": "https://esphome.io/guides/supporters.html",
     "new_install_prompt_erase": false,
+
     "builds": [
         {
             "chipFamily": "ESP32",
+			"improv": false,
             "parts": [
                 {
                     "path": "public/bin/regenfass-heltec_wifi_lora_32_V3_HCSR04.bin",
@@ -16,6 +18,7 @@
         },
         {
             "chipFamily": "ESP32-S3",
+			"improv": false,
             "parts": [
                 {
                     "path": "public/bin/regenfass-heltec_wifi_lora_32_V3_HCSR04.bin",
