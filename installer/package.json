@@ -4,7 +4,7 @@
 	"description": "Install regenfass with your browser",
 	"private": true,
 	"scripts": {
-		"build": "postcss ./public/_style.css -o ./public/style.css",
+		"build": "postcss ./public/css/_style.css -o ./public/css/style.css",
 		"css:dev": "pnpm run build --watch --verbose",
 		"dev": "concurrently -n 'css,http' 'pnpm run css:dev' 'pnpm run start'",
 		"start": "serve .",

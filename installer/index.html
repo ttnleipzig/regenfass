@@ -9,30 +9,46 @@
 	<meta name="description" content="Regenfass web installer. Install the software directly from the website." />
 	<meta name="author" content="TTN Leipzig" />
 	<meta name="darkreader-lock" content="" />
-	<link rel="icon" type="image/png" href="public/regenfass.png" />
-	<link rel="stylesheet" href="public/style.css" />
+	<link rel="icon" type="image/png" href="public/img/regenfass.png" />
+	<link rel="stylesheet" href="public/css/style.css" />
 	<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 
 	<!-- opengraph -->
 	<meta property="og:title" content="regenfass - installer" />
 	<meta property="og:description"
 		content="Regenfass web installer. Install the software directly from the website." />
-	<meta property="og:image" content="/public/regenfass-opengraph.png" />
+	<meta property="og:image" content="/public/img/regenfass-opengraph.png" />
 	<meta property="og:url" content="https://regenfass.ttn-leipzig.de/" />
 	<meta property="og:site_name" content="regenfass" />
 	<meta property="og:type" content="website" />
 
 	<!-- jsonld for a product page -->
 	<script type="application/ld+json">
-			{
-				"@context": "https://schema.org/",
-				"@type": "Product",
-				"name": "regenfass",
-				"sku": "regenfass",
-				"description": "Regenfass web installer. Install the software directly from the website.",
-				"image": "https://regenfass.ttn-leipzig.de/public/regenfass-opengraph.png",
+		{
+			"@context": "https://schema.org/",
+			"@type": "Product",
+			"name": "regenfass",
+			"sku": "regenfass",
+			"description": "Regenfass web installer. Install the software directly from the website.",
+			"image": "https://regenfass.ttn-leipzig.de/public/img/regenfass-opengraph.png",
+			"url": "https://regenfass.eu",
+			"brand": {
+				"@type": "Organization",
+				"name": "TTN Leipzig",
+				"url": "https://ttn-leipzig.de",
+				"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+				"sameAs": [
+					"https://twitter.com/ttnleipzig",
+					"https://github.com/ttnleipzig"
+				]
+			},
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "EUR",
+				"availability": "https://schema.org/InStock",
 				"url": "https://regenfass.eu",
-				"brand": {
+				"seller": {
 					"@type": "Organization",
 					"name": "TTN Leipzig",
 					"url": "https://ttn-leipzig.de",
@@ -40,119 +56,42 @@
 					"sameAs": [
 						"https://twitter.com/ttnleipzig",
 						"https://github.com/ttnleipzig"
-					]
-				},
-				"offers": {
-					"@type": "Offer",
-					"price": "0",
-					"priceCurrency": "EUR",
-					"availability": "https://schema.org/InStock",
-					"url": "https://regenfass.eu",
-					"seller": {
-						"@type": "Organization",
-						"name": "TTN Leipzig",
-						"url": "https://ttn-leipzig.de",
-						"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
-						"sameAs": [
-							"https://twitter.com/ttnleipzig",
-							"https://github.com/ttnleipzig"
-						],
-						"contactPoint": {
-							"@type": "ContactPoint",
-							"contactType": "user support",
-							"email": "info@regenfass.eu",
-							"url": "https://docs.regenfass.eu"
-						}
-					}
-				},
-				"aggregateRating": {
-					"@type": "AggregateRating",
-					"ratingValue": "5",
-					"reviewCount": "1"
-				},
-				"review": {
-					"@type": "Review",
-					"reviewRating": {
-						"@type": "Rating",
-						"ratingValue": "5",
-						"bestRating": "5"
-					},
-					"author": {
-						"@type": "Person",
-						"name": "André Lademan",
-						"url": "https://andrelademann.de",
-						"sameAs": [
-							"https://twitter.com/vergissberlin",
-							"https://github.com/vergissberlin"
-						]
+					],
+					"contactPoint": {
+						"@type": "ContactPoint",
+						"contactType": "user support",
+						"email": "info@regenfass.eu",
+						"url": "https://docs.regenfass.eu"
 					}
 				}
+			},
+			"aggregateRating": {
+				"@type": "AggregateRating",
+				"ratingValue": "5",
+				"reviewCount": "1"
+			},
+			"review": {
+				"@type": "Review",
+				"reviewRating": {
+					"@type": "Rating",
+					"ratingValue": "5",
+					"bestRating": "5"
+				},
+				"author": {
+					"@type": "Person",
+					"name": "André Lademan",
+					"url": "https://andrelademann.de",
+					"sameAs": [
+						"https://twitter.com/vergissberlin",
+						"https://github.com/vergissberlin"
+					]
+				}
 			}
+		}
 	</script>
 
 	<style>
-		:root {
-			--text-color: #189;
-			--esp-tools-button-text-color: #118899 !important;
-			--esp-tools-button-border-radius: 0px !important;
-			--md-dialog-headline-color: red;
-			--md-dialog-container-shape-start-start: 0;
-			--md-dialog-container-shape-start-end: 0;
-			--md-dialog-container-shape-end-end: 0;
-			--md-dialog-container-shape-end-start: 0;
-			--md-dialog-container-shape: 0;
-			--md-sys-color-surface-container-high: #aaa;
-			--md-sys-color-surface-container-highest: #ddd;
-			--md-sys-color-on-surface: blue;
-		}
 
-		details {
-			user-select: none;
-		}
-
-		details summary svg {
-			transform: rotate(90deg);
-		}
-
-		details[open] summary svg {
-			transform: rotate(-90deg);
-		}
-
-		details[open] summary~* {
-			animation: ease-opacity-t-b 0.5s ease;
-		}
-
-		summary {
-			cursor: pointer;
-		}
-
-		svg {
-			transition: all 0.3s;
-		}
-
-		/* TO JE TO - TO JE TAJ */
-		summary::-webkit-details-marker {
-			display: none;
-		}
-
-		:focus {
-			outline: none;
-		}
-
-		.show-more {
-			display: flex;
-			padding-top: 40px;
-		}
-
-		.show-more a {
-			display: inline-block;
-			margin: 20px auto;
-			padding: 12px 12px;
-			color: #189;
-			text-decoration: none;
-			border: 1px solid rgba(17, 136, 153, 0.8);
-			border-radius: 100px;
-		}
 	</style>
 </head>
 
@@ -204,7 +143,7 @@
 				</p>
 			</div>
 			<div class="hidden shrink-0 lg:block">
-				<img src="public/regenfass.png" alt="Avatar image" loading="lazy" />
+				<img src="public/img/regenfass.png" alt="Avatar image" loading="lazy" />
 			</div>
 		</div>
 	</div>
