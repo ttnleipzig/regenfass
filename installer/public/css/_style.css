@@ -3,63 +3,71 @@
 @tailwind utilities;
 
 :root {
-	/* Colors */
+	--alert-error-color-bg: #faefeb;
+	--alert-error-color: #d93025;
+	--alert-info-color-bg: #e6eef5;
+	--alert-info-color: #00539f;
+	--alert-standard-color-bg: #e6e6e6;
+	--alert-standard-color: #666666;
+	--alert-success-color-bg: #edf7ee;
+	--alert-success-color: #4caf50;
+	--alert-warning-color-bg: #fff5e6;
+	--alert-warning-color: #ff9800;
+	--card-background-color: #fafafa;
+	--esp-tools-button-border-radius: 0px !important;
+	--esp-tools-button-text-color: #118899 !important;
+	--esphome-background-header: #e0e0e0;
+	--md-dialog-container-shape-end-end: 0;
+	--md-dialog-container-shape-end-start: 0;
+	--md-dialog-container-shape-start-end: 0;
+	--md-dialog-container-shape-start-start: 0;
+	--md-dialog-container-shape: 0;
+	--md-dialog-headline-color: red;
+	--md-sys-color-on-surface: blue;
+	--md-sys-color-surface-container-high: #aaa;
+	--md-sys-color-surface-container-highest: #ddd;
+	--mdc-dialog-content-ink-color: #212121;
+	--mdc-dialog-heading-ink-color: #212121;
+	--mdc-dialog-z-index: 998;
+	--mdc-theme-on-primary-no-attention: white;
+	--mdc-theme-on-primary: white;
+	--mdc-theme-primary-no-attention: #444444;
+	--mdc-theme-primary: #03a9f4;
 	--primary-bg-color: #fafafa;
 	--primary-footer-bg-color: #212121;
-	--card-background-color: #fafafa;
-	--alert-standard-color: #666666;
-	--alert-standard-color-bg: #e6e6e6;
-	--alert-info-color: #00539f;
-	--alert-info-color-bg: #e6eef5;
-	--alert-success-color: #4caf50;
-	--alert-success-color-bg: #edf7ee;
-	--alert-warning-color: #ff9800;
-	--alert-warning-color-bg: #fff5e6;
-	--alert-error-color: #d93025;
-	--alert-error-color-bg: #faefeb;
-	--mdc-theme-primary: #03a9f4;
 	--primary-text-color: #212121;
-	--mdc-dialog-z-index: 998;
-	--mdc-theme-primary-no-attention: #444444;
-	--mdc-theme-on-primary-no-attention: white;
-	--esphome-background-header: #e0e0e0;
-	--mdc-theme-on-primary: white;
-	--mdc-dialog-heading-ink-color: #212121;
-	--mdc-dialog-content-ink-color: #212121;
-	--update-available-color: #2e3dd4;
 	--status-connected: #444444;
-	--status-new: #ffa500;
 	--status-imported: #4caf50;
-
-	--esp-tools-button-text-color: #118899 !important;
-	--esp-tools-button-border-radius: 0px !important;
+	--status-new: #ffa500;
+	--text-color: #189;
+	--update-available-color: #2e3dd4;
 }
 
-/* dark theme */
+/* Dark theme */
 @media (prefers-color-scheme: dark) {
 	:root {
-		--primary-bg-color: #000000;
-		--primary-text-color: #e1e1e1;
-		--primary-footer-bg-color: #101e24;
-		--esphome-background-header: #282828;
 		--card-background-color: #282828;
 		--card-text-color: #e1e1e1;
-		--primary-text-color: #e1e1e1;
-		--mdc-theme-surface: #282828;
-		--mdc-theme-on-surface: #e1e1e1;
-		--mdc-theme-text-primary-on-background: #e1e1e1;
-		--mdc-dialog-heading-ink-color: #e1e1e1;
-		--mdc-theme-primary-no-attention: #cecece;
-		--mdc-theme-on-primary-no-attention: #222222;
+		--esphome-background-header: #282828;
 		--mdc-dialog-content-ink-color: #e1e1e1;
+		--mdc-dialog-heading-ink-color: #e1e1e1;
+		--mdc-ripple-color: #282828;
+		--mdc-ripple-color: #bebebe;
+		--mdc-text-field-fill-color: #3d3d3d;
 		--mdc-text-field-ink-color: #e1e1e1;
 		--mdc-text-field-label-ink-color: #e1e1e1;
-		--mdc-ripple-color: #282828;
-		--mdc-text-field-fill-color: #3d3d3d;
+		--mdc-theme-on-primary-no-attention: #222222;
+		--mdc-theme-on-surface: #e1e1e1;
+		--mdc-theme-primary-no-attention: #cecece;
+		--mdc-theme-surface: #282828;
+		--mdc-theme-text-primary-on-background: #e1e1e1;
 		--mdc-theme-text-secondary-on-background: #e1e1e1;
-		--update-available-color: #5f7eeb;
+		--primary-bg-color: #000000;
+		--primary-footer-bg-color: #101e24;
+		--primary-text-color: #e1e1e1;
+		--primary-text-color: #e1e1e1;
 		--status-connected: #cecece;
-		--mdc-ripple-color: #bebebe;
+		--update-available-color: #5f7eeb;
 	}
 
 	.esphome-header img {
@@ -67,7 +75,37 @@
 	}
 }
 
-/* CSS CODE */
+/* Accordion */
+details {
+	user-select: none;
+}
+
+details summary svg {
+	transform: rotate(90deg);
+}
+
+details[open] summary svg {
+	transform: rotate(-90deg);
+}
+
+details[open] summary~* {
+	animation: ease-opacity-t-b 0.5s ease;
+}
+
+summary {
+	cursor: pointer;
+}
+
+summary svg {
+	transition: all 0.3s;
+}
+
+summary::-webkit-details-marker {
+	display: none;
+}
+
+
+/* Ripple */
 .ripple {
 	position: relative;
 	overflow: hidden;
