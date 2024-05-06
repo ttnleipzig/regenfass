@@ -89,6 +89,8 @@
 			}
 		}
 	</script>
+
+</body>
 </head>
 
 <body class="text-slate-700 dark:text-slate-100">
@@ -158,7 +160,7 @@
 			class="rounded-t shadow-lg bg-sky-200 open:bg-sky-100 dark:bg-slate-800 dark:text-slate-200 border-grey-lighter dark:border-slate-500 dark:open:bg-slate-700 dark:hover:bg-slate-700 dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
 			<summary
 				class="flex items-center p-4 text-xl rounded-t open:hover:bg-sky-300 open:hover:border-b-0 hover:bg-sky-300 dark:hover:bg-slate-600"
-				onclick="document.getElementById('steps-configuration').open = false;">
+				onclick="step.switchStep('installation');">
 				1. Installation
 				<button title="Installation" class="ml-auto">
 					<svg class="w-4 h-4 -mr-1 opacity-75 fill-current" xmlns="http://www.w3.org/2000/svg"
@@ -350,14 +352,11 @@
 				</p>
 			</div>
 			<div class="w-full sm:w-5/12">
-				<form
-					class="flex px-4 py-2 bg-white rounded-full dark:bg-slate-800 focus-within:ring-2 focus-within:ring-cyan-600 hover:ring-2 hover:ring-cyan-600">
-					<input type="email" class="w-full appearance-none dark:bg-slate-800 focus:outline-none"
-						placeholder="your@email-address.iot" />
+				<form class="flex px-4 py-2 bg-white rounded-full dark:bg-slate-800 focus-within:ring-2 focus-within:ring-cyan-600 hover:ring-2 hover:ring-cyan-600">
+					<input type="email" class="w-full appearance-none dark:bg-slate-800 focus:outline-none"	placeholder="your@email-address.iot" />
 					<button
 						class="px-3 py-1 ml-2 text-sm font-semibold rounded-full text-sky-100 shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
-						type="submit">
-						Subscribe
+						type="submit">Subscribe
 					</button>
 				</form>
 			</div>
@@ -365,8 +364,7 @@
 	</div>
 
 	<div class="max-w-screen-lg px-3 py-6 mx-auto">
-		<div
-			class="pt-5 text-sm antialiased text-gray-400 border-t border-gray-300 dark:border-gray-600 dark:text-gray-300">
+		<div class="pt-5 text-sm antialiased text-gray-400 border-t border-gray-300 dark:border-gray-600 dark:text-gray-300">
 			<p>
 				TTN Leipzig, André Lademan, Hardenbergstraße 48, 04275
 				Leipzig, Germany, Europe, United Nations, Milky Way
@@ -378,9 +376,11 @@
 			</p>
 		</div>
 	</div>
-
+	<script src="public/js/step.js"></script>
 	<script src="public/js/installation.js"></script>
 	<script src="public/js/configuration.js"></script>
+	<script>
+		let installation = new Installation();
+	</script>
 </body>
-
 </html>
