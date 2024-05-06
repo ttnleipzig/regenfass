@@ -1,4 +1,29 @@
-const button = document.querySelector("esp-web-install-button")
+class Installation {
+
+	button = document.querySelector("esp-web-install-button")
+	state = ""
+
+	constructor() {
+		this.state = "constructed"
+		this.initilize()
+	}
+
+	initilize() {
+		this.state = "initilized"
+		document
+			.getElementById("type")
+			.addEventListener("change", (event) => {
+				button.setAttribute(
+					"manifest",
+					`./manifest_${event.target.value}.json`
+				)
+			}
+		)
+	}
+}
+
+
+/*
 document
 	.getElementById("type")
 	.addEventListener("change", (event) => {
@@ -7,7 +32,7 @@ document
 			`./manifest_${event.target.value}.json`
 		)
 	});
-/*
+
 button.addEventListener("initializing", (event) => {
 	console.log("initializing state", event);
 });
