@@ -124,7 +124,7 @@
 			<div>
 				<h1 class="text-3xl font-bold">Hi there! 👋</h1>
 				<p class="mt-6 text-xl leading-9">
-					This project is about a smart water tank. It measures
+					sssThis project is about a smart water tank. It measures
 					the water level and sends the data to a server. The
 					server can be used to control the water pump. The pump
 					can be controlled via a web interface or via a telegram
@@ -154,11 +154,11 @@
 			</span>
 		</span>
 
-		<details id="steps-installation" open
+		<details id="step-installation" open
 			class="rounded-t shadow-lg bg-sky-200 open:bg-sky-100 dark:bg-slate-800 dark:text-slate-200 border-grey-lighter dark:border-slate-500 dark:open:bg-slate-700 dark:hover:bg-slate-700 dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
 			<summary
 				class="flex items-center p-4 text-xl rounded-t open:hover:bg-sky-300 open:hover:border-b-0 hover:bg-sky-300 dark:hover:bg-slate-600"
-				onclick="document.getElementById('steps-configuration').open = false;">
+				onclick="document.getElementById('step-configuration').open = false;">
 				1. Installation
 				<button title="Installation" class="ml-auto">
 					<svg class="w-4 h-4 -mr-1 opacity-75 fill-current" xmlns="http://www.w3.org/2000/svg"
@@ -200,11 +200,11 @@
 			</div>
 		</details>
 
-		<details id="steps-configuration"
+		<details id="step-configuration"
 			class="rounded-b shadow-lg bg-sky-200 open:bg-sky-100 dark:bg-slate-800 dark:text-slate-200 border-grey-lighter dark:border-slate-500 dark:open:bg-slate-700 dark:hover:bg-slate-700 dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
 			<summary
 				class="flex items-center p-4 text-xl rounded-b open:hover:rounded-b-none open:rounded-b-none open:hover:bg-sky-300 hover:bg-sky-300 dark:hover:bg-slate-600"
-				onclick="document.getElementById('steps-installation').open = false;">
+				onclick="document.getElementById('step-installation').open = false;">
 				2. Configuration
 				<button title="Installation" class="ml-auto">
 					<svg class="w-4 h-4 -mr-1 opacity-75 fill-current ripple" xmlns="http://www.w3.org/2000/svg"
@@ -376,8 +376,12 @@
 	</div>
 	<script src="public/js/installation.js"></script>
 	<script src="public/js/configuration.js"></script>
+	<script src="public/js/step.js"></script>
 	<script>
+
 		let installation = new Installation();
+
+
 	</script>
 </body>
 </html>
