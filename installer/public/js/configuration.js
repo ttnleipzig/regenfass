@@ -92,6 +92,7 @@ connectionButton.addEventListener("click", async () => {
 					"error",
 					error.message
 				)
+				UI.writeLog(error.message)
 			}
 		}
 	} else {
@@ -106,7 +107,7 @@ connectionButton.addEventListener("click", async () => {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Send data to the serial device
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-sendButton.addEventListener("click", async function (event) {
+sendButton.addEventListener("click", async function () {
 	setCustomValidity("#credentials-deveui", "DevEUI")
 	setCustomValidity("#credentials-joineui", "JoinEUI")
 	setCustomValidity("#credentials-appkey", "AppKey")
