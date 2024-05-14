@@ -8,7 +8,6 @@ import {
 	credentialsAppkey,
 	credentialsDeveui,
 	credentialsJoineui,
-	eventLog,
 } from './selectors.js'
 
 let isConnected = false
@@ -61,6 +60,7 @@ connectionButton.addEventListener("click", async () => {
 					"error",
 					error.message
 				)
+				UI.writeLog(error.message)
 			}
 		}
 		else {
@@ -129,12 +129,11 @@ function setCustomValidity(inputId, name) {
 // :::::: Check for serial port on load :::::
 navigator.serial.getPorts().then((ports) => {
 	if (ports.length > 0) {
-		eventLog.textContent +=
+		UI.writeEventLog("Connection",
 			"Connected to " +
-			ports[0].getInfo().usbProductId +
-			"\n"
+			ports[0].getInfo().usbProductId)
 	} else {
-		eventLog.textContent += "No device connected\n"
+		UI.writeEventLog("Connection", "No device connected")
 	}
 })
 
@@ -143,5 +142,6 @@ document.getElementById("form-configuration").addEventListener("submit", async (
 	UI.setStatusIndicator("written-indicator", "info", "Sending data …")
 	const response = await RegenfassSerial.write(data)
 	console.log(response)
+	UI.writeEventLog("Data received", response)
 	UI.setStatusIndicator("written-indicator", "success", "Data sent")
 })

@@ -57,4 +57,41 @@ export class UI {
 				break
 		}
 	}
+
+	static writeLog(log) {
+		sendLog.textContent += log + "\n"
+	}
+
+	static clearLog() {
+		sendLog.textContent = ""
+	}
+
+	static writeEventLog(event, data) {
+		eventLogElement.textContent += `${event}: ${JSON.stringify(data)} \n`
+	}
+
+	static clearEventLog() {
+		eventLogElement.textContent = ""
+	}
+
+	static setConnectionButtonState(state) {
+		switch (state) {
+			case "connected":
+				connectionButton.textContent = "Disconnect"
+				connectionButton.classList.remove("bg-red-500")
+				connectionButton.classList.add("bg-green-500")
+				break
+			case "disconnected":
+				connectionButton.textContent = "Connect"
+				connectionButton.classList.remove("bg-green-500")
+				connectionButton.classList.add("bg-red-500")
+				break
+			default:
+				connectionButton.textContent = "Connect"
+				connectionButton.classList.remove("bg-green-500")
+				connectionButton.classList.add("bg-red-500")
+				break
+		}
+	}
+
 }
