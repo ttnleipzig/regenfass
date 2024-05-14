@@ -13,6 +13,13 @@ export class RegenfassSerial {
 	/** @type {WritableStream<Uint8Array>|null} */
 	static writer = null
 
+	/** @type {TextDecoder} */
+	static textEncoder = new TextEncoder()
+
+	/** @type {TextDecoder} */
+	static textDecoder = new TextDecoder()
+
+
 	/**
 	 * Connect to serial device
 	 *
@@ -70,7 +77,7 @@ export class RegenfassSerial {
 		try {
 			while (true) {
 				const {value, done} = await this.reader.read()
-				const decoded = textDecoder.decode(value)
+				const decoded = this.textDecoder.decode(value)
 
 				sendLog.textContent += decoded
 
@@ -95,7 +102,7 @@ export class RegenfassSerial {
 	 **/
 	static async write(data) {
 		try {
-			await this.writer.write(textEncoder.encode(data + "\n"))
+			await this.writer.write(this.textEncoder.encode(data + "\n"))
 			console.log("Write: " + data)
 			sendLog.textContent += `Write: ${data} \n`
 			// setStatusIndicator("written-indicator", "success")
