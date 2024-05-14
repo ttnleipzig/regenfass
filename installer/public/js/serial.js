@@ -5,6 +5,7 @@ import {
 } from './selectors.js'
 export class RegenfassSerial {
 
+	/** @type {SerialPort|null} */
 	static port
 
 	/** @type {ReadableStream<Uint8Array>|null} */
@@ -19,6 +20,18 @@ export class RegenfassSerial {
 	/** @type {TextDecoder} */
 	static textDecoder = new TextDecoder()
 
+
+
+	static async info() {
+		return {
+			port: this.port?.path,
+			readable: this.reader != null,
+			writable: this.writer != null,
+			usbVendorId: this.port?.usbVendorId,
+			usbProductId: this.port?.usbProductId,
+
+		}
+	}
 
 	/**
 	 * Connect to serial device
