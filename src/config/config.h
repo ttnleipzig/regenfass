@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include <scp.h>
 
-using namespace SCP;
-
 namespace Configuration
 {
     struct Config
@@ -14,15 +12,15 @@ namespace Configuration
         std::string appKey;
         std::string devEui;
 
-        void apply(Line line)
+        void apply(const SCPLine *line)
         {
-            if (line.type != Line::Type::SET)
+            if (line->type != SCPLineType::SET)
             {
                 return;
             }
 
-            const auto k = line.data.kv.first;
-            const auto v = line.data.kv.second;
+            const auto k = line->as.kv.k;
+            const auto v = line->as.kv.v;
             if (k == "appEui")
             {
                 this->appEui = v;
@@ -44,7 +42,7 @@ namespace Configuration
          */
         void write(Stream &stream)
         {
-#define WRITE(key) stream.write(SCP::Line(SCP::Line::Type::SET, std::make_pair(#key, key)).toString().c_str());
+#define WRITE(key) stream.write(scp_line_to_string(scp_line_new(SCPLineType::SET, #key, key.c_str())));
             WRITE(appEui);
             WRITE(appKey);
             WRITE(devEui);
