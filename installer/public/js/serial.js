@@ -20,8 +20,6 @@ export class RegenfassSerial {
 	/** @type {TextDecoder} */
 	static textDecoder = new TextDecoder()
 
-
-
 	static async info() {
 		return {
 			port: this.port?.path,
@@ -29,7 +27,6 @@ export class RegenfassSerial {
 			writable: this.writer != null,
 			usbVendorId: this.port?.usbVendorId,
 			usbProductId: this.port?.usbProductId,
-
 		}
 	}
 
@@ -93,7 +90,6 @@ export class RegenfassSerial {
 				const decoded = this.textDecoder.decode(value)
 
 				sendLog.textContent += decoded
-
 				if (done) break
 			}
 		} catch (err) {
