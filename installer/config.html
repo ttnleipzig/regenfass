@@ -147,7 +147,7 @@ void loop() {
 						device
 					</h4>
 
-					<button id="send-button" disabled
+					<button id="button-configuration" disabled
 						class="w-48 p-3 mb-3 bg-blue-200 border rounded hover:border-slate-300 hover:bg-slate-200 active:bg-slate-300">
 						Send
 					</button>
@@ -155,12 +155,12 @@ void loop() {
 						placeholder="Send data to the serial device"
 						class="p-3 mb-1 border rounded text-slate-500 w-96 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-500" />
 
-					<label for="send-log" class="block text-align-left">Log:</label>
-					<textarea id="send-log" rows="5" readonly placeholder="Log output"
+					<label for="log-send" class="block text-align-left">Log:</label>
+					<textarea id="log-send" rows="5" readonly placeholder="Log output"
 						class="w-full p-3 border rounded text-slate-500 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-500"></textarea>
 
-					<label for="event-log" class="block text-align-left">Event-Log:</label>
-					<textarea id="event-log" rows="5" readonly placeholder="Log output"
+					<label for="log-event" class="block text-align-left">log-event:</label>
+					<textarea id="log-event" rows="5" readonly placeholder="Log output"
 						class="w-full p-3 border rounded text-slate-500 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-500"></textarea>
 				</section>
 			</div>
@@ -188,9 +188,9 @@ void loop() {
 			),
 			connectionButton = document.getElementById("connection-button"),
 			sendInput = document.getElementById("send-input"),
-			sendButton = document.getElementById("send-button"),
-			sendLog = document.getElementById("send-log"),
-			eventLog = document.getElementById("event-log"),
+			sendButton = document.getElementById("button-configuration"),
+			sendLog = document.getElementById("log-send"),
+			eventLog = document.getElementById("log-event"),
 			classSuccessBg = "bg-green-400",
 			classSuccessText = "text-green-500",
 			classInfoBg = "bg-sky-400",
