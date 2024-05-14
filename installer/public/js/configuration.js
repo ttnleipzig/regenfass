@@ -1,5 +1,5 @@
-import {Type, Line} from './line.js'
-import {RegenfassSerial} from './serial.js'
+import {Type, Line} from './line.mjs'
+import {RegenfassSerial} from './serial.mjs'
 import { UI } from './ui.js'
 
 import {
