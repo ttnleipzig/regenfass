@@ -38,15 +38,14 @@ namespace Configuration
         {
             // split by line
             auto line = file.readStringUntil('\n');
-            auto l = Line::parse(std::string(line.c_str()));
-            if (l.has_value())
-            {
-                config.apply(l.value());
-            }
-            else
+            auto l = scp_line_parse(line.c_str());
+            if (l == nullptr)
             {
                 Serial.printf("Failed to parse line: %s", line);
+                continue;
             }
+
+            config.apply(l);
         }
 
         file.close();
