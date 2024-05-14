@@ -16,7 +16,7 @@ let isConnected = false
 /**
  * encode form data
  */
-async function encodeFormData() {
+function encodeFormData() {
 	let data = [
 		new Line(Type.SET, ["deveui", credentialsDeveui.value]),
 		new Line(Type.SET, ["joineui", credentialsJoineui.value]),
