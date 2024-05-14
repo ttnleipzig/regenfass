@@ -1,7 +1,7 @@
 import {
-	sendButton,
-	sendLog,
-	connectionButton,
+	buttonConfiguration,
+	logSend,
+	buttonConnection,
 } from './selectors.js'
 export class RegenfassSerial {
 
@@ -40,12 +40,12 @@ export class RegenfassSerial {
 		this.port = await navigator.serial.requestPort()
 		await this.port.open({
 			baudRate: 115200,
-			parity: "none",
+			parity: 'none',
 			stopBits: 1,
-			flowControl: "none",
+			flowControl: 'none',
 		})
-		sendButton.disabled = false
-		connectionButton.textContent = "Disconnect"
+		buttonConfiguration.disabled = false
+		buttonConnection.textContent = 'Disconnect'
 
 		this.reader = this.port.readable.getReader()
 		this.writer = this.port.writable.getWriter()
@@ -71,8 +71,8 @@ export class RegenfassSerial {
 			await this.port.close()
 			this.port = null
 
-			sendButton.disabled = true
-			connectionButton.textContent = "Connect"
+			buttonConfiguration.disabled = true
+			buttonConnection.textContent = 'Connect'
 			return false
 		}
 	}
@@ -89,15 +89,15 @@ export class RegenfassSerial {
 				const {value, done} = await this.reader.read()
 				const decoded = this.textDecoder.decode(value)
 
-				sendLog.textContent += decoded
+				logSend.textContent += decoded
 				if (done) break
 			}
 		} catch (err) {
 			const errorMessage = `error reading data: ${err}`
 			console.error(errorMessage)
-			sendLog.textContent += errorMessage + "\n"
+			logSend.textContent += errorMessage + '\n'
 			/*
-			setStatusIndicator("written-indicator", "error")
+			setStatusIndicator('written-indicator', 'error')
 			*/
 		}
 	}
@@ -111,19 +111,19 @@ export class RegenfassSerial {
 	 **/
 	static async write(data) {
 		try {
-			await this.writer.write(this.textEncoder.encode(data + "\n"))
-			console.log("Write: " + data)
-			sendLog.textContent += `Write: ${data} \n`
-			// setStatusIndicator("written-indicator", "success")
+			await this.writer.write(this.textEncoder.encode(data + '\n'))
+			console.log('Write: ' + data)
+			logSend.textContent += `Write: ${data} \n`
+			// setStatusIndicator('written-indicator', 'success')
 		} catch (err) {
 			const errorMessage = `Error writing data: ${err}`
 			console.error(errorMessage)
-			sendLog.textContent += errorMessage + "\n"
+			logSend.textContent += errorMessage + '\n'
 			/*
 			setStatusIndicator(
-				"written-indicator",
-				"error",
-				"Error writing data: " + err
+				'written-indicator',
+				'error',
+				'Error writing data: ' + err
 			)
 			*/
 		}

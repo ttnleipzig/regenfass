@@ -67,7 +67,7 @@ export class Line {
             case Type.ACTION:
                 return `${this.data.k}!`;
             default:
-                return "error=invalid line";
+                return 'error=invalid line';
         }
     }
 }
