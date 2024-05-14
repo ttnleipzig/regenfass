@@ -12,9 +12,6 @@ export default [
 		files: [
 			'public/js/**/*.{js|mjs}',
 		],
-		env: {
-			browser: true,
-		},
 		ignores: ['tailwind.config.js']
 	},
 	pluginJs.configs.recommended,
