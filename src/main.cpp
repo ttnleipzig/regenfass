@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <esp32-hal-log.h>
 
+#define SCP_IMPLEMENTATION
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"

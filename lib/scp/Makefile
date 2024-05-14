@@ -20,23 +20,19 @@ TESTS_DIR := $(DIR)/tests
 
 all: run-tests
 
-$(DIR)/scp.o: $(DIR)/scp.cpp
-	$(CXX) -c $< -o $@
-
 $(TESTS_DIR)/catch2.o: $(TESTS_DIR)/catch2.cpp
 	$(CXX) -c $< -o $@
 
 $(TESTS_DIR)/main.o: $(TESTS_DIR)/main.cpp
 	$(CXX) -c $< -o $@
 
-$(TESTS_DIR)/main: $(DIR)/scp.o $(TESTS_DIR)/catch2.o $(TESTS_DIR)/main.o
+$(TESTS_DIR)/main: $(TESTS_DIR)/catch2.o $(TESTS_DIR)/main.o
 	$(CXX) $^ -o $@
 
 run-tests: $(TESTS_DIR)/main
 	$(TESTS_DIR)/main
 
 clean:
-	rm -f $(DIR)/scp.o
 	rm -f $(TESTS_DIR)/catch2.o
 	rm -f $(TESTS_DIR)/main.o
 	rm -f $(TESTS_DIR)/main
