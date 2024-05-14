@@ -1,4 +1,4 @@
-import { Line } from './line.js';
+import { Line } from './line.mjs';
 
 // Beispiel für Parse
 const parsedLine = Line.parse('key=value');
