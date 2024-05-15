@@ -51,20 +51,20 @@ jobs:
       - name: Run Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
 
-      - name: List test report json
-        run: ls -lisa ./installer/playwright-report/
+      - name: List test reports
+        run: ls -lisa ./installer/
 
       - name: Publish test report json to pull request
         uses: sidharthv96/playwright-report-action@v1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: ./
+          working_directory: ./installer
 
       - name: Publish test report junit to pull request
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: ./installer/playwright-report/report.xml
+          report_paths: ./installer/report.xml
           summary: 'Playwright test results'
 
       - name: Upload playwright report
