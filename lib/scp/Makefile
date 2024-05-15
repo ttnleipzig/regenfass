@@ -32,7 +32,17 @@ $(TESTS_DIR)/main: $(TESTS_DIR)/catch2.o $(TESTS_DIR)/main.o
 run-tests: $(TESTS_DIR)/main
 	$(TESTS_DIR)/main
 
+ifeq ($(shell command -v emcc 2> /dev/null),)
+wasm: $(DIR)/scp.h $(DIR)/scp_wasm.c
+	echo "emcc not found"
+else
+wasm: $(DIR)/scp.h $(DIR)/scp_wasm.c
+	emcc --no-entry -O3 -s EXPORT_ES6=1 -s MODULARIZE=1 -s WASM=1 -s EXPORTED_RUNTIME_METHODS='["cwrap","getValue","setValue","AsciiToString","stringToAscii"]' -s EXPORTED_FUNCTIONS='["_malloc","_free"]' -o $(DIR)/js/scp.mod.js $(DIR)/scp_wasm.c
+endif
+
 clean:
 	rm -f $(TESTS_DIR)/catch2.o
 	rm -f $(TESTS_DIR)/main.o
 	rm -f $(TESTS_DIR)/main
+	rm -f $(DIR)/js/scp.mod.js
+	rm -f $(DIR)/js/scp.mod.wasm
