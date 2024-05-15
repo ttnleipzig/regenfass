@@ -52,14 +52,15 @@ jobs:
         uses: sidharthv96/playwright-report-action@v1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: ./installer/playwright-report/
+          working_directory: ./
+
 
       - name: Publish test report junit to pull request
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: ./installer/playwright-report/report.xml
-          summary: 'playwright test results'
+          report_paths: ./report.xml
+          summary: 'Playwright test results'
 
       - name: Upload playwright report
         uses: actions/upload-artifact@v4
