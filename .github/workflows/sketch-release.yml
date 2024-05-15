@@ -1,4 +1,4 @@
-name: Binary - release
+name: Sketch - release
 
 on:
   push:
@@ -43,7 +43,6 @@ jobs:
           name: firmware-${{ matrix.environment }}
           path: .pio/build/${{ matrix.environment }}/*.bin
           compression-level: 8
-
 
   release:
     name: 📦 Release
