@@ -9,6 +9,10 @@
 		"dev": "concurrently -n 'css,http' 'pnpm run css:dev' 'pnpm run start'",
 		"start": "serve .",
 		"test": "pnpm exec playwright test",
+		"test:line": "pnpm exec playwright test --reporter=line",
+		"test:junit": "pnpm exec playwright test --reporter=junit > ./test-results.xml",
+		"test:list": "pnpm exec playwright test --reporter=list",
+		"test:dot": "pnpm exec playwright test --reporter=dot",
 		"lint": "pnpm exec eslint"
 	},
 	"keywords": [],
@@ -28,7 +32,7 @@
 		"tailwindcss": "^3.4.3"
 	},
 	"dependencies": {
-		"@playwright/test": "^1.43.1",
-		"@types/node": "^20.12.8"
+		"@playwright/test": "^1.44.0",
+		"@types/node": "^20.12.10"
 	}
 }
