@@ -11,6 +11,7 @@ on:
 
 env:
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
+  PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
 
 jobs:
   test:
@@ -39,7 +40,18 @@ jobs:
         run: cd ./installer && pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html
+        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
+
+      - name: Publish test report json to pull request
+        uses: sidharthv96/playwright-report-action@v1.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: ./installer/playwright-report/
+      - name: Publish test report junit to pull request
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: './installer/playwright-report/report.xml'
 
       - name: Upload playwright report
         uses: actions/upload-artifact@v4
@@ -48,9 +60,3 @@ jobs:
           name: playwright-report
           path: ./installer/playwright-report/
           retention-days: 30
-      - name: Publish playwright report
-        uses: sidharthv96/playwright-report-action
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ./installer/playwright-report/
-          package-manager: pnpm
