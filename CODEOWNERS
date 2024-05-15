@@ -1,0 +1,13 @@
+# default code owner are team leads
+*                                         @ttnleipzig/core @ttnleipzig/regenfass
+
+
+# Installer
+/installer                                @ttnleipzig/regenfass-installer
+
+# Sketch
+/lib                                      @ttnleipzig/regenfass-sketch
+/src                                      @ttnleipzig/regenfass-sketch
+
+# github actions
+/.github                                  @ttnleipzig/regenfass-ci
