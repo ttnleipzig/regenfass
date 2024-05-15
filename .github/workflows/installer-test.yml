@@ -48,6 +48,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           working_directory: ./installer/playwright-report/
+
       - name: Publish test report junit to pull request
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
