@@ -9,30 +9,46 @@
 	<meta name="description" content="Regenfass web installer. Install the software directly from the website." />
 	<meta name="author" content="TTN Leipzig" />
 	<meta name="darkreader-lock" content="" />
-	<link rel="icon" type="image/png" href="/public/regenfass.png" />
-	<link rel="stylesheet" href="/public/style.css" />
+	<link rel="icon" type="image/png" href="public/img/regenfass.png" />
+	<link rel="stylesheet" href="public/css/style.css" />
 	<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 
 	<!-- opengraph -->
 	<meta property="og:title" content="regenfass - installer" />
 	<meta property="og:description"
 		content="Regenfass web installer. Install the software directly from the website." />
-	<meta property="og:image" content="/public/regenfass-opengraph.png" />
+	<meta property="og:image" content="/public/img/regenfass-opengraph.png" />
 	<meta property="og:url" content="https://regenfass.ttn-leipzig.de/" />
 	<meta property="og:site_name" content="regenfass" />
 	<meta property="og:type" content="website" />
 
 	<!-- jsonld for a product page -->
 	<script type="application/ld+json">
-			{
-				"@context": "https://schema.org/",
-				"@type": "Product",
-				"name": "regenfass",
-				"sku": "regenfass",
-				"description": "Regenfass web installer. Install the software directly from the website.",
-				"image": "https://regenfass.ttn-leipzig.de/public/regenfass-opengraph.png",
+		{
+			"@context": "https://schema.org/",
+			"@type": "Product",
+			"name": "regenfass",
+			"sku": "regenfass",
+			"description": "Regenfass web installer. Install the software directly from the website.",
+			"image": "https://regenfass.ttn-leipzig.de/public/img/regenfass-opengraph.png",
+			"url": "https://regenfass.eu",
+			"brand": {
+				"@type": "Organization",
+				"name": "TTN Leipzig",
+				"url": "https://ttn-leipzig.de",
+				"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+				"sameAs": [
+					"https://twitter.com/ttnleipzig",
+					"https://github.com/ttnleipzig"
+				]
+			},
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "EUR",
+				"availability": "https://schema.org/InStock",
 				"url": "https://regenfass.eu",
-				"brand": {
+				"seller": {
 					"@type": "Organization",
 					"name": "TTN Leipzig",
 					"url": "https://ttn-leipzig.de",
@@ -40,55 +56,39 @@
 					"sameAs": [
 						"https://twitter.com/ttnleipzig",
 						"https://github.com/ttnleipzig"
-					]
-				},
-				"offers": {
-					"@type": "Offer",
-					"price": "0",
-					"priceCurrency": "EUR",
-					"availability": "https://schema.org/InStock",
-					"url": "https://regenfass.eu",
-					"seller": {
-						"@type": "Organization",
-						"name": "TTN Leipzig",
-						"url": "https://ttn-leipzig.de",
-						"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
-						"sameAs": [
-							"https://twitter.com/ttnleipzig",
-							"https://github.com/ttnleipzig"
-						],
-						"contactPoint": {
-							"@type": "ContactPoint",
-							"contactType": "user support",
-							"email": "info@regenfass.eu",
-							"url": "https://docs.regenfass.eu"
-						}
-					}
-				},
-				"aggregateRating": {
-					"@type": "AggregateRating",
-					"ratingValue": "5",
-					"reviewCount": "1"
-				},
-				"review": {
-					"@type": "Review",
-					"reviewRating": {
-						"@type": "Rating",
-						"ratingValue": "5",
-						"bestRating": "5"
-					},
-					"author": {
-						"@type": "Person",
-						"name": "André Lademan",
-						"url": "https://andrelademann.de",
-						"sameAs": [
-							"https://twitter.com/vergissberlin",
-							"https://github.com/vergissberlin"
-						]
+					],
+					"contactPoint": {
+						"@type": "ContactPoint",
+						"contactType": "user support",
+						"email": "info@regenfass.eu",
+						"url": "https://docs.regenfass.eu"
 					}
 				}
+			},
+			"aggregateRating": {
+				"@type": "AggregateRating",
+				"ratingValue": "5",
+				"reviewCount": "1"
+			},
+			"review": {
+				"@type": "Review",
+				"reviewRating": {
+					"@type": "Rating",
+					"ratingValue": "5",
+					"bestRating": "5"
+				},
+				"author": {
+					"@type": "Person",
+					"name": "André Lademan",
+					"url": "https://andrelademann.de",
+					"sameAs": [
+						"https://twitter.com/vergissberlin",
+						"https://github.com/vergissberlin"
+					]
+				}
 			}
-		</script>
+		}
+	</script>
 </head>
 
 <body class="text-slate-700 dark:text-slate-100">
@@ -130,65 +130,214 @@
 					can be controlled via a web interface or via a telegram
 					bot. It uses a HC-SR04 ultrasonic sensor to measure the
 					water level. The data is sent to
-					<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">The Things
-						Network</span>
+					<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
+						The Things Network
+					</span>
 					via a
-					<span
-						class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">LoRaWAN</span>
+					<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
+						LoRaWAN</span>
 					gateway.
 				</p>
 			</div>
 			<div class="hidden shrink-0 lg:block">
-				<img src="public/regenfass.png" alt="Avatar image" loading="lazy" />
+				<img src="public/img/regenfass.png" alt="Regenfass logo" loading="lazy" />
 			</div>
 		</div>
 	</div>
-	<div class="max-w-screen-lg px-3 py-6 mx-auto">
+
+	<div class="max-w-screen-lg px-3 py-6 mx-auto transition-all duration-300 ease-in-out">
 		<span class="relative inline-flex">
-			<h2 class="mb-6 text-2xl font-bold">Installation</h2>
+			<h2 class="mb-6 text-2xl font-bold">Installation & configuration</h2>
 			<span class="absolute top-0 right-0 flex w-3 h-3 -mt-1 -mr-4">
 				<span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-sky-400"></span>
 				<span class="relative inline-flex w-3 h-3 rounded-full bg-sky-500"></span>
 			</span>
 		</span>
-		<div class="flex flex-col gap-6">
-			<div
-				class="flex flex-col items-center gap-x-8 rounded-md bg-sky-200 dark:bg-slate-800 p-3 md:flex-row dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
-				<div>
-					<div class="flex flex-col items-center gap-y-2 md:flex-row">
-						<div class="text-xl font-semibold">
-							Instructions
+
+		<details id="step-installation"
+			class="rounded-t shadow-lg bg-sky-200 open:bg-sky-100 dark:bg-slate-800 dark:text-slate-200 border-grey-lighter dark:border-slate-500 dark:open:bg-slate-700 dark:hover:bg-slate-700 dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
+			<summary
+				class="flex items-center p-4 text-xl rounded-t open:hover:bg-sky-300 open:hover:border-b-0 hover:bg-sky-300 dark:hover:bg-slate-600"
+				onclick="document.getElementById('step-configuration').open = false;">
+				1. Installation
+				<button id="button-installation" title="Installation" class="ml-auto">
+					<svg class="w-4 h-4 -mr-1 opacity-75 fill-current" xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20">
+						<path
+							d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
+					</svg>
+				</button>
+			</summary>
+
+			<div class="p-4 text-lg">
+				<ol class="ml-4 text-gray-700 list-inside dark:text-gray-400">
+					<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❶</span> <span>Connect your
+							microcontroller with an USB cable to your computer.</span></li>
+					<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❷</span> <span>Select the
+							microcontroller type from the drop down.</span></li>
+					<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❸</span> <span>Click the
+							install button.</span></li>
+				</ol>
+
+				<p class="text-center">
+					<select title="Select the micro controller type" name="type" id="type"
+						class="p-6 mr-0 bg-white rounded-l-lg dark:bg-slate-600" style="margin-right: -4px">
+						<option value="heltec" selected>
+							Helltec LoRa32
+						</option>
+						<option value="esp32-generic">
+							Generic ESP32
+						</option>
+					</select>
+					<esp-web-install-button manifest="/manifest_heltec.json">
+						<button slot="activate" type="button"
+							class="px-12 py-5 my-5 ml-0 text-lg font-medium rounded-r-lg shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-600/50">
+							Install
+						</button>
+						<span slot="unsupported">Ah snap, your browser doesn't work!</span>
+						<span slot="not-allowed">
+							Ah snap, you are not allowed to use this on HTTP!
+						</span>
+					</esp-web-install-button>
+				</p>
+			</div>
+		</details>
+
+		<details id="step-configuration" open
+			class="rounded-b shadow-lg bg-sky-200 open:bg-sky-100 dark:bg-slate-800 dark:text-slate-200 border-grey-lighter dark:border-slate-500 dark:open:bg-slate-700 dark:hover:bg-slate-700 dark:shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]">
+			<summary
+				class="flex items-center p-4 text-xl rounded-b open:hover:rounded-b-none open:rounded-b-none open:hover:bg-sky-300 hover:bg-sky-300 dark:hover:bg-slate-600"
+				onclick="document.getElementById('step-installation').open = false;">
+				2. Configuration
+				<button title="Installation" class="ml-auto">
+					<svg class="w-4 h-4 -mr-1 opacity-75 fill-current ripple" xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20">
+						<path
+							d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
+					</svg>
+				</button>
+			</summary>
+
+			<div class="p-4 leading-normal text-md">
+				<section class="mb-4 border-b-1 border-slate-400">
+
+					<div id="port-name">PortName</div>
+
+					<h4 class="my-2 font-semibold text-md">
+						2.1. Connect to the serial device
+					</h4>
+					<div class="flex w-full gap-8">
+						<div class="flex-5">
+							<button id="connection-button"
+								class="w-48 p-3 mb-4 font-semibold border rounded ripple bg-sky-300 hover:bg-sky-400 dark:bg-slate-800 dark:border-slate-600 hover:border-slate-300 dark:hover:bg-slate-900 dark:active:bg-slate-700">
+								Connect
+							</button>
+						</div>
+
+						<div class="grid flex-auto gap-2 text-sm grid-col-2">
+							<div id="connection-indicator"
+								class="flex px-4 py-2 space-x-3 rounded bg-slate-100 dark:bg-slate-200 dark:bg-slate-600">
+								<span
+									class="w-4 h-4 transition-colors duration-300 ease-in-out border rounded-full bg-slate-300 border-slate-400"></span>
+								<p class="w-24 font-semibold text-slate-600 dark:text-slate-700">Connection</p>
+								<p>…</p>
+							</div>
+
+							<div id="port-indicator"
+								class="flex px-4 py-2 space-x-3 rounded bg-slate-100 dark:bg-slate-200 dark:bg-slate-600">
+								<span
+									class="w-4 h-4 transition-colors duration-300 ease-in-out border rounded-full bg-slate-300 border-slate-400"></span>
+								<p class="w-24 font-semibold text-slate-600 dark:text-slate-700">Port</p>
+								<p>…</p>
+							</div>
+
+							<div id="readable-indicator"
+								class="flex px-4 py-2 space-x-3 rounded bg-slate-100 dark:bg-slate-200 dark:bg-slate-600">
+								<span
+									class="w-4 h-4 transition-colors duration-300 ease-in-out border rounded-full bg-slate-300 border-slate-400"></span>
+								<p class="w-24 font-semibold text-slate-600 dark:text-slate-700">
+									Readable
+								</p>
+								<p>…</p>
+							</div>
+
+							<div id="writeable-indicator"
+								class="flex px-4 py-2 space-x-3 rounded bg-slate-100 dark:bg-slate-200 dark:bg-slate-600">
+								<span
+									class="w-4 h-4 transition-colors duration-300 ease-in-out border rounded-full bg-slate-300 border-slate-400"></span>
+								<span class="w-24 font-semibold text-slate-600 dark:text-slate-700">Writeable</span>
+								<span>…</span>
+							</div>
+							<div id="written-indicator"
+								class="flex px-4 py-2 space-x-3 rounded bg-slate-200 dark:bg-slate-600">
+								<span
+									class="w-4 h-4 transition-colors duration-300 ease-in-out border rounded-full bg-slate-300 border-slate-400"></span>
+								</span>
+								<span class="w-24 font-semibold text-slate-600 dark:text-slate-700">Written</span>
+								<span>…</span>
+							</div>
 						</div>
 					</div>
-					<p class="mt-3 text-gray-700 dark:text-gray-400">
-						Lorem ipsum dolor sit amet, consectetur adipiscing
-						elit. Suspendisse bibendum. Nunc non posuere
-						consectetur, justo erat semper enim, non hendrerit
-						dui odio id enim.
+				</section>
+
+				<section>
+					<h4 class="mt-6 mb-2 font-semibold text-md">
+						2.2. Setup your LoRaWAN credentials
+					</h4>
+
+					<div class="flex gap-6 mb-4 rounded bg-slate-100 dark:bg-sky-400">
+						<form id="form-configuration" class="px-8 py-4 bg-white rounded dark:bg-slate-800">
+							<div class="mb-4">
+								<label for="credentials-joineui"
+									class="block mb-2 text-sm font-bold text-align-left">JoinEUI:</label>
+								<input id="credentials-joineui" type="text" autocomplete="off" spellcheck="false"
+									placeholder="·· ·· ·· ·· ·· ·· ·· ·· " required pattern="[0-9a-fA-F]{16}"
+									class="p-3 mb-1 border rounded text-slate-500 w-96 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-500" />
+							</div>
+
+							<div class="mb-4">
+								<label for="credentials-deveui"
+									class="block mb-2 text-sm font-bold text-align-left">DevEUI:</label>
+								<input id="credentials-deveui" type="text" autocomplete="off" spellcheck="false"
+									placeholder="·· ·· ·· ·· ·· ·· ·· ·· " required pattern="[0-9a-fA-F]{16}"
+									class="p-3 mb-1 border rounded text-slate-500 w-96 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-500" />
+							</div>
+
+							<div class="mb-4">
+								<label for="credentials-appkey"
+									class="block mb-2 text-sm font-bold text-align-left">AppKey:</label>
+								<input id="credentials-appkey" type="text" autocomplete="off" spellcheck="false"
+									required pattern="[0-9a-fA-F]{32}"
+									placeholder="·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· "
+									class="p-3 mb-1 border rounded text-slate-500 w-96 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-500" />
+							</div>
+							<div class="text-right">
+								<button type="submit" id="button-configuration"
+									class="w-48 p-3 mb-4 font-semibold border rounded cursor-pointer ripple bg-sky-300 hover:bg-sky-400 dark:bg-slate-800 dark:border-slate-600 hover:border-slate-300 dark:hover:bg-slate-900 dark:active:bg-slate-700">
+									Send
+								</button>
+							</div>
+						</form>
+						<div class="w-full px-8 py-4 text-sky-900">
+							<div class="mb-4">
+								<label for="log-send" class="block mb-2 font-bold text-align-left">Log:</label>
+								<textarea id="log-send" rows="5" readonly placeholder="> "
+									class="w-full p-3 font-mono text-sm border rounded text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-500"></textarea>
+							</div>
+
+							<label for="log-event" class="block mb-2 font-bold text-align-left">log-event:</label>
+							<textarea id="log-event" rows="5" readonly placeholder="> "
+								class="w-full p-3 font-mono text-sm border rounded text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-500"></textarea>
+						</div>
+					</div>
+					<p class="mb-4 italic font-light text-center text-slate-500 dark:text-slate-400">
+						<strong class="font-bold">Hint:</strong> If you don't know how to get your LoRaWAN credentials,
+						please watch our <a href="https://www.youtube.com/watch?v=6q0996931M">video tutorial</a>
+						on how to get them.
 					</p>
-					<p class="text-center">
-						<select title="Select the micro controller type" name="type" id="type"
-							class="p-6 mr-0 bg-white rounded-l-lg dark:bg-slate-700" style="margin-right: -4px">
-							<option value="heltec" selected>
-								Helltec LoRa32
-							</option>
-							<option value="esp32-generic">
-								Generic ESP32
-							</option>
-						</select>
-						<esp-web-install-button manifest="/manifest_heltec.json">
-							<button slot="activate" type="button"
-								class="px-12 py-5 my-5 ml-0 text-lg font-medium rounded-r-lg shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-600/50">
-								Install
-							</button>
-							<span slot="unsupported">Ah snap, your browser doesn't work!</span>
-							<span slot="not-allowed">Ah snap, you are not allowed to use this on
-								HTTP!</span>
-						</esp-web-install-button>
-					</p>
-				</div>
+				</section>
 			</div>
-		</div>
+		</details>
 	</div>
 
 	<div class="max-w-screen-lg px-3 py-6 mx-auto">
@@ -196,8 +345,9 @@
 			<div class="sm:w-7/12">
 				<div class="text-3xl font-bold">
 					Subscribe to the
-					<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">update
-						newsletters</span>
+					<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
+						update newsletters
+					</span>
 				</div>
 				<p class="mt-3 dark:text-gray-300">
 					If you would like to be informed about software updates,
@@ -205,14 +355,14 @@
 				</p>
 			</div>
 			<div class="w-full sm:w-5/12">
-				<form
+				<form id="form-newsletter"
 					class="flex px-4 py-2 bg-white rounded-full dark:bg-slate-800 focus-within:ring-2 focus-within:ring-cyan-600 hover:ring-2 hover:ring-cyan-600">
 					<input type="email" class="w-full appearance-none dark:bg-slate-800 focus:outline-none"
 						placeholder="your@email-address.iot" />
 					<button
+						id="button-newsletter"
 						class="px-3 py-1 ml-2 text-sm font-semibold rounded-full text-sky-100 shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
-						type="submit">
-						Subscribe
+						type="submit">Subscribe
 					</button>
 				</form>
 			</div>
@@ -228,24 +378,16 @@
 			</p>
 			<p>
 				Powered by
-				<a href="https://esphome.github.io/esp-web-tools/" target="_blank"
+				<a href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener noreferrer"
 					class="hover:text-slate-500 dark:hover:text-white hover:underline">ESP Web Tools</a>
 			</p>
 		</div>
 	</div>
-
-	<script>
-		document
-			.getElementById("type")
-			.addEventListener("change", (event) => {
-				const button = document.querySelector(
-					"esp-web-install-button"
-				)
-				button.setAttribute(
-					"manifest",
-					`./manifest_${event.target.value}.json`
-				)
-			});
+	<script src="public/js/installation.mjs" type="module"></script>
+	<script src="public/js/configuration.mjs" type="module"></script>
+	<script src="public/js/step.js"></script>
+	<script async>
+		// let installation = new RegenfassInstallation();
 	</script>
 </body>
 

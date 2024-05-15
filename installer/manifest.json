@@ -7,6 +7,7 @@
     "builds": [
         {
             "chipFamily": "ESP32",
+			"improv": false,
             "parts": [
                 {
                     "path": "merged-firmware.bin",
@@ -16,6 +17,7 @@
         },
         {
             "chipFamily": "ESP8266",
+			"improv": false,
             "parts": [
                 {
                     "path": "esp8266.bin",
