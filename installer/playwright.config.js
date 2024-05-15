@@ -24,7 +24,12 @@ module.exports = defineConfig({
   reporter: [
     ['html', { open: 'never' }],
     ['json', {  outputFile: 'report.json' }],
-	['junit', { outputFile: 'report.xml' }]
+	['junit', { outputFile: 'report.xml' }],
+	['@estruyf/github-actions-reporter', {
+		title: 'regenfass e2e tests',
+		useDetails: true,
+		showError: true
+	  }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
