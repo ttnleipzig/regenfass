@@ -1,4 +1,4 @@
-name: Git - pull request
+name: Sketch - pull request
 
 on:
   pull_request:
