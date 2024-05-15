@@ -8,6 +8,7 @@ on:
       - ci/*
       - style/*
       - docs/*
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -56,7 +57,8 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: './installer/playwright-report/report.xml'
+          report_paths: ./installer/playwright-report/report.xml
+          summary: 'playwright test results'
 
       - name: Upload playwright report
         uses: actions/upload-artifact@v4
