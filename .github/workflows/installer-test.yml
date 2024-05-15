@@ -10,15 +10,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
           version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "./installer/pnpm-lock.yaml"
+       #   cache: "pnpm"
+       #   cache-dependency-path: "./installer/pnpm-lock.yaml"
       - run: cd ./installer && pnpm install --frozen-lockfile
       - run: cd ./installer && pnpm start &
 
