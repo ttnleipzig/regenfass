@@ -1,8 +1,13 @@
 name: Installer - test
 on:
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
+  pull_request:
+    branches:
+      - feat/*
+      - fix/*
+      - ci/*
+      - style/*
+      - docs/*
 
 env:
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
@@ -36,7 +41,8 @@ jobs:
       - name: Run Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload playwright report
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
