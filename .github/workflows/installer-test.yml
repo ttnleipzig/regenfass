@@ -3,6 +3,7 @@ name: Installer - test
 on:
   pull_request:
     branches:
+      - main
       - feat/*
       - fix/*
       - ci/*
