@@ -3,6 +3,10 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+
+env:
+  PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
+
 jobs:
   test:
     timeout-minutes: 60
@@ -30,7 +34,7 @@ jobs:
         run: cd ./installer && pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: cd ./installer && pnpm exec playwright test
+        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -42,3 +46,4 @@ jobs:
         uses: sidharthv96/playwright-report-action
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./installer/playwright-report/
