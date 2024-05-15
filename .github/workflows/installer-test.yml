@@ -51,6 +51,9 @@ jobs:
       - name: Run Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
 
+      - name: List test report json
+        run: ls -lisa ./installer/playwright-report/ && ls -lisa ./
+
       - name: Publish test report json to pull request
         uses: sidharthv96/playwright-report-action@v1.3
         with:
