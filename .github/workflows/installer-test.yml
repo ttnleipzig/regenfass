@@ -49,12 +49,10 @@ jobs:
 
       - name: Install – Playwright browsers
         run: cd ./installer && pnpm exec playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run - Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
-
-      - name: List - test reports
-        run: ls -lisa ./installer/
 
       - name: Publish - test report json to pull request
         uses: sidharthv96/playwright-report-action@v1.3
