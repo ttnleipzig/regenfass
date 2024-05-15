@@ -1,7 +1,7 @@
 import {
 	logSend,
-	buttonConnection,
-	eventLogElement,
+	buttonConfiguration,
+	logEvent,
 } from './selectors.js'
 
 export class UI {
@@ -67,29 +67,29 @@ export class UI {
 	}
 
 	static writeEventLog(event, data) {
-		eventLogElement.textContent += `${event}: ${JSON.stringify(data)} \n`
+		logEvent.textContent += `${event}: ${JSON.stringify(data)} \n`
 	}
 
 	static clearEventLog() {
-		eventLogElement.textContent = ''
+		logEvent.textContent = ''
 	}
 
 	static setConnectionButtonState(state) {
 		switch (state) {
 			case 'connected':
-				buttonConnection.textContent = 'Disconnect'
-				buttonConnection.classList.remove('bg-red-500')
-				buttonConnection.classList.add('bg-green-500')
+				buttonConfiguration.textContent = 'Disconnect'
+				buttonConfiguration.classList.remove('bg-red-500')
+				buttonConfiguration.classList.add('bg-green-500')
 				break
 			case 'disconnected':
-				buttonConnection.textContent = 'Connect'
-				buttonConnection.classList.remove('bg-green-500')
-				buttonConnection.classList.add('bg-red-500')
+				buttonConfiguration.textContent = 'Connect'
+				buttonConfiguration.classList.remove('bg-green-500')
+				buttonConfiguration.classList.add('bg-red-500')
 				break
 			default:
-				buttonConnection.textContent = 'Connect'
-				buttonConnection.classList.remove('bg-green-500')
-				buttonConnection.classList.add('bg-red-500')
+				buttonConfiguration.textContent = 'Connect'
+				buttonConfiguration.classList.remove('bg-green-500')
+				buttonConfiguration.classList.add('bg-red-500')
 				break
 		}
 	}

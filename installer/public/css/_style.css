@@ -43,6 +43,7 @@
 	--update-available-color: #2e3dd4;
 }
 
+
 /* Dark theme */
 @media (prefers-color-scheme: dark) {
 	:root {
@@ -73,6 +74,10 @@
 	.esphome-header img {
 		filter: invert(1);
 	}
+}
+
+html {
+	scroll-behavior: smooth;
 }
 
 /* Accordion */

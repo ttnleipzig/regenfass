@@ -2,7 +2,7 @@ import {
 	buttonInstallation,
 } from './selectors.js'
 
-class Installation {
+export class RegenfassInstallation {
 
 	button = document.querySelector('esp-web-install-button')
 	state = ''

@@ -4,7 +4,6 @@ import { UI } from './ui.js'
 
 import {
 	buttonConfiguration,
-	buttonConnection,
 	credentialsAppkey,
 	credentialsDeveui,
 	credentialsJoineui,
@@ -28,7 +27,7 @@ function encodeFormData() {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Connect to serial device and save status to the indicator
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-buttonConnection.addEventListener('click', async () => {
+buttonConfiguration.addEventListener('click', async () => {
 	if ('serial' in navigator) {
 		if (isConnected) {
 			try {
