@@ -10,6 +10,10 @@ on:
       - style/*
       - docs/*
 
+permissions:
+  contents: read
+  actions: write
+
 env:
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
   PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
