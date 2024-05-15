@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   actions: write
+  checks: write
 
 env:
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
