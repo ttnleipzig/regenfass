@@ -47,12 +47,6 @@ jobs:
       - name: Install dependencies
         run: cd ./installer && pnpm install --frozen-lockfile
 
-      - name: Start the application
-        run: cd ./installer && pnpm start &
-
-      - name: Wait for the application to start
-        run: sleep 5
-
       - name: Install Playwright Browsers
         run: cd ./installer && pnpm exec playwright install --with-deps
 
