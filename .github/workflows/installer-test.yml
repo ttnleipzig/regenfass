@@ -36,6 +36,14 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./installer/pnpm-lock.yaml"
 
+      - name: Playwrite cache
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         run: cd ./installer && pnpm install --frozen-lockfile
 
