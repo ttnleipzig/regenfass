@@ -38,3 +38,7 @@ jobs:
           name: playwright-report
           path: ./installer/playwright-report/
           retention-days: 30
+      - name: Publish playwright report
+        uses: sidharthv96/playwright-report-action
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
