@@ -1,5 +1,7 @@
 # regenfass - installer
 
+[![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
+
 ## Contributing
 
 ### Tests

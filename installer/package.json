@@ -9,6 +9,10 @@
 		"dev": "concurrently -n 'css,http' 'pnpm run css:dev' 'pnpm run start'",
 		"start": "serve .",
 		"test": "pnpm exec playwright test",
+		"test:line": "pnpm exec playwright test --reporter=line",
+		"test:junit": "pnpm exec playwright test --reporter=junit > ./test-results.xml",
+		"test:list": "pnpm exec playwright test --reporter=list",
+		"test:dot": "pnpm exec playwright test --reporter=dot",
 		"lint": "pnpm exec eslint"
 	},
 	"keywords": [],
@@ -17,18 +21,17 @@
 	"license": "AGPL-3.0-only",
 	"devDependencies": {
 		"@eslint/js": "^9.2.0",
+		"@estruyf/github-actions-reporter": "^1.7.0",
+		"@playwright/test": "^1.44.0",
+		"@types/node": "^20.12.12",
 		"autoprefixer": "^10.4.19",
 		"concurrently": "^8.2.2",
 		"cssnano": "^6.1.2",
 		"eslint": "^9.2.0",
 		"globals": "^15.2.0",
-		"postcss": "^8.4.38",
 		"postcss-cli": "^11.0.0",
+		"postcss": "^8.4.38",
 		"serve": "^14.2.3",
 		"tailwindcss": "^3.4.3"
-	},
-	"dependencies": {
-		"@playwright/test": "^1.43.1",
-		"@types/node": "^20.12.8"
 	}
 }
