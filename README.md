@@ -1,6 +1,6 @@
 # 🌈 regenfass
 
-[![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/build-and-release.yml)
+[![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/pulls)
