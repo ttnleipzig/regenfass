@@ -53,13 +53,13 @@ jobs:
       - name: Run - Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
 
-      - name: Publish - test report json to pull request
+      - name: Publish - Test report json to pull request
         uses: sidharthv96/playwright-report-action@v1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           working_directory: ./installer
 
-      - name: Publish - test report junit to pull request
+      - name: Publish - Test report junit to pull request
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
         with:
@@ -73,3 +73,8 @@ jobs:
           name: playwright-report
           path: ./installer/playwright-report/
           retention-days: 30
+
+      - name: Publish - Coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
