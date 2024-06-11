@@ -1,3 +1,5 @@
+#include "version.h"
+
 // Libraries
 #include <Arduino.h>
 #include <esp32-hal-log.h>
@@ -47,7 +49,7 @@ void setup()
     }
 #endif
     Serial.println("\033[32m\n\n*********************************************************");
-    Serial.println("🌈\t\t\tStarting regenfass");
+    Serial.println("🌈\t\t\tStarting regenfass " REGENFASS_VERSION);
     Serial.println("*********************************************************\033[0m\n");
 
     // Debugging information
