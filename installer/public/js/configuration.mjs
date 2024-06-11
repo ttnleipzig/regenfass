@@ -18,9 +18,9 @@ let isConnected = false
  */
 function encodeFormData() {
 	let data = [
-		scp.lineToString({ type: LineType.SET, key: 'deveui', value: credentialsDeveui.value }),
-		scp.lineToString({ type: LineType.SET, key: 'joineui', value: credentialsJoineui.value }),
-		scp.lineToString({ type: LineType.SET, key: 'appkey', value: credentialsAppkey.value })
+		scp.lineToString({ type: LineType.SET, key: 'devEUI', value: credentialsDeveui.value }),
+		scp.lineToString({ type: LineType.SET, key: 'joinEUI', value: credentialsJoineui.value }),
+		scp.lineToString({ type: LineType.SET, key: 'appKey', value: credentialsAppkey.value })
 	]
 
 	return data.join('\n')
