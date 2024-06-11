@@ -11,9 +11,9 @@ namespace Button
     void loop()
     {
         // Check if the button is pressed
-        if (digitalRead(0) == LOW)
-            log_v("pressed");
-        else
-            log_v("released");
+        // if (digitalRead(0) == LOW)
+        //     log_v("pressed");
+        // else
+        //     log_v("released");
     }
 } // namespace Button
