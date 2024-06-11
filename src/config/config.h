@@ -4,35 +4,53 @@
 #include <Arduino.h>
 #include <scp.h>
 
+#define CONFIG_PROPERTIES(X) \
+    X(appEUI)                \
+    X(appKey)                \
+    X(devEUI)
+
 namespace Configuration
 {
     struct Config
     {
-        std::string appEui;
-        std::string appKey;
-        std::string devEui;
+#define X(name) std::string name;
+        CONFIG_PROPERTIES(X)
+#undef X
 
-        void apply(const SCPLine *line)
+        SCPLine *applyGet(const SCPLine *line)
         {
-            if (line->type != SCPLineType::SET)
-            {
-                return;
-            }
+            const auto k = line->as.k;
 
+#define X(name)                                                           \
+    if (strcmp(k, #name) == 0)                                            \
+    {                                                                     \
+        return scp_line_new(SCPLineType::SET, #name, this->name.c_str()); \
+    }
+
+            CONFIG_PROPERTIES(X)
+
+#undef X
+
+            return nullptr;
+        }
+
+        bool applySet(const SCPLine *line)
+        {
             const auto k = line->as.kv.k;
             const auto v = line->as.kv.v;
-            if (k == "appEui")
-            {
-                this->appEui = v;
-            }
-            else if (k == "appKey")
-            {
-                this->appKey = v;
-            }
-            else if (k == "devEui")
-            {
-                this->devEui = v;
-            }
+
+#define X(name)                \
+    if (strcmp(k, #name) == 0) \
+    {                          \
+        this->name = v;        \
+        return true;           \
+    }
+
+            CONFIG_PROPERTIES(X)
+
+#undef X
+
+            return false;
         }
 
         /**
@@ -42,11 +60,13 @@ namespace Configuration
          */
         void write(Stream &stream)
         {
-#define WRITE(key) stream.write(scp_line_to_string(scp_line_new(SCPLineType::SET, #key, key.c_str())));
-            WRITE(appEui);
-            WRITE(appKey);
-            WRITE(devEui);
-#undef WRITE
+#define X(key)                                                                           \
+    stream.write(scp_line_to_string(scp_line_new(SCPLineType::SET, #key, key.c_str()))); \
+    stream.write('\n');
+
+            CONFIG_PROPERTIES(X)
+
+#undef X
 
             stream.flush();
         }
@@ -56,7 +76,14 @@ namespace Configuration
     {
     public:
         static void setup();
+        static void loop();
+
         static bool configExists();
+
+        static Config &getConfig()
+        {
+            return _config;
+        }
 
     private:
         static Config loadConfig();

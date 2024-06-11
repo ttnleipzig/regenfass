@@ -38,6 +38,22 @@ extern "C"
             } kv;
             char *k;
         } as;
+
+
+        #ifdef __cplusplus
+        ~SCPLine()
+        {
+            if (type == SET)
+            {
+                free(as.kv.k);
+                free(as.kv.v);
+            }
+            else
+            {
+                free(as.k);
+            }
+        }
+        #endif
     } SCPLine;
 
     void scp_string_trim(char *s);
