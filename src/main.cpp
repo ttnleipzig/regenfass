@@ -90,6 +90,8 @@ void setup()
 
 void loop()
 {
+    Configuration::Configurator::loop();
+
     // Publish Something, or Lora Does Noting
     unsigned long current_time = millis();
     if (current_time - last_print_time >= 20000)
