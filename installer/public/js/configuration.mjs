@@ -32,8 +32,6 @@ function encodeFormData() {
 // Connect to serial device and save status to the indicator
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 buttonConfigurationConnect.addEventListener('click', async () => {
-	console.log('Button clicked');
-
 	if ('serial' in navigator) {
 		if (isConnected) {
 			try {
@@ -145,7 +143,6 @@ navigator.serial.getPorts().then((ports) => {
 
 configurationForm.addEventListener('submit', async () => {
 	let data = encodeFormData()
-	console.log(data)
 	UI.setStatusIndicator('written-indicator', 'info', 'Sending data …')
 	const response = await RegenfassSerial.write(data)
 	console.log(response)
