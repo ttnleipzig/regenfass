@@ -124,7 +124,6 @@ namespace Lora
 
         void loop()
         {
-            log_i("LoRa WAN");
             auto freeTimeBeforeNextCall = LMIC.run();
             if (freeTimeBeforeNextCall < OsDeltaTime::from_ms(100))
                 return;
