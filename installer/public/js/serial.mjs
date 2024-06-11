@@ -1,5 +1,5 @@
 import {
-	buttonConfiguration,
+	buttonConfigurationConnect,
 	logSend,
 } from './selectors.js'
 export class RegenfassSerial {
@@ -43,8 +43,8 @@ export class RegenfassSerial {
 			stopBits: 1,
 			flowControl: 'none',
 		})
-		buttonConfiguration.disabled = false
-		buttonConfiguration.textContent = 'Disconnect'
+		buttonConfigurationConnect.disabled = false
+		buttonConfigurationConnect.textContent = 'Disconnect'
 
 		this.reader = this.port.readable.getReader()
 		this.writer = this.port.writable.getWriter()
@@ -70,8 +70,8 @@ export class RegenfassSerial {
 			await this.port.close()
 			this.port = null
 
-			buttonConfiguration.disabled = true
-			buttonConfiguration.textContent = 'Connect'
+			buttonConfigurationConnect.disabled = true
+			buttonConfigurationConnect.textContent = 'Connect'
 			return false
 		}
 	}

@@ -1,9 +1,10 @@
-import {Type, Line} from './line.mjs'
-import {RegenfassSerial} from './serial.mjs'
+import initScp, { LineType } from "./scp.js";
+import { RegenfassSerial } from './serial.mjs'
 import { UI } from './ui.js'
-
 import {
+	buttonConfigurationConnect,
 	buttonConfiguration,
+	configurationForm,
 	credentialsAppkey,
 	credentialsDeveui,
 	credentialsJoineui,
@@ -11,14 +12,17 @@ import {
 
 let isConnected = false
 
+const scp = await initScp()
+console.log('SCP initialized')
+
 /**
  * encode form data
  */
 function encodeFormData() {
 	let data = [
-		new Line(Type.SET, ['deveui', credentialsDeveui.value]),
-		new Line(Type.SET, ['joineui', credentialsJoineui.value]),
-		new Line(Type.SET, ['appkey', credentialsAppkey.value])
+		scp.lineToString({ type: LineType.SET, key: 'deveui', value: credentialsDeveui.value }),
+		scp.lineToString({ type: LineType.SET, key: 'joineui', value: credentialsJoineui.value }),
+		scp.lineToString({ type: LineType.SET, key: 'appkey', value: credentialsAppkey.value })
 	]
 
 	return data.join('\n')
@@ -27,7 +31,9 @@ function encodeFormData() {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Connect to serial device and save status to the indicator
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-buttonConfiguration.addEventListener('click', async () => {
+buttonConfigurationConnect.addEventListener('click', async () => {
+	console.log('Button clicked');
+
 	if ('serial' in navigator) {
 		if (isConnected) {
 			try {
@@ -137,8 +143,9 @@ navigator.serial.getPorts().then((ports) => {
 	}
 })
 
-document.getElementById('form-configuration').addEventListener('submit', async () => {
+configurationForm.addEventListener('submit', async () => {
 	let data = encodeFormData()
+	console.log(data)
 	UI.setStatusIndicator('written-indicator', 'info', 'Sending data …')
 	const response = await RegenfassSerial.write(data)
 	console.log(response)
