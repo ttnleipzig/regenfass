@@ -8,9 +8,9 @@ import {
 	credentialsAppkey,
 	credentialsDeveui,
 	credentialsJoineui,
-} from './selectors.js'
+	scp
+} from './utils.js'
 
-const scp = await initScp()
 let isConnected = false
 
 /**
@@ -30,78 +30,81 @@ function encodeFormData() {
 // Connect to serial device and save status to the indicator
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 buttonConfigurationConnect.addEventListener('click', async () => {
-	if ('serial' in navigator) {
-		if (isConnected) {
-			try {
-				isConnected = await RegenfassSerial.disconnect()
-				UI.setStatusIndicator(
-					'connection-indicator',
-					'info',
-					'Disconnected'
-				)
-				UI.setStatusIndicator(
-					'port-indicator',
-					null,
-					'Port closed'
-				)
-				UI.setStatusIndicator(
-					'readable-indicator',
-					null,
-					'Not readable'
-				)
-				UI.setStatusIndicator(
-					'writeable-indicator',
-					null,
-					'Not writeable'
-				)
-				UI.setStatusIndicator('written-indicator', null, '…')
-			} catch (error) {
-				UI.setStatusIndicator(
-					'connection-indicator',
-					'error',
-					error.message
-				)
-				UI.writeLog(error.message)
-			}
-		}
-		else {
-			try {
-				isConnected = await RegenfassSerial.connect()
-				UI.setStatusIndicator(
-					'connection-indicator',
-					'success',
-					'Connected'
-				)
-				UI.setStatusIndicator(
-					'port-indicator',
-					'success',
-					'Port opened'
-				)
-				UI.setStatusIndicator(
-					'readable-indicator',
-					'success',
-					'Readable'
-				)
-				UI.setStatusIndicator(
-					'writeable-indicator',
-					'success',
-					'Writeable'
-				)
-			} catch (error) {
-				UI.setStatusIndicator(
-					'connection-indicator',
-					'error',
-					error.message
-				)
-				UI.writeLog(error.message)
-			}
-		}
-	} else {
+	if (!('serial' in navigator)) {
 		UI.setStatusIndicator(
 			'connection-indicator',
 			'error',
 			'Your browser does not support the Web Serial API.'
 		)
+		return;
+	}
+
+	if (isConnected) {
+		try {
+			isConnected = await RegenfassSerial.disconnect()
+			UI.setStatusIndicator(
+				'connection-indicator',
+				'info',
+				'Disconnected'
+			)
+			UI.setStatusIndicator(
+				'port-indicator',
+				null,
+				'Port closed'
+			)
+			UI.setStatusIndicator(
+				'readable-indicator',
+				null,
+				'Not readable'
+			)
+			UI.setStatusIndicator(
+				'writeable-indicator',
+				null,
+				'Not writeable'
+			)
+			UI.setStatusIndicator('written-indicator', null, '…')
+		} catch (error) {
+			UI.setStatusIndicator(
+				'connection-indicator',
+				'error',
+				error.message
+			)
+			UI.writeLog(error.message)
+		}
+	}
+	else {
+		try {
+			isConnected = await RegenfassSerial.connect()
+			UI.setStatusIndicator(
+				'connection-indicator',
+				'success',
+				'Connected'
+			)
+			UI.setStatusIndicator(
+				'port-indicator',
+				'success',
+				'Port opened'
+			)
+			UI.setStatusIndicator(
+				'readable-indicator',
+				'success',
+				'Readable'
+			)
+			UI.setStatusIndicator(
+				'writeable-indicator',
+				'success',
+				'Writeable'
+			)
+
+			RegenfassSerial.read();
+		} catch (error) {
+			UI.setStatusIndicator(
+				'connection-indicator',
+				'error',
+				error.message
+			)
+			UI.writeLog(error.message)
+		}
 	}
 })
 
@@ -129,15 +132,17 @@ function setCustomValidity(inputId, name) {
 }
 
 // :::::: Check for serial port on load :::::
-navigator.serial.getPorts().then((ports) => {
-	if (ports.length > 0) {
-		UI.writeEventLog('Connection',
-			'Connected to ' +
-			ports[0].getInfo().usbProductId)
-	} else {
-		UI.writeEventLog('Connection', 'No device connected')
-	}
-})
+if ('serial' in navigator) {
+	navigator.serial.getPorts().then((ports) => {
+		if (ports.length > 0) {
+			UI.writeEventLog('Connection',
+				'Connected to ' +
+				ports[0].getInfo().usbProductId)
+		} else {
+			UI.writeEventLog('Connection', 'No device connected')
+		}
+	})
+}
 
 configurationForm.addEventListener('submit', async () => {
 	let data = encodeFormData()

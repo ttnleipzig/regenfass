@@ -1,7 +1,10 @@
 import {
 	buttonConfigurationConnect,
 	logSend,
-} from './selectors.js'
+	scp
+} from './utils.js'
+import {LineType} from './scp.js'
+
 export class RegenfassSerial {
 
 	/** @type {SerialPort|null} */
@@ -88,7 +91,19 @@ export class RegenfassSerial {
 				const {value, done} = await this.reader.read()
 				const decoded = this.textDecoder.decode(value)
 
+				try {
+					const {type, data} = scp.parseLine(decoded)
+					// switch (type) {
+					// 	default:
+					// 		logSend.textContent += decoded
+					// }
+					logSend.textContent += JSON.stringify({type, data}) + '\n'
+				} catch {
+					logSend.textContent += decoded
+				}
+
 				logSend.textContent += decoded
+				logSend.scrollTop = logSend.scrollHeight
 				if (done) break
 			}
 		} catch (err) {
@@ -110,16 +125,19 @@ export class RegenfassSerial {
 			await this.writer.write(this.textEncoder.encode(data + '\n'))
 			console.log('Write: ' + data)
 			logSend.textContent += `Write: ${data} \n`
-			setStatusIndicator('written-indicator', 'success')
+
+			// setStatusIndicator('written-indicator', 'success')
 		} catch (err) {
 			const errorMessage = `Error writing data: ${err}`
 			console.error(errorMessage)
 			logSend.textContent += errorMessage + '\n'
+			/*
 			setStatusIndicator(
 				'written-indicator',
 				'error',
 				'Error writing data: ' + err
 			)
+			*/
 		}
 	}
 

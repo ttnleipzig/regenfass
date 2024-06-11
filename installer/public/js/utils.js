@@ -1,3 +1,5 @@
+import initSCP from './scp.js'
+
 export const
 	buttonConfigurationConnect = document.getElementById('button-configuration-connect'),
 	buttonConfiguration = document.getElementById('button-configuration'),
@@ -9,3 +11,5 @@ export const
 	credentialsAppkey = document.getElementById('credentials-appkey'),
 	logSend = document.getElementById('log-send'),
 	logEvent = document.getElementById('log-event');
+
+export const scp = await initSCP()
