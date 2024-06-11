@@ -95,9 +95,6 @@ export class RegenfassSerial {
 			const errorMessage = `error reading data: ${err}`
 			console.error(errorMessage)
 			logSend.textContent += errorMessage + '\n'
-			/*
-			setStatusIndicator('written-indicator', 'error')
-			*/
 		}
 	}
 
