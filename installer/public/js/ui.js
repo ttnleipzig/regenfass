@@ -2,7 +2,7 @@ import {
 	logSend,
 	buttonConfiguration,
 	logEvent,
-} from './selectors.js'
+} from './utils.js'
 
 export class UI {
 
