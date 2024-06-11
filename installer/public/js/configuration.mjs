@@ -10,10 +10,8 @@ import {
 	credentialsJoineui,
 } from './selectors.js'
 
-let isConnected = false
-
 const scp = await initScp()
-console.log('SCP initialized')
+let isConnected = false
 
 /**
  * encode form data
