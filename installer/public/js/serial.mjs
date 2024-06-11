@@ -110,18 +110,16 @@ export class RegenfassSerial {
 			await this.writer.write(this.textEncoder.encode(data + '\n'))
 			console.log('Write: ' + data)
 			logSend.textContent += `Write: ${data} \n`
-			// setStatusIndicator('written-indicator', 'success')
+			setStatusIndicator('written-indicator', 'success')
 		} catch (err) {
 			const errorMessage = `Error writing data: ${err}`
 			console.error(errorMessage)
 			logSend.textContent += errorMessage + '\n'
-			/*
 			setStatusIndicator(
 				'written-indicator',
 				'error',
 				'Error writing data: ' + err
 			)
-			*/
 		}
 	}
 
