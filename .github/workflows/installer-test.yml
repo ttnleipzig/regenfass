@@ -1,10 +1,25 @@
-name: Installer - tests
+name: Installer - test
+
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - feat/*
+      - fix/*
+      - ci/*
+      - style/*
+      - docs/*
+
+permissions:
+  contents: read
+  actions: write
+  checks: write
+
+env:
+  PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
+  PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
+
 jobs:
   test:
     timeout-minutes: 60
@@ -12,30 +27,59 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "pnpm"
           cache-dependency-path: "./installer/pnpm-lock.yaml"
-      - run: cd ./installer && pnpm install --frozen-lockfile
-      - run: cd ./installer && pnpm start &
 
-      - name: Wait for the application to start
-        run: sleep 5
+      - name: Cache - Playwrite browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install Playwright Browsers
+      - name: Install – Application dependencies
+        run: cd ./installer && pnpm install --frozen-lockfile
+
+      - name: Install – Playwright browsers
         run: cd ./installer && pnpm exec playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
-      - name: Run Playwright tests
-        run: cd ./installer && pnpm exec playwright test
+      - name: Run - Playwright tests
+        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
 
-      - uses: actions/upload-artifact@v4
+      - name: Publish - Test report json to pull request
+        uses: sidharthv96/playwright-report-action@v1.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: ./installer
+
+      - name: Publish - Test report junit to pull request
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: ./installer/report.xml
+          summary: 'Playwright test results'
+
+      - name: Publish - Upload playwright report
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
           path: ./installer/playwright-report/
           retention-days: 30
+
+      - name: Publish - Coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

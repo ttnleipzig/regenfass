@@ -1,4 +1,7 @@
-# regenfass - installer
+# regenfass - Installer
+
+[![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
+[![Installer - test](https://github.com/ttnleipzig/regenfass/actions/workflows/installer-test.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/installer-test.yml)
 
 ## Contributing
 
