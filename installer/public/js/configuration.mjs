@@ -7,7 +7,7 @@ import {
 	configurationForm,
 	credentialsAppkey,
 	credentialsDeveui,
-	credentialsJoineui,
+	credentialsAppEUI,
 	scp
 } from './utils.js'
 
@@ -19,7 +19,7 @@ let isConnected = false
 function encodeFormData() {
 	let data = [
 		scp.lineToString({ type: LineType.SET, key: 'devEUI', value: credentialsDeveui.value }),
-		scp.lineToString({ type: LineType.SET, key: 'joinEUI', value: credentialsJoineui.value }),
+		scp.lineToString({ type: LineType.SET, key: 'appEUI', value: credentialsAppEUI.value }),
 		scp.lineToString({ type: LineType.SET, key: 'appKey', value: credentialsAppkey.value })
 	]
 
@@ -113,7 +113,7 @@ buttonConfigurationConnect.addEventListener('click', async () => {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 buttonConfiguration.addEventListener('click', async function () {
 	setCustomValidity('#credentials-deveui', 'DevEUI')
-	setCustomValidity('#credentials-joineui', 'JoinEUI')
+	setCustomValidity('#credentials-appeui', 'AppEUI')
 	setCustomValidity('#credentials-appkey', 'AppKey')
 })
 
