@@ -1,7 +1,10 @@
 import {
-	buttonConfiguration,
+	buttonConfigurationConnect,
 	logSend,
-} from './selectors.js'
+	scp
+} from './utils.js'
+import {LineType} from './scp.js'
+
 export class RegenfassSerial {
 
 	/** @type {SerialPort|null} */
@@ -43,8 +46,8 @@ export class RegenfassSerial {
 			stopBits: 1,
 			flowControl: 'none',
 		})
-		buttonConfiguration.disabled = false
-		buttonConfiguration.textContent = 'Disconnect'
+		buttonConfigurationConnect.disabled = false
+		buttonConfigurationConnect.textContent = 'Disconnect'
 
 		this.reader = this.port.readable.getReader()
 		this.writer = this.port.writable.getWriter()
@@ -70,8 +73,8 @@ export class RegenfassSerial {
 			await this.port.close()
 			this.port = null
 
-			buttonConfiguration.disabled = true
-			buttonConfiguration.textContent = 'Connect'
+			buttonConfigurationConnect.disabled = true
+			buttonConfigurationConnect.textContent = 'Connect'
 			return false
 		}
 	}
@@ -88,16 +91,25 @@ export class RegenfassSerial {
 				const {value, done} = await this.reader.read()
 				const decoded = this.textDecoder.decode(value)
 
+				try {
+					const {type, data} = scp.parseLine(decoded)
+					// switch (type) {
+					// 	default:
+					// 		logSend.textContent += decoded
+					// }
+					logSend.textContent += JSON.stringify({type, data}) + '\n'
+				} catch {
+					logSend.textContent += decoded
+				}
+
 				logSend.textContent += decoded
+				logSend.scrollTop = logSend.scrollHeight
 				if (done) break
 			}
 		} catch (err) {
 			const errorMessage = `error reading data: ${err}`
 			console.error(errorMessage)
 			logSend.textContent += errorMessage + '\n'
-			/*
-			setStatusIndicator('written-indicator', 'error')
-			*/
 		}
 	}
 
@@ -113,6 +125,7 @@ export class RegenfassSerial {
 			await this.writer.write(this.textEncoder.encode(data + '\n'))
 			console.log('Write: ' + data)
 			logSend.textContent += `Write: ${data} \n`
+
 			// setStatusIndicator('written-indicator', 'success')
 		} catch (err) {
 			const errorMessage = `Error writing data: ${err}`

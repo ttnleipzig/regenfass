@@ -1,6 +1,6 @@
 import {
 	buttonInstallation,
-} from './selectors.js'
+} from './utils.js'
 
 export class RegenfassInstallation {
 
