@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="0.7188859999999999">
+<testsuite name="installer.spec.js" timestamp="2024-07-09T17:46:01.872Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.554" errors="0">
+<testcase name="has title" classname="installer.spec.js" time="0.277">
+</testcase>
+<testcase name="get started link" classname="installer.spec.js" time="0.277">
+</testcase>
+</testsuite>
+</testsuites>
