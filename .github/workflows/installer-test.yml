@@ -5,7 +5,11 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+      - feat/*
+      - fix/*
+      - ci/*
+      - style/*
+      - docs/*
 
 permissions:
   contents: read
