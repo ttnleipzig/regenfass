@@ -4,12 +4,13 @@
 #define LoraFunctions_H
 #endif
 
-#include "Arduino.h"
+#include "lora-wan.h"
 #include <lmic.h>
 #include <hal/hal.h>
 #include <SPI.h>
 #include <algorithm>
 #include <keyhandler.h>
+#include "../config/config.h"
 
 #define DEVICE_SIMPLE
 
@@ -30,13 +31,6 @@
 // constexpr char const appKey[16] = {0xA3, 0x46, 0xE1, 0xB1, 0x2B, 0x0A, 0x15, 0xD1, 0x43, 0xA6, 0x7D, 0x37, 0xE2, 0x8C, 0xEC, 0xE5};
 // void os_getDevKey(u1_t *buf) { memcpy_P(buf, APPKEY, 16); }
 
-// Die LMICPP-Arduino braucht den Kram als Strings!
-constexpr char const appEui[] = "70B3D57ED002556F";
-// Device EUI in string format.
-constexpr char const devEui[] = "00BDAB364E4A3FC1";
-// Application key in string format.
-constexpr char const appKey[] = "38ECBE230A8DCE03A86094A60F555233";
-
 static uint8_t mydata[] = "Hello, dirk!";
 uint8_t payload[34];
 
@@ -45,6 +39,9 @@ uint8_t payload[34];
 const unsigned TX_INTERVAL = 30;
 
 char TTN_response[30];
+
+static Lora::Wan::DevEuiGetter devEUI;
+static Lora::Wan::AppEuiGetter appEUI;
 
 static const lmic_pinmap myPinmap = {
     .nss = LORA_NSS_PIN,
@@ -60,6 +57,9 @@ namespace Lora
 {
     namespace Wan
     {
+        uint8_t DevEuiGetter::key[SIZE] = {0};
+        uint8_t AppEuiGetter::key[SIZE] = {0};
+
         void printHex2(unsigned v)
         {
             v &= 0xff;
@@ -86,13 +86,6 @@ namespace Lora
         void setup()
         {
 
-            /*
-            Setup the LMIC credentials dynamically
-            LMIC.setDevEui(devEui);
-            LMIC.setArtEui(appEui);
-            LMIC.setDevKey(appKey);
-            */
-
             log_i("Setup LoraWAN");
             SPI.begin(LORA_SCK_PIN, LORA_MISO_PIN, LORA_MOSI_PIN, LORA_NSS_PIN);
 
@@ -101,7 +94,17 @@ namespace Lora
             // Reset the MAC state. Session and pending data transfers will be discarded.
             LMIC.reset();
 
-            SetupLmicKey<appEui, devEui, appKey>::setup(LMIC);
+            const auto config = Configuration::Configurator::getConfig();
+
+            ::Lora::Wan::KeyGetter appKey(config.appKey);
+            LMIC.setDevKey(appKey.get());
+
+            devEUI.set(config.devEUI);
+            LMIC.setDevEuiCallback(devEUI.get);
+
+            appEUI.set(config.appEUI);
+            LMIC.setArtEuiCallback(appEUI.get);
+
             LMIC.setClockError(MAX_CLOCK_ERROR * 1 / 100);
 
             // Disable link check validation
