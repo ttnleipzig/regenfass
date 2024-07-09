@@ -47,6 +47,16 @@ TEST_CASE("scp/line/set", "Set line parsing")
         REQUIRE(strcmp(v->as.kv.v, "!") == 0);
         REQUIRE(strcmp(scp_line_to_string(v), "a=!") == 0);
     }
+
+    SECTION("devEUI=0123456789ABCDEF")
+    {
+        auto v = scp_line_parse("devEUI=0123456789ABCDEF\n");
+        REQUIRE(v != NULL);
+        REQUIRE(v->type == SCPLineType::SET);
+        REQUIRE(strcmp(v->as.kv.k, "devEUI") == 0);
+        REQUIRE(strcmp(v->as.kv.v, "0123456789ABCDEF") == 0);
+        REQUIRE(strcmp(scp_line_to_string(v), "devEUI=0123456789ABCDEF") == 0);
+    }
 }
 
 TEST_CASE("scp/line/get", "Get line parsing")
