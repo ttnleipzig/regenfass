@@ -42,5 +42,37 @@ test.describe('Content', () => {
 				await expect(page.locator('#step-installation details ol')).toBeDefined()
 			})
 		})
+
+		test.describe('Step 2: Configuration', () => {
+			test('Has a details summary', async ({page}) => {
+				await expect(page.locator('#step-configuration summary')).toBeVisible()
+				await expect(page.locator('#step-configuration summary')).toContainText('2. Configuration')
+			})
+			test('Has a details element which reacts on click', async ({page}) => {
+				await page.locator('#step-configuration summary').click()
+				await expect(page.locator('#step-configuration summary')).toBeVisible()
+				await expect(page.locator('#step-configuration summary')).toContainText('2. Configuration')
+			})
+			test('Has a details element which hides the content on a second click', async ({page}) => {
+				await page.locator('#step-configuration summary').click()
+				await expect(page.locator('#step-configuration details')).toBeHidden()
+			})
+			test('Has a details element which reappears on a third click', async ({page}) => {
+				await page.locator('#step-configuration summary').click()
+				await expect(page.locator('#step-configuration summary')).toBeVisible()
+			})
+
+			test.describe('Step 2.1.: Connect to the serial device', () => {
+				test('Section for step 2.1 is visible', async ({page}) => {
+					await expect(page.locator('#step-configuration-21')).toBeVisible()
+				})
+			})
+
+			test.describe('Step 2.2.: Setup your LoRaWAN credentials', () => {
+				test('Section for step 2.2 is visible', async ({page}) => {
+					await expect(page.locator('#step-configuration-22')).toBeVisible()
+				})
+			})
+		})
 	})
 })
