@@ -1,4 +1,6 @@
+#define SCP_IMPLEMENTATION
 #include "../scp.h"
+
 #include "catch2.hpp"
 
 #define DEBUG_STR(thing) printf("[DBG] %s:%d: %s = \"%s\"\n", __FILE__, __LINE__, #thing, thing);
