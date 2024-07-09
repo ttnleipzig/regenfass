@@ -1,11 +1,12 @@
 # 🌈 regenfass
 
-[![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/build-and-release.yml)
+[![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/pulls)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/commits/main)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ttnleipzig/regenfass)
+[![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
 
 Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN).
 

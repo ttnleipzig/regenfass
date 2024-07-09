@@ -3,8 +3,11 @@ name: Sketch - pull request
 on:
   pull_request:
     branches:
-      - feature/*
+      - feat/*
       - fix/*
+      - ci/*
+      - style/*
+      - docs/*
 
 permissions:
   contents: read
