@@ -7,7 +7,7 @@ export const
 	buttonNewsletter = document.getElementById('button-newsletter'),
 	configurationForm = document.getElementById('form-configuration'),
 	credentialsDeveui = document.getElementById('credentials-deveui'),
-	credentialsJoineui = document.getElementById('credentials-joineui'),
+	credentialsAppEUI = document.getElementById('credentials-appeui'),
 	credentialsAppkey = document.getElementById('credentials-appkey'),
 	logSend = document.getElementById('log-send'),
 	logEvent = document.getElementById('log-event');
