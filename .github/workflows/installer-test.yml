@@ -25,6 +25,10 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+
+      ##############################################################################################
+      # Setup
+      ##############################################################################################
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -55,9 +59,15 @@ jobs:
         run: cd ./installer && pnpm exec playwright install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
+      ##############################################################################################
+      # Run tests
+      ##############################################################################################
       - name: Run - Playwright tests
         run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
 
+      ##############################################################################################
+      # Publish test results to pull request
+      ##############################################################################################
       - name: Publish - Test report json to pull request
         uses: sidharthv96/playwright-report-action@v1.3
         with:
@@ -83,3 +93,13 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: sidharthv96/playwright-report-action
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: installer
+          package-manager: pnpm
