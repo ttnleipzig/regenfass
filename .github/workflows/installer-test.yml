@@ -94,6 +94,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  ############################################################################################
+  # https://github.com/marketplace/actions/playwright-test-report
+  ############################################################################################
   playwright:
     runs-on: ubuntu-latest
     steps:
