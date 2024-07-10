@@ -93,3 +93,18 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  ############################################################################################
+  # https://github.com/marketplace/actions/playwright-test-report
+  ############################################################################################
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Generate report
+        uses: sidharthv96/playwright-report-action
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: installer
+          package-manager: pnpm
