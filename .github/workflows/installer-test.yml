@@ -1,15 +1,17 @@
-name: Installer - test
+name: Installer - Test
 
 on:
   workflow_dispatch:
   pull_request:
     branches:
-      - main
       - feat/*
       - fix/*
       - ci/*
       - style/*
       - docs/*
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -41,8 +43,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "./installer/pnpm-lock.yaml"
 
       - name: Cache - Playwrite browsers
         uses: actions/cache@v4
