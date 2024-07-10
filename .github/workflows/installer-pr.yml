@@ -28,7 +28,7 @@ jobs:
       - name: List all files
         run: ls -lisah
       - name: Generate report
-        uses: sidharthv96/playwright-report-action@v2.0-rc.5
+        uses: sidharthv96/playwright-report-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: installer
