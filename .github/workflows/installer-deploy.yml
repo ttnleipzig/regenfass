@@ -30,8 +30,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "./installer/pnpm-lock.yaml"
       - run: cd ./installer && pnpm install --frozen-lockfile
       - run: cd ./installer && pnpm build
       - name: Setup Pages
