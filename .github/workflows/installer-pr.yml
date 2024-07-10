@@ -1,14 +1,10 @@
 name: Installer - Test on pull request
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
-      - feat/*
-      - fix/*
-      - ci/*
-      - style/*
-      - docs/*
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,16 +20,17 @@ jobs:
   ############################################################################################
   # https://github.com/marketplace/actions/playwright-test-report
   ############################################################################################
-  test:
+  playwright:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
-      - name: List all files
-        run: ls -lisah
       - name: Generate report
-        uses: sidharthv96/playwright-report-action@v2.0-rc.5
+        uses: sidharthv96/playwright-report-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: installer
           package-manager: pnpm
+          custom-title: "Regenfass Installer"
+          icons: true
+          test-script: pnpm test

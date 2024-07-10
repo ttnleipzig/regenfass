@@ -1,17 +1,13 @@
 name: Installer - Test
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
-      - feat/*
-      - fix/*
-      - ci/*
-      - style/*
-      - docs/*
+      - main
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
