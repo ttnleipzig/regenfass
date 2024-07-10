@@ -20,7 +20,7 @@ jobs:
   ############################################################################################
   # https://github.com/marketplace/actions/playwright-test-report
   ############################################################################################
-  test:
+  playwright:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
