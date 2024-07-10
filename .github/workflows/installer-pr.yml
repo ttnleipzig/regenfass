@@ -33,3 +33,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: installer
           package-manager: pnpm
+          custom-title: "Regenfass Installer"
+          icons: true
+          test-script: pnpm test
