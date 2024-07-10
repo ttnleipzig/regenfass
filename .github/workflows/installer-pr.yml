@@ -1,4 +1,4 @@
-name: Installer - Test on pr
+name: Installer - Test on pull request
 
 on:
   workflow_dispatch:
@@ -9,9 +9,6 @@ on:
       - ci/*
       - style/*
       - docs/*
-  push:
-    branches:
-      - main
 
 permissions:
   contents: read
