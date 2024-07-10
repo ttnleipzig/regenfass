@@ -1,10 +1,10 @@
 name: Installer - Test on pull request
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
