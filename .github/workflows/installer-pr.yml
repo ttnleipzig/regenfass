@@ -21,87 +21,17 @@ env:
   PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
 
 jobs:
-  test:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-
-      ##############################################################################################
-      # Setup
-      ##############################################################################################
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "./installer/pnpm-lock.yaml"
-
-      - name: Cache - Playwrite browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install – Application dependencies
-        run: cd ./installer && pnpm install --frozen-lockfile
-
-      - name: Install – Playwright browsers
-        run: cd ./installer && pnpm exec playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-
-      ##############################################################################################
-      # Run tests
-      ##############################################################################################
-      - name: Run - Playwright tests
-        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
-
-      ##############################################################################################
-      # Publish test results to pull request
-      ##############################################################################################
-      - name: Publish - Test report json to pull request
-        uses: sidharthv96/playwright-report-action@v1.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: ./installer
-
-      - name: Publish - Test report junit to pull request
-        uses: mikepenz/action-junit-report@v4
-        if: success() || failure() # always run even if the previous step fails
-        with:
-          report_paths: ./installer/report.xml
-          summary: 'Playwright test results'
-
-      - name: Publish - Upload playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: ./installer/playwright-report/
-          retention-days: 30
-
-      - name: Publish - Coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   ############################################################################################
   # https://github.com/marketplace/actions/playwright-test-report
   ############################################################################################
-  playwright:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
+      - name: List all files
+        run: ls -lisah
       - name: Generate report
         uses: sidharthv96/playwright-report-action
         with:
