@@ -31,7 +31,6 @@ jobs:
         with:
           node-version: 21
           cache: "pnpm"
-          cache-dependency-path: "**/node_modules"
       - name: Update pnpm
         run: pnpm add -g pnpm@9
       - name: Install dependencies
