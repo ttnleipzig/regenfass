@@ -30,6 +30,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          # scope: installer
+      - run: cd ./installer && ls -lisah
       - run: cd ./installer && pnpm install --frozen-lockfile
       - run: cd ./installer && pnpm build
       - name: Setup Pages
