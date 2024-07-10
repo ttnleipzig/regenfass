@@ -1,4 +1,4 @@
-name: Sketch - release
+name: Sketch - Release
 
 on:
   push:
