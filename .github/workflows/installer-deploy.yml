@@ -30,7 +30,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 21
-          # scope: installer
+          scope: installer
+      - run: pnpm --version
+      - run: pwd
       - run: cd ./installer && ls -lisah
       - run: cd ./installer && pnpm install --frozen-lockfile
       - run: cd ./installer && pnpm build
