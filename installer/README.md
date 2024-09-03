@@ -1,22 +1,28 @@
-# regenfass - Installer
-
-[![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
-[![Installer - test](https://github.com/ttnleipzig/regenfass/actions/workflows/installer-test.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/installer-test.yml)
-
-## Contributing
-
-### Tests
-
-#### Tasks
-
-* `pnpm exec playwright codegen wikipedia.com`
-* `pnpm exec playwright test`
-* `pnpm exec playwright test --ui`
-* `pnpm exec playwright show-report`
-
-## How to run
+## Usage
 
 ```bash
-pnpm install
-pnpm exec playwright test
+$ npm install # or pnpm install or yarn install
 ```
+
+### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm run dev`
+
+Runs the app in the development mode.<br>
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+
+### `npm run build`
+
+Builds the app for production to the `dist` folder.<br>
+It correctly bundles Solid in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
+
+## Deployment
+
+Learn more about deploying your application with the [documentations](https://vitejs.dev/guide/static-deploy.html)

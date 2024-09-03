@@ -1,37 +1,30 @@
 {
-	"name": "regenfass-www",
-	"version": "1.0.0",
-	"description": "Install regenfass with your browser",
-	"private": true,
-	"scripts": {
-		"build": "postcss ./public/css/_style.css -o ./public/css/style.css",
-		"css:dev": "pnpm run build --watch --verbose",
-		"dev": "concurrently -n 'css,http' 'pnpm run css:dev' 'pnpm run start'",
-		"start": "serve .",
-		"test": "pnpm exec playwright test",
-		"test:line": "pnpm exec playwright test --reporter=line",
-		"test:junit": "pnpm exec playwright test --reporter=junit > ./test-results.xml",
-		"test:list": "pnpm exec playwright test --reporter=list",
-		"test:dot": "pnpm exec playwright test --reporter=dot",
-		"lint": "pnpm exec eslint"
-	},
-	"keywords": [],
-	"author": "",
-	"packageManager": "pnpm@9.1.1",
-	"license": "AGPL-3.0-only",
-	"devDependencies": {
-		"@eslint/js": "^9.2.0",
-		"@estruyf/github-actions-reporter": "^1.7.0",
-		"@playwright/test": "^1.44.0",
-		"@types/node": "^20.12.12",
-		"autoprefixer": "^10.4.19",
-		"concurrently": "^8.2.2",
-		"cssnano": "^6.1.2",
-		"eslint": "^9.2.0",
-		"globals": "^15.2.0",
-		"postcss-cli": "^11.0.0",
-		"postcss": "^8.4.38",
-		"serve": "^14.2.3",
-		"tailwindcss": "^3.4.3"
-	}
+  "name": "@ttnleipzig/regenfass-installer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kobalte/core": "^0.13.4",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "esptool-js": "^0.4.5",
+    "solid-js": "^1.8.19",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/dom-serial": "^1.0.6",
+    "@types/node": "^22.2.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.0",
+    "vite-plugin-solid": "^2.10.2"
+  }
 }
