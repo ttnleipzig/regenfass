@@ -1,6 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { ESPLoader, FlashOptions, LoaderOptions, Transport } from "esptool-js";
 import { createSignal, Show } from "solid-js";
-import { Button } from "./components/ui/button.tsx";
 
 type DeviceInfo = {
 	port: SerialPort;
