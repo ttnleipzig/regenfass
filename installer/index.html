@@ -2,12 +2,97 @@
 <html lang="en" class="min-h-screen">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite + Solid + TS</title>
+		<title>Regenfass – installer</title>
+		<link rel="icon" type="image/png" href="/img/regenfass.png" />
+
+		<!-- opengraph -->
+		<meta property="og:title" content="regenfass - installer" />
+		<meta
+			property="og:description"
+			content="Regenfass web installer. Install the software directly from the website."
+		/>
+		<meta
+			property="og:image"
+			content="/img/regenfass-opengraph.png"
+		/>
+		<meta property="og:url" content="https://regenfass.ttn-leipzig.de/" />
+		<meta property="og:site_name" content="regenfass" />
+		<meta property="og:type" content="website" />
+
+		<!-- jsonld for a product page -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org/",
+				"@type": "Product",
+				"name": "regenfass",
+				"sku": "regenfass",
+				"description": "Regenfass web installer. Install the software directly from the website.",
+				"image": "https://regenfass.ttn-leipzig.de/public/img/regenfass-opengraph.png",
+				"url": "https://regenfass.eu",
+				"brand": {
+					"@type": "Organization",
+					"name": "TTN Leipzig",
+					"url": "https://ttn-leipzig.de",
+					"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+					"sameAs": [
+						"https://twitter.com/ttnleipzig",
+						"https://github.com/ttnleipzig"
+					]
+				},
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "EUR",
+					"availability": "https://schema.org/InStock",
+					"url": "https://regenfass.eu",
+					"seller": {
+						"@type": "Organization",
+						"name": "TTN Leipzig",
+						"url": "https://ttn-leipzig.de",
+						"logo": "https://www.thethingsnetwork.org/logo/Leipzig.svg",
+						"sameAs": [
+							"https://twitter.com/ttnleipzig",
+							"https://github.com/ttnleipzig"
+						],
+						"contactPoint": {
+							"@type": "ContactPoint",
+							"contactType": "user support",
+							"email": "info@regenfass.eu",
+							"url": "https://docs.regenfass.eu"
+						}
+					}
+				},
+				"aggregateRating": {
+					"@type": "AggregateRating",
+					"ratingValue": "5",
+					"reviewCount": "1"
+				},
+				"review": {
+					"@type": "Review",
+					"reviewRating": {
+						"@type": "Rating",
+						"ratingValue": "5",
+						"bestRating": "5"
+					},
+					"author": {
+						"@type": "Person",
+						"name": "André Lademan",
+						"url": "https://andrelademann.de",
+						"sameAs": [
+							"https://twitter.com/vergissberlin",
+							"https://github.com/vergissberlin"
+						]
+					}
+				}
+			}
+		</script>
 	</head>
-	<body class="min-h-screen flex items-center flex-col p-6">
-		<div id="root" class="min-h-full flex max-w-5xl flex-1 flex-col"></div>
+	<body class="text-slate-700 dark:text-slate-100">
+		<div
+			id="root"
+			class="min-h-full flex max-w-5xl flex-1 m-auto flex-col px-8"
+		></div>
 		<script type="module" src="/src/index.tsx"></script>
 	</body>
 </html>

@@ -1,18 +1,19 @@
-import { ColorModeProvider, ColorModeScript } from "@kobalte/core";
-import { Flasher } from "./Flasher.tsx";
+import Steps from "@/components/molecules/steps/Steps.tsx";
+import Footer from "@/components/organisms/Footer";
+import Header from "@/components/organisms/Header.tsx";
+import { steps } from "@/libs/steps";
+import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 
 function App() {
 	return (
 		<>
 			<ColorModeScript />
 			<ColorModeProvider>
-				<div>
-					<h1 class="text-4xl font-bold tracking-tight">
-						Install Regenfass to your device!
-					</h1>
-
-					<Flasher />
+				<Header />
+				<div class="flex flex-col w-full">
+					<Steps title="Regenfass installer" steps={steps} />
 				</div>
+				<Footer />
 			</ColorModeProvider>
 		</>
 	);
