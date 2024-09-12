@@ -1,12 +1,9 @@
 name: Add issue automaticall to project
 
 on:
-  workflow_call:
-  pull_request:
+  issues:
     types:
       - opened
-      - synchronize
-      - closed
 jobs:
   add-to-project:
     runs-on: ubuntu-latest
