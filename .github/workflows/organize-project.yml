@@ -4,12 +4,9 @@ on:
   issues:
     types:
       - opened
-  workflow_dispatch:
 
 jobs:
-
   add-to-project:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
     - name: Add To GitHub projects
