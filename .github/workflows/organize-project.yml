@@ -16,7 +16,7 @@ jobs:
       uses: actions/add-to-project@v1.0.2
       with:
         # URL of the project to add issues to
-        project-url: https://github.com/orgs/ttnleipzig/projects
+        project-url: https://github.com/orgs/ttnleipzig/projects/1
         github-token: ${{ secrets.GITHUB_TOKEN }}
         # labeled:  optional
         # The behavior of the labels filter, AND to match all labels, OR to match any label, NOT to exclude any listed label (default is OR)
