@@ -32,3 +32,10 @@ Your app is ready to be deployed!
 ## Deployment
 
 Learn more about deploying your application with the [documentations](https://vitejs.dev/guide/static-deploy.html)
+
+## Links
+
+- [Solid Documentation](https://solidjs.com/docs)
+- [Vite Documentation](https://vitejs.dev/guide/features.html)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Solid shadcn](https://shadcn-solid.com/)
