@@ -1,32 +1,43 @@
 {
-  "name": "@ttnleipzig/regenfass-installer",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@kobalte/core": "^0.13.4",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "esptool-js": "^0.4.5",
-    "lucide": "^0.439.0",
-    "lucide-solid": "^0.454.0",
-    "solid-js": "^1.8.19",
-    "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@types/dom-serial": "^1.0.6",
-    "@types/node": "^22.2.0",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.9",
-    "typescript": "^5.5.3",
-    "vite": "^5.4.0",
-    "vite-plugin-solid": "^2.10.2"
-  }
+	"name": "@ttnleipzig/regenfass-installer",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@kobalte/core": "^0.13.7",
+		"@xstate/react": "^5.0.2",
+		"@xstate/solid": "^1.0.2",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"esptool-js": "^0.5.4",
+		"lucide": "^0.474.0",
+		"lucide-solid": "^0.474.0",
+		"solid-js": "^1.9.4",
+		"tailwind-merge": "^2.6.0",
+		"tailwindcss-animate": "^1.0.7",
+		"tiny-node-eventemitter": "^1.0.6",
+		"tsup": "^8.3.6",
+		"xstate": "^5.19.2"
+	},
+	"devDependencies": {
+		"@types/dom-serial": "^1.0.6",
+		"@types/node": "^22.10.10",
+		"@types/w3c-web-serial": "^1.0.7",
+		"autoprefixer": "^10.4.20",
+		"postcss": "^8.5.1",
+		"tailwindcss": "^3.4.17",
+		"typescript": "^5.7.3",
+		"vite": "^5.4.14",
+		"vite-plugin-solid": "^2.11.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
 }
