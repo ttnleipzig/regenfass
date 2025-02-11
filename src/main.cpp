@@ -6,6 +6,13 @@
 
 #define SCP_IMPLEMENTATION
 
+// Defines to read the battery Voltage
+#define VBAT_PIN 1
+#define VBAT_READ_CNTRL_PIN 37 // Heltec GPIO to toggle VBatt read connection …
+// Also, take care NOT to have ADC read connection
+// in OPEN DRAIN when GPIO goes HIGH
+#define ADC_READ_STABILIZE 10 // in ms (delay from GPIO control and ADC connections times)
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"
@@ -35,9 +42,17 @@
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
 #include "lora/lora-wan.h"
+Lora::Wan::loraPayload payload;
+std::string confMinLevel;
 #endif
 
 unsigned long last_print_time = 0;
+
+float readBatteryVoltage() {
+    int analogValue = analogRead(VBAT_PIN);
+    float voltage = 0.0041 * analogValue;
+    return voltage;
+}
 
 // Main functions
 void setup()
@@ -62,6 +77,15 @@ void setup()
     // Configuration
     Configuration::Configurator::setup();
 
+    // Read minValue from Config
+    const auto config = Configuration::Configurator::getConfig();
+    confMinLevel = config.minLevel;
+    Serial.printf("Configured Minimal Level: %s", confMinLevel);
+
+    // Setup Battery Voltage Read
+    pinMode(VBAT_READ_CNTRL_PIN,OUTPUT);
+    digitalWrite(VBAT_READ_CNTRL_PIN, LOW);
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::setup();
@@ -84,7 +108,7 @@ void setup()
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
-    Lora::Wan::publish2TTN(); // Initial Send to Trigger OTAA Join
+    Lora::Wan::publish2TTN(payload); // Initial Send to Trigger OTAA Join
 #endif
 }
 
@@ -96,14 +120,15 @@ void loop()
     unsigned long current_time = millis();
     if (current_time - last_print_time >= 20000)
     {
-        Lora::Wan::publish2TTN();
+        payload.minLevel = std::stof(confMinLevel);
+        payload.voltage = readBatteryVoltage();
+#if FEATURE_SENSOR_HCSR04
+        payload.waterLevel = Sensor::HCSR04::measureDistanceCm();
+#endif
+        Serial.printf("minLevel: %f voltage: %f waterLevel: %f", payload.minLevel, payload.voltage, payload.waterLevel);
+        Lora::Wan::publish2TTN(payload);
         last_print_time = current_time;
     }
-
-// Sensor
-#if FEATURE_SENSOR_HCSR04
-    Sensor::HCSR04::loop();
-#endif
 
 // #if FEATURE_SENSOR_VL53L1X
 //     Sensor::VL53L1X::loop();

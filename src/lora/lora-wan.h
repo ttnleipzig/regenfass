@@ -7,10 +7,16 @@ namespace Lora
 {
     namespace Wan
     {
+        struct loraPayload {
+            float waterLevel;
+            float minLevel;
+            float voltage;
+        };
+
         void setup();
         void loop();
         void printHex2(unsigned v);
-        void publish2TTN(void);
+        void publish2TTN(loraPayload data);
 
         // Taken from LMIC keyhandler.h
         class AppEuiGetter
