@@ -26,12 +26,5 @@ namespace Sensor
         {
             log_i("Setup HCSR04 sensor");
         }
-
-        void loop()
-        {
-            float distance = measureDistanceCm();
-            // Output float mesurement to serial console with 2 decimal places
-            log_v("HCSR04:\t%.2f cm", distance);
-        }
     }
 } // namespace Sensor

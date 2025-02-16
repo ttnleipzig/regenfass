@@ -6,12 +6,11 @@
 
 #define SCP_IMPLEMENTATION
 
-// Defines to read the battery Voltage
-#define VBAT_PIN 1
-#define VBAT_READ_CNTRL_PIN 37 // Heltec GPIO to toggle VBatt read connection …
-// Also, take care NOT to have ADC read connection
-// in OPEN DRAIN when GPIO goes HIGH
-#define ADC_READ_STABILIZE 10 // in ms (delay from GPIO control and ADC connections times)
+
+// Lora32 Battery Voltage
+#if FEATURE_LORA32_VBAT
+#include "sensors/sensor-lora32battery.h"
+#endif
 
 // Sensors
 #if FEATURE_SENSOR_HCSR04
@@ -48,12 +47,6 @@ std::string confMinLevel;
 
 unsigned long last_print_time = 0;
 
-float readBatteryVoltage() {
-    int analogValue = analogRead(VBAT_PIN);
-    float voltage = 0.0041 * analogValue;
-    return voltage;
-}
-
 // Main functions
 void setup()
 {
@@ -80,11 +73,12 @@ void setup()
     // Read minValue from Config
     const auto config = Configuration::Configurator::getConfig();
     confMinLevel = config.minLevel;
-    Serial.printf("Configured Minimal Level: %s", confMinLevel);
+    Serial.printf("Configured Minimal Level: %s\n", confMinLevel);
 
-    // Setup Battery Voltage Read
-    pinMode(VBAT_READ_CNTRL_PIN,OUTPUT);
-    digitalWrite(VBAT_READ_CNTRL_PIN, LOW);
+// Lora32 Battery Voltage
+#if FEATURE_LORA32_VBAT
+    Sensor::Lora32Battery::setup();
+#endif
 
 // Sensors
 #if FEATURE_SENSOR_HCSR04
@@ -121,11 +115,15 @@ void loop()
     if (current_time - last_print_time >= 20000)
     {
         payload.minLevel = std::stof(confMinLevel);
-        payload.voltage = readBatteryVoltage();
+
+#if FEATURE_LORA32_VBAT
+        payload.voltage = Sensor::Lora32Battery::readBattery();
+#endif
+
 #if FEATURE_SENSOR_HCSR04
         payload.waterLevel = Sensor::HCSR04::measureDistanceCm();
 #endif
-        Serial.printf("minLevel: %f voltage: %f waterLevel: %f", payload.minLevel, payload.voltage, payload.waterLevel);
+        Serial.printf("minLevel: %f voltage: %f waterLevel: %f\n", payload.minLevel, payload.voltage, payload.waterLevel);
         Lora::Wan::publish2TTN(payload);
         last_print_time = current_time;
     }
