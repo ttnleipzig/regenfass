@@ -1,0 +1,32 @@
+services:
+  db:
+    profiles: [ "dev", "all" ]
+    image: timescale/timescaledb:latest-pg17
+    ports: [ "5434:5432" ]
+    restart: unless-stopped
+    expose: [ "5432" ]
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/db:/docker-entrypoint-initdb.d/
+
+  grafana:
+    profiles: [ "dev", "all" ]
+    restart: unless-stopped
+    image: grafana/grafana
+    ports: [ "3000:3000" ]
+    expose: [ "3000" ]
+
+  backend:
+    profiles: [ "all" ]
+    build: .
+    restart: unless-stopped
+    expose: [ "64000" ]
+    ports: [ "64000:64000/tcp" ]
+    command:
+      - --listen-addr=:64000
+      - --database-uri=postgres://postgres:password@db:5432/regenfass
+
+volumes:
+  db-data:
