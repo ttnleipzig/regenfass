@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./docker/db:/docker-entrypoint-initdb.d/
+      - ./docker/db:/docker-entrypoint-initdb.d/:ro
 
   grafana:
     profiles: [ "dev", "all" ]
@@ -17,6 +17,17 @@ services:
     image: grafana/grafana
     ports: [ "3000:3000" ]
     expose: [ "3000" ]
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+
+    environment:
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_BASIC_ENABLED: false
+      GF_SERVER_ROOT_URL: https://dashboard.regenfass.eu
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD:-admin}"
 
   backend:
     profiles: [ "all" ]
@@ -30,3 +41,4 @@ services:
 
 volumes:
   db-data:
+  grafana-data:

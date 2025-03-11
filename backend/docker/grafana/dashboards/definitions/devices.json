@@ -1,0 +1,232 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 1,
+	"links": [],
+	"liveNow": true,
+	"panels": [
+		{
+			"datasource": {
+				"type": "grafana-postgresql-datasource",
+				"uid": "default_timescale_ds"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": 3600000,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byFrameRefID",
+							"options": "Water_Level"
+						},
+						"properties": [
+							{
+								"id": "unit",
+								"value": "lengthm"
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byFrameRefID",
+							"options": "Voltage"
+						},
+						"properties": [
+							{
+								"id": "unit",
+								"value": "volt"
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 22,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 1,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"hideZeros": false,
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "11.5.2",
+			"targets": [
+				{
+					"datasource": {
+						"type": "grafana-postgresql-datasource",
+						"uid": "default_timescale_ds"
+					},
+					"editorMode": "code",
+					"format": "time_series",
+					"rawQuery": true,
+					"rawSql": "SELECT\n  \"received_at\" AS \"time\",\n  voltage AS \"Spannung\",\n  device_id AS \"Gerät\"\nFROM device_measurement \nWHERE\n  $__timeFilter(\"received_at\") AND\n  device_id IN ($device_eui)\nORDER BY 1",
+					"refId": "Voltage",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					}
+				},
+				{
+					"datasource": {
+						"type": "grafana-postgresql-datasource",
+						"uid": "default_timescale_ds"
+					},
+					"editorMode": "code",
+					"format": "time_series",
+					"hide": false,
+					"rawQuery": true,
+					"rawSql": "SELECT\n  \"received_at\" AS \"time\",\n  (water_level / 100) AS \"Wasserstand\",\n  device_id AS \"Gerät\"\nFROM device_measurement \nWHERE\n  $__timeFilter(\"received_at\") AND\n  device_id IN ($device_eui)\nORDER BY 1",
+					"refId": "Water_Level",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					}
+				}
+			],
+			"title": "Messwert",
+			"type": "timeseries"
+		}
+	],
+	"preload": false,
+	"refresh": "",
+	"schemaVersion": 40,
+	"tags": ["regenfass"],
+	"templating": {
+		"list": [
+			{
+				"allowCustomValue": false,
+				"current": {
+					"text": "All",
+					"value": ["$__all"]
+				},
+				"definition": "SELECT device_eui FROM device",
+				"includeAll": true,
+				"label": "Geräte-EUI",
+				"multi": true,
+				"name": "device_eui",
+				"options": [],
+				"query": "SELECT device_eui FROM device",
+				"refresh": 1,
+				"regex": "",
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-3h",
+		"to": "now"
+	},
+	"timepicker": {
+		"nowDelay": "1m",
+		"refresh_intervals": ["30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+	},
+	"timezone": "browser",
+	"title": "Regenfass-Geräte",
+	"uid": "eefk0f045oagwb",
+	"version": 7,
+	"weekStart": "monday"
+}
