@@ -46,12 +46,24 @@ func main() {
 	}
 
 	mux := &http.ServeMux{}
+	mux.HandleFunc("GET /healthz", handleHealthz)
 	mux.HandleFunc("POST /ingest", handleIngest)
 
 	log.Printf("listening on %s", *listenAddrFlag)
 	if err := http.ListenAndServe(*listenAddrFlag, mux); err != nil {
 		log.Panic(err)
 	}
+}
+
+func handleHealthz(w http.ResponseWriter, r *http.Request) {
+	if err := pool.Ping(r.Context()); err != nil {
+		log.Println(err.Error())
+		http.Error(w, "database connection unhealthy", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("ok"))
 }
 
 func handleIngest(w http.ResponseWriter, r *http.Request) {
