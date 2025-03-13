@@ -46,12 +46,23 @@ func main() {
 	}
 
 	mux := &http.ServeMux{}
-	mux.HandleFunc("POST /ingest", handleIngest)
+	mux.HandleFunc("GET /api/healthz", handleHealthz)
+	mux.HandleFunc("POST /api/ingest", handleIngest)
 
 	log.Printf("listening on %s", *listenAddrFlag)
 	if err := http.ListenAndServe(*listenAddrFlag, mux); err != nil {
 		log.Panic(err)
 	}
+}
+
+func handleHealthz(w http.ResponseWriter, r *http.Request) {
+	if _, err := w.Write([]byte("ok")); err != nil {
+		log.Println(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func handleIngest(w http.ResponseWriter, r *http.Request) {
