@@ -30,7 +30,7 @@
 			"fieldConfig": {
 				"defaults": {
 					"color": {
-						"mode": "palette-classic"
+						"mode": "thresholds"
 					},
 					"custom": {
 						"axisBorderShow": false,
@@ -78,42 +78,138 @@
 								"value": 80
 							}
 						]
-					}
-				},
-				"overrides": [
-					{
-						"matcher": {
-							"id": "byFrameRefID",
-							"options": "Water_Level"
-						},
-						"properties": [
-							{
-								"id": "unit",
-								"value": "lengthm"
-							}
-						]
 					},
-					{
-						"matcher": {
-							"id": "byFrameRefID",
-							"options": "Voltage"
-						},
-						"properties": [
-							{
-								"id": "unit",
-								"value": "volt"
-							}
-						]
-					}
-				]
+					"unit": "lengthmm"
+				},
+				"overrides": []
 			},
 			"gridPos": {
-				"h": 22,
-				"w": 24,
+				"h": 24,
+				"w": 17,
 				"x": 0,
 				"y": 0
 			},
 			"id": 1,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"hideZeros": false,
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "11.5.2",
+			"targets": [
+				{
+					"datasource": {
+						"type": "grafana-postgresql-datasource",
+						"uid": "default_timescale_ds"
+					},
+					"editorMode": "code",
+					"format": "time_series",
+					"hide": false,
+					"rawQuery": true,
+					"rawSql": "SELECT\n  \"received_at\" AS \"time\",\n  water_level AS \"Wasserstand\",\n  device_id AS \"Gerät\"\nFROM device_measurement \nWHERE\n  $__timeFilter(\"received_at\") AND\n  device_id IN ($device_eui)\nORDER BY 1",
+					"refId": "Water_Level",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					}
+				}
+			],
+			"title": "Wasserstand",
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "grafana-postgresql-datasource",
+				"uid": "default_timescale_ds"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "thresholds"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": 3600000,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "red",
+								"value": null
+							},
+							{
+								"color": "yellow",
+								"value": 3.6
+							},
+							{
+								"color": "green",
+								"value": 3.9
+							}
+						]
+					},
+					"unit": "volt"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 24,
+				"w": 7,
+				"x": 17,
+				"y": 0
+			},
+			"id": 2,
 			"options": {
 				"legend": {
 					"calcs": [],
@@ -156,38 +252,9 @@
 						],
 						"limit": 50
 					}
-				},
-				{
-					"datasource": {
-						"type": "grafana-postgresql-datasource",
-						"uid": "default_timescale_ds"
-					},
-					"editorMode": "code",
-					"format": "time_series",
-					"hide": false,
-					"rawQuery": true,
-					"rawSql": "SELECT\n  \"received_at\" AS \"time\",\n  (water_level / 100) AS \"Wasserstand\",\n  device_id AS \"Gerät\"\nFROM device_measurement \nWHERE\n  $__timeFilter(\"received_at\") AND\n  device_id IN ($device_eui)\nORDER BY 1",
-					"refId": "Water_Level",
-					"sql": {
-						"columns": [
-							{
-								"parameters": [],
-								"type": "function"
-							}
-						],
-						"groupBy": [
-							{
-								"property": {
-									"type": "string"
-								},
-								"type": "groupBy"
-							}
-						],
-						"limit": 50
-					}
 				}
 			],
-			"title": "Messwert",
+			"title": "Batteriestand",
 			"type": "timeseries"
 		}
 	],
@@ -222,11 +289,21 @@
 	},
 	"timepicker": {
 		"nowDelay": "1m",
-		"refresh_intervals": ["30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+		"refresh_intervals": [
+			"15s",
+			"30s",
+			"1m",
+			"5m",
+			"15m",
+			"30m",
+			"1h",
+			"2h",
+			"1d"
+		]
 	},
 	"timezone": "browser",
 	"title": "Regenfass-Geräte",
 	"uid": "eefk0f045oagwb",
-	"version": 7,
+	"version": 1,
 	"weekStart": "monday"
 }
