@@ -72,10 +72,6 @@
 							{
 								"color": "green",
 								"value": null
-							},
-							{
-								"color": "red",
-								"value": 80
 							}
 						]
 					},
@@ -304,6 +300,6 @@
 	"timezone": "browser",
 	"title": "Regenfass-Geräte",
 	"uid": "eefk0f045oagwb",
-	"version": 1,
+	"version": 2,
 	"weekStart": "monday"
 }
