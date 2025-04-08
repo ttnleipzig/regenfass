@@ -5,59 +5,87 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
+	"errors"
 	"flag"
-	"log"
 	"math"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ttn-leipzig/regenfass/internal/db"
+	"github.com/ttn-leipzig/regenfass/sql"
 )
 
-var pool *pgxpool.Pool
 var (
+	pool *pgxpool.Pool
+	q    *db.Queries
+)
+var (
+	logLevelFlag    = flag.String("log-level", "INFO", "Log level")
 	databaseUriFlag = flag.String("database-uri", "postgres://postgres:password@127.0.0.1:5434/regenfass", "TimescaleDB Database URI")
 	listenAddrFlag  = flag.String("listen-addr", ":64000", "Address to listen on")
 )
 
+func init() {
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnixMicro
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+}
+
 func main() {
 	flag.Parse()
+
+	level, err := zerolog.ParseLevel(*logLevelFlag)
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not parse log level")
+	}
+	zerolog.SetGlobalLevel(level)
 
 	if *databaseUriFlag == "" {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	var err error
+	if err := migrateDB(*databaseUriFlag); err != nil {
+		log.Fatal().Err(err).Msg("could not migrate database")
+	}
+
+	log.Info().Msg("connecting to database...")
 	pool, err = pgxpool.New(context.Background(), *databaseUriFlag)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("could not instanciate new database pool")
 	}
 
+	log.Info().Msg("checking reachability...")
 	if err := pool.Ping(context.Background()); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("could not ping database")
 	}
+	log.Info().Msg("database is reachable")
 
-	if err := initDB(context.Background()); err != nil {
-		log.Fatal(err)
-	}
+	q = db.New(pool)
 
 	mux := &http.ServeMux{}
 	mux.HandleFunc("GET /healthz", handleHealthz)
 	mux.HandleFunc("POST /ingest", handleIngest)
 
-	log.Printf("listening on %s", *listenAddrFlag)
+	log.Info().Str("listenAddr", *listenAddrFlag).Msg("starting web server...")
 	if err := http.ListenAndServe(*listenAddrFlag, mux); err != nil {
-		log.Panic(err)
+		log.Fatal().Err(err).Msg("could not start web server")
 	}
 }
 
 func handleHealthz(w http.ResponseWriter, r *http.Request) {
 	if err := pool.Ping(r.Context()); err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not ping database")
 		http.Error(w, "database connection unhealthy", http.StatusBadRequest)
 		return
 	}
@@ -79,25 +107,30 @@ func handleIngest(w http.ResponseWriter, r *http.Request) {
 
 	var body Body
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not parse request body")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	payload, err := base64.StdEncoding.DecodeString(body.UplinkMessage.Payload)
 	if err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not parse message payload")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	log.Printf("%s %x", body.UplinkMessage.Payload, payload)
+	log.Debug().Hex("decoded", payload).Str("raw", body.UplinkMessage.Payload).Msg("parsed payload")
 
 	waterLevel := readFloat32(payload[0:4])
 	minimumLevel := readFloat32(payload[4:8])
 	voltage := readFloat32(payload[8:12])
 
-	log.Printf("got request devEUI=%s waterLevel=%f minimumLevel=%f voltage=%f", body.EndDeviceIDs.DevEUI, waterLevel, minimumLevel, voltage)
+	log.Debug().
+		Str("deviceEUI", body.EndDeviceIDs.DevEUI).
+		Float32("waterLevel", waterLevel).
+		Float32("minimumLevel", minimumLevel).
+		Float32("voltage", voltage).
+		Msg("got request")
 
 	tx, err := pool.BeginTx(r.Context(), pgx.TxOptions{
 		IsoLevel:       pgx.Serializable,
@@ -105,36 +138,39 @@ func handleIngest(w http.ResponseWriter, r *http.Request) {
 		DeferrableMode: pgx.NotDeferrable,
 	})
 	if err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not begin database transaction")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer tx.Rollback(r.Context())
 
-	row := tx.QueryRow(r.Context(), `
-		UPDATE device SET minimum_level = $2 WHERE device_eui = $1 RETURNING id
-	`, body.EndDeviceIDs.DevEUI, minimumLevel)
-
-	var deviceID uuid.UUID
-	if err := row.Scan(&deviceID); err != nil {
-		log.Println(err.Error())
+	rawDeviceUUID, err := q.UpdateDeviceMinimumLevel(r.Context(), db.UpdateDeviceMinimumLevelParams{
+		DeviceEui:    body.EndDeviceIDs.DevEUI,
+		MinimumLevel: float64(minimumLevel),
+	})
+	if err != nil {
+		log.Error().Err(err).Msg("could not update device's minimum level")
 		http.Error(w, "Could not update device with minimum level", http.StatusInternalServerError)
 		return
 	}
 
-	log.Printf("found device in DB id=%s", deviceID)
+	deviceUUID := pgToUUID(rawDeviceUUID)
+	log.Printf("found device in DB id=%s", deviceUUID)
 
-	_, err = tx.Exec(r.Context(), `
-		INSERT INTO device_measurement (device_id, water_level, voltage, received_at) VALUES ($1, $2, $3, $4)
-	`, body.EndDeviceIDs.DevEUI, waterLevel, voltage, body.UplinkMessage.ReceivedAt)
+	err = q.InsertDeviceMeasurement(r.Context(), db.InsertDeviceMeasurementParams{
+		DeviceID:   rawDeviceUUID,
+		WaterLevel: float64(waterLevel),
+		Voltage:    float64(voltage),
+		ReceivedAt: timeToPG(body.UplinkMessage.ReceivedAt),
+	})
 	if err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not insert device measurement")
 		http.Error(w, "Could not insert measurement", http.StatusInternalServerError)
 		return
 	}
 
 	if err := tx.Commit(r.Context()); err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err).Msg("could not commit database transaction")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -147,58 +183,37 @@ func readFloat32(bytes []byte) float32 {
 	return math.Float32frombits(bits)
 }
 
-func initDB(ctx context.Context) error {
-	tx, err := pool.BeginTx(ctx, pgx.TxOptions{
-		IsoLevel:       pgx.Serializable,
-		AccessMode:     pgx.ReadWrite,
-		DeferrableMode: pgx.NotDeferrable,
-	})
+func migrateDB(dbUri string) error {
+	migrations, err := iofs.New(sql.Migrations, "migrations")
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx)
 
-	if _, err := tx.Exec(ctx, `
-		CREATE TABLE IF NOT EXISTS device (
-			id UUID PRIMARY KEY,
-			device_eui TEXT NOT NULL UNIQUE,
-			minimum_level FLOAT NOT NULL
-		)
-	`); err != nil {
-		log.Printf("could not create device table: %v", err)
+	m, err := migrate.NewWithSourceInstance("iofs", migrations, dbUri)
+	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(ctx, `
-		CREATE INDEX IF NOT EXISTS device__device_eui ON device (device_eui);
-	`); err != nil {
-		log.Printf("could not create device EUI -> device index: %v", err)
-		return err
-	}
+	log.Info().Msg("migrating database...")
 
-	if _, err := tx.Exec(ctx, `
-		CREATE TABLE IF NOT EXISTS device_measurement (
-			received_at TIMESTAMPTZ NOT NULL,
-			device_id TEXT NOT NULL,
+	if err := m.Up(); err != nil {
+		if !errors.Is(err, migrate.ErrNoChange) {
+			return err
 
-			water_level FLOAT NOT NULL,
-			voltage FLOAT NOT NULL
-		)
-	`); err != nil {
-		log.Printf("could not create device measurement table: %v", err)
-		return err
-	}
+		}
 
-	if _, err := tx.Exec(ctx, `
-		SELECT create_hypertable('device_measurement', by_range('received_at', INTERVAL '1 day'), if_not_exists => TRUE)
-	`); err != nil {
-		log.Printf("could not create device measurement hypertable: %v", err)
-		return err
-	}
-
-	if err := tx.Commit(ctx); err != nil {
-		return err
+		log.Info().Msg("no migration needed")
+	} else {
+		log.Info().Msg("migrated database")
 	}
 
 	return nil
+}
+
+func pgToUUID(raw pgtype.UUID) uuid.UUID {
+	return raw.Bytes
+}
+
+func timeToPG(raw time.Time) pgtype.Timestamptz {
+	return pgtype.Timestamptz{Time: raw, Valid: true}
 }
