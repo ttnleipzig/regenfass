@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/binary"
-	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"math"
-	"net/http"
 	"os"
 	"time"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
@@ -73,28 +73,27 @@ func main() {
 
 	q = db.New(pool)
 
-	mux := &http.ServeMux{}
-	mux.HandleFunc("GET /healthz", handleHealthz)
-	mux.HandleFunc("POST /ingest", handleIngest)
+	app := fiber.New()
+	app.Get("/healthz", handleHealthz)
+	app.Post("/ingest", handleIngest)
 
 	log.Info().Str("listenAddr", *listenAddrFlag).Msg("starting web server...")
-	if err := http.ListenAndServe(*listenAddrFlag, mux); err != nil {
+	if err := app.Listen(*listenAddrFlag); err != nil {
 		log.Fatal().Err(err).Msg("could not start web server")
 	}
 }
 
-func handleHealthz(w http.ResponseWriter, r *http.Request) {
-	if err := pool.Ping(r.Context()); err != nil {
+func handleHealthz(c fiber.Ctx) error {
+	if err := pool.Ping(c.Context()); err != nil {
 		log.Error().Err(err).Msg("could not ping database")
-		http.Error(w, "database connection unhealthy", http.StatusBadRequest)
-		return
+		c.Status(fiber.StatusInternalServerError)
+		return fmt.Errorf("database connection unhealthy")
 	}
 
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte("ok"))
+	return c.SendString("ok")
 }
 
-func handleIngest(w http.ResponseWriter, r *http.Request) {
+func handleIngest(c fiber.Ctx) error {
 	type Body struct {
 		EndDeviceIDs struct {
 			DevEUI string `json:"dev_eui"`
@@ -105,18 +104,20 @@ func handleIngest(w http.ResponseWriter, r *http.Request) {
 		} `json:"uplink_message"`
 	}
 
+	log := getRequestLogger(c)
+
 	var body Body
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+	if err := c.Bind().JSON(&body); err != nil {
 		log.Error().Err(err).Msg("could not parse request body")
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return fiber.NewError(fiber.StatusBadRequest, "could not parse request body")
 	}
+
+	log = log.With().Str("deviceEUI", body.EndDeviceIDs.DevEUI).Logger()
 
 	payload, err := base64.StdEncoding.DecodeString(body.UplinkMessage.Payload)
 	if err != nil {
 		log.Error().Err(err).Msg("could not parse message payload")
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return fiber.NewError(fiber.StatusBadRequest, "could not parse message payload")
 	}
 
 	log.Debug().Hex("decoded", payload).Str("raw", body.UplinkMessage.Payload).Msg("parsed payload")
@@ -126,38 +127,37 @@ func handleIngest(w http.ResponseWriter, r *http.Request) {
 	voltage := readFloat32(payload[8:12])
 
 	log.Debug().
-		Str("deviceEUI", body.EndDeviceIDs.DevEUI).
 		Float32("waterLevel", waterLevel).
 		Float32("minimumLevel", minimumLevel).
 		Float32("voltage", voltage).
 		Msg("got request")
 
-	tx, err := pool.BeginTx(r.Context(), pgx.TxOptions{
+	tx, err := pool.BeginTx(c.Context(), pgx.TxOptions{
 		IsoLevel:       pgx.Serializable,
 		AccessMode:     pgx.ReadWrite,
 		DeferrableMode: pgx.NotDeferrable,
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("could not begin database transaction")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return fiber.NewError(fiber.StatusInternalServerError)
 	}
-	defer tx.Rollback(r.Context())
+	defer tx.Rollback(c.Context())
 
-	rawDeviceUUID, err := q.UpdateDeviceMinimumLevel(r.Context(), db.UpdateDeviceMinimumLevelParams{
+	rawDeviceUUID, err := q.UpdateDeviceMinimumLevel(c.Context(), db.UpdateDeviceMinimumLevelParams{
 		DeviceEui:    body.EndDeviceIDs.DevEUI,
 		MinimumLevel: float64(minimumLevel),
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("could not update device's minimum level")
-		http.Error(w, "Could not update device with minimum level", http.StatusInternalServerError)
-		return
+		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 
 	deviceUUID := pgToUUID(rawDeviceUUID)
-	log.Printf("found device in DB id=%s", deviceUUID)
+	log = log.With().Stringer("deviceUUID", deviceUUID).Logger()
 
-	err = q.InsertDeviceMeasurement(r.Context(), db.InsertDeviceMeasurementParams{
+	log.Debug().Msg("found device in DB")
+
+	err = q.InsertDeviceMeasurement(c.Context(), db.InsertDeviceMeasurementParams{
 		DeviceID:   rawDeviceUUID,
 		WaterLevel: float64(waterLevel),
 		Voltage:    float64(voltage),
@@ -165,17 +165,15 @@ func handleIngest(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("could not insert device measurement")
-		http.Error(w, "Could not insert measurement", http.StatusInternalServerError)
-		return
+		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 
-	if err := tx.Commit(r.Context()); err != nil {
+	if err := tx.Commit(c.Context()); err != nil {
 		log.Error().Err(err).Msg("could not commit database transaction")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	return c.SendStatus(fiber.StatusNoContent)
 }
 
 func readFloat32(bytes []byte) float32 {
@@ -216,4 +214,18 @@ func pgToUUID(raw pgtype.UUID) uuid.UUID {
 
 func timeToPG(raw time.Time) pgtype.Timestamptz {
 	return pgtype.Timestamptz{Time: raw, Valid: true}
+}
+
+func getRequestLogger(c fiber.Ctx) zerolog.Logger {
+	id := c.RequestCtx().ID()
+	method := c.Method()
+	path := c.Path()
+	ip := c.IP()
+
+	return log.With().
+		Uint64("requestID", id).
+		Str("httpMethod", method).
+		Str("httpPath", path).
+		Str("ip", ip).
+		Logger()
 }
