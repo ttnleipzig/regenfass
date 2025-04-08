@@ -37,7 +37,7 @@ services:
     ports: [ "64000:64000/tcp" ]
     command:
       - --listen-addr=:64000
-      - --database-uri=postgres://postgres:password@db:5432/regenfass
+      - --database-uri=postgres://postgres:password@db:5432/regenfass?sslmode=disable
 
 volumes:
   db-data:
