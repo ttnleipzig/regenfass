@@ -6,7 +6,6 @@
 
 #define SCP_IMPLEMENTATION
 
-
 // Lora32 Battery Voltage
 #if FEATURE_LORA32_VBAT
 #include "sensors/sensor-lora32battery.h"
@@ -23,6 +22,10 @@
 
 #if FEATURE_SENSOR_DS18B20
 #include "sensors/sensor-ds18b20.h"
+#endif
+
+#if FEATURE_SENSOR_HX710B
+#include "sensors/sensor-hx710b.h"
 #endif
 
 // Button
@@ -99,6 +102,10 @@ void setup()
     Display::SD1306::setup();
 #endif
 
+#if FEATURE_SENSOR_HX710B
+    Sensor::HX710B::setup(7, 6);
+#endif
+
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
@@ -122,7 +129,12 @@ void loop()
 
 #if FEATURE_SENSOR_HCSR04
         payload.waterLevel = Sensor::HCSR04::measureDistanceCm();
+#else if FEATURE_SENSOR_HX710B
+        auto raw = Sensor::HX710B::readPressure();
+        Serial.printf("yeet: %d\n", raw);
+       payload.waterLevel = -1;
 #endif
+
         Serial.printf("minLevel: %f voltage: %f waterLevel: %f\n", payload.minLevel, payload.voltage, payload.waterLevel);
         Lora::Wan::publish2TTN(payload);
         last_print_time = current_time;
