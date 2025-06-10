@@ -1,0 +1,97 @@
+body {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background: #282c34;
+	overflow: hidden;
+}
+
+.confetti-container {
+	position: relative;
+	width: 200px;
+	height: 200px;
+}
+
+.confetti {
+	position: absolute;
+	width: 10px;
+	height: 20px;
+	background: var(--confetti-color, #f2f2f2);
+	opacity: 0;
+	transform: scale(0) rotate(0deg);
+	animation: explode 2s cubic-bezier(0.6, 0.05, 0.28, 0.91) forwards;
+}
+
+/* Randomized angles and directions for each confetti */
+.confetti:nth-child(1) {
+	--confetti-color: #ff4757;
+	animation-delay: 0.1s;
+	transform-origin: 50px 50px;
+}
+.confetti:nth-child(2) {
+	--confetti-color: #3742fa;
+	animation-delay: 0.2s;
+	transform-origin: 100px -50px;
+}
+.confetti:nth-child(3) {
+	--confetti-color: #2ed573;
+	animation-delay: 0.3s;
+	transform-origin: -100px -50px;
+}
+.confetti:nth-child(4) {
+	--confetti-color: #ffa502;
+	animation-delay: 0.4s;
+	transform-origin: 150px 100px;
+}
+.confetti:nth-child(5) {
+	--confetti-color: #ff6b81;
+	animation-delay: 0.5s;
+	transform-origin: -150px 100px;
+}
+.confetti:nth-child(6) {
+	--confetti-color: #70a1ff;
+	animation-delay: 0.6s;
+	transform-origin: -50px -150px;
+}
+.confetti:nth-child(7) {
+	--confetti-color: #1e90ff;
+	animation-delay: 0.7s;
+	transform-origin: 200px -200px;
+}
+.confetti:nth-child(8) {
+	--confetti-color: #2f3542;
+	animation-delay: 0.8s;
+	transform-origin: -200px 200px;
+}
+.confetti:nth-child(9) {
+	--confetti-color: #a29bfe;
+	animation-delay: 0.9s;
+	transform-origin: 100px -100px;
+}
+.confetti:nth-child(10) {
+	--confetti-color: #fdcb6e;
+	animation-delay: 1s;
+	transform-origin: -100px 100px;
+}
+
+@keyframes explode {
+	0% {
+		opacity: 1;
+		transform: scale(0) translate(0, 0) rotate(0deg);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.5)
+			translate(calc(var(--x, 1) * 150px), calc(var(--y, 1) * -150px))
+			rotate(180deg);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1)
+			translate(calc(var(--x, 1) * 300px), calc(var(--y, 1) * 300px))
+			rotate(360deg);
+	}
+}
