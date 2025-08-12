@@ -8,7 +8,7 @@ type DeviceInfo = {
 	chip: string;
 };
 
-export function Flasher() {
+function Flasher() {
 	const [device, setDevice] = createSignal<DeviceInfo | null>(null);
 	const [file, setFile] = createSignal<File | null>(null);
 
@@ -100,10 +100,9 @@ export function Flasher() {
 function DevInfo({ info }: { info: DeviceInfo }) {
 	return (
 		<div>
-			<p>Found device:</p>
-			<pre class="font-mono whitespace-pre">
-				{JSON.stringify(info.port.getInfo())}
-			</pre>
+			<p>Connected to {info.chip}</p>
 		</div>
 	);
 }
+
+export default Flasher;

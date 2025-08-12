@@ -22,10 +22,7 @@ pnpm install
 pnpm dev
 ```
 
-### Storybook starten
-```bash
-pnpm storybook
-```
+
 
 ### Tests ausführen
 ```bash
@@ -59,57 +56,9 @@ pnpm test:coverage
 - **Welcome**: Willkommensseite für neue Benutzer
 - **Newsletter**: Newsletter-Anmeldung
 
-## 🧪 Testing
 
-Das Projekt verwendet Vitest für Unit-Tests und @testing-library für Komponententests.
 
-### Test-Struktur
-```
-src/
-├── components/
-│   ├── atoms/
-│   │   ├── Link.test.tsx
-│   │   └── ...
-│   ├── molecules/
-│   │   ├── Status.test.tsx
-│   │   └── ...
-│   └── organisms/
-│       ├── Header.test.tsx
-│       └── ...
-└── test/
-    └── setup.ts
-```
 
-### Test-Ausführung
-- `pnpm test`: Führt alle Tests aus
-- `pnpm test:ui`: Öffnet die Vitest UI
-- `pnpm test:coverage`: Generiert Testabdeckungsbericht
-
-## 📚 Storybook
-
-Storybook bietet eine interaktive Dokumentation aller Komponenten:
-
-- **Lokale URL**: http://localhost:6006/
-- **Komponenten-Übersicht**: Alle Komponenten sind nach Atomic Design organisiert
-- **Interaktive Controls**: Props können live angepasst werden
-- **Automatische Dokumentation**: Jede Komponente wird automatisch dokumentiert
-
-### Story-Struktur
-```
-src/stories/
-├── atoms/
-│   ├── Link.stories.tsx
-│   ├── Confetti.stories.tsx
-│   └── ConfettiSpinner.stories.tsx
-├── molecules/
-│   ├── Status.stories.tsx
-│   └── Flasher.stories.tsx
-└── organisms/
-    ├── Header.stories.tsx
-    ├── Footer.stories.tsx
-    ├── Welcome.stories.tsx
-    └── Newsletter.stories.tsx
-```
 
 ## 🏗️ Build
 
