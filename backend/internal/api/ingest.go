@@ -2,13 +2,13 @@ package api
 
 import (
 	"encoding/base64"
-	"encoding/binary"
-	"math"
+	"encoding/json"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
 	"github.com/ttn-leipzig/regenfass/internal/db"
+	loraprotocol "github.com/ttn-leipzig/regenfass/internal/lora_protocol"
 	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
 
@@ -41,15 +41,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 
 	log.Debug().Hex("decoded", payload).Str("raw", body.UplinkMessage.Payload).Msg("parsed payload")
 
-	waterLevel := readFloat32(payload[0:4])
-	minimumLevel := readFloat32(payload[4:8])
-	voltage := readFloat32(payload[8:12])
-
-	log.Debug().
-		Float32("waterLevel", waterLevel).
-		Float32("minimumLevel", minimumLevel).
-		Float32("voltage", voltage).
-		Msg("got request")
+	log.Debug().Msg("got request")
 
 	tx, err := a.dbPool.BeginTx(c.Context(), pgx.TxOptions{
 		IsoLevel:       pgx.Serializable,
@@ -63,27 +55,50 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	defer tx.Rollback(c.Context())
 	q := a.db.WithTx(tx)
 
-	rawDeviceUUID, err := q.UpdateDeviceMinimumLevel(c.Context(), db.UpdateDeviceMinimumLevelParams{
-		DeviceEui:    body.EndDeviceIDs.DevEUI,
-		MinimumLevel: float64(minimumLevel),
-	})
+	device, err := q.GetDeviceByEUI(c.Context(), body.EndDeviceIDs.DevEUI)
 	if err != nil {
-		log.Error().Err(err).Msg("could not update device's minimum level")
-		return fiber.NewError(fiber.StatusInternalServerError)
+		log.Error().Err(err).Msg("could not get device by EUI")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not get device by EUI")
 	}
 
-	deviceUUID := utils.PGToUUID(rawDeviceUUID)
+	// rawDeviceUUID, err := q.UpdateDeviceMinimumLevel(c.Context(), db.UpdateDeviceMinimumLevelParams{
+	// 	DeviceEui:    body.EndDeviceIDs.DevEUI,
+	// 	MinimumLevel: float64(minimumLevel),
+	// })
+	// if err != nil {
+	// 	log.Error().Err(err).Msg("could not update device's minimum level")
+	// 	return fiber.NewError(fiber.StatusInternalServerError)
+	// }
+
+	deviceUUID := utils.PGToUUID(device.ID)
 	log = log.With().Stringer("deviceUUID", deviceUUID).Logger()
 
 	log.Debug().Msg("found device in DB")
 
-	err = q.InsertDeviceMeasurement(c.Context(), db.InsertDeviceMeasurementParams{
-		DeviceID:   rawDeviceUUID,
-		WaterLevel: float64(waterLevel),
-		Voltage:    float64(voltage),
-		ReceivedAt: utils.TimeToPG(body.UplinkMessage.ReceivedAt),
-	})
+	datapoints, err := loraprotocol.Decode(payload)
 	if err != nil {
+		log.Error().Err(err).Msg("could not decode payload")
+		return fiber.NewError(fiber.StatusBadRequest, "could not decode payload")
+	}
+
+	pointsToInsert := make([]db.InsertDeviceMeasurementsParams, 0, len(datapoints))
+	for _, point := range datapoints {
+		v, err := json.Marshal(point.Value)
+		if err != nil {
+			log.Error().Err(err).Msg("could not marshal point value")
+			return fiber.NewError(fiber.StatusInternalServerError, "could not marshal point value")
+		}
+
+		pointsToInsert = append(pointsToInsert, db.InsertDeviceMeasurementsParams{
+			DeviceID:   device.ID,
+			Type:       point.Type,
+			ChannelID:  point.ChannelID,
+			Value:      v,
+			ReceivedAt: utils.TimeToPG(body.UplinkMessage.ReceivedAt),
+		})
+	}
+
+	if _, err = q.InsertDeviceMeasurements(c.Context(), pointsToInsert); err != nil {
 		log.Error().Err(err).Msg("could not insert device measurement")
 		return fiber.NewError(fiber.StatusInternalServerError)
 	}
@@ -94,9 +109,4 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	}
 
 	return c.SendStatus(fiber.StatusNoContent)
-}
-
-func readFloat32(bytes []byte) float32 {
-	bits := binary.LittleEndian.Uint32(bytes)
-	return math.Float32frombits(bits)
 }
