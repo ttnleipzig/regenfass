@@ -2,21 +2,16 @@
 
 #include <keyhandler.h>
 #include <config.h>
+#include "./protocol.h"
 
 namespace Lora
 {
     namespace Wan
     {
-        struct loraPayload {
-            float waterLevel;
-            float minLevel;
-            float voltage;
-        };
-
         void setup();
         void loop();
         void printHex2(unsigned v);
-        void publish2TTN(loraPayload data);
+        void publish2TTN(const std::vector<Lora::Protocol::DataPoint> &data);
 
         // Taken from LMIC keyhandler.h
         class AppEuiGetter
