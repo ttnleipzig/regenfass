@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <keyhandler.h>
 #include "../config/config.h"
+#include "./protocol.h"
 
 #define DEVICE_SIMPLE
 
@@ -65,7 +66,7 @@ namespace Lora
             Serial.print(v, HEX);
         }
 
-        void publish2TTN(loraPayload data)
+        void publish2TTN(const std::vector<Lora::Protocol::DataPoint> &data)
         {
             // Check if there is not a current TX/RX job running
             if (LMIC.getOpMode().test(OpState::TXRXPEND))
@@ -75,8 +76,9 @@ namespace Lora
             }
 
             // Prepare upstream data transmission at the next possible time.
-            uint8_t* byteData = reinterpret_cast<uint8_t*>(&data);
-            LMIC.setTxData2(1, byteData, sizeof(data), 0);
+            std::vector<uint8_t> payload = Lora::Protocol::packDataPoints(data);
+
+            LMIC.setTxData2(1, payload.data(), payload.size(), 0);
             Serial.println(F("Packet queued"));
             // Next TX is scheduled after TX_COMPLETE event.
         }

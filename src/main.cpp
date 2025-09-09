@@ -6,7 +6,6 @@
 
 #define SCP_IMPLEMENTATION
 
-
 // Lora32 Battery Voltage
 #if FEATURE_LORA32_VBAT
 #include "sensors/sensor-lora32battery.h"
@@ -41,8 +40,8 @@
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
 #include "lora/lora-wan.h"
-Lora::Wan::loraPayload payload;
-std::string confMinLevel;
+#include "lora/protocol.h"
+float confMinLevel;
 #endif
 
 unsigned long last_print_time = 0;
@@ -56,6 +55,7 @@ void setup()
     {
     }
 #endif
+
     Serial.println("\033[32m\n\n*********************************************************");
     Serial.println("🌈\t\t\tStarting regenfass " REGENFASS_VERSION);
     Serial.println("*********************************************************\033[0m\n");
@@ -72,8 +72,8 @@ void setup()
 
     // Read minValue from Config
     const auto config = Configuration::Configurator::getConfig();
-    confMinLevel = config.minLevel;
-    Serial.printf("Configured Minimal Level: %s\n", confMinLevel);
+    confMinLevel = std::stof(config.minLevel);
+    Serial.printf("Configured Minimal Level: %f\n", confMinLevel);
 
 // Lora32 Battery Voltage
 #if FEATURE_LORA32_VBAT
@@ -102,7 +102,7 @@ void setup()
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
-    Lora::Wan::publish2TTN(payload); // Initial Send to Trigger OTAA Join
+    Lora::Wan::publish2TTN({}); // Initial Send to Trigger OTAA Join
 #endif
 }
 
@@ -114,17 +114,30 @@ void loop()
     unsigned long current_time = millis();
     if (current_time - last_print_time >= 20000)
     {
-        payload.minLevel = std::stof(confMinLevel);
+        std::vector<Lora::Protocol::DataPoint> data_points;
+        data_points.push_back(Lora::Protocol::DataPoint{
+            .measurement_type = Lora::Protocol::MeasurementType::Distance,
+            .channel_id = Lora::Protocol::ChannelID::_0,
+            .value = confMinLevel,
+        });
 
 #if FEATURE_LORA32_VBAT
-        payload.voltage = Sensor::Lora32Battery::readBattery();
+        data_points.push_back(Lora::Protocol::DataPoint{
+            .measurement_type = Lora::Protocol::MeasurementType::Voltage,
+            .channel_id = Lora::Protocol::ChannelID::_1,
+            .value = Sensor::Lora32Battery::readBattery(),
+        });
 #endif
 
 #if FEATURE_SENSOR_HCSR04
-        payload.waterLevel = Sensor::HCSR04::measureDistanceCm();
+        data_points.push_back(Lora::Protocol::DataPoint{
+            .measurement_type = Lora::Protocol::MeasurementType::Distance,
+            .channel_id = Lora::Protocol::ChannelID::_2,
+            .value = Sensor::HCSR04::measureDistanceCm(),
+        });
 #endif
-        Serial.printf("minLevel: %f voltage: %f waterLevel: %f\n", payload.minLevel, payload.voltage, payload.waterLevel);
-        Lora::Wan::publish2TTN(payload);
+
+        Lora::Wan::publish2TTN(data_points);
         last_print_time = current_time;
     }
 
