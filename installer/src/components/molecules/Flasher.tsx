@@ -11,23 +11,35 @@ type DeviceInfo = {
 function Flasher() {
 	const [device, setDevice] = createSignal<DeviceInfo | null>(null);
 	const [file, setFile] = createSignal<File | null>(null);
+	const [message, setMessage] = createSignal<string | null>(null);
 
 	return (
 		<div>
 			<Button
 				onClick={async () => {
-					const port = await navigator.serial.requestPort();
-					const transport = new Transport(port, true);
-					const espLoader = new ESPLoader({
-						baudrate: 921600,
-						debugLogging: true,
-						// romBaudrate:
-						transport,
-					} as LoaderOptions);
+					try {
+						const port = await navigator.serial.requestPort();
+						const transport = new Transport(port, true);
+						const espLoader = new ESPLoader({
+							baudrate: 921600,
+							debugLogging: true,
+							// romBaudrate:
+							transport,
+						} as LoaderOptions);
 
-					const chip = await espLoader.main();
+						const chip = await espLoader.main();
 
-					setDevice({ port, espLoader, chip });
+						setDevice({ port, espLoader, chip });
+						setMessage(null);
+					} catch (e) {
+						const name = (e as any)?.name || "";
+						if (name === "NotFoundError") {
+							setMessage("No port selected. Please choose a serial device to continue.");
+							return;
+						}
+						if (import.meta.env.DEV) console.error(e);
+						setMessage("Could not open serial port.");
+					}
 				}}
 			>
 				Connect
@@ -49,7 +61,7 @@ function Flasher() {
 								onClick={async () => {
 									const content = await file()?.text();
 									if (!content) {
-										console.log("no content?");
+										if (import.meta.env.DEV) console.log("no content?");
 										return;
 									}
 
@@ -71,11 +83,8 @@ function Flasher() {
 												written,
 												total
 											) => {
-												console.log({
-													fileIndex,
-													written,
-													total,
-												});
+												if (import.meta.env.DEV)
+													console.log({ fileIndex, written, total });
 											},
 										} satisfies FlashOptions;
 
@@ -83,15 +92,19 @@ function Flasher() {
 											flashOptions
 										);
 									} catch (e) {
-										console.error(e);
+										if (import.meta.env.DEV) console.error(e);
 									}
-								}}
-							>
-								Connect
-							</Button>
-						</>
-					);
-				}}
+							}}
+						>
+							Connect
+						</Button>
+					</>
+				);
+			}}
+			</Show>
+
+			<Show when={message()}>
+				<p class="mt-3 text-sm text-muted-foreground">{message()}</p>
 			</Show>
 		</div>
 	);

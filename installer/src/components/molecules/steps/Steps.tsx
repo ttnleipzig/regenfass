@@ -1,66 +1,118 @@
 import { Button } from "@/components/ui/button.tsx";
 import { setupStateMachine } from "@/libs/install/state.ts";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useMachine } from "@xstate/solid";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Match, Switch } from "solid-js";
 
 export default function Steps() {
-	const [state, emitEvent, machineRef] = useMachine(setupStateMachine);
+	const [state, emitEvent] = useMachine(setupStateMachine);
 
 	return (
-		<div>
+		<div class="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
 			<Switch fallback={<pre>{JSON.stringify(state.toJSON(), null, 2)}</pre>}>
-				<Match when={state.matches("Start_CheckingWebSerialSupport")}>
-					Checking web serial support...
+				<Match when={(state as any).matches("Start_CheckingWebSerialSupport")}>
+					<Alert>
+						<AlertTitle>Checking Web Serial support</AlertTitle>
+						<AlertDescription>
+							We are verifying that your browser supports the Web Serial API.
+						</AlertDescription>
+					</Alert>
 				</Match>
-				<Match when={state.matches("Start_FetchUpstreamVersions")}>
-					Fetching upstream versions...
+				<Match when={(state as any).matches("Start_FetchUpstreamVersions")}>
+					<Alert>
+						<AlertTitle>Fetching versions</AlertTitle>
+						<AlertDescription>
+							Getting the latest available firmware versions.
+						</AlertDescription>
+					</Alert>
 				</Match>
 
-				<Match when={state.matches("Start_WaitingForUser")}>
-					<div>
-						<span>Waiting for your confirmation</span>
-						<Button onClick={() => emitEvent({ type: "start.next" })}>
-							Next
-						</Button>
+				<Match when={(state as any).matches("Start_WaitingForUser")}>
+					<div class="space-y-4">
+						<Alert>
+							<AlertTitle>Waiting for your confirmation</AlertTitle>
+							<AlertDescription>
+								Please confirm to continue.
+							</AlertDescription>
+						</Alert>
+						<div class="pt-1">
+							<Button onClick={() => emitEvent({ type: "start.next" })}>
+								Next
+							</Button>
+						</div>
 					</div>
 				</Match>
 
-				<Match when={state.matches("Connect_Connecting")}>Connecting...</Match>
-				<Match when={state.matches("Connect_ReadingVersion")}>
-					Reading version...
+				<Match when={(state as any).matches("Connect_Connecting")}>
+					<Alert>
+						<AlertTitle>Connecting</AlertTitle>
+						<AlertDescription>Trying to connect to your device.</AlertDescription>
+					</Alert>
+				</Match>
+				<Match when={(state as any).matches("Connect_ReadingVersion")}>
+					<Alert>
+						<AlertTitle>Reading firmware version</AlertTitle>
+						<AlertDescription>Gathering device information.</AlertDescription>
+					</Alert>
 				</Match>
 
 				<Match
-					when={state.matches("Install_WaitingForInstallationMethodChoice")}
+					when={(state as any).matches("Install_WaitingForInstallationMethodChoice")}
 				>
-					<div>
-						<span>Do you wanna update?</span>
-						<Button onClick={() => emitEvent({ type: "install.install" })}>
-							Install
-						</Button>
-						<Button onClick={() => emitEvent({ type: "install.update" })}>
-							Update
-						</Button>
+					<div class="space-y-4">
+						<Alert>
+							<AlertTitle>Choose installation method</AlertTitle>
+							<AlertDescription>Install fresh or update existing firmware.</AlertDescription>
+						</Alert>
+						<div class="flex gap-3">
+							<Button onClick={() => emitEvent({ type: "install.install" })}>
+								Install
+							</Button>
+							<Button onClick={() => emitEvent({ type: "install.update" })}>
+								Update
+							</Button>
+						</div>
 					</div>
 				</Match>
 
-				<Match when={state.matches("Install_Installing")}>
-					<span>Installing...</span>
+				<Match when={(state as any).matches("Install_Installing")}>
+					<Alert>
+						<AlertTitle>Installing</AlertTitle>
+						<AlertDescription>Flashing firmware to the device.</AlertDescription>
+					</Alert>
 				</Match>
 
-				<Match when={state.matches("Install_Updating")}>
-					<span>Updating...</span>
+				<Match when={(state as any).matches("Install_Updating")}>
+					<Alert>
+						<AlertTitle>Updating</AlertTitle>
+						<AlertDescription>Updating the existing firmware.</AlertDescription>
+					</Alert>
 				</Match>
-				<Match when={state.matches("Install_MigratingConfiguration")}>
-					<span>Migrating configuration...</span>
+				<Match when={(state as any).matches("Install_MigratingConfiguration")}>
+					<Alert>
+						<AlertTitle>Migrating configuration</AlertTitle>
+						<AlertDescription>Keeping your settings safe.</AlertDescription>
+					</Alert>
 				</Match>
 
-				<Match when={state.matches("Config_LoadingConfiguration")}>
-					<span>Loading configuration...</span>
+				<Match when={(state as any).matches("Config_LoadingConfiguration")}>
+					<Alert>
+						<AlertTitle>Loading configuration</AlertTitle>
+						<AlertDescription>Reading the current device settings.</AlertDescription>
+					</Alert>
 				</Match>
 
-				<Match when={state.matches("Config_Editing")}>
-					<div>
+				<Match when={(state as any).matches("Config_Editing")}>
+					<div class="space-y-3">
 						<input
 							type="text"
 							name="appEUI"
@@ -94,35 +146,59 @@ export default function Steps() {
 								})
 							}
 						/>
-						<Button onclick={() => emitEvent({ type: "config.clear" })}>
-							clear
-						</Button>
-						<Button
-							onclick={() =>
-								emitEvent({ type: "config.loadFromFile", config: {} })
-							}
-						>
-							load from file
-						</Button>
-						<Button onclick={() => emitEvent({ type: "config.saveToFile" })}>
-							save to file
-						</Button>
-						<Button onclick={() => emitEvent({ type: "config.next" })}>
-							next
-						</Button>
+						<div class="flex gap-3 pt-2">
+							<Button onClick={() => emitEvent({ type: "config.clear" })}>
+								clear
+							</Button>
+							<Button
+								onClick={() =>
+									emitEvent({
+										type: "config.loadFromFile",
+										config: {
+											firmwareVersion: "",
+											configVersion: "",
+											appEUI: "",
+											appKey: "",
+											devEUI: "",
+										},
+									})
+								}
+							>
+								load from file
+							</Button>
+							<Button onClick={() => emitEvent({ type: "config.saveToFile" })}>
+								save to file
+							</Button>
+							<Button onClick={() => emitEvent({ type: "config.next" })}>
+								next
+							</Button>
+						</div>
 					</div>
 				</Match>
-				<Match when={state.matches("Config_WritingConfiguration")}>
+				<Match when={(state as any).matches("Config_WritingConfiguration")}>
 					<span>Writing configuration...</span>
 				</Match>
 
-				<Match when={state.matches("Finish_ShowingNextSteps")}>
-					<span>Next steps:</span>
+				<Match when={(state as any).matches("Finish_ShowingNextSteps")}>
+					<Alert>
+						<AlertTitle>Next steps</AlertTitle>
+						<AlertDescription>All set. You can now use your device.</AlertDescription>
+					</Alert>
 				</Match>
-				<Match when={state.matches("Finish_ShowingError")}>
-					<span>
-						Error: {(state.context.error as unknown as Error).toString()}
-					</span>
+				<Match when={(state as any).matches("Finish_ShowingError")}>
+					<AlertDialog>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Critical error</AlertDialogTitle>
+								<AlertDialogDescription>
+									{(state.context.error as unknown as Error).toString()}
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogAction>OK</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</Match>
 			</Switch>
 		</div>

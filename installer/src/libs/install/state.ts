@@ -12,7 +12,7 @@ const ConfigField = {
 
 	appEUI: "appEUI",
 	appKey: "appKey",
-	devEUI: "devUEI",
+	devEUI: "devEUI",
 } as const;
 type ConfigField = keyof typeof ConfigField;
 
@@ -111,7 +111,8 @@ class SCPReader extends EventEmitter<SCPReaderEvents> {
 				const parsed = scp.parseLine(raw);
 				this.emit("line", parsed);
 			} catch (err) {
-				console.error(`could not parse SCP line: ${raw}`, err);
+				if (import.meta.env.DEV)
+					console.error(`could not parse SCP line: ${raw}`, err);
 			}
 		}
 
@@ -140,7 +141,6 @@ const readField = async (
 
 const loadConfiguration = async (connection: SerialPort): Promise<Config> => {
 	const version = await readField(connection, "version");
-	console.log(version);
 
 	return {
 		configVersion: "0",

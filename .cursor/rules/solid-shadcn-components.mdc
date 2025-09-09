@@ -1,0 +1,6 @@
+---
+description: Verwende shadcn-solidjs Komponenten
+globs: /installer/**/*
+alwaysApply: true
+---
+Verwende möglichst nur Komponenten von https://shadcn-solid.com/docs/components/. Folge der Installationsanweisung. Achte auf ein passendes Theming,
