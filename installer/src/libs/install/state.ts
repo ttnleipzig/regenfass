@@ -1,6 +1,6 @@
 import { EventEmitter } from "tiny-node-eventemitter";
 import { assign, emit, fromPromise, setup } from "xstate";
-import initSCP, { type Line as SCPLine } from "../scp/scp.mjs";
+import initSCP, { Line, LineType, type Line as SCPLine } from "../scp/scp.mjs";
 
 const scp = await initSCP();
 
@@ -57,15 +57,22 @@ type SCPReaderEvents = {
 	line(line: SCPLine): void;
 };
 
-class SCPReader extends EventEmitter<SCPReaderEvents> {
+class SCPAdapter extends EventEmitter<SCPReaderEvents> {
+	// technically wrong type, it's only a `number`
 	#timeout: NodeJS.Timeout | null = null;
 	#buffer = "";
-	stream: ReadableStream<Uint8Array>;
-	#reader?: ReadableStreamDefaultReader<Uint8Array>;
+	#readStream: ReadableStream<Uint8Array<ArrayBufferLike>>;
+	#writeStream: WritableStream<Uint8Array<ArrayBufferLike>>;
+	#reader?: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>>;
+	#writer?: WritableStreamDefaultWriter<Uint8Array<ArrayBufferLike>>;
 
-	constructor(stream: ReadableStream<Uint8Array>) {
+	constructor(
+		readStream: ReadableStream<Uint8Array<ArrayBufferLike>>,
+		writeStream: WritableStream<Uint8Array<ArrayBufferLike>>
+	) {
 		super();
-		this.stream = stream;
+		this.#readStream = readStream;
+		this.#writeStream = writeStream;
 	}
 
 	static forSerialPort(port: SerialPort) {
@@ -74,72 +81,122 @@ class SCPReader extends EventEmitter<SCPReaderEvents> {
 				`Could not create SCPReader, serial port is not readable; did you forget to open() it?`
 			);
 
-		return new SCPReader(port.readable);
+		if (!port.writable)
+			throw new Error(
+				`Could not create SCPReader, serial port is not writable; did you forget to open() it?`
+			);
+
+		return new SCPAdapter(port.readable, port.writable);
 	}
 
 	start() {
 		this.stop();
-		this.#reader = this.stream.getReader();
+
+		this.#reader = this.#readStream.getReader();
+		this.#writer = this.#writeStream.getWriter();
+
 		this.#timeout = setTimeout(() => this.#pump());
+
+		console.log("started adapter!");
 	}
 
 	stop() {
+		console.log("stopping adapter...");
+
 		if (this.#timeout) clearTimeout(this.#timeout);
+
+		console.log("releasing read lock");
 		this.#reader?.releaseLock();
+		this.#reader = undefined;
+
+		console.log("releasing writer lock");
+		this.#writer?.releaseLock();
+		this.#writer = undefined;
 	}
 
 	async #pump() {
 		if (!this.#reader) {
 			throw new Error(
-				`Could not pump, #reader is undefined; did you start the reader`
+				`Could not pump, #reader is undefined; did you start the reader?`
 			);
 		}
 
-		const { done, value } = await this.#reader.read();
-		if (done) {
-			this.emit("done");
-			this.#timeout = null;
-			return;
-		}
-
-		this.#buffer += textDecoder.decode(value!);
-		const lines = this.#buffer.split("\n");
-		this.#buffer = lines[lines.length - 1];
-
-		for (const raw of lines) {
-			try {
-				const parsed = scp.parseLine(raw);
-				this.emit("line", parsed);
-			} catch (err) {
-				if (import.meta.env.DEV)
-					console.error(`could not parse SCP line: ${raw}`, err);
+		try {
+			const { done, value } = await this.#reader.read();
+			if (done) {
+				this.emit("done");
+				this.#timeout = null;
+				return;
 			}
+
+			const raw = textDecoder.decode(value!);
+			this.#buffer += raw;
+			const lines = this.#buffer.split("\n");
+			this.#buffer = lines.pop()!;
+
+			for (const raw of lines) {
+				try {
+					const parsed = scp.parseLine(raw);
+					console.log(`[SCPAdapter] read:`, parsed);
+					this.emit("line", parsed);
+				} catch (err) {
+					console.error(`could not parse SCP line: ${raw}`, err);
+				}
+			}
+		} catch (err) {
+			console.error(err);
 		}
 
 		this.#timeout = setTimeout(() => this.#pump());
 	}
+
+	write(line: Line) {
+		const raw = scp.lineToString(line) + "\n";
+
+		const encoded = textEncoder.encode(raw);
+
+		console.log("[SCPAdapter] write:", raw.replaceAll("\n", "\\n"));
+		this.#writer?.write(encoded);
+	}
 }
 
 const readField = async (
-	connection: SerialPort,
+	adapter: SCPAdapter,
 	field: string
 ): Promise<string> => {
-	if (!connection.readable) throw new Error(`Connection not readable`);
-	if (!connection.writable) throw new Error(`Connection not writable`);
+	adapter.start();
 
-	const writer = connection.writable.getWriter();
-	await writer.write(textEncoder.encode(`${field}?`));
-	writer.releaseLock();
+	const promise = new Promise<string>((resolve, reject) => {
+		let value: string | null = null;
 
-	const reader = connection.readable.getReader();
-	const result = await reader.read();
-	reader.releaseLock();
-	if (!result.value) throw new Error(`Did not receive response back`);
+		adapter.on("line", (line) => {
+			console.log("got line");
+			if (line.type === LineType.SET && line.key === field) {
+				value = line.value;
+				adapter.stop();
+				resolve(value.trim());
+			}
+		});
 
-	return textDecoder.decode(result.value);
+		adapter.on("done", () => {
+			if (value === null) {
+				reject(new Error(`Failed to read field ${field}`));
+			}
+		});
+
+		// Set a timeout
+		setTimeout(() => {
+			adapter.stop();
+			reject(new Error(`Timeout waiting for field ${field}`));
+		}, 5000);
+	});
+
+	adapter.write({ type: LineType.GET, key: field });
+
+	return promise;
 };
 
-const loadConfiguration = async (connection: SerialPort): Promise<Config> => {
+const loadConfiguration = async (connection: SCPAdapter): Promise<Config> => {
 	const version = await readField(connection, "version");
 
 	return {
@@ -152,22 +209,18 @@ const loadConfiguration = async (connection: SerialPort): Promise<Config> => {
 };
 
 const writeConfiguration = async (
-	connection: SerialPort,
+	connection: SCPAdapter,
 	config: Config
 ): Promise<Config> => {
-	if (!connection.writable) throw new Error(`Connection not writable`);
-
 	for (const [key, value] of Object.entries(config)) {
-		const writer = connection.writable.getWriter();
-		await writer.write(textEncoder.encode(`${key}=${value}\n`));
-		writer.releaseLock();
+		connection.write({ type: LineType.SET, key, value });
 	}
 
 	return config;
 };
 
 const migrateConfiguration = async (
-	connection: SerialPort,
+	connection: SCPAdapter,
 	desiredVersion: string
 ): Promise<Config> => {
 	let config = await loadConfiguration(connection);
@@ -197,14 +250,16 @@ export const setupStateMachine = setup({
 			upstreamVersions: string[];
 			// Maybe we should do this as a normal error?
 			error: unknown | null;
-			connection: readonly [SerialPort, SCPReader] | null;
+			connection: readonly [SerialPort, SCPAdapter] | null;
 			firmwareVersion: string | null;
+			targetFirmwareVersion: string | null;
 			configuration: Config;
 		},
 		events: {} as
 			| { type: "start.next" }
 			| { type: "install.install" }
 			| { type: "install.update" }
+			| { type: "install.target_version_selected"; version: string|null }
 			| {
 					type: "config.changeField";
 					field: ConfigField;
@@ -233,39 +288,37 @@ export const setupStateMachine = setup({
 		}),
 		requestConnection: fromPromise(async () => {
 			const port = await navigator.serial.requestPort({
-				allowedBluetoothServiceClassIds: [REGENFASS_BTLE_SVC_CLASS_ID],
+				// allowedBluetoothServiceClassIds: [REGENFASS_BTLE_SVC_CLASS_ID],
 			});
 
+			console.log("opening!");
 			await port.open({ baudRate: 115200 });
 
-			return [port, SCPReader.forSerialPort(port)] as const;
+			return [port, SCPAdapter.forSerialPort(port)] as const;
 		}),
-		readVersion: fromPromise<string, { connection: SerialPort }>(
-			async ({ input: { connection } }) => {
-				// TODO: Read configuration from device
-				return "0.0.0";
-			}
+		readVersion: fromPromise<string, { connection: SCPAdapter }>(
+			({ input: { connection } }) => readField(connection, "version")
 		),
 		installFirmware: fromPromise<
 			string,
-			{ connection: SerialPort; version: string }
+			{ connection: SCPAdapter; version: string }
 		>(async ({ input: { connection, version } }) => {
 			// TODO: Flash firmware
 			return version;
 		}),
-		loadConfiguration: fromPromise<Config, { connection: SerialPort }>(
+		loadConfiguration: fromPromise<Config, { connection: SCPAdapter }>(
 			({ input: { connection } }) => loadConfiguration(connection)
 		),
 		migrateConfiguration: fromPromise<
 			Config,
-			{ connection: SerialPort; desiredVersion: string }
+			{ connection: SCPAdapter; desiredVersion: string }
 		>(({ input: { connection, desiredVersion } }) =>
 			migrateConfiguration(connection, desiredVersion)
 		),
 		writeConfiguration: fromPromise<
 			Config,
 			{
-				connection: SerialPort;
+				connection: SCPAdapter;
 				configuration: Config;
 			}
 		>(({ input: { connection, configuration } }) =>
@@ -275,6 +328,8 @@ export const setupStateMachine = setup({
 	guards: {
 		webSerialSupported: () => navigator.serial !== undefined,
 		webSerialNotSupported: () => navigator.serial === undefined,
+		targetFirmwareVersionSet: (ctx) =>
+			ctx.context.targetFirmwareVersion !== null,
 	},
 }).createMachine({
 	/** @xstate-layout N4IgpgJg5mDOIC5SzAFwK4AcB0BlVAhgE6oD6AwgBZgDGA1gJYB2UA6mAEa5hEMEA2uLJgD2JAMQQRTMNmYA3EXVkoMOfMTJVajFuy48+g4WNQIFImgVQNpAbQAMAXUdPEoUbAY3p7kAA9EABYARgAmbFCwgGYwhzCggE4ggA4ANmi0gBoQAE9gmOwAVgB2DISHVKK0sqCAXzqc1Sw8QhIKanpmNk5uXgEhTFEJKRk5JkVlbGb1Nq1O3R6DfuMh03MJy2tbJlc7ELckEE9vHb9AhCjI8Nj4pNSM7LzEIursaMS09JKghxDSooNJpoFoadoAMTQNEoAFVMLBUEQwAQALYANR4XmksEk0lkFimM1amlIkNQ0LhCKRqIxRCxTFgG0UVh8u2crj8J1Z50Q4Qc0WKIS+JX5SQcRWi0Ry+QQYSKiWwiQ+KTiiUSMXFkqBICJYLIZIp8MRyPRmJ2OJ4RDE2Ew-GsADMxCjpiDZiSDbCjdTTXTzUytqy9s5OSIvNyjhc+QKikKUiLomKJVLnpd-tgwmkgmlPkVQiUQkFC9rdXNSKwCKcWOCxDCUERxAjNNgaNIbEx0GAOUcuWcI7y0pniokSqUUmqvrnkzKwikHIqsyUR0FJSEHA4UsXXdhyNIZDQtLvaG2oLixgSVFud0w9wfr0fuv6WTsg4cPKHTr4+7KHIvsIuEkUKQhJK-LJNKvIqtg6RASkHxpGEwFhIkm5qNuh77hQ6HHuIlrWraDpOi6qFXjemF3vuD4WE+9jssG3bvuGoAXHEv7-kEgHAdEoFBOBso-NgiFFHKXwhCkErIdqTAiBAcB+DMIZhr2TGIAAtE8MoqUUipqmqs7JAuQkScCqF6h0OjdPofRGIMwyoApH5MDyCBqgJM7qkqcYxrBU4vB8f4cfE6o-CKRk6lupkepSxo0ma2L2YxASIOqKTFCUiRASKA4riUvHKtg8HyrcNRpKuCYoaCpblpWUDVkQtY8PFSmJQgBavOmQQIaqIQlHEma8TOc4qiqiTxOk1QldE5U4CRR5kTe3SNZ+yktcN2B-EBRTikhGaAf1pSRB5i4lLBQl-JNjRhcRWGkAASsiEDdLS9KLY5X4agK0QFp8XFhL97H9fy-k1JkKTQdEZRTdgACSDKEPw-BlhWx61TDjbw9s0gALJoJQ0lUCIDA0GAL1OR1uXilB66pGEaVquKgIXUSqNwwjVXIzWmBQEQBAyVe9oMEQKIY69b6KUtzVvKD3VVFLKrLrx8aRH8PzdelPXDpDzMCAjWvwwt9FiyLzUFiE+UFrTP5pEm6W8aJaTvNEKqLsBw6OyUmuw9rpBwhA2wsCTX4m-lgFxLEZTqnERS5YOSGlHbIoIT1HtowjmMMFzftQHz6foNzCU9uLFwjWtpQlLEs6g79ju8ZmQSKq14rJXmG6M5e0j81ApAADIiDz3TZ1AufCwHy1Ku8m2JN1VdBGlWa8R1ETHbH7G-EJ6T1K3V1MB3pAAKIPceI-G1miqzgZ0SvPEI7z0B6YimvZcfGqI6QwPZa8MeA9D-nDFNUX9shG6mJWIXwszLh4imcIJQoKbQTskeCNRSiQ3BMwBgsBKCkFwLjAA7t0AAcmAfwqB8BgHhEfC4cYoJu0AhkY6rwhT9ULFBOUMYuKrnFH8DexkWgoKYGgjBWCRC4JYLvIgVoiDkMQO9d4X0MjxD+lHFM4DFSahVJtAcM9zoNCAA */
@@ -286,9 +341,11 @@ export const setupStateMachine = setup({
 		connection: null,
 		configuration: null as unknown as Config,
 		firmwareVersion: null,
+		targetFirmwareVersion: null,
 	},
 	exit: ({ context }) => {
-		context.connection?.close();
+		context.connection?.[1].stop();
+		context.connection?.[0].close();
 	},
 	states: {
 		Start_CheckingWebSerialSupport: {
@@ -356,7 +413,9 @@ export const setupStateMachine = setup({
 		Connect_ReadingVersion: {
 			invoke: {
 				src: "readVersion",
-				input: ({ context: { connection } }) => ({ connection: connection! }),
+				input: ({ context: { connection } }) => ({
+					connection: connection![1],
+				}),
 				onDone: {
 					target: "Install_WaitingForInstallationMethodChoice",
 					actions: assign({
@@ -374,8 +433,19 @@ export const setupStateMachine = setup({
 
 		Install_WaitingForInstallationMethodChoice: {
 			on: {
-				"install.update": "Install_Updating",
-				"install.install": "Install_Installing",
+				"install.update": {
+					guard: "targetFirmwareVersionSet",
+					target: "Update_LoadingConfiguration",
+				},
+				"install.install": {
+					guard: "targetFirmwareVersionSet",
+					target: "Install_Installing",
+				},
+				"install.target_version_selected": {
+					actions: assign({
+						targetFirmwareVersion: (ctx) => ctx.event.version,
+					}),
+				},
 			},
 		},
 
@@ -383,7 +453,7 @@ export const setupStateMachine = setup({
 			invoke: {
 				src: "installFirmware",
 				input: ({ context: { connection } }) => ({
-					connection: connection!,
+					connection: connection![1],
 					// TODO: Ask for firmware version
 					version: "0.0.0",
 				}),
@@ -402,11 +472,29 @@ export const setupStateMachine = setup({
 			},
 		},
 
+		Update_LoadingConfiguration: {
+			invoke: {
+				src: "loadConfiguration",
+				input: ({ context: { connection, firmwareVersion } }) => ({
+					connection: connection![1],
+					// TODO: Map firmware version to desired version
+					desiredVersion: firmwareVersion!,
+				}),
+				onDone: {
+					target: "Finish_ShowingError",
+					actions: assign({
+						error: "loaded",
+						configuration: ({ event }) => event.output,
+					}),
+				},
+			},
+		},
+
 		Install_Updating: {
 			invoke: {
 				src: "installFirmware",
 				input: ({ context: { connection } }) => ({
-					connection: connection!,
+					connection: connection![1],
 					// TODO: Ask for the firmware version
 					version: "0.0.0",
 				}),
@@ -428,7 +516,7 @@ export const setupStateMachine = setup({
 			invoke: {
 				src: "migrateConfiguration",
 				input: ({ context: { connection, firmwareVersion } }) => ({
-					connection: connection!,
+					connection: connection![1],
 					// TODO: Map firmware version to desired version
 					desiredVersion: firmwareVersion!,
 				}),
@@ -438,7 +526,9 @@ export const setupStateMachine = setup({
 		Config_LoadingConfiguration: {
 			invoke: {
 				src: "loadConfiguration",
-				input: ({ context: { connection } }) => ({ connection: connection! }),
+				input: ({ context: { connection } }) => ({
+					connection: connection![1],
+				}),
 				onDone: {
 					actions: assign({
 						configuration: ({ event: { output } }) => output,
@@ -494,7 +584,7 @@ export const setupStateMachine = setup({
 				src: "writeConfiguration",
 				input: ({ context: { connection, configuration } }) => ({
 					configuration,
-					connection: connection!,
+					connection: connection![1],
 				}),
 				onDone: "Finish_ShowingNextSteps",
 				onError: {
