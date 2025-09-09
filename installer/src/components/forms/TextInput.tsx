@@ -11,7 +11,7 @@ export interface TextInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputEl
 
 const TextInput: Component<TextInputProps> = (props) => {
   const [local, rest] = splitProps(props, ["label", "required", "error", "helperText", "class"]);
-  const [inputId] = createSignal(`input-${Math.random().toString(36).substr(2, 9)}`);
+  const [inputId] = createSignal(`input-${crypto.randomUUID()}`);
   const [errorId] = createSignal(`${inputId()}-error`);
   const [helperId] = createSignal(`${inputId()}-helper`);
 
