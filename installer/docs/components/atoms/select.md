@@ -1,9 +1,81 @@
 # Select
 
-```tsx
-import { Select } from '@/components/ui/select';
+Dropdown selection component built on Kobalte with multiple sub-components for flexible composition.
 
-<Select options={[{label:'One', value:'1'},{label:'Two', value:'2'}]} />
+```tsx
+import { 
+  Select, 
+  SelectTrigger, 
+  SelectValue, 
+  SelectContent, 
+  SelectItem 
+} from '@/components/ui/select';
+
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Select option..." />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="option1">Option 1</SelectItem>
+    <SelectItem value="option2">Option 2</SelectItem>
+    <SelectItem value="option3">Option 3</SelectItem>
+  </SelectContent>
+</Select>
 ```
 
 ## Props
+
+### Select
+Root select component - inherits all Kobalte Select props.
+
+| Name        | Type                    | Default | Description                           |
+|-------------|-------------------------|---------|---------------------------------------|
+| value       | string                  | -       | Current selected value                |
+| onValueChange | (value: string) => void | -      | Callback when selection changes       |
+| disabled    | boolean                 | false   | Disable the select                    |
+| ...         | Kobalte SelectProps     | -       | All Kobalte select root props         |
+
+### SelectTrigger
+
+| Name     | Type                      | Default | Description                     |
+|----------|---------------------------|---------|---------------------------------|
+| class    | string                    | -       | Additional CSS classes          |
+| children | JSX.Element               | -       | Trigger content                 |
+| ...      | Kobalte SelectTriggerProps| -       | All Kobalte trigger props       |
+
+### SelectContent
+
+| Name     | Type                      | Default | Description                     |
+|----------|---------------------------|---------|---------------------------------|
+| class    | string                    | -       | Additional CSS classes          |
+| ...      | Kobalte SelectContentProps| -       | All Kobalte content props       |
+
+### SelectItem
+
+| Name     | Type                    | Default | Description                     |
+|----------|-------------------------|---------|---------------------------------|
+| value    | string                  | -       | Item value                      |
+| class    | string                  | -       | Additional CSS classes          |
+| children | JSX.Element             | -       | Item label content              |
+| ...      | Kobalte SelectItemProps | -       | All Kobalte item props          |
+
+### SelectValue
+
+Displays the current selection - inherits all Kobalte SelectValue props.
+
+### Additional Components
+
+- `SelectDescription`: For helper text
+- `SelectErrorMessage`: For error states
+- `SelectItemDescription`: For item descriptions  
+- `SelectHiddenSelect`: Hidden native select for form integration
+- `SelectSection`: For grouping items
+
+## Design notes
+
+- Built on Kobalte primitives for full accessibility support
+- Trigger includes dropdown arrow icon and focus states
+- Content appears in a portal with smooth animations
+- Selected items show checkmark indicator
+- Follows design system spacing and color tokens
+- Supports keyboard navigation and screen readers
