@@ -1,14 +1,16 @@
+import { Headline } from "@/components/ui/headline";
+
 export default function Newsletter() {
 	return (
 		<aside id="newsletter" class="max-w-screen-lg px-3 py-6 mx-auto">
 			<div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
 				<div class="sm:w-7/12">
-					<h2 class="text-3xl font-bold">
+					<Headline as="h2">
 						Subscribe to the
 						<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
 							update newsletters
 						</span>
-					</h2>
+					</Headline>
 					<p class="mt-3 dark:text-gray-300">
 						If you would like to be informed about software updates,
 						you can subscribe to this newsletter.

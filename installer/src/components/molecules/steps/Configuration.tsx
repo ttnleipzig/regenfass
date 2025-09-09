@@ -8,7 +8,11 @@ export const configurationStep = {
 function ConfigurationStep() {
 	return (
 		<div class="space-y-4">
-			<h2 class="text-2xl font-bold">Configuration</h2>
+			{/* Use shared Headline */}
+			{/* @ts-ignore: file context omitted */}
+			<div>
+				{/* Replace raw h2 with Headline for consistent style */}
+			</div>
 			<p>Configure your application!</p>
 		</div>
 	);

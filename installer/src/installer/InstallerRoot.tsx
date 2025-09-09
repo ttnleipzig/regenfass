@@ -9,7 +9,7 @@ export interface InstallerRootProps {
 }
 
 const InstallerRoot: Component<InstallerRootProps> = (props) => {
-  const [state, send, service] = useMachine(setupStateMachine);
+  const [state, send] = useMachine(setupStateMachine);
   const [currentStateName, setCurrentStateName] = createSignal<InstallerStateNames>("Start_CheckingWebSerialSupport");
 
   // Update current state name when state changes

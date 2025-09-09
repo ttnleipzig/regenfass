@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/solid";
+import { render, screen, fireEvent } from "@solidjs/testing-library";
 import { TextInput } from "../../components/forms/TextInput";
 
 describe("TextInput", () => {

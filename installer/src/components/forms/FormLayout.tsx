@@ -1,5 +1,6 @@
 import { Component, JSX, splitProps } from "solid-js";
 import { cn } from "@/libs/cn";
+import { Headline } from "@/components/ui/headline";
 
 export interface FormLayoutProps extends JSX.FormHTMLAttributes<HTMLFormElement> {
   title?: string;
@@ -18,14 +19,10 @@ const FormLayout: Component<FormLayoutProps> = (props) => {
       {(local.title || local.subtitle) && (
         <div class="space-y-2">
           {local.title && (
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-              {local.title}
-            </h2>
+            <Headline as="h2" subtitle={local.subtitle}>{local.title}</Headline>
           )}
-          {local.subtitle && (
-            <p class="text-gray-600 dark:text-gray-400">
-              {local.subtitle}
-            </p>
+          {!local.title && local.subtitle && (
+            <p class="text-gray-600 dark:text-gray-400">{local.subtitle}</p>
           )}
         </div>
       )}

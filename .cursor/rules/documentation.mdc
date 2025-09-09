@@ -1,7 +1,8 @@
 ---
-description: Dokumentation auf Englisch schriben
+description: Dokumentation auf Englisch schreiben
 globs: **/*
 alwaysApply: true
 ---
 
-Schreibe alle Dokumentation in einem freundlichen englisch. Zielgruppe sind nicht Techniker.
+1. Schreibe alle Dokumentation in einem freundlichen englisch. Zielgruppe sind nicht Techniker.
+2. Lege Dokumentation für UI Komponenten des Installers unter installer/docs ab. Achte dabei auf die bestehende Verzeichnisstruktur

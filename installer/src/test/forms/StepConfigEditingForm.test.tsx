@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/solid";
+import { render, screen, fireEvent } from "@solidjs/testing-library";
 import { StepConfigEditingForm } from "../../installer/forms/StepConfigEditingForm";
 
 describe("StepConfigEditingForm", () => {
