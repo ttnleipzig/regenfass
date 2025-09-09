@@ -1,0 +1,6 @@
+---
+description: Verwende mermaid für Flow Diagramme
+globs: */**
+alwaysApply: true
+---
+Verwende mermaid zur visalisierung von Architekturen und Flussdiagrammen.

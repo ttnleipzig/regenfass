@@ -1,5 +1,6 @@
 /*
 
+!/.cursor
 !/.devcontainer
 !/.github
 !/board_partions
@@ -13,8 +14,12 @@
 !/.gitignore
 !/.editorconfig
 !/.releaserc.yml
+!/.markdownlintignore
+!/.remarkignore
 !/app
 !/platformio.ini
+!/CHANGELOG.md
+!/CODEOWNERS
 !/README.md
 !/LICENSE.md
 !/SECURITY.md

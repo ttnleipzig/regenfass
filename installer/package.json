@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.13.11",
-    "@xstate/react": "^6.0.0",
+    "@tabler/icons-solidjs": "^3.34.1",
     "@xstate/solid": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -22,6 +22,7 @@
     "xstate": "^5.20.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@types/dom-serial": "^1.0.6",

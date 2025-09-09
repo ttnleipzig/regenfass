@@ -1,0 +1,7 @@
+---
+description: Dokumentation auf Englisch schriben
+globs: **/*
+alwaysApply: true
+---
+
+Schreibe alle Dokumentation in einem freundlichen englisch. Zielgruppe sind nicht Techniker.

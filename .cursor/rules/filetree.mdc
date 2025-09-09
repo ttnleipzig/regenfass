@@ -1,0 +1,6 @@
+---
+description: Filetree in Dokumentationen verboten
+globs:
+alwaysApply: true
+---
+Erstelle in Dokumentationen keinen Filetree.

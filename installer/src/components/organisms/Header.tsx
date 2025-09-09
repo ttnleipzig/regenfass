@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import { IconMoon } from "@tabler/icons-solidjs";
 
 const Header: Component = () => {
   return (
@@ -28,8 +29,17 @@ const Header: Component = () => {
           </ul>
         </nav>
 
-        <button class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-800">
-          🌙
+        <button
+          class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400"
+          onClick={() => {
+            const root = document.documentElement;
+            const isDark = root.classList.toggle("dark");
+            root.setAttribute("data-kb-theme", isDark ? "dark" : "light");
+            try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch {}
+          }}
+          aria-label="Toggle dark mode"
+        >
+          <IconMoon size={18} />
         </button>
       </div>
     </header>
