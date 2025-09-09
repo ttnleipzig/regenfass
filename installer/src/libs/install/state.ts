@@ -60,10 +60,10 @@ type SCPReaderEvents = {
 class SCPReader extends EventEmitter<SCPReaderEvents> {
 	#timeout: NodeJS.Timeout | null = null;
 	#buffer = "";
-	stream: ReadableStream<Uint8Array<ArrayBufferLike>>;
-	#reader?: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>>;
+	stream: ReadableStream<Uint8Array>;
+	#reader?: ReadableStreamDefaultReader<Uint8Array>;
 
-	constructor(stream: ReadableStream<Uint8Array<ArrayBufferLike>>) {
+	constructor(stream: ReadableStream<Uint8Array>) {
 		super();
 		this.stream = stream;
 	}

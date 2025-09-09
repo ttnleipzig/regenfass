@@ -8,11 +8,13 @@ function App() {
 		<>
 			<ColorModeScript />
 			<ColorModeProvider>
-				<Header />
-				<div class="flex flex-col w-full">
-					<Steps />
+				<div class="min-h-screen flex flex-col">
+					<Header />
+					<div class="flex flex-col w-full flex-1">
+						<Steps />
+					</div>
+					<Footer />
 				</div>
-				<Footer />
 			</ColorModeProvider>
 		</>
 	);
