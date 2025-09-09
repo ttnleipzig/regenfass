@@ -5,27 +5,23 @@ The Headline component displays a clear section title with optional subtitle and
 Usage:
 
 ```tsx
-import { Headline } from "@/components/ui/headline";
-import { IconAlertCircle } from "@tabler/icons-solidjs";
+import { Headline } from '@/components/ui/headline';
 
-<Headline as="h2" subtitle="Configure your device">
-  Configuration
-</Headline>
-
-<Headline as="h3" align="center" icon={<IconAlertCircle size={16} />}>
-  Warning
-</Headline>
+<Headline as='h2' subtitle='Configure your device'>Configuration</Headline>
+<Headline as='h3' align='center'>Centered</Headline>
 ```
 
-Props:
+## Props
 
-- as: h1 | h2 | h3 | h4 (default: h2)
-- align: left | center | right (default: left)
-- subtitle: string (optional)
-- icon: JSX.Element (optional)
+| Name      | Type                               | Default | Description                          |
+|-----------|------------------------------------|---------|--------------------------------------|
+| as        | 'h1' | 'h2' | 'h3' | 'h4'        | 'h2'    | Heading level                        |
+| align     | 'left' | 'center' | 'right'      | 'left'  | Text alignment                       |
+| subtitle  | string                             | -       | Optional subtitle line               |
+| icon      | JSX.Element                        | -       | Optional leading icon                |
+| class     | string                             | -       | Additional classes                   |
+| children  | JSX.Element                        | -       | Title content                        |
 
-Design notes:
+## Design notes
 
-- Font sizes are responsive and use `text-foreground` for contrast.
-- Subtitle uses `text-muted-foreground`.
-- Works with the existing Tailwind theme tokens.
+- Font sizes are responsive and use `
