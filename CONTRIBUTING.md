@@ -58,6 +58,47 @@ Build and upload the project:
 pio run --target upload --environment <environment>
 ```
 
+### 🔨 Build Examples
+
+**Example 1: Building for Heltec WiFi LoRa 32 V3 with HC-SR04**
+```bash
+cd regenfass/
+pio run --environment heltec_wifi_lora_32_V3_HCSR04
+```
+
+Expected output:
+```
+Environment    Status    Duration
+-------------  --------  ------------
+heltec_wifi_lora_32_V3_HCSR04  SUCCESS   00:00:45.123
+========================= 1 succeeded, 0 failed, 0 skipped =========================
+```
+
+**Example 2: Upload to connected device**  
+```bash
+pio run --target upload --environment heltec_wifi_lora_32_V3_HCSR04
+```
+
+**Example 3: Monitor serial output**
+```bash
+pio device monitor --environment heltec_wifi_lora_32_V3_HCSR04
+```
+
+Expected serial output:
+```
+[12:34:56] Water level: 45.2 cm (75%)
+[12:34:56] Battery: 3.7V
+[12:34:56] Sending LoRaWAN packet...
+[12:34:58] LoRaWAN: TX complete
+```
+
+**Example 4: Building all environments**
+```bash
+pio run
+```
+
+This builds all configured environments in platformio.ini.
+
 ## Debug level
 
 The debug level can be set in the `platformio.ini` file.
@@ -118,6 +159,51 @@ verbose as useally because it will be used for the Changelog and Release-Notes.
 5. Merge the pull request once it is approved and delete your feature branch
 6. If not allready done, *please release* will automatically create a new release pull request. This pull request will include your changes.
 7. To create a new release, you have to merge the release pull request into the master
+
+### 🔄 Development Workflow Example
+
+**Scenario: Adding support for a new sensor (VL53L1X)**
+
+**Step 1: Create feature branch**
+```bash
+git checkout -b feature/vl53l1x-sensor
+```
+
+**Step 2: Implement the feature**
+```bash
+# Create sensor implementation
+touch src/sensors/sensor-vl53l1x.cpp
+touch src/sensors/sensor-vl53l1x.h
+
+# Add configuration to platformio.ini
+# Add sensor to main.cpp
+```
+
+**Step 3: Test your changes**
+```bash
+# Build for test environment
+pio run --environment heltec_wifi_lora_32_V3_VL53L1X
+
+# Test on hardware
+pio run --target upload --environment heltec_wifi_lora_32_V3_VL53L1X
+pio device monitor
+```
+
+**Step 4: Create pull request**
+```bash
+git add .
+git commit -m "feat: add VL53L1X distance sensor support"
+git push origin feature/vl53l1x-sensor
+# Create PR via GitHub UI
+```
+
+**Step 5: Example commit messages**
+```bash
+git commit -m "feat: add VL53L1X sensor support"
+git commit -m "fix: correct sensor reading calculation"  
+git commit -m "docs: update sensor compatibility table"
+git commit -m "test: add VL53L1X sensor unit tests"
+```
 
 ```mermaid
 graph LR;
