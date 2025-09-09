@@ -9,6 +9,7 @@ on:
       - ci/*
       - style/*
       - docs/*
+      - main
   push:
     branches:
       - main
@@ -19,15 +20,14 @@ permissions:
   checks: write
 
 env:
-  PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
-  PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
+  NODE_VERSION: '20'
 
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
+    
     steps:
-
       ##############################################################################################
       # Setup
       ##############################################################################################
@@ -42,54 +42,52 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: './installer/pnpm-lock.yaml'
 
-      - name: Cache - Playwrite browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install – Application dependencies
+      - name: Install dependencies
         run: cd ./installer && pnpm install --frozen-lockfile
 
-      - name: Install – Playwright browsers
-        run: cd ./installer && pnpm exec playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      ##############################################################################################
+      # Lint and Build
+      ##############################################################################################
+      - name: Build application
+        run: cd ./installer && pnpm run build
 
       ##############################################################################################
       # Run tests
       ##############################################################################################
-      - name: Run - Playwright tests
-        run: cd ./installer && pnpm exec playwright test --reporter=json,line,html,junit
+      - name: Run unit and integration tests
+        run: cd ./installer && pnpm run test:run
+
+      - name: Run tests with coverage
+        run: cd ./installer && pnpm run test:coverage
 
       ##############################################################################################
-      # Publish test results to pull request
+      # Publish test results
       ##############################################################################################
-      - name: Publish - Test report json to pull request
-        uses: sidharthv96/playwright-report-action@v1.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: ./installer
-
-      - name: Publish - Test report junit to pull request
-        uses: mikepenz/action-junit-report@v4
-        if: success() || failure() # always run even if the previous step fails
-        with:
-          report_paths: ./installer/report.xml
-          summary: 'Playwright test results'
-
-      - name: Publish - Upload playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: ./installer/playwright-report/
-          retention-days: 30
-
-      - name: Publish - Coverage reports to Codecov
+      - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./installer/coverage/lcov.info
+          flags: installer
+          name: installer-coverage
+          fail_ci_if_error: false
+
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: ./installer/coverage/
+          retention-days: 30
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: ./installer/test-results/
+          retention-days: 30
