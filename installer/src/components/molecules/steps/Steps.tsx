@@ -16,6 +16,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select.tsx";
+import {
+	TextFieldRoot,
+	TextFieldInput,
+	TextFieldLabel,
+} from "@/components/ui/textfield.tsx";
 import { setupStateMachine } from "@/libs/install/state.ts";
 import { createBrowserInspector } from "@statelyai/inspect";
 import { useMachine } from "@xstate/solid";
@@ -161,39 +166,48 @@ export default function Steps() {
 
 				<Match when={(state as any).matches("Config_Editing")}>
 					<div class="space-y-3">
-						<input
-							type="text"
-							name="appEUI"
-							onChange={(t) =>
-								emitEvent({
-									type: "config.changeField",
-									field: "appEUI",
-									value: t.target.value,
-								})
-							}
-						/>
-						<input
-							type="text"
-							name="appKey"
-							onChange={(t) =>
-								emitEvent({
-									type: "config.changeField",
-									field: "appKey",
-									value: t.target.value,
-								})
-							}
-						/>
-						<input
-							type="text"
-							name="devEUI"
-							onChange={(t) =>
-								emitEvent({
-									type: "config.changeField",
-									field: "devEUI",
-									value: t.target.value,
-								})
-							}
-						/>
+						<TextFieldRoot>
+							<TextFieldLabel>appEUI</TextFieldLabel>
+							<TextFieldInput
+								type="text"
+								name="appEUI"
+								onChange={(t) =>
+									emitEvent({
+										type: "config.changeField",
+										field: "appEUI",
+										value: t.target.value,
+									})
+								}
+							/>
+						</TextFieldRoot>
+						<TextFieldRoot>
+							<TextFieldLabel>appKey</TextFieldLabel>
+							<TextFieldInput
+								type="text"
+								name="appKey"
+								onChange={(t) =>
+									emitEvent({
+										type: "config.changeField",
+										field: "appKey",
+										value: t.target.value,
+									})
+								}
+							/>
+						</TextFieldRoot>
+						<TextFieldRoot>
+							<TextFieldLabel>devEUI</TextFieldLabel>
+							<TextFieldInput
+								type="text"
+								name="devEUI"
+								onChange={(t) =>
+									emitEvent({
+										type: "config.changeField",
+										field: "devEUI",
+										value: t.target.value,
+									})
+								}
+							/>
+						</TextFieldRoot>
 						<div class="flex gap-3 pt-2">
 							<Button onClick={() => emitEvent({ type: "config.clear" })}>
 								clear

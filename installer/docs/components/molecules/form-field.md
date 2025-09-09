@@ -4,7 +4,9 @@
 import { FormField } from "@/components/forms/FormField";
 
 <FormField label="Email" helperText="We never share your email.">
-	<input type="email" class="w-full" />
+	<TextFieldRoot>
+		<TextFieldInput type="email" class="w-full" />
+	</TextFieldRoot>
 </FormField>;
 ```
 
