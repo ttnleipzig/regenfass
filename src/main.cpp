@@ -72,7 +72,11 @@ void setup()
 
     // Read minValue from Config
     const auto config = Configuration::Configurator::getConfig();
-    confMinLevel = std::stof(config.minLevel);
+    if (config.minLevel.empty()) {
+        confMinLevel = 0;
+    } else {
+        confMinLevel = std::stof(config.minLevel);
+    }
     Serial.printf("Configured Minimal Level: %f\n", confMinLevel);
 
 // Lora32 Battery Voltage
