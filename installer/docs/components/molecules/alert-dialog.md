@@ -36,3 +36,14 @@ import {
 | AlertDialogTitle        | class?            | Title text                        |
 | AlertDialogDescription  | class?            | Secondary text                    |
 | AlertDialogAction       | class?            | Action button (closes by default) |
+
+## Design notes
+
+- Built on Kobalte Dialog primitives for complete accessibility compliance
+- Modal dialog with backdrop overlay and focus management
+- Content surface uses design system spacing and styling
+- Header and footer sections provide structured layout
+- Action button automatically closes dialog when clicked
+- Supports all ARIA dialog patterns including escape key handling
+- Uses portal rendering for proper z-index layering
+- Title and description support custom styling while maintaining semantic structure
