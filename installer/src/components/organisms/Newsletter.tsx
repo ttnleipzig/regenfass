@@ -1,4 +1,8 @@
 import { Headline } from "@/components/ui/headline";
+import {
+	TextFieldRoot,
+	TextFieldInput,
+} from "@/components/ui/textfield.tsx";
 
 export default function Newsletter() {
 	return (
@@ -21,11 +25,13 @@ export default function Newsletter() {
 						id="form-newsletter"
 						class="flex px-4 py-2 bg-white rounded-full dark:bg-slate-800 focus-within:ring-2 focus-within:ring-cyan-600 hover:ring-2 hover:ring-cyan-600"
 					>
-						<input
-							type="email"
-							class="w-full appearance-none dark:bg-slate-800 focus:outline-none"
-							placeholder="your@email-address.iot"
-						/>
+						<TextFieldRoot class="flex-1">
+							<TextFieldInput
+								type="email"
+								class="w-full appearance-none dark:bg-slate-800 focus:outline-none"
+								placeholder="your@email-address.iot"
+							/>
+						</TextFieldRoot>
 						<button
 							id="button-newsletter"
 							class="px-3 py-1 ml-2 text-sm font-semibold rounded-full text-sky-100 shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"

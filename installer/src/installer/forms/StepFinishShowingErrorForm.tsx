@@ -3,6 +3,7 @@ import { FormLayout } from "@/components/forms/FormLayout";
 import { PrimaryButton } from "@/components/forms/PrimaryButton";
 import { SecondaryButton } from "@/components/forms/SecondaryButton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import type { FormProps } from "../types";
 
 export interface StepFinishShowingErrorFormProps extends FormProps {
@@ -143,13 +144,14 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
         </div>
 
         <div class="text-center">
-          <button
+          <Button
             type="button"
+            variant="link"
             onClick={handleDismiss}
             class="text-sm text-gray-500 hover:text-gray-700 underline"
           >
             Fehler ignorieren und fortfahren
-          </button>
+          </Button>
         </div>
       </div>
     </FormLayout>
