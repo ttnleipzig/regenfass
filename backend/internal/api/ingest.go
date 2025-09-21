@@ -90,11 +90,11 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 		}
 
 		pointsToInsert = append(pointsToInsert, db.InsertDeviceMeasurementsParams{
-			DeviceID:   device.ID,
-			Type:       point.Type,
-			ChannelID:  point.ChannelID,
-			Value:      v,
-			ReceivedAt: utils.TimeToPG(body.UplinkMessage.ReceivedAt),
+			DeviceID:        device.ID,
+			MeasurementType: int16(point.Type),
+			ChannelID:       int16(point.ChannelID),
+			Value:           v,
+			ReceivedAt:      utils.TimeToPG(body.UplinkMessage.ReceivedAt),
 		})
 	}
 
