@@ -1,0 +1,3 @@
+npm run docs:components
+npm run lint:md:fix
+npx lint-staged

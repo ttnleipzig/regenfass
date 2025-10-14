@@ -1,0 +1,22 @@
+{
+  // Markdownlint configuration
+  "default": true,
+  
+  // Disable line length check (can be too restrictive)
+  "MD013": false,
+  
+  // Allow HTML in markdown (useful for complex docs)
+  "MD033": false,
+  
+  // Allow duplicate headings (useful for repeated sections)
+  "MD024": false,
+  
+  // Allow inline HTML
+  "MD041": false,
+  
+  // Ignore docs directory cache if any
+  "ignores": [
+    "node_modules/**",
+    "docs/.cache/**"
+  ]
+}

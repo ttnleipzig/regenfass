@@ -18,47 +18,49 @@ pnpm install
 ## 🛠️ Entwicklung
 
 ### Entwicklungsserver starten
+
 ```bash
 pnpm dev
 ```
 
-
-
 ### Tests ausführen
+
 ```bash
 pnpm test
 ```
 
 ### Tests mit UI
+
 ```bash
 pnpm test:ui
 ```
 
 ### Testabdeckung
+
 ```bash
 pnpm test:coverage
 ```
 
-## 🧩 Komponenten
+## 📖 Dokumentation
 
-### Atoms
-- **Link**: Wiederverwendbare Link-Komponente mit externer/interner Link-Erkennung
-- **Confetti**: Animierte Confetti-Komponente für Erfolgsfeiern
-- **ConfettiSpinner**: Ladeanimation mit Confetti-Effekt
+- **[Komponenten-Dokumentation](./docs/COMPONENTS.md)**: Automatisch generierte Übersicht aller Komponenten
+- **[Projekt-Regeln](./docs/WARP.md)**: Entwicklungsrichtlinien und Standards
 
-### Molecules
-- **Status**: Statusanzeige mit verschiedenen Zuständen (idle, loading, success, error)
-- **Flasher**: Firmware-Flashing-Komponente mit Port- und Firmware-Auswahl
+### Living Documentation
 
-### Organisms
-- **Header**: Hauptnavigation mit Logo und Menü
-- **Footer**: Fußbereich mit Links und Informationen
-- **Welcome**: Willkommensseite für neue Benutzer
-- **Newsletter**: Newsletter-Anmeldung
+Die Komponenten-Dokumentation wird automatisch aus dem Quellcode generiert und bei jedem Build sowie vor jedem Commit aktualisiert.
 
+**Dokumentation manuell generieren:**
 
+```bash
+pnpm run docs:components
+```
 
+**Dokumentation im Watch-Modus:**
 
+```bash
+pnpm run docs:components:watch
+```
 
 ## 🏗️ Build
 

@@ -1,9 +1,13 @@
 import { Component } from "solid-js";
 
 interface ConfettiProps {
+  /** Whether the confetti animation should be active */
   active?: boolean;
 }
 
+/**
+ * Confetti animation component for celebrating successful actions
+ */
 const Confetti: Component<ConfettiProps> = (props) => {
   return (
     <div class="relative w-48 h-48">

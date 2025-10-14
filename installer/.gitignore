@@ -29,3 +29,6 @@ storybook-static
 
 .vite
 *.tsbuildinfo
+
+# pnpm
+.pnpm-store
