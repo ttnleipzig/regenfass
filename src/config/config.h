@@ -7,8 +7,15 @@
 #define CONFIG_PROPERTIES(X) \
     X(appEUI)                \
     X(appKey)                \
-    X(devEUI)                \
-    X(minLevel)
+    X(devEUI)
+
+#define REGENFASS_CONFIG_VERSION "1"
+
+// Regenfall config versions:
+// 1:
+//   - appEUI
+//   - appKey
+//   - devEUI
 
 namespace Configuration
 {

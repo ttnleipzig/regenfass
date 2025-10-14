@@ -41,7 +41,6 @@
 #ifdef FEATURE_LORAWAN_ENABLED
 #include "lora/lora-wan.h"
 #include "lora/protocol.h"
-float confMinLevel;
 #endif
 
 unsigned long last_print_time = 0;
@@ -69,15 +68,6 @@ void setup()
 
     // Configuration
     Configuration::Configurator::setup();
-
-    // Read minValue from Config
-    const auto config = Configuration::Configurator::getConfig();
-    if (config.minLevel.empty()) {
-        confMinLevel = 0;
-    } else {
-        confMinLevel = std::stof(config.minLevel);
-    }
-    Serial.printf("Configured Minimal Level: %f\n", confMinLevel);
 
 // Lora32 Battery Voltage
 #if FEATURE_LORA32_VBAT
@@ -119,11 +109,6 @@ void loop()
     if (current_time - last_print_time >= 20000)
     {
         std::vector<Lora::Protocol::DataPoint> data_points;
-        data_points.push_back(Lora::Protocol::DataPoint{
-            .measurement_type = Lora::Protocol::MeasurementType::Distance,
-            .channel_id = Lora::Protocol::ChannelID::_0,
-            .value = confMinLevel,
-        });
 
 #if FEATURE_LORA32_VBAT
         data_points.push_back(Lora::Protocol::DataPoint{
