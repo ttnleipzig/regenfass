@@ -1,14 +1,14 @@
-import { ComponentType } from "solid-js";
-import { StepStartWaitingForUserForm } from "./forms/StepStartWaitingForUserForm";
-import { StepConnectConnectingForm } from "./forms/StepConnectConnectingForm";
-import { StepInstallWaitingForInstallationMethodChoiceForm } from "./forms/StepInstallWaitingForInstallationMethodChoiceForm";
+import { Component } from "solid-js";
 import { StepConfigEditingForm } from "./forms/StepConfigEditingForm";
-import { StepFinishShowingNextStepsForm } from "./forms/StepFinishShowingNextStepsForm";
+import { StepConnectConnectingForm } from "./forms/StepConnectConnectingForm";
 import { StepFinishShowingErrorForm } from "./forms/StepFinishShowingErrorForm";
+import { StepFinishShowingNextStepsForm } from "./forms/StepFinishShowingNextStepsForm";
+import { StepInstallWaitingForInstallationMethodChoiceForm } from "./forms/StepInstallWaitingForInstallationMethodChoiceForm";
+import { StepStartWaitingForUserForm } from "./forms/StepStartWaitingForUserForm";
 import type { FormProps, InstallerStateNames } from "./types";
 
 // Progress/Loading Components for automatic states
-const LoadingComponent: ComponentType<FormProps> = (props) => (
+const LoadingComponent: Component<FormProps> = (props) => (
   <div class="flex items-center justify-center min-h-64">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -17,7 +17,7 @@ const LoadingComponent: ComponentType<FormProps> = (props) => (
   </div>
 );
 
-const ProgressComponent: ComponentType<FormProps & { message?: string }> = (props) => (
+const ProgressComponent: Component<FormProps & { message?: string }> = (props) => (
   <div class="flex items-center justify-center min-h-64">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
@@ -27,7 +27,7 @@ const ProgressComponent: ComponentType<FormProps & { message?: string }> = (prop
 );
 
 // State to Form Component Mapping
-export const stateToFormMap: Record<InstallerStateNames, ComponentType<FormProps>> = {
+export const stateToFormMap: Record<InstallerStateNames, Component<FormProps>> = {
   // Start States
   "Start_CheckingWebSerialSupport": LoadingComponent,
   "Start_FetchUpstreamVersions": LoadingComponent,
@@ -54,7 +54,7 @@ export const stateToFormMap: Record<InstallerStateNames, ComponentType<FormProps
 };
 
 // Helper function to get form component for a state
-export const getFormComponent = (stateName: InstallerStateNames): ComponentType<FormProps> => {
+export const getFormComponent = (stateName: InstallerStateNames): Component<FormProps> => {
   return stateToFormMap[stateName] || LoadingComponent;
 };
 
@@ -82,7 +82,7 @@ export const getStateDisplayName = (stateName: InstallerStateNames): string => {
     "Finish_ShowingNextSteps": "Installation abgeschlossen",
     "Finish_ShowingError": "Fehler aufgetreten",
   };
-  
+
   return displayNames[stateName] || stateName;
 };
 
@@ -104,6 +104,6 @@ export const getStateDescription = (stateName: InstallerStateNames): string => {
     "Finish_ShowingNextSteps": "Anzeige der nächsten Schritte nach erfolgreicher Installation",
     "Finish_ShowingError": "Anzeige von Fehlern und Lösungsvorschlägen",
   };
-  
+
   return descriptions[stateName] || "";
 };

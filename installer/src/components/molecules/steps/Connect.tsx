@@ -1,3 +1,4 @@
+import Status from "@/components/molecules/Status";
 import {
 	Select,
 	SelectContent,
@@ -7,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { SelectBaseItemComponentProps } from "@kobalte/core/src/select/select-base.jsx";
 import { SelectValueState } from "@kobalte/core/src/select/select-value.jsx";
-import Status from "@/components/molecules/Status";
+import { For } from "solid-js";
 
 export const connectStep = {
 	title: "Connect",
