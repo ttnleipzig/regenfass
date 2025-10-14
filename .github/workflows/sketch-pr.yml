@@ -35,15 +35,19 @@ jobs:
           python-version: "3.9"
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
+
       - name: Build firmware
         run: pio run -e ${{ matrix.environment }}
+
+      - name: Extract firmware metadata
+        run: >-
+          pio project metadata -e '${{ matrix.environment }}' --json-output |
+           jq '.${{ matrix.environment }}.extra' > .pio/build/${{ matrix.environment }}/firmware_metadata.json
+
       - uses: actions/upload-artifact@v2
         with:
           name: firmware-${{ matrix.environment }}
           path: |
-            .pio/build/${{ matrix.environment }}/*.bin
-      - uses: actions/upload-artifact@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: firmware-release
-          path: .pio/build/${{ matrix.environment }}/*.bin
+            .pio/build/${{ matrix.environment }}/firmware.bin
+            .pio/build/${{ matrix.environment }}/bootloader.bin
+            .pio/build/${{ matrix.environment }}/firmware_metadata.json
