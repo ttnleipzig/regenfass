@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import { A } from "@solidjs/router";
 import { ModeToggle } from "../ui/mode-toggle";
 
 const Header: Component = () => {
@@ -11,6 +12,11 @@ const Header: Component = () => {
         
         <nav class="hidden md:block">
           <ul class="flex font-medium text-gray-800 gap-x-3 dark:text-gray-400">
+            <li>
+              <A href="/playground" class="p-2 hover:text-slate-500 dark:hover:text-white hover:underline">
+                🎨 Components
+              </A>
+            </li>
             <li>
               <a href="https://docs.regenfass.eu/" class="p-2 hover:text-slate-500 dark:hover:text-white hover:underline">
                 Docs

@@ -1,0 +1,621 @@
+{
+  "atoms": [
+    {
+      "name": "Confetti",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Confetti.tsx",
+      "relativePath": "atoms/Confetti.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the confetti animation should be active",
+          "controlType": "boolean"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Confetti />"
+        }
+      ],
+      "importPath": "@/components/atoms/Confetti"
+    },
+    {
+      "name": "ConfettiSpinner",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ConfettiSpinner.tsx",
+      "relativePath": "atoms/ConfettiSpinner.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ConfettiSpinner />"
+        }
+      ],
+      "importPath": "@/components/atoms/ConfettiSpinner"
+    },
+    {
+      "name": "Link",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Link.tsx",
+      "relativePath": "atoms/Link.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "href",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "children",
+          "type": "JSX.Element",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "href": "Example href",
+            "children": "Example children"
+          },
+          "code": "<Link href=\"Example href\" children=\"Example children\" />"
+        }
+      ],
+      "importPath": "@/components/atoms/Link"
+    }
+  ],
+  "molecules": [
+    {
+      "name": "Status",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Status.tsx",
+      "relativePath": "molecules/Status.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "status",
+          "type": "'idle' | 'loading' | 'success' | 'error'",
+          "required": true,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "idle",
+            "loading",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "status": "idle",
+            "message": "Example message"
+          },
+          "code": "<Status status=\"idle\" message=\"Example message\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/Status"
+    }
+  ],
+  "organisms": [
+    {
+      "name": "Header",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Header.tsx",
+      "relativePath": "organisms/Header.tsx",
+      "category": "organisms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Header />"
+        }
+      ],
+      "importPath": "@/components/organisms/Header"
+    }
+  ],
+  "ui": [
+    {
+      "name": "CardTitle",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/card.tsx",
+      "relativePath": "ui/card.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardTitle />"
+        }
+      ],
+      "importPath": "@/components/ui/card"
+    },
+    {
+      "name": "CardDescription",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/card.tsx",
+      "relativePath": "ui/card.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardDescription />"
+        }
+      ],
+      "importPath": "@/components/ui/card"
+    },
+    {
+      "name": "Input",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/input.tsx",
+      "relativePath": "ui/input.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Input />"
+        },
+        {
+          "name": "With Error",
+          "description": "Input with validation error",
+          "props": {
+            "error": "This field is required"
+          },
+          "code": "<Input error=\"This field is required\" />"
+        }
+      ],
+      "importPath": "@/components/ui/input"
+    }
+  ],
+  "forms": [
+    {
+      "name": "Checkbox",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/Checkbox.tsx",
+      "relativePath": "forms/Checkbox.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Checkbox />"
+        }
+      ],
+      "importPath": "@/components/forms/Checkbox"
+    },
+    {
+      "name": "ErrorList",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/ErrorList.tsx",
+      "relativePath": "forms/ErrorList.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "errors",
+          "type": "string[]",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ErrorList />"
+        }
+      ],
+      "importPath": "@/components/forms/ErrorList"
+    },
+    {
+      "name": "FileUploader",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FileUploader.tsx",
+      "relativePath": "forms/FileUploader.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "accept",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "onFileSelect",
+          "type": "(files: FileList | null) => void",
+          "required": false,
+          "description": "",
+          "controlType": "select"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<FileUploader />"
+        }
+      ],
+      "importPath": "@/components/forms/FileUploader"
+    },
+    {
+      "name": "FormField",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FormField.tsx",
+      "relativePath": "forms/FormField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<FormField />"
+        }
+      ],
+      "importPath": "@/components/forms/FormField"
+    },
+    {
+      "name": "FormLayout",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FormLayout.tsx",
+      "relativePath": "forms/FormLayout.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "actions",
+          "type": "JSX.Element",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<FormLayout />"
+        }
+      ],
+      "importPath": "@/components/forms/FormLayout"
+    },
+    {
+      "name": "PrimaryButton",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/PrimaryButton.tsx",
+      "relativePath": "forms/PrimaryButton.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<PrimaryButton />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<PrimaryButton loading />"
+        }
+      ],
+      "importPath": "@/components/forms/PrimaryButton"
+    },
+    {
+      "name": "SecondaryButton",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SecondaryButton.tsx",
+      "relativePath": "forms/SecondaryButton.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<SecondaryButton />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<SecondaryButton loading />"
+        }
+      ],
+      "importPath": "@/components/forms/SecondaryButton"
+    },
+    {
+      "name": "TextInput",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextInput.tsx",
+      "relativePath": "forms/TextInput.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextInput />"
+        },
+        {
+          "name": "With Error",
+          "description": "Input with validation error",
+          "props": {
+            "error": "This field is required"
+          },
+          "code": "<TextInput error=\"This field is required\" />"
+        }
+      ],
+      "importPath": "@/components/forms/TextInput"
+    }
+  ],
+  "uncategorized": []
+}
