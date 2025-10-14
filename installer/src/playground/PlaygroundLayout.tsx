@@ -1,4 +1,5 @@
 import { Component, createSignal, onMount, Suspense } from "solid-js";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useRouteData } from "@solidjs/router";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import Sidebar from "./components/Sidebar";
@@ -96,7 +97,16 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                     <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
                       Component Playground
                     </h1>
-                    <div class="w-10" /> {/* Spacer */}
+                    <div class="flex items-center gap-2">
+                      <ModeToggle />
+                    </div>
+                  </div>
+                </header>
+                {/* Desktop header */}
+                <header class="hidden lg:flex items-center justify-between bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
+                  <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Component Playground</h1>
+                  <div class="flex items-center gap-2">
+                    <ModeToggle />
                   </div>
                 </header>
 
