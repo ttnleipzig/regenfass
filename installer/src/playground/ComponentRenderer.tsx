@@ -5,7 +5,6 @@ import {
   onMount, 
   Show, 
   For, 
-  lazy, 
   ErrorBoundary,
   createResource
 } from "solid-js";
@@ -33,9 +32,18 @@ const componentImports: Record<string, () => Promise<{ default: any }>> = {
   'Newsletter': () => import('../components/organisms/Newsletter').then(m => ({ default: m.default ?? m })),
   
   // UI
-  'CardTitle': () => import('../components/ui/card').then(m => ({ default: m.CardTitle })),
-  'CardDescription': () => import('../components/ui/card').then(m => ({ default: m.CardDescription })),
   'Input': () => import('../components/ui/input').then(m => ({ default: m.Input })),
+  'Card': () => import('../components/ui/card').then(m => ({ default: (m as any).Card })),
+  'Button': () => import('../components/ui/button').then(m => ({ default: (m as any).Button })),
+  'Badge': () => import('../components/ui/badge').then(m => ({ default: (m as any).Badge })),
+  'Alert': () => import('../components/ui/alert').then(m => ({ default: (m as any).Alert })),
+  'Headline': () => import('../components/ui/headline').then(m => ({ default: (m as any).Headline })),
+  'Select': () => import('../components/ui/select').then(m => ({ default: (m as any).Select })),
+  'SelectTrigger': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectTrigger })),
+  'SelectContent': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectContent })),
+  'SelectItem': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectItem })),
+  'SelectValue': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectValue })),
+  'TextField': () => import('../components/ui/textfield').then(m => ({ default: (m as any).TextFieldRoot })),
   
   // Forms
   'Checkbox': () => import('../components/forms/Checkbox').then(m => ({ default: (m as any).Checkbox ?? m.default ?? m })),

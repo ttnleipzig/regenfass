@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { Project, SourceFile, Node } from 'ts-morph';
+import { Project, SourceFile, Node, SyntaxKind } from 'ts-morph';
 import glob from 'fast-glob';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -77,9 +77,21 @@ class PlaygroundRegistryGenerator {
 
   private returnsJSX(node: Node): boolean {
     if (Node.isFunctionDeclaration(node) || Node.isArrowFunction(node)) {
-      const returnType = node.getReturnType();
-      const returnTypeText = returnType.getText();
-      return returnTypeText.includes('JSX') || returnTypeText.includes('Element');
+      // Prefer structural detection of JSX in the function body
+      const hasJsx =
+        node.getDescendantsOfKind(SyntaxKind.JsxElement).length > 0 ||
+        node.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement).length > 0 ||
+        node.getDescendantsOfKind(SyntaxKind.JsxFragment).length > 0;
+      if (hasJsx) return true;
+
+      // Fallback to return type text heuristic
+      try {
+        const returnType = node.getReturnType();
+        const returnTypeText = returnType.getText();
+        return returnTypeText.includes('JSX') || returnTypeText.includes('Element');
+      } catch {
+        return false;
+      }
     }
     return false;
   }
