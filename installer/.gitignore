@@ -32,3 +32,6 @@ storybook-static
 
 # pnpm
 .pnpm-store
+
+# test results
+test-results/

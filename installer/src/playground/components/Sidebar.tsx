@@ -1,4 +1,4 @@
-import { Component, For, createSignal, Show } from "solid-js";
+import { Component, For, createSignal, Show, onMount, createEffect } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import type { PlaygroundRegistry, ComponentCategory } from "../types";
 
@@ -28,9 +28,27 @@ const categoryNames: Record<ComponentCategory, string> = {
 
 const Sidebar: Component<SidebarProps> = (props) => {
   const [searchTerm, setSearchTerm] = createSignal("");
-  const [expandedCategories, setExpandedCategories] = createSignal<Set<ComponentCategory>>(
-    new Set(['atoms', 'molecules', 'organisms', 'ui', 'forms'])
-  );
+  const [expandedCategories, setExpandedCategories] = createSignal<Set<ComponentCategory>>(new Set());
+  const STORAGE_KEY = "playground:expandedCategories";
+
+  onMount(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          setExpandedCategories(new Set(arr as ComponentCategory[]));
+        }
+      }
+    } catch {}
+  });
+
+  createEffect(() => {
+    try {
+      const arr = Array.from(expandedCategories());
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    } catch {}
+  });
   const location = useLocation();
 
   const toggleCategory = (category: ComponentCategory) => {

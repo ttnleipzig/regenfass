@@ -12,7 +12,7 @@ import { Dynamic } from "solid-js/web";
 import { useParams } from "@solidjs/router";
 import CodeViewer from "./components/CodeViewer";
 import PropsPanel from "./components/PropsPanel";
-import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry } from "./types";
+import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry, PropInfo } from "./types";
 
 // Dynamic imports for all components
 const componentImports: Record<string, () => Promise<{ default: any }>> = {
@@ -126,7 +126,9 @@ const ComponentRenderer: Component = () => {
     if (!comp) return '';
     
     const values = propValues();
+    const childrenValue = (values as any)["children"];
     const propsString = Object.entries(values)
+      .filter(([key, value]) => key !== 'children')
       .filter(([_, value]) => value !== undefined && value !== '')
       .map(([key, value]) => {
         if (typeof value === 'boolean') {
@@ -142,9 +144,13 @@ const ComponentRenderer: Component = () => {
       })
       .join(' ');
 
+    const openTag = `<${comp.name}${propsString ? ' ' + propsString : ''}>`;
+    const closeTag = `</${comp.name}>`;
+    const hasChildren = typeof childrenValue === 'string' && childrenValue.trim().length > 0;
+
     return `import ${comp.name} from '${comp.importPath}';
 
-<${comp.name}${propsString ? ' ' + propsString : ''} />`;
+${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsString ? ' ' + propsString : ''} />`}`;
   };
 
   const [loadedComponent] = createResource(
@@ -322,7 +328,22 @@ const ComponentRenderer: Component = () => {
               {/* Props panel */}
               <div class="lg:w-96 bg-gray-50 dark:bg-gray-950 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-700 p-6">
                 <PropsPanel
-                  props={comp().props}
+                  props={((): PropInfo[] => {
+                    const base = comp().props.slice();
+                    // Add a slot text control for button-like components
+                    if (comp().name === 'PrimaryButton' || comp().name === 'SecondaryButton') {
+                      if (!base.find(p => p.name === 'children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: false,
+                          description: 'Button text (slot content)',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    return base;
+                  })()}
                   values={propValues()}
                   onChange={handlePropChange}
                 />
