@@ -102,19 +102,19 @@ class SCPAdapter extends EventEmitter<SCPReaderEvents> {
 
 		this.#timeout = setTimeout(() => this.#pump());
 
-		console.log("started adapter!");
+		console.debug("started adapter!");
 	}
 
 	stop() {
-		console.log("stopping adapter...");
+		console.debug("stopping adapter...");
 
 		if (this.#timeout) clearTimeout(this.#timeout);
 
-		console.log("releasing read lock");
+		console.debug("releasing read lock");
 		this.#reader?.releaseLock();
 		this.#reader = undefined;
 
-		console.log("releasing writer lock");
+		console.debug("releasing writer lock");
 		this.#writer?.releaseLock();
 		this.#writer = undefined;
 	}
@@ -142,10 +142,10 @@ class SCPAdapter extends EventEmitter<SCPReaderEvents> {
 			for (const raw of lines) {
 				try {
 					const parsed = scp.parseLine(raw);
-					console.log(`[SCPAdapter] read:`, parsed);
+					console.debug(`[SCPAdapter] read:`, parsed);
 					this.emit("line", parsed);
 				} catch (err) {
-					console.error(`could not parse SCP line: ${raw}`, err);
+					console.error(`could not parse SCP line, skipping: ${raw}`, err);
 				}
 			}
 		} catch (err) {
@@ -160,7 +160,7 @@ class SCPAdapter extends EventEmitter<SCPReaderEvents> {
 
 		const encoded = textEncoder.encode(raw);
 
-		console.log("[SCPAdapter] write:", raw.replaceAll("\n", "\\n"));
+		console.debug("[SCPAdapter] write:", raw.replaceAll("\n", "\\n"));
 		this.#writer?.write(encoded);
 	}
 }
