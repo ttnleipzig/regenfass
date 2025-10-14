@@ -10,6 +10,50 @@ interface PropsPanelProps {
 const PropsPanel: Component<PropsPanelProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = createSignal(false);
 
+  const capitalize = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
+  const fillExamples = () => {
+    props.props.forEach((propInfo) => {
+      switch (propInfo.controlType) {
+        case 'text': {
+          const sample = capitalize(propInfo.name || 'Sample');
+          props.onChange(propInfo.name, sample);
+          break;
+        }
+        case 'number': {
+          props.onChange(propInfo.name, 42);
+          break;
+        }
+        case 'color': {
+          props.onChange(propInfo.name, '#4F46E5');
+          break;
+        }
+        case 'select': {
+          const first = (propInfo.options && propInfo.options[0]) || '';
+          if (first) props.onChange(propInfo.name, first);
+          break;
+        }
+        case 'boolean': {
+          props.onChange(propInfo.name, true);
+          break;
+        }
+      }
+    });
+
+    // Special handling: when the prop name is "class", append Tailwind utility classes
+    const hasClassProp = props.props.find((p) => p.name === 'class');
+    if (hasClassProp) {
+      const existing = props.values['class'] || '';
+      const extra = ' text-blue-600 font-semibold';
+      const merged = (existing + extra)
+        .split(/\s+/)
+        .filter(Boolean)
+        .filter((v, i, arr) => arr.indexOf(v) === i)
+        .join(' ');
+      props.onChange('class', merged.trim());
+    }
+  };
+
   const renderControl = (propInfo: PropInfo) => {
     const value = () => props.values[propInfo.name] ?? propInfo.defaultValue ?? '';
 
@@ -96,12 +140,35 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
   };
 
   const resetProps = () => {
-    props.props.forEach(propInfo => {
-      const defaultValue = propInfo.defaultValue;
-      if (defaultValue !== undefined) {
-        props.onChange(propInfo.name, defaultValue);
+    props.props.forEach((propInfo) => {
+      switch (propInfo.controlType) {
+        case 'text':
+          props.onChange(propInfo.name, '');
+          break;
+        case 'number':
+          // Use empty string to clear the numeric field visually
+          props.onChange(propInfo.name, '');
+          break;
+        case 'select':
+          props.onChange(propInfo.name, '');
+          break;
+        case 'color':
+          // Color inputs cannot be truly empty; fallback to a neutral base
+          props.onChange(propInfo.name, '#000000');
+          break;
+        case 'boolean':
+          props.onChange(propInfo.name, false);
+          break;
+        default:
+          props.onChange(propInfo.name, '');
       }
     });
+
+    // Explicitly clear Tailwind class prop if present
+    const hasClassProp = props.props.find((p) => p.name === 'class');
+    if (hasClassProp) {
+      props.onChange('class', '');
+    }
   };
 
   return (
@@ -120,6 +187,15 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
             title="Reset to defaults"
           >
             Reset
+          </button>
+          <button
+            onClick={fillExamples}
+            class="px-2 py-1 text-xs text-gray-600 dark:text-gray-400 
+                   hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 
+                   rounded transition-colors"
+            title="Fill example values"
+          >
+            Fill examples
           </button>
           <button
             onClick={() => setIsCollapsed(!isCollapsed())}
