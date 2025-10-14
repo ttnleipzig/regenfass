@@ -1,4 +1,9 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
+import Prism from "prismjs";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-tsx";
+import "prismjs/themes/prism.css";
 
 interface CodeViewerProps {
   code: string;
@@ -21,10 +26,12 @@ const CodeViewer: Component<CodeViewerProps> = (props) => {
     }
   };
 
-  // Render plain code safely and prevent overflow
+  // Render highlighted HTML with Prism (keeps soft-wrap)
   createEffect(() => {
     if (codeRef) {
-      codeRef.textContent = props.code;
+      const lang = (props.language || 'tsx').toLowerCase();
+      const grammar = Prism.languages[lang] || Prism.languages.tsx;
+      codeRef.innerHTML = Prism.highlight(props.code, grammar, lang);
     }
   });
 
