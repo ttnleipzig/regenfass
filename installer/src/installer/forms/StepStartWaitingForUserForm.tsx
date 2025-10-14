@@ -1,7 +1,7 @@
 import { Component, createSignal } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { Checkbox } from "@/components/forms/Checkbox";
-import { PrimaryButton } from "@/components/forms/PrimaryButton";
+import { ActionButton } from "@/components/forms/ActionButton";
 import { ErrorList } from "@/components/forms/ErrorList";
 import type { FormProps } from "../types";
 
@@ -78,9 +78,9 @@ const StepStartWaitingForUserForm: Component<StepStartWaitingForUserFormProps> =
         />
 
         <div class="flex justify-end">
-          <PrimaryButton type="submit" onClick={handleSubmit}>
+          <ActionButton type="primary" type="submit" onClick={handleSubmit}>
             Installation starten
-          </PrimaryButton>
+          </ActionButton>
         </div>
       </div>
     </FormLayout>

@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
-import { PrimaryButton } from "@/components/forms/PrimaryButton";
-import { SecondaryButton } from "@/components/forms/SecondaryButton";
+import { ActionButton } from "@/components/forms/ActionButton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import type { FormProps } from "../types";
@@ -135,12 +134,12 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
         )}
 
         <div class="flex justify-center space-x-4">
-          <SecondaryButton onClick={handleRestart}>
+          <ActionButton type="secondary" onClick={handleRestart}>
             Installation neu starten
-          </SecondaryButton>
-          <PrimaryButton onClick={handleRetry}>
+          </ActionButton>
+          <ActionButton type="primary" onClick={handleRetry}>
             Erneut versuchen
-          </PrimaryButton>
+          </ActionButton>
         </div>
 
         <div class="text-center">

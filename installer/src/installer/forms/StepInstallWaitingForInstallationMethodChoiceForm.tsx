@@ -1,8 +1,7 @@
 import { Component, createSignal } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { Select } from "@/components/forms/Select";
-import { PrimaryButton } from "@/components/forms/PrimaryButton";
-import { SecondaryButton } from "@/components/forms/SecondaryButton";
+import { ActionButton } from "@/components/forms/ActionButton";
 import { ErrorList } from "@/components/forms/ErrorList";
 import type { FormProps, InstallationMethod } from "../types";
 
@@ -122,15 +121,16 @@ const StepInstallWaitingForInstallationMethodChoiceForm: Component<StepInstallWa
         <ErrorList errors={errors()} />
 
         <div class="flex justify-end space-x-3">
-          <SecondaryButton onClick={props.onBack}>
+          <ActionButton type="secondary" onClick={props.onBack}>
             Zurück
-          </SecondaryButton>
-          <PrimaryButton 
+          </ActionButton>
+          <ActionButton
+            type="primary"
             onClick={handleInstall}
             disabled={!selectedMethod() || !selectedVersion()}
           >
             {selectedMethod() === "install" ? "Installieren" : "Aktualisieren"}
-          </PrimaryButton>
+          </ActionButton>
         </div>
       </div>
     </FormLayout>

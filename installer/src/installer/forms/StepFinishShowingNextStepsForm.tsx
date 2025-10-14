@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
-import { PrimaryButton } from "@/components/forms/PrimaryButton";
-import { SecondaryButton } from "@/components/forms/SecondaryButton";
+import { ActionButton } from "@/components/forms/ActionButton";
 import type { FormProps } from "../types";
 
 export interface StepFinishShowingNextStepsFormProps extends FormProps {
@@ -132,12 +131,12 @@ const StepFinishShowingNextStepsForm: Component<StepFinishShowingNextStepsFormPr
         </div>
 
         <div class="flex justify-center space-x-4">
-          <SecondaryButton onClick={handleRestart}>
+          <ActionButton type="secondary" onClick={handleRestart}>
             Neue Installation
-          </SecondaryButton>
-          <PrimaryButton onClick={handleCloudSetup}>
+          </ActionButton>
+          <ActionButton type="primary" onClick={handleCloudSetup}>
             Cloud-Setup starten
-          </PrimaryButton>
+          </ActionButton>
         </div>
       </div>
     </FormLayout>

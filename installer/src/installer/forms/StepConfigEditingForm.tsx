@@ -2,8 +2,7 @@ import { Component, createSignal, createEffect } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { TextInput } from "@/components/forms/TextInput";
 import { FileUploader } from "@/components/forms/FileUploader";
-import { PrimaryButton } from "@/components/forms/PrimaryButton";
-import { SecondaryButton } from "@/components/forms/SecondaryButton";
+import { ActionButton } from "@/components/forms/ActionButton";
 import { ErrorList } from "@/components/forms/ErrorList";
 import type { FormProps, Config, ConfigField } from "../types";
 
@@ -220,15 +219,15 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
             />
             
             <div class="flex items-end">
-              <SecondaryButton onClick={handleSaveToFile}>
+              <ActionButton type="secondary" onClick={handleSaveToFile}>
                 Konfiguration exportieren
-              </SecondaryButton>
+              </ActionButton>
             </div>
             
             <div class="flex items-end">
-              <SecondaryButton onClick={handleClear}>
+              <ActionButton type="secondary" onClick={handleClear}>
                 Konfiguration löschen
-              </SecondaryButton>
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -238,16 +237,17 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
         )}
 
         <div class="flex justify-end space-x-3">
-          <SecondaryButton onClick={props.onBack}>
+          <ActionButton type="secondary" onClick={props.onBack}>
             Zurück
-          </SecondaryButton>
-          <PrimaryButton 
+          </ActionButton>
+          <ActionButton
+            type="primary"
             onClick={handleSubmit}
             loading={isSubmitting()}
             disabled={hasErrors() || isSubmitting()}
           >
             {isSubmitting() ? "Speichere..." : "Konfiguration speichern"}
-          </PrimaryButton>
+          </ActionButton>
         </div>
       </div>
     </FormLayout>
