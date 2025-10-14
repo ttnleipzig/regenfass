@@ -74,7 +74,9 @@ jobs:
         id: release
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          clean: true
+          skip-github-release: false       # Default, erstellt GitHub Release
+          skip-github-pull-request: false  # Default, erstellt PR wenn nötig
+          target-branch: main
           release-type: simple
       - name: Print the release URL if present
         if: ${{ steps.release.outputs.upload_url }}
