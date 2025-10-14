@@ -35,7 +35,7 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
           <input
             type="number"
             value={value()}
-            onChange={(e) => props.onChange(propInfo.name, parseFloat(e.target.value) || 0)}
+            onInput={(e) => props.onChange(propInfo.name, parseFloat((e.target as HTMLInputElement).value) || 0)}
             class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md 
                    bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -65,13 +65,13 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
             <input
               type="color"
               value={value()}
-              onChange={(e) => props.onChange(propInfo.name, e.target.value)}
+              onInput={(e) => props.onChange(propInfo.name, (e.target as HTMLInputElement).value)}
               class="w-10 h-8 border border-gray-300 dark:border-gray-600 rounded cursor-pointer"
             />
             <input
               type="text"
               value={value()}
-              onChange={(e) => props.onChange(propInfo.name, e.target.value)}
+              onInput={(e) => props.onChange(propInfo.name, (e.target as HTMLInputElement).value)}
               placeholder="#000000"
               class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md 
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
@@ -85,7 +85,7 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
           <input
             type="text"
             value={value()}
-            onChange={(e) => props.onChange(propInfo.name, e.target.value)}
+            onInput={(e) => props.onChange(propInfo.name, (e.target as HTMLInputElement).value)}
             placeholder={propInfo.defaultValue || `Enter ${propInfo.name}...`}
             class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md 
                    bg-white dark:bg-gray-800 text-gray-900 dark:text-white
