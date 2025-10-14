@@ -45,6 +45,7 @@ jobs:
         run: >-
           mkdir -p artifacts &&
           mv .pio/build/${{ matrix.environment }}/firmware.bin artifacts/ &&
+          mv .pio/build/${{ matrix.environment }}/partitions.bin artifacts/ &&
           mv .pio/build/${{ matrix.environment }}/bootloader.bin artifacts/ &&
           mv .pio/build/${{ matrix.environment }}/firmware_metadata.json artifacts/ &&
           cp ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin artifacts/
