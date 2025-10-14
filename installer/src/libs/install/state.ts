@@ -40,13 +40,18 @@ const makeConfig = <Version extends number, Fields extends ConfigField[]>(
 
 const configV1 = makeConfig(
 	1,
-	["firmwareVersion", "configVersion", "appEUI", "appKey", "devEUI"],
-	(config) => config,
-	(config) => config
+	["appEUI", "appKey", "devEUI"],
+	(config) => {
+		throw new Error("No newer version that config v1 implemented")
+	},
+	() => {
+		throw new Error("Can't downgrade below version 1");
+	}
 );
 type ConfigV1 = typeof configV1.$schema;
 
-type Config = ConfigV1;
+type BaseConfig = { firmwareVersion: string; configVersion: string };
+type Config = BaseConfig & ConfigV1;
 const configVersions = [configV1];
 
 const textEncoder = new TextEncoder();
@@ -197,15 +202,26 @@ const readField = async (
 };
 
 const loadConfiguration = async (connection: SCPAdapter): Promise<Config> => {
-	const version = await readField(connection, "version");
+	const firmwareVersion = await readField(connection, "version");
+	console.log("Firmware version:", firmwareVersion);
+	const configVersion = await readField(connection, "configVersion");
+	console.log("Config version:", configVersion);
 
-	return {
-		configVersion: "0",
-		firmwareVersion: "0.0.0",
-		appEUI: "",
-		appKey: "",
-		devEUI: "",
+	const appEUI = await readField(connection, "appEUI");
+	const appKey = await readField(connection, "appKey");
+	const devEUI = await readField(connection, "devEUI");
+
+	const config: Config = {
+		configVersion,
+		firmwareVersion,
+		appEUI,
+		appKey,
+		devEUI,
 	};
+
+	console.log("Loaded config from device", config);
+
+	return config;
 };
 
 const writeConfiguration = async (
@@ -238,7 +254,7 @@ const migrateConfiguration = async (
 			);
 		}
 
-		config = nextConfigVersion.upgrade(config);
+		config = nextConfigVersion.upgrade(config) as Config;
 	}
 
 	return config;
@@ -259,7 +275,7 @@ export const setupStateMachine = setup({
 			| { type: "start.next" }
 			| { type: "install.install" }
 			| { type: "install.update" }
-			| { type: "install.target_version_selected"; version: string|null }
+			| { type: "install.target_version_selected"; version: string | null }
 			| {
 					type: "config.changeField";
 					field: ConfigField;
