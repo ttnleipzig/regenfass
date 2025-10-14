@@ -9,16 +9,17 @@ import { Show, splitProps } from "solid-js";
 import { IconAlertTriangle, IconCircleX, IconInfoCircle } from "@tabler/icons-solidjs";
 
 export const alertVariants = cva(
-	"relative w-full rounded-lg border text-sm bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-5 py-4 ring-1 ring-border/50 [&:has(svg)]:pl-12 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-5 [&>svg]:top-4 [&>svg]:text-foreground",
+	"relative w-full rounded-lg border text-sm bg-card/60 dark:bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-5 py-4 ring-1 ring-border/50 dark:ring-border/60 [&:has(svg)]:pl-12 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-5 [&>svg]:top-4 [&>svg]:text-foreground",
 	{
 		variants: {
 			variant: {
 				default: "text-foreground",
 				destructive:
-					"border-destructive/30 text-destructive bg-destructive/10 dark:border-destructive/40 [&>svg]:text-destructive",
-				info: "border-info/30 text-info bg-info/10 dark:border-info/40 [&>svg]:text-info",
+					"border-destructive/30 text-destructive bg-destructive/10 dark:border-destructive/70 dark:bg-destructive/25 dark:text-destructive-foreground [&>svg]:text-destructive dark:[&>svg]:text-destructive-foreground",
+				info:
+					"border-info/30 text-info bg-info/10 dark:border-info/70 dark:bg-info/20 dark:text-info-foreground [&>svg]:text-info dark:[&>svg]:text-info-foreground",
 				warning:
-					"border-warning/30 text-warning bg-warning/10 dark:border-warning/40 [&>svg]:text-warning",
+					"border-warning/30 text-warning bg-warning/10 dark:border-warning/70 dark:bg-warning/20 dark:text-warning-foreground [&>svg]:text-warning dark:[&>svg]:text-warning-foreground",
 			},
 		},
 		defaultVariants: {

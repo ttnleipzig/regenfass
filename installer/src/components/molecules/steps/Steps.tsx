@@ -1,13 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+// Removed AlertDialog in favor of inline alert
 import { Button } from "@/components/ui/button.tsx";
 import {
 	Select,
@@ -29,7 +21,7 @@ import { Match, Switch } from "solid-js";
 const { inspect } = createBrowserInspector();
 
 export default function Steps() {
-	const [state, emitEvent, machineRef] = useMachine(setupStateMachine, {
+	const [state, emitEvent, service] = useMachine(setupStateMachine, {
 		inspect,
 	});
 
@@ -168,42 +160,42 @@ export default function Steps() {
 					<div class="space-y-3">
 						<TextFieldRoot>
 							<TextFieldLabel>appEUI</TextFieldLabel>
-							<TextFieldInput
+						<TextFieldInput
 								type="text"
 								name="appEUI"
-								onChange={(t) =>
+							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "appEUI",
-										value: t.target.value,
+									value: t.currentTarget.value,
 									})
 								}
 							/>
 						</TextFieldRoot>
 						<TextFieldRoot>
 							<TextFieldLabel>appKey</TextFieldLabel>
-							<TextFieldInput
+						<TextFieldInput
 								type="text"
 								name="appKey"
-								onChange={(t) =>
+							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "appKey",
-										value: t.target.value,
+									value: t.currentTarget.value,
 									})
 								}
 							/>
 						</TextFieldRoot>
 						<TextFieldRoot>
 							<TextFieldLabel>devEUI</TextFieldLabel>
-							<TextFieldInput
+						<TextFieldInput
 								type="text"
 								name="devEUI"
-								onChange={(t) =>
+							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "devEUI",
-										value: t.target.value,
+									value: t.currentTarget.value,
 									})
 								}
 							/>
@@ -250,19 +242,19 @@ export default function Steps() {
 					</Alert>
 				</Match>
 				<Match when={(state as any).matches("Finish_ShowingError")}>
-					<AlertDialog>
-						<AlertDialogContent>
-							<AlertDialogHeader>
-								<AlertDialogTitle>Critical error</AlertDialogTitle>
-								<AlertDialogDescription>
-									{(state.context.error as unknown as Error).toString()}
-								</AlertDialogDescription>
-							</AlertDialogHeader>
-							<AlertDialogFooter>
-								<AlertDialogAction>OK</AlertDialogAction>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
+					<div class="space-y-3">
+						<Alert variant="destructive">
+							<AlertTitle>Critical error</AlertTitle>
+							<AlertDescription>
+								{(state.context.error as unknown as Error).toString()}
+							</AlertDescription>
+						</Alert>
+						<div class="pt-1">
+							<Button onClick={() => emitEvent({ type: "restart" })}>
+								Restart
+							</Button>
+						</div>
+					</div>
 				</Match>
 			</Switch>
 		</div>

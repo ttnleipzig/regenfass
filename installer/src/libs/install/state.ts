@@ -285,7 +285,8 @@ export const setupStateMachine = setup({
 			| { type: "config.loadFromFile"; config: Config }
 			| { type: "config.saveToFile" }
 			| { type: "config.write" }
-			| { type: "config.next" },
+			| { type: "config.next" }
+			| { type: "restart" },
 		emitted: {} as
 			| { type: "config.saveToFile"; config: Config }
 			| {
@@ -616,6 +617,19 @@ export const setupStateMachine = setup({
 			// TODO: When we're done with the cloud, we need the onboarding to continue here
 			type: "final",
 		},
-		Finish_ShowingError: { type: "final" },
+		Finish_ShowingError: {
+			on: {
+				restart: {
+					target: "Start_WaitingForUser",
+					actions: assign({
+						error: () => null,
+						connection: () => null,
+						firmwareVersion: () => null,
+						targetFirmwareVersion: () => null,
+						configuration: (ctx) => ctx.context.configuration,
+					}),
+				},
+			},
+		},
 	},
 });
