@@ -12,6 +12,24 @@ const url =
 	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
 const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
 
+const sleep = (ms: number) =>
+	new Promise<void>((res) => setTimeout(() => res(), ms));
+
+const hardReset = async (transport: Transport) => {
+	console.log("Triggering reset");
+	await transport.device.setSignals({
+		dataTerminalReady: false,
+		requestToSend: true,
+	});
+	await sleep(250);
+	await transport.device.setSignals({
+		dataTerminalReady: false,
+		requestToSend: false,
+	});
+	await sleep(250);
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+};
+
 const loadConfiguration = async (
 	connection: SCPAdapter
 ): Promise<DeviceInfo> => {
@@ -245,16 +263,18 @@ export const setupStateMachine = setup({
 				console.error("installing failed:", error);
 				throw error;
 			} finally {
+				await hardReset(transport);
 				await transport.disconnect();
 				console.log("DISCONNECTED TRANSPORT AFTER FLASHING");
 			}
 
-			await new Promise<void>((res) => setTimeout(() => res(), 1000));
+			await sleep(1000);
 			await port.open({ baudRate: 115200 });
 			console.log("REOPENED PORT AFTER FLASHING");
 
 			console.log(firmwareMetadata);
 
+			await sleep(1000);
 			return [version, SCPAdapter.forSerialPort(port)] as const;
 		}),
 		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
