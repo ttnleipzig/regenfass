@@ -445,13 +445,10 @@ export const setupStateMachine = setup({
 		Install_MigratingConfiguration: {
 			invoke: {
 				src: "migrateConfiguration",
-				input: ({ context: { connection, deviceInfo } }) => {
-					console.log("aaaaaa");
-					return {
-						connection: connection![1],
-						desiredVersion: deviceInfo!.configVersion,
-					};
-				},
+				input: ({ context: { connection, deviceInfo } }) => ({
+					connection: connection![1],
+					desiredVersion: deviceInfo!.configVersion,
+				}),
 				onDone: {
 					target: "Config_Editing",
 					actions: assign({
