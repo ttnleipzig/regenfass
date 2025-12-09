@@ -1,12 +1,11 @@
 import { ConfigField } from "@/installer/types.ts";
 import { Config, CONFIG_VERSIONS, DeviceInfo } from "@/libs/install/config.ts";
-import { readField, SCPAdapter } from "@/libs/install/scp";
+import { readField, SCPAdapter, writeField } from "@/libs/install/scp";
 import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
 import { assign, emit, fromPromise, setup } from "xstate";
-import { LineType } from "../scp/scp.mjs";
 
 const url =
 	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
@@ -62,11 +61,11 @@ const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 };
 
 const writeConfiguration = async (
-	connection: SCPAdapter,
+	adapter: SCPAdapter,
 	config: Config
 ): Promise<Config> => {
 	for (const [key, value] of Object.entries(config)) {
-		connection.write({ type: LineType.SET, key, value: value.toString() });
+		await writeField(adapter, key, value.toString());
 	}
 
 	return config;

@@ -153,3 +153,22 @@ export const readField = async (
 
 	return promise;
 };
+
+export const writeField = async (
+	adapter: SCPAdapter,
+	field: string,
+	value: string
+): Promise<void> => {
+	adapter.start();
+
+	const promise = new Promise<void>((resolve, reject) => {
+		setTimeout(() => {
+			adapter.stop();
+			resolve();
+		}, 1000);
+	});
+
+	adapter.write({ type: SDPLineType.SET, key: field, value });
+
+	return promise;
+};
