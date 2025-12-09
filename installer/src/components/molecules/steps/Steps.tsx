@@ -9,9 +9,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select.tsx";
 import {
-	TextFieldRoot,
 	TextFieldInput,
 	TextFieldLabel,
+	TextFieldRoot,
 } from "@/components/ui/textfield.tsx";
 import { setupStateMachine } from "@/libs/install/state.ts";
 import { createBrowserInspector } from "@statelyai/inspect";
@@ -247,6 +247,8 @@ export default function Steps() {
 							<AlertTitle>Critical error</AlertTitle>
 							<AlertDescription>
 								{(state.context.error as unknown as Error).toString()}
+								{(state.context.error as unknown as Error).stack}
+								{(state.context.error as unknown as Error).cause!}
 							</AlertDescription>
 						</Alert>
 						<div class="pt-1">

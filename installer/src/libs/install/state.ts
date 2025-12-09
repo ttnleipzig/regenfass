@@ -1,227 +1,47 @@
-import { EventEmitter } from "tiny-node-eventemitter";
+import { ConfigField } from "@/installer/types.ts";
+import { Config, CONFIG_VERSIONS, DeviceInfo } from "@/libs/install/config.ts";
+import { readField, SCPAdapter } from "@/libs/install/sdp.ts";
+import EncLatin1 from "crypto-js/enc-latin1.js";
+import MD5 from "crypto-js/md5.js";
+import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
+import JSZip from "jszip";
 import { assign, emit, fromPromise, setup } from "xstate";
-import initSCP, { Line, LineType, type Line as SCPLine } from "../scp/scp.mjs";
+import { LineType } from "../scp/scp.mjs";
 
-const scp = await initSCP();
-
+const url =
+	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
 const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
 
-const ConfigField = {
-	firmwareVersion: "firmwareVersion",
-	configVersion: "configVersion",
-
-	appEUI: "appEUI",
-	appKey: "appKey",
-	devEUI: "devEUI",
-} as const;
-type ConfigField = keyof typeof ConfigField;
-
-type Upgrader<Fields extends ConfigField[]> = (
-	config: Record<string, string>
-) => Record<Fields[number], string>;
-type Downgrader<Fields extends ConfigField[]> = (
-	config: Record<Fields[number], string>
-) => Record<string, string>;
-
-type ConfigV<Version extends number, Fields extends ConfigField[]> = {
-	version: Version;
-	fields: Fields;
-	upgrade: Upgrader<Fields>;
-	downgrade: Downgrader<Fields>;
-	$schema: Record<Fields[number], string>;
-};
-
-const makeConfig = <Version extends number, Fields extends ConfigField[]>(
-	version: Version,
-	fields: Fields,
-	upgrade: Upgrader<Fields>,
-	downgrade: Downgrader<Fields>
-) => ({ version, fields, upgrade, downgrade } as ConfigV<Version, Fields>);
-
-const configV1 = makeConfig(
-	1,
-	["appEUI", "appKey", "devEUI"],
-	(config) => {
-		throw new Error("No newer version that config v1 implemented")
-	},
-	() => {
-		throw new Error("Can't downgrade below version 1");
-	}
-);
-type ConfigV1 = typeof configV1.$schema;
-
-type BaseConfig = { firmwareVersion: string; configVersion: string };
-type Config = BaseConfig & ConfigV1;
-const configVersions = [configV1];
-
-const textEncoder = new TextEncoder();
-const textDecoder = new TextDecoder();
-
-type SCPReaderEvents = {
-	done(): void;
-	line(line: SCPLine): void;
-};
-
-class SCPAdapter extends EventEmitter<SCPReaderEvents> {
-	// technically wrong type, it's only a `number`
-	#timeout: NodeJS.Timeout | null = null;
-	#buffer = "";
-	#readStream: ReadableStream<Uint8Array<ArrayBufferLike>>;
-	#writeStream: WritableStream<Uint8Array<ArrayBufferLike>>;
-	#reader?: ReadableStreamDefaultReader<Uint8Array<ArrayBufferLike>>;
-	#writer?: WritableStreamDefaultWriter<Uint8Array<ArrayBufferLike>>;
-
-	constructor(
-		readStream: ReadableStream<Uint8Array<ArrayBufferLike>>,
-		writeStream: WritableStream<Uint8Array<ArrayBufferLike>>
-	) {
-		super();
-		this.#readStream = readStream;
-		this.#writeStream = writeStream;
-	}
-
-	static forSerialPort(port: SerialPort) {
-		if (!port.readable)
-			throw new Error(
-				`Could not create SCPReader, serial port is not readable; did you forget to open() it?`
-			);
-
-		if (!port.writable)
-			throw new Error(
-				`Could not create SCPReader, serial port is not writable; did you forget to open() it?`
-			);
-
-		return new SCPAdapter(port.readable, port.writable);
-	}
-
-	start() {
-		this.stop();
-
-		this.#reader = this.#readStream.getReader();
-		this.#writer = this.#writeStream.getWriter();
-
-		this.#timeout = setTimeout(() => this.#pump());
-
-		console.debug("started adapter!");
-	}
-
-	stop() {
-		console.debug("stopping adapter...");
-
-		if (this.#timeout) clearTimeout(this.#timeout);
-
-		console.debug("releasing read lock");
-		this.#reader?.releaseLock();
-		this.#reader = undefined;
-
-		console.debug("releasing writer lock");
-		this.#writer?.releaseLock();
-		this.#writer = undefined;
-	}
-
-	async #pump() {
-		if (!this.#reader) {
-			throw new Error(
-				`Could not pump, #reader is undefined; did you start the reader?`
-			);
-		}
-
-		try {
-			const { done, value } = await this.#reader.read();
-			if (done) {
-				this.emit("done");
-				this.#timeout = null;
-				return;
-			}
-
-			const raw = textDecoder.decode(value!);
-			this.#buffer += raw;
-			const lines = this.#buffer.split("\n");
-			this.#buffer = lines.pop()!;
-
-			for (const raw of lines) {
-				try {
-					const parsed = scp.parseLine(raw);
-					console.debug(`[SCPAdapter] read:`, parsed);
-					this.emit("line", parsed);
-				} catch (err) {
-					console.error(`could not parse SCP line, skipping: ${raw}`, err);
-				}
-			}
-		} catch (err) {
-			console.error(err);
-		}
-
-		this.#timeout = setTimeout(() => this.#pump());
-	}
-
-	write(line: Line) {
-		const raw = scp.lineToString(line) + "\n";
-
-		const encoded = textEncoder.encode(raw);
-
-		console.debug("[SCPAdapter] write:", raw.replaceAll("\n", "\\n"));
-		this.#writer?.write(encoded);
-	}
-}
-
-const readField = async (
-	adapter: SCPAdapter,
-	field: string
-): Promise<string> => {
-	adapter.start();
-
-	const promise = new Promise<string>((resolve, reject) => {
-		let value: string | null = null;
-
-		adapter.on("line", (line) => {
-			console.log("got line");
-			if (line.type === LineType.SET && line.key === field) {
-				value = line.value;
-				adapter.stop();
-				resolve(value.trim());
-			}
-		});
-
-		adapter.on("done", () => {
-			if (value === null) {
-				reject(new Error(`Failed to read field ${field}`));
-			}
-		});
-
-		// Set a timeout
-		setTimeout(() => {
-			adapter.stop();
-			reject(new Error(`Timeout waiting for field ${field}`));
-		}, 5000);
-	});
-
-	adapter.write({ type: LineType.GET, key: field });
-
-	return promise;
-};
-
-const loadConfiguration = async (connection: SCPAdapter): Promise<Config> => {
+const loadConfiguration = async (
+	connection: SCPAdapter
+): Promise<DeviceInfo> => {
 	const firmwareVersion = await readField(connection, "version");
 	console.log("Firmware version:", firmwareVersion);
-	const configVersion = await readField(connection, "configVersion");
+	const configVersion = +(await readField(connection, "configVersion"));
 	console.log("Config version:", configVersion);
 
-	const appEUI = await readField(connection, "appEUI");
-	const appKey = await readField(connection, "appKey");
-	const devEUI = await readField(connection, "devEUI");
+	const applicableConfig = CONFIG_VERSIONS.find(
+		(v) => v.version === configVersion
+	);
+	if (!applicableConfig) {
+		throw new Error(
+			`Unknown config version: ${configVersion}, there is no loader implemented`
+		);
+	}
 
-	const config: Config = {
+	const config = await applicableConfig.load((field) =>
+		readField(connection, field)
+	);
+
+	const info: DeviceInfo = {
 		configVersion,
 		firmwareVersion,
-		appEUI,
-		appKey,
-		devEUI,
+		config,
 	};
 
-	console.log("Loaded config from device", config);
+	console.log("Loaded config from device", info);
 
-	return config;
+	return info;
 };
 
 const writeConfiguration = async (
@@ -229,7 +49,7 @@ const writeConfiguration = async (
 	config: Config
 ): Promise<Config> => {
 	for (const [key, value] of Object.entries(config)) {
-		connection.write({ type: LineType.SET, key, value });
+		connection.write({ type: LineType.SET, key, value: value.toString() });
 	}
 
 	return config;
@@ -237,27 +57,27 @@ const writeConfiguration = async (
 
 const migrateConfiguration = async (
 	connection: SCPAdapter,
-	desiredVersion: string
+	desiredVersion: number
 ): Promise<Config> => {
-	let config = await loadConfiguration(connection);
-	if (config.configVersion === desiredVersion) return config;
+	let info = await loadConfiguration(connection);
+	if (info.configVersion === desiredVersion) return info.config;
 
-	while (config.configVersion < desiredVersion) {
-		const nextVersion = +config.configVersion + 1;
+	while (info.configVersion < desiredVersion) {
+		const nextVersion = info.configVersion + 1;
 
-		let nextConfigVersion = configVersions.find(
+		let nextConfigVersion = CONFIG_VERSIONS.find(
 			(v) => v.version === nextVersion
 		);
 		if (!nextConfigVersion) {
 			throw new Error(
-				`Failed to migrate from ${config.configVersion} to ${nextVersion} (to get to ${desiredVersion})`
+				`Failed to migrate from ${info.configVersion} to ${nextVersion} (to get to ${desiredVersion}), could not find handler for config format for v${nextVersion}`
 			);
 		}
 
-		config = nextConfigVersion.upgrade(config) as Config;
+		info.config = nextConfigVersion.upgrade(info.config) as Config;
 	}
 
-	return config;
+	return info.config;
 };
 
 export const setupStateMachine = setup({
@@ -269,7 +89,7 @@ export const setupStateMachine = setup({
 			connection: readonly [SerialPort, SCPAdapter] | null;
 			firmwareVersion: string | null;
 			targetFirmwareVersion: string | null;
-			configuration: Config;
+			deviceInfo: DeviceInfo;
 		},
 		events: {} as
 			| { type: "start.next" }
@@ -288,7 +108,7 @@ export const setupStateMachine = setup({
 			| { type: "config.next" }
 			| { type: "restart" },
 		emitted: {} as
-			| { type: "config.saveToFile"; config: Config }
+			| { type: "config.saveToFile"; configVersion: number; config: Config }
 			| {
 					type: "install.progress";
 					/** Between 0 and 1 */
@@ -317,18 +137,132 @@ export const setupStateMachine = setup({
 			({ input: { connection } }) => readField(connection, "version")
 		),
 		installFirmware: fromPromise<
-			string,
-			{ connection: SCPAdapter; version: string }
-		>(async ({ input: { connection, version } }) => {
-			// TODO: Flash firmware
-			return version;
+			[string, SCPAdapter],
+			{ connection: SerialPort; version: string }
+		>(async ({ input: { connection: port, version } }) => {
+			const z = new JSZip();
+
+			const res = await fetch(url);
+			const zipBuf = res.arrayBuffer();
+			const zip = await z.loadAsync(zipBuf);
+
+			const firmwareMetadata: {
+				flash_images: {
+					offset: string;
+					path: string;
+				}[];
+				application_offset: string;
+			} = JSON.parse(await zip.file("firmware_metadata.json")!.async("text"));
+
+			await port.close();
+			console.log("CLOSED PORT BEFORE FLASHING");
+
+			const transport = new Transport(port, true);
+
+			const espLoaderTerminal = {
+				clean() {
+					console.clear();
+				},
+				writeLine(data: unknown) {
+					console.log(data);
+				},
+				write(data: unknown) {
+					console.log(data);
+				},
+			};
+
+			const loaderOpts: LoaderOptions = {
+				transport,
+				baudrate: 115200,
+				terminal: espLoaderTerminal,
+				debugLogging: true,
+				// romBaudrate:
+			};
+			const esploader = new ESPLoader(loaderOpts);
+
+			try {
+				const chip = await esploader.main();
+				console.log(chip);
+				const flashSize = await esploader.getFlashSize();
+
+				const bootloaderBin = await zip
+					.file("bootloader.bin")!
+					.async("binarystring");
+				const partitionsBin = await zip
+					.file("partitions.bin")!
+					.async("binarystring");
+				const bootApp0Bin = await zip
+					.file("boot_app0.bin")!
+					.async("binarystring");
+				const firmwareBin = await zip
+					.file("firmware.bin")!
+					.async("binarystring");
+
+				await esploader.writeFlash({
+					fileArray: [
+						{
+							data: bootloaderBin,
+							address: parseInt(
+								firmwareMetadata.flash_images.find((i) =>
+									i.path.endsWith("/bootloader.bin")
+								)!.offset,
+								16
+							),
+						},
+						{
+							data: partitionsBin,
+							address: parseInt(
+								firmwareMetadata.flash_images.find((i) =>
+									i.path.endsWith("/partitions.bin")
+								)!.offset,
+								16
+							),
+						},
+						{
+							data: bootApp0Bin,
+							address: parseInt(
+								firmwareMetadata.flash_images.find((i) =>
+									i.path.endsWith("/boot_app0.bin")
+								)!.offset,
+								16
+							),
+						},
+						{
+							data: firmwareBin,
+							address: parseInt(firmwareMetadata.application_offset, 16),
+						},
+					],
+					eraseAll: false,
+					compress: true,
+					reportProgress: (fileIndex, written, total) => {
+						console.log(`file ${fileIndex}: ${written}/${total} bytes`);
+					},
+					calculateMD5Hash: (image) => MD5(EncLatin1.parse(image)),
+					flashSize: flashSize + "KB",
+				});
+				await esploader.after();
+			} catch (error) {
+				console.error("installing failed:", error);
+				throw error;
+			} finally {
+				await transport.disconnect();
+				console.log("DISCONNECTED TRANSPORT AFTER FLASHING");
+			}
+
+			await new Promise<void>((res) => setTimeout(() => res(), 1000));
+			await port.open({ baudRate: 115200 });
+			console.log("REOPENED PORT AFTER FLASHING");
+
+			console.log(firmwareMetadata);
+
+			return [version, SCPAdapter.forSerialPort(port)] as const;
 		}),
-		loadConfiguration: fromPromise<Config, { connection: SCPAdapter }>(
+		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
 			({ input: { connection } }) => loadConfiguration(connection)
 		),
 		migrateConfiguration: fromPromise<
 			Config,
-			{ connection: SCPAdapter; desiredVersion: string }
+			{ connection: SCPAdapter; desiredVersion: number }
 		>(({ input: { connection, desiredVersion } }) =>
 			migrateConfiguration(connection, desiredVersion)
 		),
@@ -356,7 +290,7 @@ export const setupStateMachine = setup({
 		upstreamVersions: [],
 		error: null,
 		connection: null,
-		configuration: null as unknown as Config,
+		deviceInfo: null as unknown as DeviceInfo,
 		firmwareVersion: null,
 		targetFirmwareVersion: null,
 	},
@@ -470,14 +404,16 @@ export const setupStateMachine = setup({
 			invoke: {
 				src: "installFirmware",
 				input: ({ context: { connection } }) => ({
-					connection: connection![1],
+					connection: connection![0],
 					// TODO: Ask for firmware version
 					version: "0.0.0",
 				}),
 				onDone: {
 					target: "Config_LoadingConfiguration",
 					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output,
+						firmwareVersion: ({ event: { output } }) => output[0],
+						connection: ({ context: { connection }, event: { output } }) =>
+							[connection![0], output[1]] as const,
 					}),
 				},
 				onError: {
@@ -491,17 +427,16 @@ export const setupStateMachine = setup({
 
 		Update_LoadingConfiguration: {
 			invoke: {
-				src: "loadConfiguration",
+				src: "loadDeviceInfo",
 				input: ({ context: { connection, firmwareVersion } }) => ({
 					connection: connection![1],
 					// TODO: Map firmware version to desired version
 					desiredVersion: firmwareVersion!,
 				}),
 				onDone: {
-					target: "Finish_ShowingError",
+					target: "Install_Updating",
 					actions: assign({
-						error: "loaded",
-						configuration: ({ event }) => event.output,
+						deviceInfo: ({ event }) => event.output,
 					}),
 				},
 			},
@@ -510,15 +445,17 @@ export const setupStateMachine = setup({
 		Install_Updating: {
 			invoke: {
 				src: "installFirmware",
-				input: ({ context: { connection } }) => ({
-					connection: connection![1],
+				input: ({ context: { connection, targetFirmwareVersion } }) => ({
+					connection: connection![0],
 					// TODO: Ask for the firmware version
-					version: "0.0.0",
+					version: targetFirmwareVersion!,
 				}),
 				onDone: {
 					target: "Install_MigratingConfiguration",
 					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output,
+						firmwareVersion: ({ event: { output } }) => output[0],
+						connection: ({ context: { connection }, event: { output } }) =>
+							[connection![0], output[1]] as const,
 					}),
 				},
 				onError: {
@@ -542,13 +479,13 @@ export const setupStateMachine = setup({
 
 		Config_LoadingConfiguration: {
 			invoke: {
-				src: "loadConfiguration",
+				src: "loadDeviceInfo",
 				input: ({ context: { connection } }) => ({
 					connection: connection![1],
 				}),
 				onDone: {
 					actions: assign({
-						configuration: ({ event: { output } }) => output,
+						deviceInfo: ({ event: { output } }) => output,
 					}),
 				},
 				onError: {
@@ -562,33 +499,44 @@ export const setupStateMachine = setup({
 		Config_Editing: {
 			on: {
 				"config.changeField": {
-					actions: assign(({ event, context }) => ({
-						configuration: {
-							...context.configuration,
-							[event.field]: event.value,
+					actions: assign(({ event, context: { deviceInfo } }) => ({
+						deviceInfo: {
+							...deviceInfo,
+							config: {
+								...deviceInfo.config,
+								[event.field]: event.value,
+							},
 						},
 					})),
 				},
 				"config.clear": {
 					actions: assign({
-						configuration: ({ context: { configuration } }) => ({
-							firmwareVersion: configuration.firmwareVersion,
-							configVersion: configuration.configVersion,
-							appEUI: "",
-							appKey: "",
-							devEUI: "",
-						}),
+						deviceInfo: ({ context: { deviceInfo } }) => {
+							const applicableConfig = CONFIG_VERSIONS.find(
+								(v) => v.version === deviceInfo.configVersion
+							);
+							if (!applicableConfig) throw new Error("should never happen");
+
+							return {
+								...deviceInfo,
+								config: applicableConfig?.getDefaultValues(),
+							};
+						},
 					}),
 				},
 				"config.loadFromFile": {
 					actions: assign({
-						configuration: ({ event: { config } }) => config,
+						deviceInfo: ({ event: { config }, context: { deviceInfo } }) => ({
+							...deviceInfo,
+							config,
+						}),
 					}),
 				},
 				"config.saveToFile": {
-					actions: emit(({ context: { configuration: config } }) => ({
+					actions: emit(({ context: { deviceInfo } }) => ({
 						type: "config.saveToFile",
-						config,
+						configVersion: deviceInfo.configVersion,
+						config: deviceInfo.config,
 					})),
 				},
 				"config.next": {
@@ -599,8 +547,8 @@ export const setupStateMachine = setup({
 		Config_WritingConfiguration: {
 			invoke: {
 				src: "writeConfiguration",
-				input: ({ context: { connection, configuration } }) => ({
-					configuration,
+				input: ({ context: { connection, deviceInfo } }) => ({
+					configuration: deviceInfo.config,
 					connection: connection![1],
 				}),
 				onDone: "Finish_ShowingNextSteps",
@@ -626,7 +574,7 @@ export const setupStateMachine = setup({
 						connection: () => null,
 						firmwareVersion: () => null,
 						targetFirmwareVersion: () => null,
-						configuration: (ctx) => ctx.context.configuration,
+						deviceInfo: (ctx) => ctx.context.deviceInfo,
 					}),
 				},
 			},
