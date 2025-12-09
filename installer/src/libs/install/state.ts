@@ -1,6 +1,6 @@
 import { ConfigField } from "@/installer/types.ts";
 import { Config, CONFIG_VERSIONS, DeviceInfo } from "@/libs/install/config.ts";
-import { readField, SCPAdapter } from "@/libs/install/sdp.ts";
+import { readField, SCPAdapter } from "@/libs/install/scp";
 import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
