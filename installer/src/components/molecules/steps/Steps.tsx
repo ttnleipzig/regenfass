@@ -15,6 +15,7 @@ import {
 import {
 	TextFieldInput,
 	TextFieldLabel,
+	TextFieldRoot,
 } from "@/components/forms/TextField.tsx";
 import { setupStateMachine } from "@/libs/install/state.ts";
 import { createBrowserInspector } from "@statelyai/inspect";
