@@ -1,6 +1,6 @@
 import { Component, JSX, splitProps } from "solid-js";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/libs/cn";
+import { Button } from "@/components/atoms/Button.tsx";
+import { cn } from "@/libs/cn.ts";
 
 export type ActionButtonType = "primary" | "secondary";
 
@@ -14,7 +14,7 @@ export interface ActionButtonProps
   class?: string;
 }
 
-export const ActionButton: Component<ActionButtonProps> = (props) => {
+export const ButtonAction: Component<ActionButtonProps> = (props) => {
   const [local, rest] = splitProps(props, ["type", "nativeType", "loading", "class", "children", "disabled"]);
 
   const isPrimary = () => (local.type ?? "primary") === "primary";
@@ -55,5 +55,5 @@ export const ActionButton: Component<ActionButtonProps> = (props) => {
   );
 };
 
-export default ActionButton;
+export default ButtonAction;
 

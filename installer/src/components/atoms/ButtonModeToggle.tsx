@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/atoms/Button.tsx";
 import { IconMoon, IconSun } from "@tabler/icons-solidjs";
 import { useColorMode } from "@kobalte/core/color-mode";
 
-export function ModeToggle() {
+export function ButtonModeToggle() {
 	const { colorMode, setColorMode } = useColorMode();
 
 	const toggle = () => {

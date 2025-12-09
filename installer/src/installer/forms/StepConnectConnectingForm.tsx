@@ -1,8 +1,8 @@
 import { Component, createSignal } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { Select } from "@/components/forms/Select";
-import { ActionButton } from "@/components/forms/ActionButton";
-import { ErrorList } from "@/components/forms/ErrorList";
+import { ButtonAction } from "@/components/atoms/ButtonAction.tsx";
+import { ErrorList } from "@/components/molecules/ErrorList.tsx";
 import type { FormProps, DeviceType } from "../types";
 
 export interface StepConnectConnectingFormProps extends FormProps {
@@ -145,18 +145,18 @@ const StepConnectConnectingForm: Component<StepConnectConnectingFormProps> = (
 
 				<div class="flex justify-end space-x-3">
 					{props.error ? (
-						<ActionButton type="secondary" onClick={handleRetry}>
+						<ButtonAction type="secondary" onClick={handleRetry}>
 							Erneut versuchen
-						</ActionButton>
+						</ButtonAction>
 					) : (
-						<ActionButton
+						<ButtonAction
 							type="primary"
 							onClick={handleConnect}
 							loading={isConnecting()}
 							disabled={!selectedDevice() || isConnecting()}
 						>
 							{isConnecting() ? "Verbinde..." : "Verbinden"}
-						</ActionButton>
+						</ButtonAction>
 					)}
 				</div>
 			</div>

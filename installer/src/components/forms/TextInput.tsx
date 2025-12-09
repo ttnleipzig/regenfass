@@ -1,5 +1,5 @@
 import { Component, JSX, splitProps } from "solid-js";
-import { Input } from "@/components/ui/input";
+import { InputField } from "@/components/forms/InputField.tsx";
 import { FormField } from "./FormField";
 import { cn } from "@/libs/cn";
 
@@ -21,7 +21,7 @@ const TextInput: Component<TextInputProps> = (props) => {
       error={local.error}
       helperText={local.helperText}
     >
-      <Input
+      <InputField
         {...rest}
         class={cn("w-full", local.class)}
         error={local.error}

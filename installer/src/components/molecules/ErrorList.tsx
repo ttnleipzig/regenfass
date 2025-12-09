@@ -1,5 +1,5 @@
 import { Component, JSX } from "solid-js";
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 
 export interface ErrorListProps extends JSX.HTMLAttributes<HTMLDivElement> {
   errors?: string[];
@@ -11,9 +11,10 @@ const ErrorList: Component<ErrorListProps> = (props) => {
 
   if (errors.length === 0) return null;
 
-  return (
-    <div 
-      class={cn("rounded-md bg-red-50 border border-red-200 p-4", className)} 
+  // @ts-ignore
+	return (
+    <div
+      class={cn("rounded-md bg-red-50 border border-red-200 p-4", className)}
       role="alert"
       {...rest}
     >

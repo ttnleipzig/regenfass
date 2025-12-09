@@ -1,8 +1,8 @@
 import { Component, createSignal } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { Checkbox } from "@/components/forms/Checkbox";
-import { ActionButton } from "@/components/forms/ActionButton";
-import { ErrorList } from "@/components/forms/ErrorList";
+import { ButtonAction } from "@/components/atoms/ButtonAction.tsx";
+import { ErrorList } from "@/components/molecules/ErrorList.tsx";
 import type { FormProps } from "../types";
 
 export interface StepStartWaitingForUserFormProps extends FormProps {
@@ -15,7 +15,7 @@ const StepStartWaitingForUserForm: Component<StepStartWaitingForUserFormProps> =
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
-    
+
     if (!confirmStart()) {
       setErrors(["Bitte bestätigen Sie, dass Sie bereit sind, mit der Installation zu beginnen."]);
       return;
@@ -78,9 +78,9 @@ const StepStartWaitingForUserForm: Component<StepStartWaitingForUserFormProps> =
         />
 
         <div class="flex justify-end">
-          <ActionButton type="primary" type="submit" onClick={handleSubmit}>
+          <ButtonAction type="primary" type="submit" onClick={handleSubmit}>
             Installation starten
-          </ActionButton>
+          </ButtonAction>
         </div>
       </div>
     </FormLayout>

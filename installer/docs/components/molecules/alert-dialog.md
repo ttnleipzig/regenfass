@@ -1,4 +1,4 @@
-# Alert Dialog
+# AlertInline Dialog
 
 ```tsx
 import {

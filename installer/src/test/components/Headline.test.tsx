@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@solidjs/testing-library";
-import { Headline } from "@/components/ui/headline";
+import { Headline } from "@/components/atoms/Headline.tsx";
 import { IconAlertCircle } from "@tabler/icons-solidjs";
 
 describe("Headline", () => {

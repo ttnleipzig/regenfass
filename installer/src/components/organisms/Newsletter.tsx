@@ -1,8 +1,8 @@
-import { Headline } from "@/components/ui/headline";
+import { Headline } from "@/components/atoms/Headline.tsx";
 import {
 	TextFieldRoot,
 	TextFieldInput,
-} from "@/components/ui/textfield.tsx";
+} from "@/components/forms/TextField.tsx";
 
 export default function Newsletter() {
 	return (

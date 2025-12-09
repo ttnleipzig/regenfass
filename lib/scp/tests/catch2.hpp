@@ -8119,7 +8119,7 @@ namespace Catch {
                 sizeof( OriginalType ) == sizeof( UnsignedType ),
                 "reordering requires the same sized types on both sides" );
             static_assert( std::is_unsigned<UnsignedType>::value,
-                           "Input type must be unsigned" );
+                           "InputField type must be unsigned" );
             // Assuming 2s complement (standardized in current C++), the
             // positive and negative numbers are already internally ordered,
             // and their difference is in the top bit. Swapping it orders
@@ -8138,7 +8138,7 @@ namespace Catch {
             static_assert(
                 sizeof( OriginalType ) == sizeof( UnsignedType ),
                 "reordering requires the same sized types on both sides" );
-            static_assert( std::is_unsigned<UnsignedType>::value, "Input type must be unsigned" );
+            static_assert( std::is_unsigned<UnsignedType>::value, "InputField type must be unsigned" );
             // No reordering is needed for unsigned -> unsigned
             return in;
         }

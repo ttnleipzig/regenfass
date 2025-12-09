@@ -1,10 +1,10 @@
-import { 
-  Component, 
-  createSignal, 
-  createEffect, 
-  onMount, 
-  Show, 
-  For, 
+import {
+  Component,
+  createSignal,
+  createEffect,
+  onMount,
+  Show,
+  For,
   ErrorBoundary,
   createResource
 } from "solid-js";
@@ -14,46 +14,10 @@ import CodeViewer from "./components/CodeViewer";
 import PropsPanel from "./components/PropsPanel";
 import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry, PropInfo } from "./types";
 
-// Dynamic imports for all components
-const componentImports: Record<string, () => Promise<{ default: any }>> = {
-  // Atoms
-  'Confetti': () => import('../components/atoms/Confetti'),
-  'ConfettiSpinner': () => import('../components/atoms/ConfettiSpinner'),
-  'Link': () => import('../components/atoms/Link'),
-  
-  // Molecules
-  'Status': () => import('../components/molecules/Status').then(m => ({ default: m.default ?? m })),
-  'Flasher': () => import('../components/molecules/Flasher').then(m => ({ default: m.default ?? m })),
-  
-  // Organisms
-  'Header': () => import('../components/organisms/Header').then(m => ({ default: m.default ?? m })),
-  'Footer': () => import('../components/organisms/Footer').then(m => ({ default: m.default ?? m })),
-  'Welcome': () => import('../components/organisms/Welcome').then(m => ({ default: m.default ?? m })),
-  'Newsletter': () => import('../components/organisms/Newsletter').then(m => ({ default: m.default ?? m })),
-  
-  // UI
-  'Input': () => import('../components/ui/input').then(m => ({ default: m.Input })),
-  'Card': () => import('../components/ui/card').then(m => ({ default: (m as any).Card })),
-  'Button': () => import('../components/ui/button').then(m => ({ default: (m as any).Button })),
-  'Badge': () => import('../components/ui/badge').then(m => ({ default: (m as any).Badge })),
-  'Alert': () => import('../components/ui/alert').then(m => ({ default: (m as any).Alert })),
-  'Headline': () => import('../components/ui/headline').then(m => ({ default: (m as any).Headline })),
-  'Select': () => import('../components/ui/select').then(m => ({ default: (m as any).Select })),
-  'SelectTrigger': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectTrigger })),
-  'SelectContent': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectContent })),
-  'SelectItem': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectItem })),
-  'SelectValue': () => import('../components/ui/select').then(m => ({ default: (m as any).SelectValue })),
-  'TextField': () => import('../components/ui/textfield').then(m => ({ default: (m as any).TextFieldRoot })),
-  
-  // Forms
-  'Checkbox': () => import('../components/forms/Checkbox').then(m => ({ default: (m as any).Checkbox ?? m.default ?? m })),
-  'ErrorList': () => import('../components/forms/ErrorList').then(m => ({ default: (m as any).ErrorList ?? m.default ?? m })),
-  'FileUploader': () => import('../components/forms/FileUploader').then(m => ({ default: (m as any).FileUploader ?? m.default ?? m })),
-  'FormField': () => import('../components/forms/FormField').then(m => ({ default: (m as any).FormField ?? m.default ?? m })),
-  'FormLayout': () => import('../components/forms/FormLayout').then(m => ({ default: (m as any).FormLayout ?? m.default ?? m })),
-  'PrimaryButton': () => import('../components/forms/PrimaryButton').then(m => ({ default: (m as any).PrimaryButton ?? m.default ?? m })),
-  'SecondaryButton': () => import('../components/forms/SecondaryButton').then(m => ({ default: (m as any).SecondaryButton ?? m.default ?? m })),
-  'TextInput': () => import('../components/forms/TextInput').then(m => ({ default: (m as any).TextInput ?? m.default ?? m })),
+// Dynamic module map for any component under src/components
+const moduleLoaders: Record<string, () => Promise<any>> = {
+  ...import.meta.glob('../components/**/*.{ts,tsx}'),
+  ...import.meta.glob('@/components/**/*.{ts,tsx}')
 };
 
 const ComponentRenderer: Component = () => {
@@ -87,19 +51,19 @@ const ComponentRenderer: Component = () => {
     const reg = registry();
     const category = params.category;
     const componentName = params.component;
-    
+
     console.log('ComponentRenderer effect - registry:', !!reg, 'category:', category, 'component:', componentName);
-    
+
     if (reg && category && componentName) {
       const categoryComponents = reg[category as keyof PlaygroundRegistry];
       console.log('Category components:', categoryComponents?.length || 0);
       const foundComponent = categoryComponents?.find(c => c.name === componentName);
       console.log('Found component:', foundComponent?.name);
-      
+
       if (foundComponent) {
         setComponent(foundComponent);
         setSelectedExample(foundComponent.examples[0] || null);
-        
+
         // Initialize prop values with defaults
         const initialProps: Record<string, any> = {};
         foundComponent.props.forEach(prop => {
@@ -124,7 +88,7 @@ const ComponentRenderer: Component = () => {
   const generateCurrentCode = () => {
     const comp = component();
     if (!comp) return '';
-    
+
     const values = propValues();
     const childrenValue = (values as any)["children"];
     const propsString = Object.entries(values)
@@ -154,13 +118,34 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   };
 
   const [loadedComponent] = createResource(
-    () => component()?.name,
-    async (name) => {
-      if (!name) return null;
-      const loader = componentImports[name];
-      if (!loader) return null;
-      const mod = await loader();
-      return mod.default;
+    () => ({ importPath: component()?.importPath, name: component()?.name }),
+    async ({ importPath, name }) => {
+      if (!importPath || !name) return null;
+
+      const candidates = [
+        importPath,
+        `${importPath}.tsx`,
+        `${importPath}.ts`,
+      ];
+
+      for (const key of candidates) {
+        const loader = moduleLoaders[key];
+        if (loader) {
+          const mod = await loader();
+          return mod[name] ?? mod.default ?? null;
+        }
+      }
+
+      const relative = importPath.replace(/^@\//, '');
+      const match = Object.entries(moduleLoaders).find(([k]) =>
+        k.endsWith(`${relative}.tsx`) || k.endsWith(`${relative}.ts`)
+      );
+      if (match) {
+        const mod = await match[1]();
+        return mod[name] ?? mod.default ?? null;
+      }
+
+      return null;
     }
   );
 
@@ -331,7 +316,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                   props={((): PropInfo[] => {
                     const base = comp().props.slice();
                     // Add a slot text control for button-like components
-                    if (comp().name === 'PrimaryButton' || comp().name === 'SecondaryButton') {
+                    if (comp().name === 'ButtonPrimary' || comp().name === 'ButtonSecondary') {
                       if (!base.find(p => p.name === 'children')) {
                         base.push({
                           name: 'children',

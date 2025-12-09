@@ -41,7 +41,7 @@ class PlaygroundRegistryGenerator {
   constructor() {
     this.componentsRoot = path.resolve(process.cwd(), 'src/components');
     this.outputPath = path.resolve(process.cwd(), 'src/playground/registry.json');
-    
+
     this.project = new Project({
       tsConfigFilePath: path.resolve(process.cwd(), 'tsconfig.json'),
     });
@@ -61,13 +61,13 @@ class PlaygroundRegistryGenerator {
       if (typeNode && typeNode.getText().includes('Component')) {
         return true;
       }
-      
+
       const initializer = node.getInitializer();
       if (Node.isArrowFunction(initializer) && this.returnsJSX(initializer)) {
         return true;
       }
     }
-    
+
     if (Node.isFunctionDeclaration(node) && this.returnsJSX(node)) {
       return true;
     }
@@ -106,7 +106,7 @@ class PlaygroundRegistryGenerator {
 
     try {
       let propsParameter: Node | undefined;
-      
+
       if (Node.isFunctionDeclaration(node)) {
         propsParameter = node.getParameters()[0];
       } else if (Node.isVariableDeclaration(node)) {
@@ -122,13 +122,13 @@ class PlaygroundRegistryGenerator {
 
       const propsType = propsParameter.getType();
       const propsSymbol = propsType.getSymbol();
-      
+
       if (propsSymbol) {
         const declarations = propsSymbol.getDeclarations();
-        
+
         for (const declaration of declarations) {
           if (Node.isInterfaceDeclaration(declaration) || Node.isTypeLiteralNode(declaration)) {
-            const properties = Node.isInterfaceDeclaration(declaration) 
+            const properties = Node.isInterfaceDeclaration(declaration)
               ? declaration.getProperties()
               : declaration.getProperties();
 
@@ -159,10 +159,10 @@ class PlaygroundRegistryGenerator {
       const name = property.getName();
       const isOptional = property.hasQuestionToken();
       const required = !isOptional;
-      
+
       const typeNode = property.getTypeNode();
       const type = typeNode ? typeNode.getText() : property.getType().getText(property);
-      
+
       const cleanType = type
         .replace(/import\([^)]+\)\./g, '')
         .replace(/\s+/g, ' ')
@@ -205,7 +205,7 @@ class PlaygroundRegistryGenerator {
 
   private getControlType(type: string): PropInfo['controlType'] {
     const normalizedType = type.toLowerCase();
-    
+
     if (normalizedType.includes('boolean')) {
       return 'boolean';
     }
@@ -228,7 +228,7 @@ class PlaygroundRegistryGenerator {
         .split('|')
         .map(opt => opt.trim().replace(/['"]/g, ''))
         .filter(opt => opt !== 'undefined' && opt !== 'null');
-      
+
       if (options.length > 1 && options.every(opt => opt.match(/^[a-zA-Z0-9_-]+$/))) {
         return options;
       }
@@ -282,7 +282,7 @@ class PlaygroundRegistryGenerator {
     if (componentName.toLowerCase().includes('input')) {
       examples.push({
         name: 'With Error',
-        description: 'Input with validation error',
+        description: 'InputField with validation error',
         props: { ...defaultProps, error: 'This field is required' },
         code: this.generateCodeExample(componentName, { ...defaultProps, error: 'This field is required' }),
       });
@@ -314,17 +314,17 @@ class PlaygroundRegistryGenerator {
     const components: PlaygroundComponent[] = [];
     const filePath = sourceFile.getFilePath();
     const relativePath = path.relative(this.componentsRoot, filePath);
-    
+
     const pathSegments = relativePath.split(path.sep);
     const category = this.categorizeComponent(pathSegments[0]);
 
     const exportedDeclarations = sourceFile.getExportedDeclarations();
-    
+
     for (const [exportName, declarations] of exportedDeclarations) {
       for (const declaration of declarations) {
         if (this.isComponentDeclaration(declaration)) {
           const name = exportName === 'default' ? this.getDefaultExportName(relativePath) : exportName;
-          
+
           let description = '';
           try {
             if (Node.isFunctionDeclaration(declaration) || Node.isVariableDeclaration(declaration)) {
@@ -367,7 +367,7 @@ class PlaygroundRegistryGenerator {
     try {
       console.log('🔍 Discovering components for playground…');
       const componentFiles = await this.discoverComponents();
-      
+
       if (componentFiles.length === 0) {
         console.log('⚠️  No component files found');
         return;
@@ -375,7 +375,7 @@ class PlaygroundRegistryGenerator {
 
       console.log('📖 Analyzing components…');
       const allComponents: PlaygroundComponent[] = [];
-      
+
       for (const filePath of componentFiles) {
         const sourceFile = this.project.addSourceFileAtPath(filePath);
         const components = this.extractComponentInfo(sourceFile);
@@ -390,7 +390,7 @@ class PlaygroundRegistryGenerator {
       // Group by category
       const registry = {
         atoms: allComponents.filter(c => c.category === 'atoms'),
-        molecules: allComponents.filter(c => c.category === 'molecules'), 
+        molecules: allComponents.filter(c => c.category === 'molecules'),
         organisms: allComponents.filter(c => c.category === 'organisms'),
         ui: allComponents.filter(c => c.category === 'ui'),
         forms: allComponents.filter(c => c.category === 'forms'),
@@ -399,18 +399,18 @@ class PlaygroundRegistryGenerator {
 
       // Ensure output directory exists
       fs.mkdirSync(path.dirname(this.outputPath), { recursive: true });
-      
+
       // Write registry file
       fs.writeFileSync(this.outputPath, JSON.stringify(registry, null, 2), 'utf8');
-      
+
       // Also copy to public directory for development
       const publicPath = path.resolve(process.cwd(), 'public/registry.json');
       fs.writeFileSync(publicPath, JSON.stringify(registry, null, 2), 'utf8');
-      
+
       console.log(`✅ Playground registry generated: ${this.outputPath}`);
       console.log(`✅ Registry copied to public: ${publicPath}`);
       console.log(`📊 Found ${allComponents.length} components across ${Object.keys(registry).length} categories`);
-      
+
     } catch (error) {
       console.error('❌ Error generating playground registry:', error);
       process.exit(1);

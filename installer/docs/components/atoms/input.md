@@ -1,11 +1,11 @@
-# Input
+# InputField
 
 ```tsx
-import { Input } from '@/components/ui/input';
+import { InputField } from '@/components/ui/input';
 
-<Input label='Name' placeholder='Your name' />
-<Input label='Email' type='email' required helperText='We never share your email.' />
-<Input label='API Key' error='This field is required' />
+<InputField label='Name' placeholder='Your name' />
+<InputField label='Email' type='email' required helperText='We never share your email.' />
+<InputField label='API Key' error='This field is required' />
 ```
 
 ## Props

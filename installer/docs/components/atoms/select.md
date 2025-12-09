@@ -1,32 +1,32 @@
-# Select
+# SelectField
 
 Dropdown selection component built on Kobalte with multiple sub-components for flexible composition.
 
 ```tsx
-import { 
-  Select, 
-  SelectTrigger, 
-  SelectValue, 
-  SelectContent, 
-  SelectItem 
+import {
+  SelectField,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem
 } from '@/components/ui/select';
 
-<Select>
+<SelectField>
   <SelectTrigger>
-    <SelectValue placeholder="Select option..." />
+    <SelectValue placeholder="SelectField option..." />
   </SelectTrigger>
   <SelectContent>
     <SelectItem value="option1">Option 1</SelectItem>
     <SelectItem value="option2">Option 2</SelectItem>
     <SelectItem value="option3">Option 3</SelectItem>
   </SelectContent>
-</Select>
+</SelectField>
 ```
 
 ## Props
 
-### Select
-Root select component - inherits all Kobalte Select props.
+### SelectField
+Root select component - inherits all Kobalte SelectField props.
 
 | Name        | Type                    | Default | Description                           |
 |-------------|-------------------------|---------|---------------------------------------|
@@ -67,7 +67,7 @@ Displays the current selection - inherits all Kobalte SelectValue props.
 
 - `SelectDescription`: For helper text
 - `SelectErrorMessage`: For error states
-- `SelectItemDescription`: For item descriptions  
+- `SelectItemDescription`: For item descriptions
 - `SelectHiddenSelect`: Hidden native select for form integration
 - `SelectSection`: For grouping items
 

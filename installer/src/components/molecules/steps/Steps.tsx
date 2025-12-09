@@ -1,18 +1,17 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertInline, AlertDescription, AlertTitle } from "@/components/molecules/AlertInline.tsx";
 // Removed AlertDialog in favor of inline alert
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/atoms/Button.tsx";
 import {
-	Select,
+	SelectField,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui/select.tsx";
+} from "@/components/forms/SelectField.tsx";
 import {
 	TextFieldInput,
 	TextFieldLabel,
-	TextFieldRoot,
-} from "@/components/ui/textfield.tsx";
+} from "@/components/forms/TextField.tsx";
 import { setupStateMachine } from "@/libs/install/state.ts";
 import { createBrowserInspector } from "@statelyai/inspect";
 import { useMachine } from "@xstate/solid";
@@ -29,28 +28,28 @@ export default function Steps() {
 		<div class="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
 			<Switch fallback={<pre>{JSON.stringify(state.toJSON(), null, 2)}</pre>}>
 				<Match when={(state as any).matches("Start_CheckingWebSerialSupport")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Checking Web Serial support</AlertTitle>
 						<AlertDescription>
 							We are verifying that your browser supports the Web Serial API.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 				<Match when={(state as any).matches("Start_FetchUpstreamVersions")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Fetching versions</AlertTitle>
 						<AlertDescription>
 							Getting the latest available firmware versions.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 
 				<Match when={(state as any).matches("Start_WaitingForUser")}>
 					<div class="space-y-4">
-						<Alert>
+						<AlertInline>
 							<AlertTitle>Waiting for your confirmation</AlertTitle>
 							<AlertDescription>Please confirm to continue.</AlertDescription>
-						</Alert>
+						</AlertInline>
 						<div class="pt-1">
 							<Button onClick={() => emitEvent({ type: "start.next" })}>
 								Next
@@ -60,18 +59,18 @@ export default function Steps() {
 				</Match>
 
 				<Match when={(state as any).matches("Connect_Connecting")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Connecting</AlertTitle>
 						<AlertDescription>
 							Trying to connect to your device.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 				<Match when={(state as any).matches("Connect_ReadingVersion")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Reading firmware version</AlertTitle>
 						<AlertDescription>Gathering device information.</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 
 				<Match
@@ -80,12 +79,12 @@ export default function Steps() {
 					)}
 				>
 					<div class="space-y-4">
-						<Alert>
+						<AlertInline>
 							<AlertTitle>Choose installation method</AlertTitle>
 							<AlertDescription>
 								Install fresh or update existing firmware.
 							</AlertDescription>
-						</Alert>
+						</AlertInline>
 						<div class="flex gap-3">
 							<Button
 								disabled={!state.can({ type: "install.install" })}
@@ -101,10 +100,10 @@ export default function Steps() {
 							</Button>
 						</div>
 
-						<Select
+						<SelectField
 							value={state.context.targetFirmwareVersion}
 							options={["0.0.0", "0.0.1"]}
-							placeholder="Select a version"
+							placeholder="SelectField a version"
 							onChange={(version) =>
 								emitEvent({
 									type: "install.target_version_selected",
@@ -121,39 +120,39 @@ export default function Steps() {
 								</SelectValue>
 							</SelectTrigger>
 							<SelectContent />
-						</Select>
+						</SelectField>
 					</div>
 				</Match>
 
 				<Match when={(state as any).matches("Install_Installing")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Installing</AlertTitle>
 						<AlertDescription>
 							Flashing firmware to the device.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 
 				<Match when={(state as any).matches("Install_Updating")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Updating</AlertTitle>
 						<AlertDescription>Updating the existing firmware.</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 				<Match when={(state as any).matches("Install_MigratingConfiguration")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Migrating configuration</AlertTitle>
 						<AlertDescription>Keeping your settings safe.</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 
 				<Match when={(state as any).matches("Config_LoadingConfiguration")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Loading configuration</AlertTitle>
 						<AlertDescription>
 							Reading the current device settings.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 
 				<Match when={(state as any).matches("Config_Editing")}>
@@ -234,23 +233,23 @@ export default function Steps() {
 				</Match>
 
 				<Match when={(state as any).matches("Finish_ShowingNextSteps")}>
-					<Alert>
+					<AlertInline>
 						<AlertTitle>Next steps</AlertTitle>
 						<AlertDescription>
 							All set. You can now use your device.
 						</AlertDescription>
-					</Alert>
+					</AlertInline>
 				</Match>
 				<Match when={(state as any).matches("Finish_ShowingError")}>
 					<div class="space-y-3">
-						<Alert variant="destructive">
+						<AlertInline variant="destructive">
 							<AlertTitle>Critical error</AlertTitle>
 							<AlertDescription>
 								{(state.context.error as unknown as Error).toString()}
 								{(state.context.error as unknown as Error).stack}
 								{(state.context.error as unknown as Error).cause!}
 							</AlertDescription>
-						</Alert>
+						</AlertInline>
 						<div class="pt-1">
 							<Button onClick={() => emitEvent({ type: "restart" })}>
 								Restart

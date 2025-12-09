@@ -1,9 +1,7 @@
 import { Component, createSignal, onMount, Suspense } from "solid-js";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { useRouteData } from "@solidjs/router";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import Sidebar from "./components/Sidebar";
-import type { PlaygroundRegistry } from "./types";
+import type { PlaygroundRegistry, PlaygroundComponent, ComponentExample } from "./types";
 
 interface PlaygroundLayoutProps {
   registry?: PlaygroundRegistry;
@@ -18,17 +16,108 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
 
   onMount(async () => {
     try {
+      let baseRegistry: PlaygroundRegistry | null = null;
       if (props.registry) {
-        setRegistry(props.registry);
+        baseRegistry = props.registry;
       } else {
-        // Load registry from JSON file
-        const response = await fetch('/registry.json');
-        if (!response.ok) {
-          throw new Error(`Failed to load component registry: ${response.statusText}`);
+        try {
+          const response = await fetch('/registry.json');
+          if (!response.ok) throw new Error('not-ok');
+          baseRegistry = await response.json();
+        } catch {
+          baseRegistry = null;
         }
-        const data = await response.json();
-        setRegistry(data);
       }
+
+      // Build a runtime registry from actual source files so Sidebar is always up-to-date
+      const buildRuntimeRegistry = (): PlaygroundRegistry => {
+        const loaders = {
+          ...import.meta.glob('@/components/**/*.{ts,tsx}'),
+          ...import.meta.glob('../components/**/*.{ts,tsx}')
+        };
+
+        const categories = ['atoms', 'molecules', 'organisms', 'ui', 'forms'] as const;
+        const result: PlaygroundRegistry = {
+          atoms: [],
+          molecules: [],
+          organisms: [],
+          ui: [],
+          forms: [],
+          uncategorized: [],
+        };
+
+        const seen = new Set<string>();
+
+        Object.keys(loaders).forEach((key) => {
+          // Compute relative path under components/
+          let rel = key
+            .replace(/^.*\/src\/components\//, '')
+            .replace(/^\.\.\/components\//, '');
+
+          if (!rel || rel.endsWith('.d.ts')) return;
+
+          const withoutExt = rel.replace(/\.(tsx|ts)$/i, '');
+          const segments = withoutExt.split('/');
+          const first = segments[0];
+          const category = (categories as readonly string[]).includes(first) ? first : 'uncategorized';
+          const fileBase = segments[segments.length - 1];
+
+          // Derive component name from filename
+          const name = fileBase.charAt(0).toUpperCase() + fileBase.slice(1);
+          const importPath = `@/components/${withoutExt}`;
+
+          const keyId = `${category}:${name}`;
+          if (seen.has(keyId)) return;
+          seen.add(keyId);
+
+          const examples: ComponentExample[] = [
+            {
+              name: 'Default',
+              description: 'Default component appearance',
+              props: {},
+              code: `<${name} />`,
+            },
+          ];
+
+          const entry: PlaygroundComponent = {
+            name,
+            filePath: '',
+            relativePath: rel,
+            category,
+            description: '',
+            props: [],
+            examples,
+            importPath,
+          };
+
+          (result as any)[category].push(entry);
+        });
+
+        return result;
+      };
+
+      const runtimeRegistry = buildRuntimeRegistry();
+
+      // Merge base registry (from file) with runtime entries, preferring base metadata when present
+      const merged: PlaygroundRegistry = {
+        atoms: [], molecules: [], organisms: [], ui: [], forms: [], uncategorized: []
+      } as PlaygroundRegistry;
+
+      const mergeCategory = (cat: keyof PlaygroundRegistry) => {
+        const base = baseRegistry?.[cat] ?? [];
+        const fromRuntime = runtimeRegistry[cat];
+        const byName = new Map<string, PlaygroundComponent>();
+        base.forEach(c => byName.set(c.name, c));
+        fromRuntime.forEach(c => {
+          if (!byName.has(c.name)) byName.set(c.name, c);
+        });
+        (merged as any)[cat] = Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
+      };
+
+      (['atoms','molecules','organisms','ui','forms','uncategorized'] as (keyof PlaygroundRegistry)[])
+        .forEach(mergeCategory);
+
+      setRegistry(merged);
     } catch (err) {
       console.error('Error loading registry:', err);
       setError(err instanceof Error ? err.message : 'Failed to load components');
@@ -94,11 +183,9 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                       </svg>
                     </button>
-                    <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
-                      Component Playground
-                    </h1>
+
                     <div class="flex items-center gap-2">
-                      <ModeToggle />
+                      <button class="px-2 py-1 text-sm border rounded">Theme</button>
                     </div>
                   </div>
                 </header>
@@ -106,7 +193,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                 <header class="hidden lg:flex items-center justify-between bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
                   <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Component Playground</h1>
                   <div class="flex items-center gap-2">
-                    <ModeToggle />
+                    <button class="px-2 py-1 text-sm border rounded">Theme</button>
                   </div>
                 </header>
 

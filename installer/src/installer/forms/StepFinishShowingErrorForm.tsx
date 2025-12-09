@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
-import { ActionButton } from "@/components/forms/ActionButton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { ButtonAction } from "@/components/atoms/ButtonAction.tsx";
+import { AlertInline, AlertDescription, AlertTitle } from "@/components/molecules/AlertInline.tsx";
+import { Button } from "@/components/atoms/Button.tsx";
 import type { FormProps } from "../types";
 
 export interface StepFinishShowingErrorFormProps extends FormProps {
@@ -12,17 +12,17 @@ export interface StepFinishShowingErrorFormProps extends FormProps {
 const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (props) => {
   const getErrorMessage = (): string => {
     if (!props.error) return "Ein unbekannter Fehler ist aufgetreten.";
-    
+
     if (typeof props.error === "string") {
       return props.error;
     }
-    
+
     return props.error.message || "Ein Fehler ist aufgetreten.";
   };
 
   const getErrorType = (): string => {
     if (!props.error) return "Unbekannter Fehler";
-    
+
     if (typeof props.error === "string") {
       if (props.error.includes("Web Serial")) return "Browser-Kompatibilität";
       if (props.error.includes("Connection")) return "Verbindungsfehler";
@@ -30,7 +30,7 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
       if (props.error.includes("Configuration")) return "Konfigurationsfehler";
       return "Allgemeiner Fehler";
     }
-    
+
     return props.error.name || "Fehler";
   };
 
@@ -90,14 +90,14 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
       subtitle="Bei der Installation ist ein Fehler aufgetreten. Bitte überprüfen Sie die Details und versuchen Sie es erneut."
     >
       <div class="space-y-6">
-        <Alert variant="destructive">
+        <AlertInline variant="destructive">
           <AlertTitle>{getErrorType()}</AlertTitle>
           <AlertDescription>
             <p>{getErrorMessage()}</p>
           </AlertDescription>
-        </Alert>
+        </AlertInline>
 
-        <Alert variant="info">
+        <AlertInline variant="info">
           <AlertTitle>Mögliche Lösungen</AlertTitle>
           <AlertDescription>
             <div class="space-y-2 mt-2">
@@ -115,10 +115,10 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
               ))}
             </div>
           </AlertDescription>
-        </Alert>
+        </AlertInline>
 
         {props.error && typeof props.error === "object" && props.error.stack && (
-          <Alert>
+          <AlertInline>
             <AlertTitle>Technische Details</AlertTitle>
             <AlertDescription>
               <details>
@@ -130,16 +130,16 @@ const StepFinishShowingErrorForm: Component<StepFinishShowingErrorFormProps> = (
                 </pre>
               </details>
             </AlertDescription>
-          </Alert>
+          </AlertInline>
         )}
 
         <div class="flex justify-center space-x-4">
-          <ActionButton type="secondary" onClick={handleRestart}>
+          <ButtonAction type="secondary" onClick={handleRestart}>
             Installation neu starten
-          </ActionButton>
-          <ActionButton type="primary" onClick={handleRetry}>
+          </ButtonAction>
+          <ButtonAction type="primary" onClick={handleRetry}>
             Erneut versuchen
-          </ActionButton>
+          </ButtonAction>
         </div>
 
         <div class="text-center">

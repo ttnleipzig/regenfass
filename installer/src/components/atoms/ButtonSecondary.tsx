@@ -1,13 +1,13 @@
 import { Component, JSX, splitProps } from "solid-js";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/libs/cn";
+import { Button } from "@/components/atoms/Button.tsx";
+import { cn } from "@/libs/cn.ts";
 
 export interface SecondaryButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   class?: string;
 }
 
-const SecondaryButton: Component<SecondaryButtonProps> = (props) => {
+const ButtonSecondary: Component<SecondaryButtonProps> = (props) => {
   const [local, rest] = splitProps(props, ["loading", "class", "children", "disabled"]);
 
   return (
@@ -28,4 +28,4 @@ const SecondaryButton: Component<SecondaryButtonProps> = (props) => {
   );
 };
 
-export { SecondaryButton };
+export { ButtonSecondary };

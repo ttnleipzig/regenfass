@@ -1,11 +1,11 @@
-import Status from "@/components/molecules/Status";
+import Status from "@/components/atoms/Status.tsx";
 import {
-	Select,
+	SelectField,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui/select";
+} from "@/components/forms/SelectField.tsx";
 import { SelectBaseItemComponentProps } from "@kobalte/core/src/select/select-base.jsx";
 import { SelectValueState } from "@kobalte/core/src/select/select-value.jsx";
 import { For } from "solid-js";
@@ -50,7 +50,7 @@ function Connect() {
 				<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❶</span> <span>Connect
 						your
 						microcontroller with an USB cable to your computer.</span></li>
-				<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❷</span> <span>Select
+				<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❷</span> <span>SelectField
 						the
 						microcontroller type from the drop down.</span></li>
 				<li class="flex items-center gap-3"><span class="text-4xl text-sky-500">❸</span> <span>Click the
@@ -60,7 +60,7 @@ function Connect() {
 			  {(item) => <Status title={item.title} />}
 			</For>
 
-			<Select
+			<SelectField
 				class="mx-auto"
 				options={[
 					// ["heltec-lora32", "Heltec LoRa32"],
@@ -68,7 +68,7 @@ function Connect() {
 					"Heltec LoRa32",
 					"Generic ESP32",
 				]}
-				placeholder="Select a board..."
+				placeholder="SelectField a board..."
 				itemComponent={(
 					props: SelectBaseItemComponentProps<[string, string]>
 				) => (
@@ -90,7 +90,7 @@ function Connect() {
 				</SelectTrigger>
 
 				<SelectContent />
-			</Select>
+			</SelectField>
 		</div>
 	);
 }

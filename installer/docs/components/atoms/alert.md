@@ -1,22 +1,22 @@
-# Alert
+# AlertInline
 
 ```tsx
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertInline, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
-<Alert variant='info'>
+<AlertInline variant='info'>
   <AlertTitle>Heads up</AlertTitle>
   <AlertDescription>Useful information for the user.</AlertDescription>
-</Alert>
+</AlertInline>
 
-<Alert variant='warning'>
+<AlertInline variant='warning'>
   <AlertTitle>Warning</AlertTitle>
   <AlertDescription>Please check your input.</AlertDescription>
-</Alert>
+</AlertInline>
 
-<Alert variant='destructive'>
+<AlertInline variant='destructive'>
   <AlertTitle>Error</AlertTitle>
   <AlertDescription>Something went wrong.</AlertDescription>
-</Alert>
+</AlertInline>
 ```
 
 ## Props
@@ -30,7 +30,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 ## Design notes
 
-- Built on Kobalte Alert primitive for accessibility compliance
+- Built on Kobalte AlertInline primitive for accessibility compliance
 - Each variant has semantic colors with appropriate background and border styling
 - Icons automatically match the variant (info: circle, warning: triangle, error: X)
 - Uses backdrop blur effect with semi-transparent backgrounds for modern appearance

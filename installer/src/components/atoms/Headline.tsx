@@ -1,4 +1,4 @@
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 import { JSX, Show, splitProps } from "solid-js";
 
 type HeadlineProps = {

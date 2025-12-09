@@ -1,6 +1,6 @@
 import { Component, JSX, splitProps, createSignal } from "solid-js";
 import { FormField } from "./FormField";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/atoms/Button.tsx";
 import { cn } from "@/libs/cn";
 
 export interface FileUploaderProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'class'> {
@@ -62,7 +62,7 @@ const FileUploader: Component<FileUploaderProps> = (props) => {
             </Button>
           )}
         </div>
-        
+
         {selectedFiles() && (
           <div class="space-y-2">
             <p class="text-sm font-medium text-gray-700 dark:text-gray-300">

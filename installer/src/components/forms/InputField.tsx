@@ -1,13 +1,13 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 import {
   TextFieldRoot,
   TextFieldInput,
   TextFieldLabel,
   TextFieldDescription,
   TextFieldErrorMessage,
-} from "@/components/ui/textfield.tsx";
+} from "@/components/forms/TextField.tsx";
 
 export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -16,7 +16,7 @@ export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
   class?: string;
 }
 
-const Input: Component<InputProps> = (props) => {
+const InputField: Component<InputProps> = (props) => {
   const [local, rest] = splitProps(props, ["class", "error", "label", "helperText", "id"]);
 
   const inputId = () => local.id || `input-${Math.random().toString(36).substr(2, 9)}`;
@@ -54,4 +54,4 @@ const Input: Component<InputProps> = (props) => {
   );
 };
 
-export { Input };
+export { InputField };

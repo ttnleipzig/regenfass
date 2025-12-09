@@ -1,20 +1,20 @@
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import type {
   TextFieldDescriptionProps,
   TextFieldErrorMessageProps,
   TextFieldInputProps,
   TextFieldLabelProps,
-  TextFieldProps,
+	TextFieldRootProps,
 } from "@kobalte/core/text-field";
 import { TextField as TextFieldPrimitive } from "@kobalte/core/text-field";
 import type { ParentProps, ValidComponent } from "solid-js";
-import { Show, splitProps } from "solid-js";
+import {  splitProps } from "solid-js";
 
 export const TextField = TextFieldPrimitive;
 
 type textFieldRootProps<T extends ValidComponent = "div"> = ParentProps<
-  TextFieldProps<T> & { class?: string; required?: boolean }
+  TextFieldRootProps<T> & { class?: string; required?: boolean }
 >;
 
 export const TextFieldRoot = <T extends ValidComponent = "div">(

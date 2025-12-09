@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
-import { ActionButton } from "@/components/forms/ActionButton";
+import { ButtonAction } from "@/components/atoms/ButtonAction.tsx";
 import type { FormProps } from "../types";
 
 export interface StepFinishShowingNextStepsFormProps extends FormProps {
@@ -59,7 +59,7 @@ const StepFinishShowingNextStepsForm: Component<StepFinishShowingNextStepsFormPr
                 </p>
               </div>
             </div>
-            
+
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-blue-600 text-xs font-medium">
@@ -72,7 +72,7 @@ const StepFinishShowingNextStepsForm: Component<StepFinishShowingNextStepsFormPr
                 </p>
               </div>
             </div>
-            
+
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-blue-600 text-xs font-medium">
@@ -131,12 +131,12 @@ const StepFinishShowingNextStepsForm: Component<StepFinishShowingNextStepsFormPr
         </div>
 
         <div class="flex justify-center space-x-4">
-          <ActionButton type="secondary" onClick={handleRestart}>
+          <ButtonAction type="secondary" onClick={handleRestart}>
             Neue Installation
-          </ActionButton>
-          <ActionButton type="primary" onClick={handleCloudSetup}>
+          </ButtonAction>
+          <ButtonAction type="primary" onClick={handleCloudSetup}>
             Cloud-Setup starten
-          </ActionButton>
+          </ButtonAction>
         </div>
       </div>
     </FormLayout>

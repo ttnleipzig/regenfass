@@ -1,4 +1,4 @@
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 import type { ComponentProps, ParentComponent } from "solid-js";
 import { splitProps } from "solid-js";
 

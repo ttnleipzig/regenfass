@@ -1,4 +1,4 @@
-import { cn } from "@/libs/cn";
+import { cn } from "@/libs/cn.ts";
 import type { AlertRootProps } from "@kobalte/core/alert";
 import { Alert as AlertPrimitive } from "@kobalte/core/alert";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
@@ -34,7 +34,7 @@ type alertProps<T extends ValidComponent = "div"> = ParentProps<AlertRootProps<T
 		showIcon?: boolean;
 	};
 
-export const Alert = <T extends ValidComponent = "div">(
+export const AlertInline = <T extends ValidComponent = "div">(
 	props: PolymorphicProps<T, alertProps<T>>,
 ) => {
 	const [local, rest] = splitProps(props as Required<Pick<alertProps, "class" | "variant" | "showIcon">> & { children: any }, ["class", "variant", "showIcon", "children"]);

@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import { A } from "@solidjs/router";
-import { ModeToggle } from "../ui/mode-toggle";
+import { ButtonModeToggle } from "../atoms/ButtonModeToggle.tsx";
 
 const Header: Component = () => {
   return (
@@ -9,7 +9,7 @@ const Header: Component = () => {
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
           Regenfass
         </h1>
-        
+
         <nav class="hidden md:block">
           <ul class="flex font-medium text-gray-800 gap-x-3 dark:text-gray-400">
             <li>
@@ -35,7 +35,7 @@ const Header: Component = () => {
           </ul>
         </nav>
 
-        <ModeToggle />
+        <ButtonModeToggle />
       </div>
     </header>
   );

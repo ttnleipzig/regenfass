@@ -1,13 +1,13 @@
-# SecondaryButton
+# ButtonSecondary
 
 Secondary action button with loading state support.
 
 ```tsx
-import { SecondaryButton } from '@/components/forms/SecondaryButton';
+import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
 
-<SecondaryButton>Cancel</SecondaryButton>
-<SecondaryButton loading={true}>Loading...</SecondaryButton>
-<SecondaryButton disabled={true}>Disabled</SecondaryButton>
+<ButtonSecondary>Cancel</ButtonSecondary>
+<ButtonSecondary loading={true}>Loading...</ButtonSecondary>
+<ButtonSecondary disabled={true}>Disabled</ButtonSecondary>
 ```
 
 ## Props

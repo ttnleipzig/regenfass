@@ -10,29 +10,29 @@ This directory documents UI components following Atomic Design (Atoms → Molecu
 
 ### Atoms
 
-- [Alert](atoms/alert.md)
+- [AlertInline](atoms/alert.md)
 - [Badge](atoms/badge.md)
 - [Button](atoms/button.md)
 - [Card](atoms/card.md)
 - [Headline](atoms/headline.md)
-- [Input](atoms/input.md)
+- [InputField](atoms/input.md)
 - [Link](atoms/link.md)
-- [Select](atoms/select.md)
+- [SelectField](atoms/select.md)
 - [Confetti](atoms/confetti.md)
 - [ConfettiSpinner](atoms/confetti-spinner.md)
 
 ### Molecules
 
-- [Alert Dialog](molecules/alert-dialog.md)
+- [AlertInline Dialog](molecules/alert-dialog.md)
 - [Checkbox](molecules/checkbox.md)
 - [ErrorList](molecules/error-list.md)
 - [FileUploader](molecules/file-uploader.md)
 - [FormField](molecules/form-field.md)
 - [FormLayout](molecules/form-layout.md)
-- [PrimaryButton](molecules/primary-button.md)
-- [SecondaryButton](molecules/secondary-button.md)
+- [ButtonPrimary](molecules/primary-button.md)
+- [ButtonSecondary](molecules/secondary-button.md)
 - [TextInput](molecules/text-input.md)
-- [ModeToggle](molecules/mode-toggle.md)
+- [ButtonModeToggle](molecules/mode-toggle.md)
 
 ### Organisms
 

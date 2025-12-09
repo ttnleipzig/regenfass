@@ -17,15 +17,15 @@ This document contains automatically generated documentation for all components 
 - [Ui](#ui)
   - [CardTitle](#cardtitle)
   - [CardDescription](#carddescription)
-  - [Input](#input)
+  - [InputField](#input)
 - [Forms](#forms)
   - [Checkbox](#checkbox)
   - [ErrorList](#errorlist)
   - [FileUploader](#fileuploader)
   - [FormField](#formfield)
   - [FormLayout](#formlayout)
-  - [PrimaryButton](#primarybutton)
-  - [SecondaryButton](#secondarybutton)
+  - [ButtonPrimary](#primarybutton)
+  - [ButtonSecondary](#secondarybutton)
   - [TextInput](#textinput)
 
 ## Atoms
@@ -122,7 +122,7 @@ import { Header } from '@/components/organisms/Header';
 
 ### CardDescription
 
-**Path**: `ui/card.tsx`
+**Path**: `ui/Card.tsx`
 
 **Dependencies:**
 
@@ -139,7 +139,7 @@ import { CardDescription } from '@/components/ui/card';
 
 ### CardTitle
 
-**Path**: `ui/card.tsx`
+**Path**: `ui/Card.tsx`
 
 **Dependencies:**
 
@@ -154,9 +154,9 @@ import { CardDescription } from '@/components/ui/card';
 import { CardTitle } from '@/components/ui/card';
 ```
 
-### Input
+### InputField
 
-**Path**: `ui/input.tsx`
+**Path**: `ui/InputField.tsx`
 
 **Dependencies:**
 
@@ -169,7 +169,7 @@ import { CardTitle } from '@/components/ui/card';
 **Import:**
 
 ```typescript
-import { Input } from '@/components/ui/input';
+import { InputField } from '@/components/ui/input';
 ```
 
 ## Forms
@@ -269,9 +269,9 @@ import { FormField } from '@/components/forms/FormField';
 import { FormLayout } from '@/components/forms/FormLayout';
 ```
 
-### PrimaryButton
+### ButtonPrimary
 
-**Path**: `forms/PrimaryButton.tsx`
+**Path**: `forms/ButtonPrimary.tsx`
 
 **Dependencies:**
 
@@ -284,12 +284,12 @@ import { FormLayout } from '@/components/forms/FormLayout';
 **Import:**
 
 ```typescript
-import { PrimaryButton } from '@/components/forms/PrimaryButton';
+import { ButtonPrimary } from '@/components/forms/ButtonPrimary';
 ```
 
-### SecondaryButton
+### ButtonSecondary
 
-**Path**: `forms/SecondaryButton.tsx`
+**Path**: `forms/ButtonSecondary.tsx`
 
 **Dependencies:**
 
@@ -302,7 +302,7 @@ import { PrimaryButton } from '@/components/forms/PrimaryButton';
 **Import:**
 
 ```typescript
-import { SecondaryButton } from '@/components/forms/SecondaryButton';
+import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
 ```
 
 ### TextInput

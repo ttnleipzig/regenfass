@@ -2,8 +2,8 @@ import { Component, createSignal, createEffect } from "solid-js";
 import { FormLayout } from "@/components/forms/FormLayout";
 import { TextInput } from "@/components/forms/TextInput";
 import { FileUploader } from "@/components/forms/FileUploader";
-import { ActionButton } from "@/components/forms/ActionButton";
-import { ErrorList } from "@/components/forms/ErrorList";
+import { ButtonAction } from "@/components/atoms/ButtonAction.tsx";
+import { ErrorList } from "@/components/molecules/ErrorList.tsx";
 import type { FormProps, Config, ConfigField } from "../types";
 
 export interface StepConfigEditingFormProps extends FormProps {
@@ -59,7 +59,7 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
 
   const handleFieldChange = (field: ConfigField, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     const error = validateField(field, value);
     setErrors(prev => ({
       ...prev,
@@ -88,7 +88,7 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
 
     const file = files[0];
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       try {
         const config = JSON.parse(e.target?.result as string);
@@ -99,7 +99,7 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
         setErrors({ general: "Ungültige Konfigurationsdatei. Bitte wählen Sie eine gültige JSON-Datei aus." });
       }
     };
-    
+
     reader.readAsText(file);
   };
 
@@ -109,7 +109,7 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
 
   const handleSubmit = () => {
     const newErrors: Record<string, string> = {};
-    
+
     // Validate all required fields
     ["appEUI", "appKey", "devEUI"].forEach(field => {
       const error = validateField(field as ConfigField, formData()[field as ConfigField] || "");
@@ -209,7 +209,7 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
 
         <div class="space-y-4">
           <h4 class="text-sm font-medium text-gray-900">Konfiguration importieren/exportieren</h4>
-          
+
           <div class="flex flex-wrap gap-3">
             <FileUploader
               label="Konfiguration importieren"
@@ -217,17 +217,17 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
               onFileSelect={handleLoadFromFile}
               helperText="Wählen Sie eine JSON-Konfigurationsdatei aus"
             />
-            
+
             <div class="flex items-end">
-              <ActionButton type="secondary" onClick={handleSaveToFile}>
+              <ButtonAction type="secondary" onClick={handleSaveToFile}>
                 Konfiguration exportieren
-              </ActionButton>
+              </ButtonAction>
             </div>
-            
+
             <div class="flex items-end">
-              <ActionButton type="secondary" onClick={handleClear}>
+              <ButtonAction type="secondary" onClick={handleClear}>
                 Konfiguration löschen
-              </ActionButton>
+              </ButtonAction>
             </div>
           </div>
         </div>
@@ -237,17 +237,17 @@ const StepConfigEditingForm: Component<StepConfigEditingFormProps> = (props) => 
         )}
 
         <div class="flex justify-end space-x-3">
-          <ActionButton type="secondary" onClick={props.onBack}>
+          <ButtonAction type="secondary" onClick={props.onBack}>
             Zurück
-          </ActionButton>
-          <ActionButton
+          </ButtonAction>
+          <ButtonAction
             type="primary"
             onClick={handleSubmit}
             loading={isSubmitting()}
             disabled={hasErrors() || isSubmitting()}
           >
             {isSubmitting() ? "Speichere..." : "Konfiguration speichern"}
-          </ActionButton>
+          </ButtonAction>
         </div>
       </div>
     </FormLayout>

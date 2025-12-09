@@ -44,7 +44,7 @@ const PropsPanel: Component<PropsPanelProps> = (props) => {
     const hasClassProp = props.props.find((p) => p.name === 'class');
     if (hasClassProp) {
       const existing = props.values['class'] || '';
-      const extra = ' text-blue-600 font-semibold';
+      const extra = ' font-semibold';
       const merged = (existing + extra)
         .split(/\s+/)
         .filter(Boolean)

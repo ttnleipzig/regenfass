@@ -1,6 +1,6 @@
 import { Component, JSX, splitProps } from "solid-js";
 import { cn } from "@/libs/cn";
-import { Headline } from "@/components/ui/headline";
+import { Headline } from "@/components/atoms/Headline.tsx";
 
 export interface FormLayoutProps extends JSX.FormHTMLAttributes<HTMLFormElement> {
   title?: string;
@@ -12,8 +12,8 @@ const FormLayout: Component<FormLayoutProps> = (props) => {
   const [local, rest] = splitProps(props, ["class", "title", "subtitle", "actions", "children"]);
 
   return (
-    <form 
-      class={cn("space-y-6", local.class)} 
+    <form
+      class={cn("space-y-6", local.class)}
       {...rest}
     >
       {(local.title || local.subtitle) && (
@@ -26,7 +26,7 @@ const FormLayout: Component<FormLayoutProps> = (props) => {
           )}
         </div>
       )}
-      
+
       <div class="space-y-4">
         {local.children}
       </div>

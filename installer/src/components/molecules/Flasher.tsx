@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/atoms/Button.tsx";
 import { ESPLoader, FlashOptions, LoaderOptions, Transport } from "esptool-js";
 import { createSignal, Show } from "solid-js";
 

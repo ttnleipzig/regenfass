@@ -5,16 +5,16 @@ File upload component with custom button styling and file list display.
 ```tsx
 import { FileUploader } from '@/components/forms/FileUploader';
 
-<FileUploader 
-  label='Konfiguration importieren' 
+<FileUploader
+  label='Konfiguration importieren'
   accept='.json'
-  onFileSelect={(files) => console.log(files)} 
+  onFileSelect={(files) => console.log(files)}
 />
-<FileUploader 
-  label='Upload images' 
+<FileUploader
+  label='Upload images'
   accept='image/*'
   multiple={true}
-  helperText='Select one or more image files'
+  helperText='SelectField one or more image files'
 />
 ```
 
@@ -36,7 +36,7 @@ import { FileUploader } from '@/components/forms/FileUploader';
 
 - Built on FormField component for consistent form styling
 - Uses hidden native file input with custom button interface
-- "Datei auswählen" (Select File) button with outline variant styling
+- "Datei auswählen" (SelectField File) button with outline variant styling
 - Shows selected files with names and sizes in KB
 - Includes "Löschen" (Clear) button when files are selected
 - File size automatically calculated and displayed with 1 decimal precision
