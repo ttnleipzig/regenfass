@@ -31,9 +31,7 @@ const hardReset = async (transport: Transport) => {
 	await new Promise((resolve) => setTimeout(resolve, 1000));
 };
 
-const loadConfiguration = async (
-	connection: SCPAdapter
-): Promise<DeviceInfo> => {
+const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 	const firmwareVersion = await readField(connection, "version");
 	console.log("Firmware version:", firmwareVersion);
 	const configVersion = +(await readField(connection, "configVersion"));
@@ -77,9 +75,8 @@ const writeConfiguration = async (
 const migrateConfiguration = async (
 	connection: SCPAdapter,
 	desiredVersion: number
-): Promise<Config> => {
-	let info = await loadConfiguration(connection);
-	if (info.configVersion === desiredVersion) return info.config;
+): Promise<DeviceInfo> => {
+	let info = await loadDeviceInfo(connection);
 
 	while (info.configVersion < desiredVersion) {
 		const nextVersion = info.configVersion + 1;
@@ -94,9 +91,10 @@ const migrateConfiguration = async (
 		}
 
 		info.config = nextConfigVersion.upgrade(info.config) as Config;
+		info.configVersion = nextConfigVersion.version;
 	}
 
-	return info.config;
+	return info;
 };
 
 export const setupStateMachine = setup({
@@ -113,7 +111,7 @@ export const setupStateMachine = setup({
 		events: {} as
 			| { type: "start.next" }
 			| { type: "install.install" }
-			| { type: "install.update" }
+			| { type: "install.configure" }
 			| { type: "install.target_version_selected"; version: string | null }
 			| {
 					type: "config.changeField";
@@ -152,8 +150,13 @@ export const setupStateMachine = setup({
 
 			return [port, SCPAdapter.forSerialPort(port)] as const;
 		}),
-		readVersion: fromPromise<string, { connection: SCPAdapter }>(
-			({ input: { connection } }) => readField(connection, "version")
+		readVersion: fromPromise<[string, string], { connection: SCPAdapter }>(
+			async ({ input: { connection } }) => {
+				const firmwareVersion = await readField(connection, "version");
+				const configVersion = await readField(connection, "configVersion");
+
+				return [firmwareVersion, configVersion] as const;
+			}
 		),
 		installFirmware: fromPromise<
 			[string, SCPAdapter],
@@ -203,7 +206,6 @@ export const setupStateMachine = setup({
 			try {
 				const chip = await esploader.main();
 				console.log(chip);
-				const flashSize = await esploader.getFlashSize();
 
 				const bootloaderBin = await zip
 					.file("bootloader.bin")!
@@ -282,10 +284,10 @@ export const setupStateMachine = setup({
 			return [version, SCPAdapter.forSerialPort(port)] as const;
 		}),
 		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
-			({ input: { connection } }) => loadConfiguration(connection)
+			({ input: { connection } }) => loadDeviceInfo(connection)
 		),
 		migrateConfiguration: fromPromise<
-			Config,
+			DeviceInfo,
 			{ connection: SCPAdapter; desiredVersion: number }
 		>(({ input: { connection, desiredVersion } }) =>
 			migrateConfiguration(connection, desiredVersion)
@@ -387,14 +389,15 @@ export const setupStateMachine = setup({
 		},
 		Connect_ReadingVersion: {
 			invoke: {
-				src: "readVersion",
+				src: "loadDeviceInfo",
 				input: ({ context: { connection } }) => ({
 					connection: connection![1],
 				}),
 				onDone: {
 					target: "Install_WaitingForInstallationMethodChoice",
 					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output,
+						firmwareVersion: ({ event: { output } }) => output.firmwareVersion,
+						deviceInfo: ({ event: { output } }) => output,
 					}),
 				},
 				onError: {
@@ -408,6 +411,9 @@ export const setupStateMachine = setup({
 
 		Install_WaitingForInstallationMethodChoice: {
 			on: {
+				"install.configure": {
+					target: "Install_MigratingConfiguration",
+				},
 				"install.install": {
 					guard: "targetFirmwareVersionSet",
 					target: "Install_Installing",
@@ -447,16 +453,18 @@ export const setupStateMachine = setup({
 		Install_MigratingConfiguration: {
 			invoke: {
 				src: "migrateConfiguration",
-				input: ({ context: { connection, deviceInfo } }) => ({
-					connection: connection![1],
-					desiredVersion: deviceInfo!.configVersion,
-				}),
+				input: ({ context: { connection, deviceInfo } }) => {
+					console.log("aaaaaa");
+					return {
+						connection: connection![1],
+						desiredVersion: deviceInfo!.configVersion,
+					};
+				},
 				onDone: {
 					target: "Config_Editing",
 					actions: assign({
-						deviceInfo: ({ context: { deviceInfo }, event: { output } }) => {
-							return { ...deviceInfo, config: output };
-						},
+						deviceInfo: ({ context: { deviceInfo }, event: { output } }) =>
+							output,
 					}),
 				},
 				onError: {

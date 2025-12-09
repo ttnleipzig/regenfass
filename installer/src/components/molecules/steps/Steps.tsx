@@ -1,4 +1,8 @@
-import { AlertDescription, AlertInline, AlertTitle } from "@/components/molecules/AlertInline.tsx";
+import {
+	AlertDescription,
+	AlertInline,
+	AlertTitle,
+} from "@/components/molecules/AlertInline.tsx";
 // Removed AlertDialog in favor of inline alert
 import { Button } from "@/components/atoms/Button.tsx";
 import {
@@ -91,6 +95,12 @@ export default function Steps() {
 								onClick={() => emitEvent({ type: "install.install" })}
 							>
 								Install
+							</Button>
+							<Button
+								disabled={!state.can({ type: "install.configure" })}
+								onClick={() => emitEvent({ type: "install.configure" })}
+							>
+								Configure
 							</Button>
 						</div>
 
