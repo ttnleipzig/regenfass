@@ -15,6 +15,7 @@ const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
 const sleep = (ms: number) =>
 	new Promise<void>((res) => setTimeout(() => res(), ms));
 
+// hardReset() taken from https://github.com/esphome/esp-web-tools/blob/df4ae5b0b088a27f8931d2a953ab0882e3263c86/src/util/reset.ts
 const hardReset = async (transport: Transport) => {
 	console.log("Triggering reset");
 	await transport.device.setSignals({
