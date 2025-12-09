@@ -147,9 +147,11 @@ export default function Steps() {
 
 				<Match when={(state as any).matches("Config_Editing")}>
 					<div class="space-y-3">
+						{/* TODO: Autogenerate fields from ConfigV<T> objects */}
 						<TextFieldRoot>
 							<TextFieldLabel>appEUI</TextFieldLabel>
 							<TextFieldInput
+								value={state.context.deviceInfo.config.appEUI}
 								type="text"
 								name="appEUI"
 								onChange={(
@@ -169,6 +171,7 @@ export default function Steps() {
 						<TextFieldRoot>
 							<TextFieldLabel>appKey</TextFieldLabel>
 							<TextFieldInput
+								value={state.context.deviceInfo.config.appKey}
 								type="text"
 								name="appKey"
 								onChange={(
@@ -188,6 +191,7 @@ export default function Steps() {
 						<TextFieldRoot>
 							<TextFieldLabel>devEUI</TextFieldLabel>
 							<TextFieldInput
+								value={state.context.deviceInfo.config.devEUI}
 								type="text"
 								name="devEUI"
 								onChange={(

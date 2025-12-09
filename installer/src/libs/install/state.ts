@@ -509,7 +509,7 @@ export const setupStateMachine = setup({
 					})),
 				},
 				"config.next": {
-					target: "Finish_ShowingNextSteps",
+					target: "Config_WritingConfiguration",
 				},
 			},
 		},
