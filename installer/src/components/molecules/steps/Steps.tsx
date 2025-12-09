@@ -107,7 +107,7 @@ export default function Steps() {
 
 						<SelectField
 							value={state.context.targetFirmwareVersion}
-							options={["0.0.0", "0.0.1"]}
+							options={state.context.upstreamVersions}
 							placeholder="SelectField a version"
 							onChange={(version) =>
 								emitEvent({

@@ -150,14 +150,6 @@ export const setupStateMachine = setup({
 
 			return [port, SCPAdapter.forSerialPort(port)] as const;
 		}),
-		readVersion: fromPromise<[string, string], { connection: SCPAdapter }>(
-			async ({ input: { connection } }) => {
-				const firmwareVersion = await readField(connection, "version");
-				const configVersion = await readField(connection, "configVersion");
-
-				return [firmwareVersion, configVersion] as const;
-			}
-		),
 		installFirmware: fromPromise<
 			[string, SCPAdapter],
 			{ connection: SerialPort; version: string }
