@@ -193,6 +193,7 @@ export const setupStateMachine = setup({
 			const loaderOpts: LoaderOptions = {
 				transport,
 				baudrate: 115200,
+				romBaudrate: 115200,
 				terminal: espLoaderTerminal,
 				debugLogging: true,
 				// romBaudrate:
@@ -256,8 +257,10 @@ export const setupStateMachine = setup({
 					reportProgress: (fileIndex, written, total) => {
 						console.log(`file ${fileIndex}: ${written}/${total} bytes`);
 					},
-					calculateMD5Hash: (image) => MD5(EncLatin1.parse(image)),
-					flashSize: flashSize + "KB",
+					calculateMD5Hash: (image) => MD5(EncLatin1.parse(image)).toString(),
+					flashMode: "keep",
+					flashFreq: "keep",
+					flashSize: "keep",
 				});
 				await esploader.after();
 			} catch (error) {
@@ -405,10 +408,6 @@ export const setupStateMachine = setup({
 
 		Install_WaitingForInstallationMethodChoice: {
 			on: {
-				"install.update": {
-					guard: "targetFirmwareVersionSet",
-					target: "Update_LoadingConfiguration",
-				},
 				"install.install": {
 					guard: "targetFirmwareVersionSet",
 					target: "Install_Installing",
@@ -424,51 +423,8 @@ export const setupStateMachine = setup({
 		Install_Installing: {
 			invoke: {
 				src: "installFirmware",
-				input: ({ context: { connection } }) => ({
-					connection: connection![0],
-					// TODO: Ask for firmware version
-					version: "0.0.0",
-				}),
-				onDone: {
-					target: "Config_LoadingConfiguration",
-					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output[0],
-						connection: ({ context: { connection }, event: { output } }) =>
-							[connection![0], output[1]] as const,
-					}),
-				},
-				onError: {
-					target: "Finish_ShowingError",
-					actions: assign({
-						error: ({ event: { error } }) => error,
-					}),
-				},
-			},
-		},
-
-		Update_LoadingConfiguration: {
-			invoke: {
-				src: "loadDeviceInfo",
-				input: ({ context: { connection, firmwareVersion } }) => ({
-					connection: connection![1],
-					// TODO: Map firmware version to desired version
-					desiredVersion: firmwareVersion!,
-				}),
-				onDone: {
-					target: "Install_Updating",
-					actions: assign({
-						deviceInfo: ({ event }) => event.output,
-					}),
-				},
-			},
-		},
-
-		Install_Updating: {
-			invoke: {
-				src: "installFirmware",
 				input: ({ context: { connection, targetFirmwareVersion } }) => ({
 					connection: connection![0],
-					// TODO: Ask for the firmware version
 					version: targetFirmwareVersion!,
 				}),
 				onDone: {
@@ -487,26 +443,20 @@ export const setupStateMachine = setup({
 				},
 			},
 		},
+
 		Install_MigratingConfiguration: {
 			invoke: {
 				src: "migrateConfiguration",
-				input: ({ context: { connection, firmwareVersion } }) => ({
+				input: ({ context: { connection, deviceInfo } }) => ({
 					connection: connection![1],
-					// TODO: Map firmware version to desired version
-					desiredVersion: firmwareVersion!,
-				}),
-			},
-		},
-
-		Config_LoadingConfiguration: {
-			invoke: {
-				src: "loadDeviceInfo",
-				input: ({ context: { connection } }) => ({
-					connection: connection![1],
+					desiredVersion: deviceInfo!.configVersion,
 				}),
 				onDone: {
+					target: "Config_Editing",
 					actions: assign({
-						deviceInfo: ({ event: { output } }) => output,
+						deviceInfo: ({ context: { deviceInfo }, event: { output } }) => {
+							return { ...deviceInfo, config: output };
+						},
 					}),
 				},
 				onError: {
@@ -517,6 +467,7 @@ export const setupStateMachine = setup({
 				},
 			},
 		},
+
 		Config_Editing: {
 			on: {
 				"config.changeField": {

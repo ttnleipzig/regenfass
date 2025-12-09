@@ -1,9 +1,9 @@
-import { AlertInline, AlertDescription, AlertTitle } from "@/components/molecules/AlertInline.tsx";
+import { AlertDescription, AlertInline, AlertTitle } from "@/components/molecules/AlertInline.tsx";
 // Removed AlertDialog in favor of inline alert
 import { Button } from "@/components/atoms/Button.tsx";
 import {
-	SelectField,
 	SelectContent,
+	SelectField,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
@@ -92,12 +92,6 @@ export default function Steps() {
 							>
 								Install
 							</Button>
-							<Button
-								disabled={!state.can({ type: "install.update" })}
-								onClick={() => emitEvent({ type: "install.update" })}
-							>
-								Update
-							</Button>
 						</div>
 
 						<SelectField
@@ -128,17 +122,11 @@ export default function Steps() {
 					<AlertInline>
 						<AlertTitle>Installing</AlertTitle>
 						<AlertDescription>
-							Flashing firmware to the device.
+							Flashing firmware to the device...
 						</AlertDescription>
 					</AlertInline>
 				</Match>
 
-				<Match when={(state as any).matches("Install_Updating")}>
-					<AlertInline>
-						<AlertTitle>Updating</AlertTitle>
-						<AlertDescription>Updating the existing firmware.</AlertDescription>
-					</AlertInline>
-				</Match>
 				<Match when={(state as any).matches("Install_MigratingConfiguration")}>
 					<AlertInline>
 						<AlertTitle>Migrating configuration</AlertTitle>
@@ -146,55 +134,61 @@ export default function Steps() {
 					</AlertInline>
 				</Match>
 
-				<Match when={(state as any).matches("Config_LoadingConfiguration")}>
-					<AlertInline>
-						<AlertTitle>Loading configuration</AlertTitle>
-						<AlertDescription>
-							Reading the current device settings.
-						</AlertDescription>
-					</AlertInline>
-				</Match>
-
 				<Match when={(state as any).matches("Config_Editing")}>
 					<div class="space-y-3">
 						<TextFieldRoot>
 							<TextFieldLabel>appEUI</TextFieldLabel>
-						<TextFieldInput
+							<TextFieldInput
 								type="text"
 								name="appEUI"
-							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
+								onChange={(
+									t: Event & {
+										currentTarget: HTMLInputElement;
+										target: HTMLInputElement;
+									}
+								) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "appEUI",
-									value: t.currentTarget.value,
+										value: t.currentTarget.value,
 									})
 								}
 							/>
 						</TextFieldRoot>
 						<TextFieldRoot>
 							<TextFieldLabel>appKey</TextFieldLabel>
-						<TextFieldInput
+							<TextFieldInput
 								type="text"
 								name="appKey"
-							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
+								onChange={(
+									t: Event & {
+										currentTarget: HTMLInputElement;
+										target: HTMLInputElement;
+									}
+								) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "appKey",
-									value: t.currentTarget.value,
+										value: t.currentTarget.value,
 									})
 								}
 							/>
 						</TextFieldRoot>
 						<TextFieldRoot>
 							<TextFieldLabel>devEUI</TextFieldLabel>
-						<TextFieldInput
+							<TextFieldInput
 								type="text"
 								name="devEUI"
-							onChange={(t: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }) =>
+								onChange={(
+									t: Event & {
+										currentTarget: HTMLInputElement;
+										target: HTMLInputElement;
+									}
+								) =>
 									emitEvent({
 										type: "config.changeField",
 										field: "devEUI",
-									value: t.currentTarget.value,
+										value: t.currentTarget.value,
 									})
 								}
 							/>
@@ -208,8 +202,6 @@ export default function Steps() {
 									emitEvent({
 										type: "config.loadFromFile",
 										config: {
-											firmwareVersion: "",
-											configVersion: "",
 											appEUI: "",
 											appKey: "",
 											devEUI: "",
@@ -247,7 +239,9 @@ export default function Steps() {
 							<AlertDescription>
 								{(state.context.error as unknown as Error).toString()}
 								{(state.context.error as unknown as Error).stack}
-								{(state.context.error as unknown as Error).cause!}
+								{JSON.stringify(
+									(state.context.error as unknown as Error).cause!
+								)}
 							</AlertDescription>
 						</AlertInline>
 						<div class="pt-1">
