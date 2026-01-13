@@ -6,9 +6,9 @@ import {
   Show,
   For,
   ErrorBoundary,
-  createResource
+  createResource,
+  Suspense
 } from "solid-js";
-import { Dynamic } from "solid-js/web";
 import { useParams } from "@solidjs/router";
 import CodeViewer from "./components/CodeViewer";
 import PropsPanel from "./components/PropsPanel";
@@ -240,9 +240,16 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   };
 
   const [loadedComponent] = createResource(
-    () => ({ importPath: component()?.importPath, name: component()?.name }),
-    async ({ importPath, name }) => {
-      if (!importPath || !name) return null;
+    () => {
+      const comp = component();
+      return comp ? { importPath: comp.importPath, name: comp.name } : null;
+    },
+    async (key) => {
+      if (!key) return null;
+      const { importPath, name } = key;
+      if (!importPath || !name) {
+        return null;
+      }
 
       // Normalize the import path to match the glob patterns
       // @/components/atoms/Headline -> atoms/Headline
@@ -285,13 +292,27 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
           
           // Try different ways to get the component
           // 1. Named export matching the component name (exact match)
-          if (mod[name] && typeof mod[name] === 'function') {
-            return mod[name];
+          if (mod[name]) {
+            const comp = mod[name];
+            if (typeof comp === 'function') {
+              return comp;
+            }
+            // Sometimes SolidJS components are wrapped, check if it's a component factory
+            if (comp && typeof comp === 'object' && 'default' in comp && typeof comp.default === 'function') {
+              return comp.default;
+            }
           }
           
           // 2. Default export
-          if (mod.default && typeof mod.default === 'function') {
-            return mod.default;
+          if (mod.default) {
+            const comp = mod.default;
+            if (typeof comp === 'function') {
+              return comp;
+            }
+            // Check if default is an object with the component
+            if (comp && typeof comp === 'object' && name in comp && typeof comp[name] === 'function') {
+              return comp[name];
+            }
           }
           
           // 3. Check if the module itself is the component (for default exports)
@@ -302,8 +323,11 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
           // 4. Try case-insensitive match for named exports
           const lowerName = name.toLowerCase();
           const foundKey = Object.keys(mod).find(k => k.toLowerCase() === lowerName);
-          if (foundKey && typeof mod[foundKey] === 'function') {
-            return mod[foundKey];
+          if (foundKey) {
+            const comp = mod[foundKey];
+            if (typeof comp === 'function') {
+              return comp;
+            }
           }
           
           console.warn(`Component "${name}" not found in module from "${importPath}". Available exports:`, Object.keys(mod));
@@ -313,7 +337,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
       } else {
         // Debug: log available keys to help diagnose
         const availableKeys = Object.keys(moduleLoaders).filter(k => 
-          k.includes('Headline') || k.includes('atoms')
+          k.includes('Headline') || k.includes('atoms') || k.includes('headline')
         );
         console.warn(`Module not found for import path: ${importPath} (relative: ${relative}). Matching keys:`, availableKeys);
         
@@ -342,23 +366,58 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
     }
   );
 
-  const DynamicComponent = () => (
-    <ErrorBoundary
-      fallback={(err) => (
-        <div class="p-4 bg-red-50 border border-red-200 rounded-md">
-          <h3 class="text-red-800 font-medium">Component Error</h3>
-          <p class="text-red-600 text-sm mt-1">{err.toString()}</p>
-        </div>
-      )}
-    >
-      <Show
-        when={loadedComponent()}
-        fallback={<div class="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />}
+  const DynamicComponent = () => {
+    const props = propValues();
+    
+    return (
+      <ErrorBoundary
+        fallback={(err) => (
+          <div class="p-4 bg-red-50 border border-red-200 rounded-md">
+            <h3 class="text-red-800 font-medium">Component Error</h3>
+            <p class="text-red-600 text-sm mt-1">{err.toString()}</p>
+          </div>
+        )}
       >
-        <Dynamic component={loadedComponent()!} {...propValues()} />
-      </Show>
-    </ErrorBoundary>
-  );
+        <Suspense fallback={<div class="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />}>
+          {() => {
+            const comp = loadedComponent();
+            if (!comp) {
+              return (
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+                  <p class="text-yellow-600 text-sm mt-1">Component not loaded</p>
+                </div>
+              );
+            }
+            // Ensure comp is callable before rendering
+            if (typeof comp !== 'function' && !(comp && typeof comp === 'object' && 'call' in comp)) {
+              return (
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+                  <p class="text-yellow-600 text-sm mt-1">
+                    Component is not callable. Type: {typeof comp}, Value: {String(comp)}
+                  </p>
+                </div>
+              );
+            }
+            // Render the component directly as JSX element
+            // SolidJS JSX handles function components and Proxies correctly
+            try {
+              const Comp = comp as any;
+              return <Comp {...(props as any)} />;
+            } catch (err) {
+              return (
+                <div class="p-4 bg-red-50 border border-red-200 rounded-md">
+                  <h3 class="text-red-800 font-medium">Rendering Error</h3>
+                  <p class="text-red-600 text-sm mt-1">{String(err)}</p>
+                </div>
+              );
+            }
+          }}
+        </Suspense>
+      </ErrorBoundary>
+    );
+  };
 
   const viewportClasses = () => {
     switch (viewMode()) {
@@ -398,9 +457,9 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
           {(comp) => (
             <div class="h-full flex flex-col lg:flex-row">
               {/* Main content area */}
-              <div class="flex-1 flex flex-col min-h-0">
+              <div class="flex-1 flex flex-col min-h-0 overflow-y-auto">
                 {/* Header */}
-                <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+                <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex-shrink-0">
                   <div class="flex items-center justify-between">
                     <div>
                       <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
@@ -456,7 +515,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
 
                 {/* Examples selector */}
                 <Show when={comp().examples.length > 1}>
-                  <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
+                  <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-3 flex-shrink-0">
                     <div class="flex items-center space-x-4">
                       <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Examples:</span>
                       <div class="flex space-x-2">
@@ -482,8 +541,8 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                   </div>
                 </Show>
 
-                {/* Component preview */}
-                <div class="flex-1 overflow-auto p-6">
+                {/* Component preview - shown first on all screen sizes */}
+                <div class="p-6 flex-shrink-0">
                   <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96">
                     <div class="p-8">
                       <div class={viewportClasses()}>
@@ -493,8 +552,8 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                   </div>
                 </div>
 
-                {/* Code display */}
-                <div class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-6">
+                {/* Code display - shown second on all screen sizes */}
+                <div class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-6 flex-shrink-0">
                   <CodeViewer
                     code={generateCurrentCode()}
                     language="tsx"
