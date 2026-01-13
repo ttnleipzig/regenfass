@@ -1,5 +1,10 @@
 import { ConfigField } from "@/installer/types.ts";
-import { Config, CONFIG_VERSIONS, DeviceInfo } from "@/libs/install/config.ts";
+import {
+	Config,
+	CONFIG_VERSIONS,
+	DeviceInfo,
+	getLatestConfigVersion,
+} from "@/libs/install/config.ts";
 import { readField, SCPAdapter, writeField } from "@/libs/install/scp";
 import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
@@ -104,7 +109,7 @@ export const setupStateMachine = setup({
 			error: unknown | null;
 			connection: readonly [SerialPort, SCPAdapter] | null;
 			targetFirmwareVersion: string | null;
-			deviceInfo: DeviceInfo;
+			deviceInfo: Partial<DeviceInfo>;
 		},
 		events: {} as
 			| { type: "start.next" }
@@ -295,8 +300,10 @@ export const setupStateMachine = setup({
 	guards: {
 		webSerialSupported: () => navigator.serial !== undefined,
 		webSerialNotSupported: () => navigator.serial === undefined,
-		targetFirmwareVersionSet: (ctx) =>
-			ctx.context.targetFirmwareVersion !== null,
+		alreadyInstalledOnDevice: ({ context }) =>
+			context.deviceInfo.firmwareVersion !== undefined,
+		targetFirmwareVersionSet: ({ context }) =>
+			context.targetFirmwareVersion !== null,
 	},
 }).createMachine({
 	/** @xstate-layout N4IgpgJg5mDOIC5SzAFwK4AcB0BlVAhgE6oD6AwgBZgDGA1gJYB2UA6mAEa5hEMEA2uLJgD2JAMQQRTMNmYA3EXVkoMOfMTJVajFuy48+g4WNQIFImgVQNpAbQAMAXUdPEoUbAY3p7kAA9EABYARgAmbFCwgGYwhzCggE4ggA4ANmi0gBoQAE9gmOwAVgB2DISHVKK0sqCAXzqc1Sw8QhIKanpmNk5uXgEhTFEJKRk5JkVlbGb1Nq1O3R6DfuMh03MJy2tbJlc7ELckEE9vHb9AhCjI8Nj4pNSM7LzEIursaMS09JKghxDSooNJpoFoadoAMTQNEoAFVMLBUEQwAQALYANR4XmksEk0lkFimM1amlIkNQ0LhCKRqIxRCxTFgG0UVh8u2crj8J1Z50Q4Qc0WKIS+JX5SQcRWi0Ry+QQYSKiWwiQ+KTiiUSMXFkqBICJYLIZIp8MRyPRmJ2OJ4RDE2Ew-GsADMxCjpiDZiSDbCjdTTXTzUytqy9s5OSIvNyjhc+QKikKUiLomKJVLnpd-tgwmkgmlPkVQiUQkFC9rdXNSKwCKcWOCxDCUERxAjNNgaNIbEx0GAOUcuWcI7y0pniokSqUUmqvrnkzKwikHIqsyUR0FJSEHA4UsXXdhyNIZDQtLvaG2oLixgSVFud0w9wfr0fuv6WTsg4cPKHTr4+7KHIvsIuEkUKQhJK-LJNKvIqtg6RASkHxpGEwFhIkm5qNuh77hQ6HHuIlrWraDpOi6qFXjemF3vuD4WE+9jssG3bvuGoAXHEv7-kEgHAdEoFBOBso-NgiFFHKXwhCkErIdqTAiBAcB+DMIZhr2TGIAAtE8MoqUUipqmqs7JAuQkScCqF6h0OjdPofRGIMwyoApH5MDyCBqgJM7qkqcYxrBU4vB8f4cfE6o-CKRk6lupkepSxo0ma2L2YxASIOqKTFCUiRASKA4riUvHKtg8HyrcNRpKuCYoaCpblpWUDVkQtY8PFSmJQgBavOmQQIaqIQlHEma8TOc4qiqiTxOk1QldE5U4CRR5kTe3SNZ+yktcN2B-EBRTikhGaAf1pSRB5i4lLBQl-JNjRhcRWGkAASsiEDdLS9KLY5X4agK0QFp8XFhL97H9fy-k1JkKTQdEZRTdgACSDKEPw-BlhWx61TDjbw9s0gALJoJQ0lUCIDA0GAL1OR1uXilB66pGEaVquKgIXUSqNwwjVXIzWmBQEQBAyVe9oMEQKIY69b6KUtzVvKD3VVFLKrLrx8aRH8PzdelPXDpDzMCAjWvwwt9FiyLzUFiE+UFrTP5pEm6W8aJaTvNEKqLsBw6OyUmuw9rpBwhA2wsCTX4m-lgFxLEZTqnERS5YOSGlHbIoIT1HtowjmMMFzftQHz6foNzCU9uLFwjWtpQlLEs6g79ju8ZmQSKq14rJXmG6M5e0j81ApAADIiDz3TZ1AufCwHy1Ku8m2JN1VdBGlWa8R1ETHbH7G-EJ6T1K3V1MB3pAAKIPceI-G1miqzgZ0SvPEI7z0B6YimvZcfGqI6QwPZa8MeA9D-nDFNUX9shG6mJWIXwszLh4imcIJQoKbQTskeCNRSiQ3BMwBgsBKCkFwLjAA7t0AAcmAfwqB8BgHhEfC4cYoJu0AhkY6rwhT9ULFBOUMYuKrnFH8DexkWgoKYGgjBWCRC4JYLvIgVoiDkMQO9d4X0MjxD+lHFM4DFSahVJtAcM9zoNCAA */
@@ -306,7 +313,7 @@ export const setupStateMachine = setup({
 		upstreamVersions: [],
 		error: null,
 		connection: null,
-		deviceInfo: null as unknown as DeviceInfo,
+		deviceInfo: {},
 		targetFirmwareVersion: null,
 	},
 	exit: ({ context }) => {
@@ -392,7 +399,7 @@ export const setupStateMachine = setup({
 					target: "Install_WaitingForInstallationMethodChoice",
 					actions: assign({
 						deviceInfo: {
-							firmwareVersion: "",
+							firmwareVersion: undefined,
 							configVersion: 0,
 							config: {
 								appEUI: "",
@@ -408,6 +415,7 @@ export const setupStateMachine = setup({
 		Install_WaitingForInstallationMethodChoice: {
 			on: {
 				"install.configure": {
+					guard: "alreadyInstalledOnDevice",
 					target: "Install_MigratingConfiguration",
 				},
 				"install.install": {
@@ -433,7 +441,11 @@ export const setupStateMachine = setup({
 					target: "Install_MigratingConfiguration",
 					actions: assign({
 						deviceInfo: ({ event: { output }, context: { deviceInfo } }) => ({
-							...deviceInfo,
+							config:
+								deviceInfo.config ??
+								getLatestConfigVersion().getDefaultValues(),
+							configVersion:
+								deviceInfo.configVersion ?? getLatestConfigVersion().version,
 							firmwareVersion: output[0],
 						}),
 						connection: ({ context: { connection }, event: { output } }) =>
@@ -454,7 +466,7 @@ export const setupStateMachine = setup({
 				src: "migrateConfiguration",
 				input: ({ context: { connection, deviceInfo } }) => ({
 					connection: connection![1],
-					desiredVersion: deviceInfo!.configVersion,
+					desiredVersion: deviceInfo.configVersion!,
 				}),
 				onDone: {
 					target: "Config_Editing",
@@ -478,7 +490,7 @@ export const setupStateMachine = setup({
 						deviceInfo: {
 							...deviceInfo,
 							config: {
-								...deviceInfo.config,
+								...deviceInfo.config!,
 								[event.field]: event.value,
 							},
 						},
@@ -510,8 +522,8 @@ export const setupStateMachine = setup({
 				"config.saveToFile": {
 					actions: emit(({ context: { deviceInfo } }) => ({
 						type: "config.saveToFile",
-						configVersion: deviceInfo.configVersion,
-						config: deviceInfo.config,
+						configVersion: deviceInfo.configVersion!,
+						config: deviceInfo.config!,
 					})),
 				},
 				"config.next": {
@@ -523,7 +535,7 @@ export const setupStateMachine = setup({
 			invoke: {
 				src: "writeConfiguration",
 				input: ({ context: { connection, deviceInfo } }) => ({
-					configuration: deviceInfo.config,
+					configuration: deviceInfo.config!,
 					connection: connection![1],
 				}),
 				onDone: "Finish_ShowingNextSteps",

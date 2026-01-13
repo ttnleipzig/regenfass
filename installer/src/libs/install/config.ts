@@ -69,6 +69,9 @@ type ConfigV1 = typeof configV1.$schema;
 export type Config = ConfigV1;
 export const CONFIG_VERSIONS = [configV1];
 
+export const getLatestConfigVersion = () =>
+	CONFIG_VERSIONS[CONFIG_VERSIONS.length - 1];
+
 export type DeviceInfo = {
 	firmwareVersion: string;
 	configVersion: number;
