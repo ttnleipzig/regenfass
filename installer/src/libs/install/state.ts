@@ -103,7 +103,6 @@ export const setupStateMachine = setup({
 			// Maybe we should do this as a normal error?
 			error: unknown | null;
 			connection: readonly [SerialPort, SCPAdapter] | null;
-			firmwareVersion: string | null;
 			targetFirmwareVersion: string | null;
 			deviceInfo: DeviceInfo;
 		},
@@ -308,7 +307,6 @@ export const setupStateMachine = setup({
 		error: null,
 		connection: null,
 		deviceInfo: null as unknown as DeviceInfo,
-		firmwareVersion: null,
 		targetFirmwareVersion: null,
 	},
 	exit: ({ context }) => {
@@ -387,14 +385,21 @@ export const setupStateMachine = setup({
 				onDone: {
 					target: "Install_WaitingForInstallationMethodChoice",
 					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output.firmwareVersion,
 						deviceInfo: ({ event: { output } }) => output,
 					}),
 				},
 				onError: {
 					target: "Finish_ShowingError",
 					actions: assign({
-						error: ({ event: { error } }) => error,
+						deviceInfo: {
+							firmwareVersion: "",
+							configVersion: 0,
+							config: {
+								appEUI: "",
+								appKey: "",
+								devEUI: "",
+							},
+						},
 					}),
 				},
 			},
@@ -427,7 +432,10 @@ export const setupStateMachine = setup({
 				onDone: {
 					target: "Install_MigratingConfiguration",
 					actions: assign({
-						firmwareVersion: ({ event: { output } }) => output[0],
+						deviceInfo: ({ event: { output }, context: { deviceInfo } }) => ({
+							...deviceInfo,
+							firmwareVersion: output[0],
+						}),
 						connection: ({ context: { connection }, event: { output } }) =>
 							[connection![0], output[1]] as const,
 					}),
@@ -451,8 +459,7 @@ export const setupStateMachine = setup({
 				onDone: {
 					target: "Config_Editing",
 					actions: assign({
-						deviceInfo: ({ context: { deviceInfo }, event: { output } }) =>
-							output,
+						deviceInfo: ({ event: { output } }) => output,
 					}),
 				},
 				onError: {
@@ -540,7 +547,6 @@ export const setupStateMachine = setup({
 					actions: assign({
 						error: () => null,
 						connection: () => null,
-						firmwareVersion: () => null,
 						targetFirmwareVersion: () => null,
 						deviceInfo: (ctx) => ctx.context.deviceInfo,
 					}),
