@@ -32,13 +32,106 @@ const ComponentRenderer: Component = () => {
 
   onMount(async () => {
     try {
-      // Load registry
-      const response = await fetch('/registry.json');
-      if (!response.ok) {
-        throw new Error('Failed to load component registry');
+      // Load base registry from file
+      let baseRegistry: PlaygroundRegistry | null = null;
+      try {
+        const response = await fetch('/registry.json');
+        if (response.ok) {
+          baseRegistry = await response.json();
+        }
+      } catch {
+        // Ignore if registry.json doesn't exist
       }
-      const data = await response.json();
-      setRegistry(data);
+
+      // Build a runtime registry from actual source files
+      const buildRuntimeRegistry = (): PlaygroundRegistry => {
+        const loaders = {
+          ...import.meta.glob('@/components/**/*.{ts,tsx}'),
+          ...import.meta.glob('../components/**/*.{ts,tsx}')
+        };
+
+        const categories = ['atoms', 'molecules', 'organisms', 'ui', 'forms'] as const;
+        const result: PlaygroundRegistry = {
+          atoms: [],
+          molecules: [],
+          organisms: [],
+          ui: [],
+          forms: [],
+          uncategorized: [],
+        };
+
+        const seen = new Set<string>();
+
+        Object.keys(loaders).forEach((key) => {
+          // Compute relative path under components/
+          let rel = key
+            .replace(/^.*\/src\/components\//, '')
+            .replace(/^\.\.\/components\//, '');
+
+          if (!rel || rel.endsWith('.d.ts')) return;
+
+          const withoutExt = rel.replace(/\.(tsx|ts)$/i, '');
+          const segments = withoutExt.split('/');
+          const first = segments[0];
+          const category = (categories as readonly string[]).includes(first) ? first : 'uncategorized';
+          const fileBase = segments[segments.length - 1];
+
+          // Derive component name from filename
+          const name = fileBase.charAt(0).toUpperCase() + fileBase.slice(1);
+          const importPath = `@/components/${withoutExt}`;
+
+          const keyId = `${category}:${name}`;
+          if (seen.has(keyId)) return;
+          seen.add(keyId);
+
+          const examples: ComponentExample[] = [
+            {
+              name: 'Default',
+              description: 'Default component appearance',
+              props: {},
+              code: `<${name} />`,
+            },
+          ];
+
+          const entry: PlaygroundComponent = {
+            name,
+            filePath: '',
+            relativePath: rel,
+            category,
+            description: '',
+            props: [],
+            examples,
+            importPath,
+          };
+
+          (result as any)[category].push(entry);
+        });
+
+        return result;
+      };
+
+      const runtimeRegistry = buildRuntimeRegistry();
+
+      // Merge base registry (from file) with runtime entries, preferring base metadata when present
+      const merged: PlaygroundRegistry = {
+        atoms: [], molecules: [], organisms: [], ui: [], forms: [], uncategorized: []
+      } as PlaygroundRegistry;
+
+      const mergeCategory = (cat: keyof PlaygroundRegistry) => {
+        const base = baseRegistry?.[cat] ?? [];
+        const fromRuntime = runtimeRegistry[cat];
+        const byName = new Map<string, PlaygroundComponent>();
+        base.forEach(c => byName.set(c.name, c));
+        fromRuntime.forEach(c => {
+          if (!byName.has(c.name)) byName.set(c.name, c);
+        });
+        (merged as any)[cat] = Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
+      };
+
+      (['atoms','molecules','organisms','ui','forms','uncategorized'] as (keyof PlaygroundRegistry)[])
+        .forEach(mergeCategory);
+
+      setRegistry(merged);
     } catch (err) {
       console.error('Error loading registry:', err);
       setError(err instanceof Error ? err.message : 'Failed to load registry');
@@ -52,13 +145,9 @@ const ComponentRenderer: Component = () => {
     const category = params.category;
     const componentName = params.component;
 
-    console.log('ComponentRenderer effect - registry:', !!reg, 'category:', category, 'component:', componentName);
-
     if (reg && category && componentName) {
       const categoryComponents = reg[category as keyof PlaygroundRegistry];
-      console.log('Category components:', categoryComponents?.length || 0);
       const foundComponent = categoryComponents?.find(c => c.name === componentName);
-      console.log('Found component:', foundComponent?.name);
 
       if (foundComponent) {
         setComponent(foundComponent);
@@ -71,6 +160,39 @@ const ComponentRenderer: Component = () => {
             initialProps[prop.name] = prop.defaultValue;
           }
         });
+        
+        // Set component-specific default values if no props are defined
+        if (foundComponent.props.length === 0) {
+          if (foundComponent.name === 'Headline') {
+            initialProps.children = 'Example Headline';
+            initialProps.as = 'h2';
+            initialProps.align = 'left';
+          } else if (foundComponent.name === 'Button') {
+            initialProps.children = 'Click me';
+          } else if (foundComponent.name === 'ButtonPrimary') {
+            initialProps.children = 'Primary Button';
+            initialProps.loading = false;
+          } else if (foundComponent.name === 'ButtonSecondary') {
+            initialProps.children = 'Secondary Button';
+            initialProps.loading = false;
+          } else if (foundComponent.name === 'Badge') {
+            initialProps.children = 'Badge';
+            initialProps.variant = 'default';
+          } else if (foundComponent.name === 'Link') {
+            initialProps.href = '#';
+            initialProps.children = 'Example Link';
+          } else if (foundComponent.name === 'Status') {
+            initialProps.status = 'idle';
+            initialProps.message = 'Status message';
+          } else if (foundComponent.name === 'AlertInline') {
+            initialProps.children = 'Alert message';
+            initialProps.variant = 'default';
+            initialProps.showIcon = true;
+          } else if (foundComponent.name === 'Card') {
+            initialProps.children = 'Card content';
+          }
+        }
+        
         setPropValues(initialProps);
       } else {
         setError(`Component "${componentName}" not found in category "${category}"`);
@@ -122,27 +244,98 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
     async ({ importPath, name }) => {
       if (!importPath || !name) return null;
 
-      const candidates = [
-        importPath,
-        `${importPath}.tsx`,
-        `${importPath}.ts`,
-      ];
-
-      for (const key of candidates) {
-        const loader = moduleLoaders[key];
-        if (loader) {
-          const mod = await loader();
-          return mod[name] ?? mod.default ?? null;
-        }
+      // Normalize the import path to match the glob patterns
+      // @/components/atoms/Headline -> atoms/Headline
+      const relative = importPath.replace(/^@\/components\//, '').replace(/\.(tsx|ts)$/, '');
+      
+      // Try multiple matching strategies
+      let match: [string, () => Promise<any>] | undefined;
+      
+      // Strategy 1: Direct match with normalized paths
+      match = Object.entries(moduleLoaders).find(([k]) => {
+        // Normalize the key to match the relative path
+        let normalizedKey = k
+          .replace(/^.*\/src\/components\//, '')
+          .replace(/^\.\.\/components\//, '')
+          .replace(/^@\/components\//, '')
+          .replace(/\.(tsx|ts)$/, '');
+        
+        return normalizedKey === relative;
+      });
+      
+      // Strategy 2: Match by filename only (fallback)
+      if (!match) {
+        const fileName = relative.split('/').pop();
+        match = Object.entries(moduleLoaders).find(([k]) => {
+          const keyFileName = k.split('/').pop()?.replace(/\.(tsx|ts)$/, '');
+          return keyFileName === fileName;
+        });
+      }
+      
+      // Strategy 3: Match by component name in path
+      if (!match) {
+        match = Object.entries(moduleLoaders).find(([k]) => {
+          return k.includes(name) && (k.includes('atoms') || k.includes(relative.split('/')[0]));
+        });
       }
 
-      const relative = importPath.replace(/^@\//, '');
-      const match = Object.entries(moduleLoaders).find(([k]) =>
-        k.endsWith(`${relative}.tsx`) || k.endsWith(`${relative}.ts`)
-      );
       if (match) {
-        const mod = await match[1]();
-        return mod[name] ?? mod.default ?? null;
+        try {
+          const mod = await match[1]();
+          
+          // Try different ways to get the component
+          // 1. Named export matching the component name (exact match)
+          if (mod[name] && typeof mod[name] === 'function') {
+            return mod[name];
+          }
+          
+          // 2. Default export
+          if (mod.default && typeof mod.default === 'function') {
+            return mod.default;
+          }
+          
+          // 3. Check if the module itself is the component (for default exports)
+          if (typeof mod === 'function') {
+            return mod;
+          }
+          
+          // 4. Try case-insensitive match for named exports
+          const lowerName = name.toLowerCase();
+          const foundKey = Object.keys(mod).find(k => k.toLowerCase() === lowerName);
+          if (foundKey && typeof mod[foundKey] === 'function') {
+            return mod[foundKey];
+          }
+          
+          console.warn(`Component "${name}" not found in module from "${importPath}". Available exports:`, Object.keys(mod));
+        } catch (err) {
+          console.error(`Error loading component "${name}" from "${importPath}":`, err);
+        }
+      } else {
+        // Debug: log available keys to help diagnose
+        const availableKeys = Object.keys(moduleLoaders).filter(k => 
+          k.includes('Headline') || k.includes('atoms')
+        );
+        console.warn(`Module not found for import path: ${importPath} (relative: ${relative}). Matching keys:`, availableKeys);
+        
+        // Try a more flexible search as fallback
+        const fallbackMatch = Object.entries(moduleLoaders).find(([k]) => {
+          const fileName = k.split('/').pop()?.replace(/\.(tsx|ts)$/, '');
+          return fileName === name;
+        });
+        
+        if (fallbackMatch) {
+          try {
+            const mod = await fallbackMatch[1]();
+            if (mod[name] && typeof mod[name] === 'function') {
+              return mod[name];
+            }
+            if (mod.default && typeof mod.default === 'function') {
+              return mod.default;
+            }
+          } catch (err) {
+            console.error(`Error loading component "${name}" via fallback:`, err);
+          }
+        }
       }
 
       return null;
@@ -316,13 +509,215 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                   props={((): PropInfo[] => {
                     const base = comp().props.slice();
                     // Add a slot text control for button-like components
-                    if (comp().name === 'ButtonPrimary' || comp().name === 'ButtonSecondary') {
+                    if (comp().name === 'ButtonPrimary' || comp().name === 'ButtonSecondary' || comp().name === 'Button') {
                       if (!base.find(p => p.name === 'children')) {
                         base.push({
                           name: 'children',
                           type: 'string',
                           required: false,
                           description: 'Button text (slot content)',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add children prop for Headline component
+                    if (comp().name === 'Headline') {
+                      if (!base.find(p => p.name === 'children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: true,
+                          description: 'Headline text',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                      // Add other Headline props if not already present
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('as')) {
+                        base.push({
+                          name: 'as',
+                          type: "'h1' | 'h2' | 'h3' | 'h4'",
+                          required: false,
+                          description: 'HTML heading level',
+                          controlType: 'select',
+                          options: ['h1', 'h2', 'h3', 'h4'],
+                          defaultValue: 'h2',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('align')) {
+                        base.push({
+                          name: 'align',
+                          type: "'left' | 'center' | 'right'",
+                          required: false,
+                          description: 'Text alignment',
+                          controlType: 'select',
+                          options: ['left', 'center', 'right'],
+                          defaultValue: 'left',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('subtitle')) {
+                        base.push({
+                          name: 'subtitle',
+                          type: 'string',
+                          required: false,
+                          description: 'Optional subtitle text',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for Badge component
+                    if (comp().name === 'Badge') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: true,
+                          description: 'Badge text',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('variant')) {
+                        base.push({
+                          name: 'variant',
+                          type: "'default' | 'secondary' | 'destructive' | 'outline'",
+                          required: false,
+                          description: 'Badge variant',
+                          controlType: 'select',
+                          options: ['default', 'secondary', 'destructive', 'outline'],
+                          defaultValue: 'default',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for Button component
+                    if (comp().name === 'Button') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('variant')) {
+                        base.push({
+                          name: 'variant',
+                          type: "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
+                          required: false,
+                          description: 'Button variant',
+                          controlType: 'select',
+                          options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+                          defaultValue: 'default',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('size')) {
+                        base.push({
+                          name: 'size',
+                          type: "'default' | 'sm' | 'lg' | 'icon'",
+                          required: false,
+                          description: 'Button size',
+                          controlType: 'select',
+                          options: ['default', 'sm', 'lg', 'icon'],
+                          defaultValue: 'default',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for ButtonPrimary and ButtonSecondary
+                    if (comp().name === 'ButtonPrimary' || comp().name === 'ButtonSecondary') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('loading')) {
+                        base.push({
+                          name: 'loading',
+                          type: 'boolean',
+                          required: false,
+                          description: 'Show loading spinner',
+                          controlType: 'boolean',
+                          defaultValue: false,
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for Link component
+                    if (comp().name === 'Link') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('href')) {
+                        base.push({
+                          name: 'href',
+                          type: 'string',
+                          required: true,
+                          description: 'Link URL',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: true,
+                          description: 'Link text',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for Status component
+                    if (comp().name === 'Status') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('status')) {
+                        base.push({
+                          name: 'status',
+                          type: "'idle' | 'loading' | 'success' | 'error'",
+                          required: true,
+                          description: 'Status type',
+                          controlType: 'select',
+                          options: ['idle', 'loading', 'success', 'error'],
+                          defaultValue: 'idle',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('message')) {
+                        base.push({
+                          name: 'message',
+                          type: 'string',
+                          required: true,
+                          description: 'Status message',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for AlertInline component
+                    if (comp().name === 'AlertInline') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: true,
+                          description: 'Alert message',
+                          controlType: 'text',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('variant')) {
+                        base.push({
+                          name: 'variant',
+                          type: "'default' | 'destructive' | 'info' | 'warning'",
+                          required: false,
+                          description: 'Alert variant',
+                          controlType: 'select',
+                          options: ['default', 'destructive', 'info', 'warning'],
+                          defaultValue: 'default',
+                        } as unknown as PropInfo);
+                      }
+                      if (!propNames.includes('showIcon')) {
+                        base.push({
+                          name: 'showIcon',
+                          type: 'boolean',
+                          required: false,
+                          description: 'Show icon',
+                          controlType: 'boolean',
+                          defaultValue: true,
+                        } as unknown as PropInfo);
+                      }
+                    }
+                    // Add props for Card component
+                    if (comp().name === 'Card') {
+                      const propNames = base.map(p => p.name);
+                      if (!propNames.includes('children')) {
+                        base.push({
+                          name: 'children',
+                          type: 'string',
+                          required: false,
+                          description: 'Card content',
                           controlType: 'text',
                         } as unknown as PropInfo);
                       }
