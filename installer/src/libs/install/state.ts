@@ -389,7 +389,7 @@ export const setupStateMachine = setup({
 					}),
 				},
 				onError: {
-					target: "Finish_ShowingError",
+					target: "Install_WaitingForInstallationMethodChoice",
 					actions: assign({
 						deviceInfo: {
 							firmwareVersion: "",
