@@ -6,15 +6,16 @@ export interface FormFieldProps extends JSX.HTMLAttributes<HTMLDivElement> {
   required?: boolean;
   error?: string;
   helperText?: string;
+  id?: string;
 }
 
 const FormField: Component<FormFieldProps> = (props) => {
-  const [local, rest] = splitProps(props, ["class", "label", "required", "error", "helperText", "children"]);
+  const [local, rest] = splitProps(props, ["class", "label", "required", "error", "helperText", "children", "id"]);
 
   return (
     <div class={cn("space-y-2", local.class)} {...rest}>
       {local.label && (
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for={local.id} class="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {local.label}
           {local.required && <span class="text-red-500 ml-1">*</span>}
         </label>

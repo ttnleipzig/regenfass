@@ -1,13 +1,13 @@
 # Regenfass Installer
 
-Ein moderner Installer für das Regenfass-Projekt, entwickelt mit SolidJS und Vite.
+A modern installer for the Regenfass project, built with SolidJS and Vite.
 
 ## 🚀 Features
 
-- **Moderne UI**: Entwickelt mit SolidJS und Tailwind CSS
-- **Komponenten-Bibliothek**: Vollständig dokumentiert mit Storybook
-- **Tests**: Umfassende Testabdeckung mit Vitest
-- **TypeScript**: Vollständig typisiert für bessere Entwicklererfahrung
+- **Modern UI**: Built with SolidJS and Tailwind CSS
+- **Component Library**: Fully documented with comprehensive examples
+- **Tests**: Comprehensive test coverage with Vitest
+- **TypeScript**: Fully typed for better developer experience
 
 ## 📦 Installation
 
@@ -15,48 +15,48 @@ Ein moderner Installer für das Regenfass-Projekt, entwickelt mit SolidJS und Vi
 pnpm install
 ```
 
-## 🛠️ Entwicklung
+## 🛠️ Development
 
-### Entwicklungsserver starten
+### Start Development Server
 
 ```bash
 pnpm dev
 ```
 
-### Tests ausführen
+### Run Tests
 
 ```bash
 pnpm test
 ```
 
-### Tests mit UI
+### Run Tests with UI
 
 ```bash
 pnpm test:ui
 ```
 
-### Testabdeckung
+### Test Coverage
 
 ```bash
 pnpm test:coverage
 ```
 
-## 📖 Dokumentation
+## 📖 Documentation
 
-- **[Komponenten-Dokumentation](./docs/COMPONENTS.md)**: Automatisch generierte Übersicht aller Komponenten
-- **[Projekt-Regeln](./docs/WARP.md)**: Entwicklungsrichtlinien und Standards
+- **[Component Documentation](./docs/COMPONENTS.md)**: Auto-generated overview of all components
+- **[Project Rules](./docs/WARP.md)**: Development guidelines and standards
 
 ### Living Documentation
 
-Die Komponenten-Dokumentation wird automatisch aus dem Quellcode generiert und bei jedem Build sowie vor jedem Commit aktualisiert.
+Component documentation is automatically generated from source code and updated on every build and before each commit.
 
-**Dokumentation manuell generieren:**
+**Generate documentation manually:**
 
 ```bash
 pnpm run docs:components
 ```
 
-**Dokumentation im Watch-Modus:**
+**Watch mode for documentation:**
 
 ```bash
 pnpm run docs:components:watch
@@ -70,16 +70,16 @@ pnpm build
 
 ## 🎨 Styling
 
-Das Projekt verwendet Tailwind CSS für das Styling. Alle Komponenten sind responsive und folgen modernen Design-Prinzipien.
+The project uses Tailwind CSS for styling. All components are responsive and follow modern design principles.
 
 ## 📝 Contributing
 
-1. Fork das Repository
-2. Erstelle einen Feature-Branch
-3. Schreibe Tests für neue Features
-4. Stelle sicher, dass alle Tests bestehen
-5. Erstelle einen Pull Request
+1. Fork the repository
+2. Create a feature branch
+3. Write tests for new features
+4. Ensure all tests pass
+5. Create a pull request
 
-## 📄 Lizenz
+## 📄 License
 
 MIT License

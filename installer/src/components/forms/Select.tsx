@@ -38,7 +38,11 @@ const Select = <T,>(props: SelectProps<T>) => {
         options={local.options}
         placeholder={local.placeholder}
         value={local.value}
-        onChange={local.onChange}
+        onChange={local.onChange ? (value: T | null) => {
+          if (value !== null) {
+            local.onChange!(value);
+          }
+        } : undefined}
         itemComponent={(props) => (
           <SelectItem item={props.item}>
             {getLabelFn()(props.item.rawValue)}

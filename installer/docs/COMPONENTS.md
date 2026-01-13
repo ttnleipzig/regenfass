@@ -7,28 +7,93 @@ This document contains automatically generated documentation for all components 
 ## Table of Contents
 
 - [Atoms](#atoms)
+  - [ButtonAction](#buttonaction)
+  - [ButtonAction](#buttonaction)
+  - [ButtonPrimary](#buttonprimary)
+  - [ButtonSecondary](#buttonsecondary)
   - [Confetti](#confetti)
   - [ConfettiSpinner](#confettispinner)
   - [Link](#link)
-- [Molecules](#molecules)
   - [Status](#status)
-- [Organisms](#organisms)
-  - [Header](#header)
-- [Ui](#ui)
+- [Molecules](#molecules)
   - [CardTitle](#cardtitle)
   - [CardDescription](#carddescription)
-  - [InputField](#input)
+  - [ErrorList](#errorlist)
+- [Organisms](#organisms)
+  - [Header](#header)
 - [Forms](#forms)
   - [Checkbox](#checkbox)
-  - [ErrorList](#errorlist)
   - [FileUploader](#fileuploader)
   - [FormField](#formfield)
   - [FormLayout](#formlayout)
-  - [ButtonPrimary](#primarybutton)
-  - [ButtonSecondary](#secondarybutton)
+  - [InputField](#inputfield)
   - [TextInput](#textinput)
 
 ## Atoms
+
+### ButtonAction
+
+**Path**: `atoms/ButtonAction.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/components`
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { ButtonAction } from '@/components/atoms/ButtonAction';
+```
+
+### ButtonAction
+
+**Path**: `atoms/ButtonAction.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/components`
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { ButtonAction } from '@/components/atoms/ButtonAction';
+```
+
+### ButtonPrimary
+
+**Path**: `atoms/ButtonPrimary.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/components`
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { ButtonPrimary } from '@/components/atoms/ButtonPrimary';
+```
+
+### ButtonSecondary
+
+**Path**: `atoms/ButtonSecondary.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/components`
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { ButtonSecondary } from '@/components/atoms/ButtonSecondary';
+```
 
 ### Confetti
 
@@ -37,11 +102,9 @@ This document contains automatically generated documentation for all components 
 **Dependencies:**
 
 *External:*
-
 - `solid-js`
 
 **Import:**
-
 ```typescript
 import { Confetti } from '@/components/atoms/Confetti';
 ```
@@ -53,11 +116,9 @@ import { Confetti } from '@/components/atoms/Confetti';
 **Dependencies:**
 
 *External:*
-
 - `solid-js`
 
 **Import:**
-
 ```typescript
 import { ConfettiSpinner } from '@/components/atoms/ConfettiSpinner';
 ```
@@ -69,31 +130,72 @@ import { ConfettiSpinner } from '@/components/atoms/ConfettiSpinner';
 **Dependencies:**
 
 *External:*
-
 - `solid-js`
 
 **Import:**
-
 ```typescript
 import { Link } from '@/components/atoms/Link';
 ```
 
-## Molecules
-
 ### Status
 
-**Path**: `molecules/Status.tsx`
+**Path**: `atoms/Status.tsx`
 
 **Dependencies:**
 
 *External:*
-
 - `solid-js`
 
 **Import:**
-
 ```typescript
-import { Status } from '@/components/molecules/Status';
+import { Status } from '@/components/atoms/Status';
+```
+
+## Molecules
+
+### CardDescription
+
+**Path**: `molecules/Card.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { CardDescription } from '@/components/molecules/Card';
+```
+
+### CardTitle
+
+**Path**: `molecules/Card.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { CardTitle } from '@/components/molecules/Card';
+```
+
+### ErrorList
+
+**Path**: `molecules/ErrorList.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/libs`
+- `solid-js`
+
+**Import:**
+```typescript
+import { ErrorList } from '@/components/molecules/ErrorList';
 ```
 
 ## Organisms
@@ -105,71 +207,15 @@ import { Status } from '@/components/molecules/Status';
 **Dependencies:**
 
 *External:*
-
+- `@solidjs/router`
 - `solid-js`
 
 *Internal:*
-
-- `ui/mode-toggle`
+- `atoms/ButtonModeToggle`
 
 **Import:**
-
 ```typescript
 import { Header } from '@/components/organisms/Header';
-```
-
-## Ui
-
-### CardDescription
-
-**Path**: `ui/Card.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { CardDescription } from '@/components/ui/card';
-```
-
-### CardTitle
-
-**Path**: `ui/Card.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { CardTitle } from '@/components/ui/card';
-```
-
-### InputField
-
-**Path**: `ui/InputField.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/components`
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { InputField } from '@/components/ui/input';
 ```
 
 ## Forms
@@ -181,35 +227,15 @@ import { InputField } from '@/components/ui/input';
 **Dependencies:**
 
 *External:*
-
 - `@/libs`
 - `solid-js`
 
 *Internal:*
-
 - `forms/FormField`
 
 **Import:**
-
 ```typescript
 import { Checkbox } from '@/components/forms/Checkbox';
-```
-
-### ErrorList
-
-**Path**: `forms/ErrorList.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ErrorList } from '@/components/forms/ErrorList';
 ```
 
 ### FileUploader
@@ -219,17 +245,14 @@ import { ErrorList } from '@/components/forms/ErrorList';
 **Dependencies:**
 
 *External:*
-
 - `@/components`
 - `@/libs`
 - `solid-js`
 
 *Internal:*
-
 - `forms/FormField`
 
 **Import:**
-
 ```typescript
 import { FileUploader } from '@/components/forms/FileUploader';
 ```
@@ -241,12 +264,10 @@ import { FileUploader } from '@/components/forms/FileUploader';
 **Dependencies:**
 
 *External:*
-
 - `@/libs`
 - `solid-js`
 
 **Import:**
-
 ```typescript
 import { FormField } from '@/components/forms/FormField';
 ```
@@ -258,51 +279,29 @@ import { FormField } from '@/components/forms/FormField';
 **Dependencies:**
 
 *External:*
-
 - `@/components`
 - `@/libs`
 - `solid-js`
 
 **Import:**
-
 ```typescript
 import { FormLayout } from '@/components/forms/FormLayout';
 ```
 
-### ButtonPrimary
+### InputField
 
-**Path**: `forms/ButtonPrimary.tsx`
+**Path**: `forms/InputField.tsx`
 
 **Dependencies:**
 
 *External:*
-
 - `@/components`
 - `@/libs`
 - `solid-js`
 
 **Import:**
-
 ```typescript
-import { ButtonPrimary } from '@/components/forms/ButtonPrimary';
-```
-
-### ButtonSecondary
-
-**Path**: `forms/ButtonSecondary.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/components`
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
+import { InputField } from '@/components/forms/InputField';
 ```
 
 ### TextInput
@@ -312,21 +311,19 @@ import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
 **Dependencies:**
 
 *External:*
-
 - `@/components`
 - `@/libs`
 - `solid-js`
 
 *Internal:*
-
 - `forms/FormField`
 
 **Import:**
-
 ```typescript
 import { TextInput } from '@/components/forms/TextInput';
 ```
 
+
 ---
 
-*Generated on 14. Oktober 2025 um 20:23*
+*Generated on 13. Januar 2026 um 23:39*

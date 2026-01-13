@@ -57,7 +57,7 @@ function Connect() {
 						install button.</span></li>
 			</ol>
 			<For each={statusChecks} >
-			  {(item) => <Status title={item.title} />}
+			  {(item) => <Status status="idle" message={item.title} />}
 			</For>
 
 			<SelectField

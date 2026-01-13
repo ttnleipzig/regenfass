@@ -1,6 +1,6 @@
 ---
 description: Verwende solid-icons
-globs: /installer/*/**
+globs: "installer/**/*"
 alwaysApply: true
 ---
 Verwende solid-icons in der UI des Installers

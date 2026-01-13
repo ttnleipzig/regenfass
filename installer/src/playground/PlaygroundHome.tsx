@@ -201,8 +201,8 @@ const PlaygroundHome: Component = () => {
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {Object.values(reg).reduce((total, comps) => 
-                total + comps.reduce((sum, comp) => sum + comp.props.length, 0), 0
+              {Object.values(reg).reduce((total: number, comps: any[]) => 
+                total + comps.reduce((sum: number, comp: any) => sum + comp.props.length, 0), 0
               )}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -211,8 +211,8 @@ const PlaygroundHome: Component = () => {
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">
-              {Object.values(reg).reduce((total, comps) => 
-                total + comps.reduce((sum, comp) => sum + comp.examples.length, 0), 0
+              {Object.values(reg).reduce((total: number, comps: any[]) => 
+                total + comps.reduce((sum: number, comp: any) => sum + comp.examples.length, 0), 0
               )}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">

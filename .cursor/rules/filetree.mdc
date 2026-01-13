@@ -1,6 +1,6 @@
 ---
 description: Filetree in Dokumentationen verboten
-globs:
+globs: "**/*.md"
 alwaysApply: true
 ---
 Erstelle in Dokumentationen keinen Filetree.

@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { Component, createEffect, createSignal } from "solid-js";
 import Prism from "prismjs";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-jsx";

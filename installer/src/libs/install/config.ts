@@ -3,7 +3,7 @@ const ConfigField = {
 	appKey: "appKey",
 	devEUI: "devEUI",
 } as const;
-type ConfigField = keyof typeof ConfigField;
+export type ConfigField = keyof typeof ConfigField;
 
 type GetDefaultValues<Fields extends ConfigField[]> = () => Record<
 	Fields[number],

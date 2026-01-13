@@ -6,44 +6,12 @@ This directory documents UI components following Atomic Design (Atoms → Molecu
 - **Molecules**: Compositions of atoms (form fields, dialogs).
 - **Organisms**: Complex sections (headers, footers, step views).
 
-## Index
+## Available Components
 
-### Atoms
+This documentation covers all UI components organized by their complexity level. Each component includes usage examples, props documentation, and design guidelines.
 
-- [AlertInline](atoms/alert.md)
-- [Badge](atoms/badge.md)
-- [Button](atoms/button.md)
-- [Card](atoms/card.md)
-- [Headline](atoms/headline.md)
-- [InputField](atoms/input.md)
-- [Link](atoms/link.md)
-- [SelectField](atoms/select.md)
-- [Confetti](atoms/confetti.md)
-- [ConfettiSpinner](atoms/confetti-spinner.md)
+**Atoms** provide the foundational building blocks including AlertInline, Badge, Button, Card, Headline, InputField, Link, SelectField, Confetti, and ConfettiSpinner. These are simple, reusable primitives that form the basis of the design system.
 
-### Molecules
+**Molecules** combine atoms into more complex components such as AlertInline Dialog, Checkbox, ErrorList, FileUploader, FormField, FormLayout, ButtonPrimary, ButtonSecondary, TextInput, and ButtonModeToggle. These components handle common UI patterns and interactions.
 
-- [AlertInline Dialog](molecules/alert-dialog.md)
-- [Checkbox](molecules/checkbox.md)
-- [ErrorList](molecules/error-list.md)
-- [FileUploader](molecules/file-uploader.md)
-- [FormField](molecules/form-field.md)
-- [FormLayout](molecules/form-layout.md)
-- [ButtonPrimary](molecules/primary-button.md)
-- [ButtonSecondary](molecules/secondary-button.md)
-- [TextInput](molecules/text-input.md)
-- [ButtonModeToggle](molecules/mode-toggle.md)
-
-### Organisms
-
-- [Header](../organisms/header.md)
-- [Footer](../organisms/footer.md)
-- [Newsletter](../organisms/newsletter.md)
-- [Welcome](../organisms/welcome.md)
-- [Flasher](../organisms/flasher.md)
-- Steps
-  - [Steps](../organisms/steps/steps.md)
-  - [Connect](../organisms/steps/connect.md)
-  - [Configuration](../organisms/steps/configuration.md)
-  - [Install](../organisms/steps/install.md)
-  - [Finish](../organisms/steps/finish.md)
+**Organisms** represent complete sections of the interface including Header, Footer, Newsletter, Welcome, Flasher, and the Steps components (Steps, Connect, Configuration, Install, and Finish). These are complex compositions that provide full functionality for major application sections.

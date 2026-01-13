@@ -1,8 +1,8 @@
-import { ConfigField } from "@/installer/types.ts";
 import {
 	Config,
 	CONFIG_VERSIONS,
 	DeviceInfo,
+	ConfigField,
 	getLatestConfigVersion,
 } from "@/libs/install/config.ts";
 import { readField, SCPAdapter, writeField } from "@/libs/install/scp";
@@ -14,7 +14,7 @@ import { assign, emit, fromPromise, setup } from "xstate";
 
 const url =
 	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
-const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
+// const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
 
 const sleep = (ms: number) =>
 	new Promise<void>((res) => setTimeout(() => res(), ms));
@@ -151,7 +151,8 @@ export const setupStateMachine = setup({
 			console.log("opening!");
 			await port.open({ baudRate: 115200 });
 
-			return [port, SCPAdapter.forSerialPort(port)] as const;
+			const result: [SerialPort, SCPAdapter] = [port, SCPAdapter.forSerialPort(port)];
+			return result;
 		}),
 		installFirmware: fromPromise<
 			[string, SCPAdapter],
@@ -276,7 +277,9 @@ export const setupStateMachine = setup({
 			console.log(firmwareMetadata);
 
 			await sleep(1000);
-			return [version, SCPAdapter.forSerialPort(port)] as const;
+			const adapter = SCPAdapter.forSerialPort(port);
+			const tuple: [string, SCPAdapter] = [version, adapter];
+			return Promise.resolve(tuple);
 		}),
 		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
 			({ input: { connection } }) => loadDeviceInfo(connection)
@@ -340,7 +343,6 @@ export const setupStateMachine = setup({
 			},
 		},
 		Start_FetchUpstreamVersions: {
-			guard: "webSerialSupported",
 			invoke: {
 				src: "fetchUpstreamVersions",
 				onDone: {
@@ -414,14 +416,18 @@ export const setupStateMachine = setup({
 
 		Install_WaitingForInstallationMethodChoice: {
 			on: {
-				"install.configure": {
-					guard: "alreadyInstalledOnDevice",
-					target: "Install_MigratingConfiguration",
-				},
-				"install.install": {
-					guard: "targetFirmwareVersionSet",
-					target: "Install_Installing",
-				},
+				"install.configure": [
+					{
+						guard: "alreadyInstalledOnDevice",
+						target: "Install_MigratingConfiguration",
+					},
+				],
+				"install.install": [
+					{
+						guard: "targetFirmwareVersionSet",
+						target: "Install_Installing",
+					},
+				],
 				"install.target_version_selected": {
 					actions: assign({
 						targetFirmwareVersion: (ctx) => ctx.event.version,
@@ -448,8 +454,10 @@ export const setupStateMachine = setup({
 								deviceInfo.configVersion ?? getLatestConfigVersion().version,
 							firmwareVersion: output[0],
 						}),
-						connection: ({ context: { connection }, event: { output } }) =>
-							[connection![0], output[1]] as const,
+						connection: ({ context: { connection }, event: { output } }) => {
+							const result: [SerialPort, SCPAdapter] = [connection![0], output[1]];
+							return result;
+						},
 					}),
 				},
 				onError: {

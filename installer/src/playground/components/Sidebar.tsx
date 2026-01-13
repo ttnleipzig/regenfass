@@ -79,7 +79,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
 
     Object.entries(props.registry).forEach(([category, components]) => {
       filtered[category as ComponentCategory] = components.filter(
-        (comp) => comp.name.toLowerCase().includes(term) ||
+        (comp: any) => comp.name.toLowerCase().includes(term) ||
                  comp.description.toLowerCase().includes(term)
       );
     });

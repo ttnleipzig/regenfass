@@ -14,7 +14,11 @@
     "playground:registry:watch": "tsx scripts/generate-playground-registry.ts --watch",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules\"",
     "lint:md:fix": "markdownlint-cli2 --fix \"**/*.md\" \"!node_modules\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@kobalte/core": "^0.13.11",
@@ -45,6 +49,7 @@
     "@types/node": "^24.2.1",
     "@types/prismjs": "^1.26.5",
     "@types/w3c-web-serial": "^1.0.8",
+    "@vitest/ui": "3.2.4",
     "autoprefixer": "^10.4.21",
     "chokidar": "^4.0.3",
     "crypto-js": "^4.2.0",
@@ -63,5 +68,5 @@
     "vite-plugin-solid": "^2.11.8",
     "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@9.12.0+sha512.4abf725084d7bcbafbd728bfc7bee61f2f791f977fd87542b3579dcb23504d170d46337945e4c66485cd12d588a0c0e570ed9c477e7ccdd8507cf05f3f92eaca"
+  "packageManager": "pnpm@10.28.0"
 }

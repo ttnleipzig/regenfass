@@ -1,4 +1,4 @@
-import { Component, JSX } from "solid-js";
+import { Component, For, JSX } from "solid-js";
 import { cn } from "@/libs/cn.ts";
 
 export interface ErrorListProps extends JSX.HTMLAttributes<HTMLDivElement> {
@@ -30,9 +30,9 @@ const ErrorList: Component<ErrorListProps> = (props) => {
           </h3>
           <div class="mt-2 text-sm text-red-700">
             <ul class="list-disc pl-5 space-y-1">
-              {errors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
+              <For each={errors}>
+                {(error) => <li>{error}</li>}
+              </For>
             </ul>
           </div>
         </div>

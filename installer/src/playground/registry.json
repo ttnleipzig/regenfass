@@ -1,6 +1,261 @@
 {
   "atoms": [
     {
+      "name": "Badge",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Badge.tsx",
+      "relativePath": "atoms/Badge.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Badge />"
+        }
+      ],
+      "importPath": "@/components/atoms/Badge"
+    },
+    {
+      "name": "Button",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Button.tsx",
+      "relativePath": "atoms/Button.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Button />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<Button loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/Button"
+    },
+    {
+      "name": "ButtonAction",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonAction.tsx",
+      "relativePath": "atoms/ButtonAction.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "type",
+          "type": "ActionButtonType",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "nativeType",
+          "type": "JSX.ButtonHTMLAttributes<HTMLButtonElement>[\"type\"]",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ButtonAction />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<ButtonAction loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/ButtonAction"
+    },
+    {
+      "name": "ButtonAction",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonAction.tsx",
+      "relativePath": "atoms/ButtonAction.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "type",
+          "type": "ActionButtonType",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "nativeType",
+          "type": "JSX.ButtonHTMLAttributes<HTMLButtonElement>[\"type\"]",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ButtonAction />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<ButtonAction loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/ButtonAction"
+    },
+    {
+      "name": "ButtonModeToggle",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonModeToggle.tsx",
+      "relativePath": "atoms/ButtonModeToggle.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ButtonModeToggle />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<ButtonModeToggle loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/ButtonModeToggle"
+    },
+    {
+      "name": "ButtonPrimary",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonPrimary.tsx",
+      "relativePath": "atoms/ButtonPrimary.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ButtonPrimary />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<ButtonPrimary loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/ButtonPrimary"
+    },
+    {
+      "name": "ButtonSecondary",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonSecondary.tsx",
+      "relativePath": "atoms/ButtonSecondary.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ButtonSecondary />"
+        },
+        {
+          "name": "Loading",
+          "description": "Button in loading state",
+          "props": {
+            "loading": true
+          },
+          "code": "<ButtonSecondary loading />"
+        }
+      ],
+      "importPath": "@/components/atoms/ButtonSecondary"
+    },
+    {
       "name": "Confetti",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Confetti.tsx",
       "relativePath": "atoms/Confetti.tsx",
@@ -43,6 +298,40 @@
       "importPath": "@/components/atoms/ConfettiSpinner"
     },
     {
+      "name": "Headline",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Headline.tsx",
+      "relativePath": "atoms/Headline.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Headline />"
+        }
+      ],
+      "importPath": "@/components/atoms/Headline"
+    },
+    {
+      "name": "Headline",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Headline.tsx",
+      "relativePath": "atoms/Headline.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Headline />"
+        }
+      ],
+      "importPath": "@/components/atoms/Headline"
+    },
+    {
       "name": "Link",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Link.tsx",
       "relativePath": "atoms/Link.tsx",
@@ -76,14 +365,12 @@
         }
       ],
       "importPath": "@/components/atoms/Link"
-    }
-  ],
-  "molecules": [
+    },
     {
       "name": "Status",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Status.tsx",
-      "relativePath": "molecules/Status.tsx",
-      "category": "molecules",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Status.tsx",
+      "relativePath": "atoms/Status.tsx",
+      "category": "atoms",
       "description": "",
       "props": [
         {
@@ -118,10 +405,3683 @@
           "code": "<Status status=\"idle\" message=\"Example message\" />"
         }
       ],
-      "importPath": "@/components/molecules/Status"
+      "importPath": "@/components/atoms/Status"
+    }
+  ],
+  "molecules": [
+    {
+      "name": "AlertDialogContent",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogContent />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogHeader",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogHeader />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogFooter",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogFooter />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogTitle",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogTitle />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogDescription",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogDescription />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogClose",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogClose />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertDialogAction",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "relativePath": "molecules/AlertDialog.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDialogAction />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertDialog"
+    },
+    {
+      "name": "AlertInline",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "relativePath": "molecules/AlertInline.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertInline />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertInline"
+    },
+    {
+      "name": "AlertTitle",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "relativePath": "molecules/AlertInline.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertTitle />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertInline"
+    },
+    {
+      "name": "AlertDescription",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "relativePath": "molecules/AlertInline.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<AlertDescription />"
+        }
+      ],
+      "importPath": "@/components/molecules/AlertInline"
+    },
+    {
+      "name": "Card",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Card />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "CardHeader",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardHeader />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "CardTitle",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardTitle />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "CardDescription",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardDescription />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "CardContent",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardContent />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "CardFooter",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "relativePath": "molecules/Card.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<CardFooter />"
+        }
+      ],
+      "importPath": "@/components/molecules/Card"
+    },
+    {
+      "name": "ErrorList",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/ErrorList.tsx",
+      "relativePath": "molecules/ErrorList.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "errors",
+          "type": "string[]",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<ErrorList />"
+        }
+      ],
+      "importPath": "@/components/molecules/ErrorList"
+    },
+    {
+      "name": "Flasher",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Flasher.tsx",
+      "relativePath": "molecules/Flasher.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Flasher />"
+        }
+      ],
+      "importPath": "@/components/molecules/Flasher"
+    },
+    {
+      "name": "StepConfigEditing",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConfigEditing.tsx",
+      "relativePath": "molecules/steps/StepConfigEditing.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConfigEditing state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConfigEditing"
+    },
+    {
+      "name": "StepConfigWritingConfiguration",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConfigWritingConfiguration.tsx",
+      "relativePath": "molecules/steps/StepConfigWritingConfiguration.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConfigWritingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConfigWritingConfiguration"
+    },
+    {
+      "name": "StepConnectConnecting",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConnectConnecting.tsx",
+      "relativePath": "molecules/steps/StepConnectConnecting.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConnectConnecting state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConnectConnecting"
+    },
+    {
+      "name": "StepConnectReadingVersion",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConnectReadingVersion.tsx",
+      "relativePath": "molecules/steps/StepConnectReadingVersion.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConnectReadingVersion state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConnectReadingVersion"
+    },
+    {
+      "name": "StepFinishShowingError",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepFinishShowingError.tsx",
+      "relativePath": "molecules/steps/StepFinishShowingError.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepFinishShowingError state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepFinishShowingError"
+    },
+    {
+      "name": "StepFinishShowingNextSteps",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepFinishShowingNextSteps.tsx",
+      "relativePath": "molecules/steps/StepFinishShowingNextSteps.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepFinishShowingNextSteps state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepFinishShowingNextSteps"
+    },
+    {
+      "name": "StepInstallInstalling",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallInstalling.tsx",
+      "relativePath": "molecules/steps/StepInstallInstalling.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallInstalling state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallInstalling"
+    },
+    {
+      "name": "StepInstallMigratingConfiguration",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallMigratingConfiguration.tsx",
+      "relativePath": "molecules/steps/StepInstallMigratingConfiguration.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallMigratingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallMigratingConfiguration"
+    },
+    {
+      "name": "StepInstallWaitingForInstallationMethodChoice",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
+      "relativePath": "molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallWaitingForInstallationMethodChoice state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice"
+    },
+    {
+      "name": "StepStartCheckingWebSerialSupport",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartCheckingWebSerialSupport.tsx",
+      "relativePath": "molecules/steps/StepStartCheckingWebSerialSupport.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartCheckingWebSerialSupport state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartCheckingWebSerialSupport"
+    },
+    {
+      "name": "StepStartFetchUpstreamVersions",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartFetchUpstreamVersions.tsx",
+      "relativePath": "molecules/steps/StepStartFetchUpstreamVersions.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartFetchUpstreamVersions state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartFetchUpstreamVersions"
+    },
+    {
+      "name": "StepStartWaitingForUser",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartWaitingForUser.tsx",
+      "relativePath": "molecules/steps/StepStartWaitingForUser.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartWaitingForUser state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartWaitingForUser"
+    },
+    {
+      "name": "Steps",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/Steps.tsx",
+      "relativePath": "molecules/steps/Steps.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Steps />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/Steps"
     }
   ],
   "organisms": [
+    {
+      "name": "Footer",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Footer.tsx",
+      "relativePath": "organisms/Footer.tsx",
+      "category": "organisms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Footer />"
+        }
+      ],
+      "importPath": "@/components/organisms/Footer"
+    },
     {
       "name": "Header",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Header.tsx",
@@ -138,14 +4098,12 @@
         }
       ],
       "importPath": "@/components/organisms/Header"
-    }
-  ],
-  "ui": [
+    },
     {
-      "name": "CardTitle",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/card.tsx",
-      "relativePath": "ui/card.tsx",
-      "category": "ui",
+      "name": "Newsletter",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Newsletter.tsx",
+      "relativePath": "organisms/Newsletter.tsx",
+      "category": "organisms",
       "description": "",
       "props": [],
       "examples": [
@@ -153,16 +4111,16 @@
           "name": "Default",
           "description": "Default component appearance",
           "props": {},
-          "code": "<CardTitle />"
+          "code": "<Newsletter />"
         }
       ],
-      "importPath": "@/components/ui/card"
+      "importPath": "@/components/organisms/Newsletter"
     },
     {
-      "name": "CardDescription",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/card.tsx",
-      "relativePath": "ui/card.tsx",
-      "category": "ui",
+      "name": "Welcome",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Welcome.tsx",
+      "relativePath": "organisms/Welcome.tsx",
+      "category": "organisms",
       "description": "",
       "props": [],
       "examples": [
@@ -170,66 +4128,13 @@
           "name": "Default",
           "description": "Default component appearance",
           "props": {},
-          "code": "<CardDescription />"
+          "code": "<Welcome />"
         }
       ],
-      "importPath": "@/components/ui/card"
-    },
-    {
-      "name": "Input",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/input.tsx",
-      "relativePath": "ui/input.tsx",
-      "category": "ui",
-      "description": "",
-      "props": [
-        {
-          "name": "error",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "helperText",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "class",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Input />"
-        },
-        {
-          "name": "With Error",
-          "description": "Input with validation error",
-          "props": {
-            "error": "This field is required"
-          },
-          "code": "<Input error=\"This field is required\" />"
-        }
-      ],
-      "importPath": "@/components/ui/input"
+      "importPath": "@/components/organisms/Welcome"
     }
   ],
+  "ui": [],
   "forms": [
     {
       "name": "Checkbox",
@@ -283,38 +4188,6 @@
         }
       ],
       "importPath": "@/components/forms/Checkbox"
-    },
-    {
-      "name": "ErrorList",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/ErrorList.tsx",
-      "relativePath": "forms/ErrorList.tsx",
-      "category": "forms",
-      "description": "",
-      "props": [
-        {
-          "name": "errors",
-          "type": "string[]",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<ErrorList />"
-        }
-      ],
-      "importPath": "@/components/forms/ErrorList"
     },
     {
       "name": "FileUploader",
@@ -476,18 +4349,32 @@
       "importPath": "@/components/forms/FormLayout"
     },
     {
-      "name": "PrimaryButton",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/PrimaryButton.tsx",
-      "relativePath": "forms/PrimaryButton.tsx",
+      "name": "InputField",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/InputField.tsx",
+      "relativePath": "forms/InputField.tsx",
       "category": "forms",
       "description": "",
       "props": [
         {
-          "name": "loading",
-          "type": "boolean",
+          "name": "error",
+          "type": "string",
           "required": false,
           "description": "",
-          "controlType": "boolean"
+          "controlType": "text"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
         },
         {
           "name": "class",
@@ -502,36 +4389,99 @@
           "name": "Default",
           "description": "Default component appearance",
           "props": {},
-          "code": "<PrimaryButton />"
+          "code": "<InputField />"
         },
         {
-          "name": "Loading",
-          "description": "Button in loading state",
+          "name": "With Error",
+          "description": "InputField with validation error",
           "props": {
-            "loading": true
+            "error": "This field is required"
           },
-          "code": "<PrimaryButton loading />"
+          "code": "<InputField error=\"This field is required\" />"
         }
       ],
-      "importPath": "@/components/forms/PrimaryButton"
+      "importPath": "@/components/forms/InputField"
     },
     {
-      "name": "SecondaryButton",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SecondaryButton.tsx",
-      "relativePath": "forms/SecondaryButton.tsx",
+      "name": "Select",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/Select.tsx",
+      "relativePath": "forms/Select.tsx",
       "category": "forms",
       "description": "",
       "props": [
         {
-          "name": "loading",
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "required",
           "type": "boolean",
           "required": false,
           "description": "",
           "controlType": "boolean"
         },
         {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
           "name": "class",
           "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "options",
+          "type": "T[]",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "value",
+          "type": "T",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "onChange",
+          "type": "(value: T) => void",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "getValue",
+          "type": "(item: T) => string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "getLabel",
+          "type": "(item: T) => string",
           "required": false,
           "description": "",
           "controlType": "text"
@@ -541,19 +4491,157 @@
         {
           "name": "Default",
           "description": "Default component appearance",
-          "props": {},
-          "code": "<SecondaryButton />"
-        },
-        {
-          "name": "Loading",
-          "description": "Button in loading state",
           "props": {
-            "loading": true
+            "options": "Example options"
           },
-          "code": "<SecondaryButton loading />"
+          "code": "<Select options=\"Example options\" />"
         }
       ],
-      "importPath": "@/components/forms/SecondaryButton"
+      "importPath": "@/components/forms/Select"
+    },
+    {
+      "name": "SelectTrigger",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
+      "relativePath": "forms/SelectField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<SelectTrigger />"
+        }
+      ],
+      "importPath": "@/components/forms/SelectField"
+    },
+    {
+      "name": "SelectContent",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
+      "relativePath": "forms/SelectField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<SelectContent />"
+        }
+      ],
+      "importPath": "@/components/forms/SelectField"
+    },
+    {
+      "name": "SelectItem",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
+      "relativePath": "forms/SelectField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<SelectItem />"
+        }
+      ],
+      "importPath": "@/components/forms/SelectField"
+    },
+    {
+      "name": "TextFieldRoot",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "relativePath": "forms/TextField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextFieldRoot />"
+        }
+      ],
+      "importPath": "@/components/forms/TextField"
+    },
+    {
+      "name": "TextFieldLabel",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "relativePath": "forms/TextField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextFieldLabel />"
+        }
+      ],
+      "importPath": "@/components/forms/TextField"
+    },
+    {
+      "name": "TextFieldInput",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "relativePath": "forms/TextField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextFieldInput />"
+        },
+        {
+          "name": "With Error",
+          "description": "InputField with validation error",
+          "props": {
+            "error": "This field is required"
+          },
+          "code": "<TextFieldInput error=\"This field is required\" />"
+        }
+      ],
+      "importPath": "@/components/forms/TextField"
+    },
+    {
+      "name": "TextFieldDescription",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "relativePath": "forms/TextField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextFieldDescription />"
+        }
+      ],
+      "importPath": "@/components/forms/TextField"
+    },
+    {
+      "name": "TextFieldErrorMessage",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "relativePath": "forms/TextField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<TextFieldErrorMessage />"
+        }
+      ],
+      "importPath": "@/components/forms/TextField"
     },
     {
       "name": "TextInput",
@@ -607,7 +4695,7 @@
         },
         {
           "name": "With Error",
-          "description": "Input with validation error",
+          "description": "InputField with validation error",
           "props": {
             "error": "This field is required"
           },
