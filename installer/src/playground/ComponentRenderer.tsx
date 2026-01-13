@@ -20,6 +20,42 @@ const moduleLoaders: Record<string, () => Promise<any>> = {
   ...import.meta.glob('@/components/**/*.{ts,tsx}')
 };
 
+const ComponentRendererContent: Component<{ loadedComponent: () => any; props: Record<string, any> }> = ({ loadedComponent, props }) => {
+  const comp = loadedComponent();
+  if (!comp) {
+    return (
+      <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+        <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+        <p class="text-yellow-600 text-sm mt-1">Component not loaded</p>
+      </div>
+    );
+  }
+  // Ensure comp is callable before rendering
+  if (typeof comp !== 'function' && !(comp && typeof comp === 'object' && 'call' in comp)) {
+    return (
+      <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+        <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+        <p class="text-yellow-600 text-sm mt-1">
+          Component is not callable. Type: {typeof comp}, Value: {String(comp)}
+        </p>
+      </div>
+    );
+  }
+  // Render the component directly as JSX element
+  // SolidJS JSX handles function components and Proxies correctly
+  try {
+    const Comp = comp as any;
+    return <Comp {...(props as any)} />;
+  } catch (err) {
+    return (
+      <div class="p-4 bg-red-50 border border-red-200 rounded-md">
+        <h3 class="text-red-800 font-medium">Rendering Error</h3>
+        <p class="text-red-600 text-sm mt-1">{String(err)}</p>
+      </div>
+    );
+  }
+};
+
 const ComponentRenderer: Component = () => {
   const params = useParams<{ category: string; component: string }>();
   const [component, setComponent] = createSignal<PlaygroundComponent | null>(null);
@@ -379,41 +415,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
         )}
       >
         <Suspense fallback={<div class="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />}>
-          {() => {
-            const comp = loadedComponent();
-            if (!comp) {
-              return (
-                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
-                  <p class="text-yellow-600 text-sm mt-1">Component not loaded</p>
-                </div>
-              );
-            }
-            // Ensure comp is callable before rendering
-            if (typeof comp !== 'function' && !(comp && typeof comp === 'object' && 'call' in comp)) {
-              return (
-                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
-                  <p class="text-yellow-600 text-sm mt-1">
-                    Component is not callable. Type: {typeof comp}, Value: {String(comp)}
-                  </p>
-                </div>
-              );
-            }
-            // Render the component directly as JSX element
-            // SolidJS JSX handles function components and Proxies correctly
-            try {
-              const Comp = comp as any;
-              return <Comp {...(props as any)} />;
-            } catch (err) {
-              return (
-                <div class="p-4 bg-red-50 border border-red-200 rounded-md">
-                  <h3 class="text-red-800 font-medium">Rendering Error</h3>
-                  <p class="text-red-600 text-sm mt-1">{String(err)}</p>
-                </div>
-              );
-            }
-          }}
+          <ComponentRendererContent loadedComponent={loadedComponent} props={props} />
         </Suspense>
       </ErrorBoundary>
     );
