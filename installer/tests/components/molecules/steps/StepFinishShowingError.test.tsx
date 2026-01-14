@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepFinishShowingError from "@/components/molecules/steps/StepFinishShowingError.tsx";
@@ -53,7 +54,8 @@ describe("StepFinishShowingError", () => {
     ));
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveClass("border-destructive");
+    // The destructive variant uses border-destructive/30, so check if it contains border-destructive
+    expect(alert?.className).toContain("border-destructive");
   });
 
   it("renders restart button", () => {

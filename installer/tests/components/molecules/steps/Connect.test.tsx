@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@solidjs/testing-library";
 import { connectStep } from "@/components/molecules/steps/Connect.tsx";
 
@@ -17,20 +17,24 @@ describe("Connect", () => {
 
   it("renders connect step", () => {
     const Component = connectStep.render;
-    render(() => <Component />);
-    expect(
-      screen.getByText(
-        /Connect your microcontroller with an USB cable to your computer/
-      )
-    ).toBeInTheDocument();
+    const { container } = render(() => <Component />);
+    // Check for the paragraph text specifically
+    const paragraph = container.querySelector("p");
+    expect(paragraph).toBeInTheDocument();
+    expect(paragraph?.textContent).toContain("Connect your microcontroller with an USB cable to your computer");
   });
 
   it("renders connection instructions", () => {
     const Component = connectStep.render;
-    render(() => <Component />);
-    expect(screen.getByText(/Connect your microcontroller/)).toBeInTheDocument();
-    expect(screen.getByText(/SelectField the microcontroller type/)).toBeInTheDocument();
-    expect(screen.getByText(/Click the install button/)).toBeInTheDocument();
+    const { container } = render(() => <Component />);
+    // Check for the ordered list items
+    const listItems = container.querySelectorAll("ol li");
+    expect(listItems.length).toBeGreaterThanOrEqual(3);
+    // Check that the instructions are present in the list items
+    const listText = Array.from(listItems).map(li => li.textContent).join(" ");
+    expect(listText).toContain("Connect your microcontroller");
+    expect(listText).toContain("SelectField the microcontroller type");
+    expect(listText).toContain("Click the install button");
   });
 
   it("renders status checks", () => {
@@ -46,8 +50,10 @@ describe("Connect", () => {
 
   it("renders select field", () => {
     const Component = connectStep.render;
-    const { container } = render(() => <Component />);
+    render(() => <Component />);
     // The SelectField should be rendered (checking by placeholder text)
-    expect(screen.getByText(/SelectField a board/)).toBeInTheDocument();
+    // Use getAllByText since the text appears multiple times
+    const selectFields = screen.getAllByText(/SelectField a board/);
+    expect(selectFields.length).toBeGreaterThan(0);
   });
 });

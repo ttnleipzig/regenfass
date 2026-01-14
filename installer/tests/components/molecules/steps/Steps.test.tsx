@@ -4,13 +4,13 @@ import Steps from "@/components/molecules/steps/Steps.tsx";
 
 // Mock XState Solid
 vi.mock("@xstate/solid", () => {
-  const { createSignal } = require("solid-js");
   return {
     useMachine: vi.fn(() => {
-      const [state] = createSignal({
+      // The component uses (state as any).matches(...), so state should be the object directly
+      const state = {
         matches: (value: string) => value === "Start_WaitingForUser",
         toJSON: () => ({ value: "Start_WaitingForUser" }),
-      });
+      };
       const emitEvent = vi.fn();
       return [state, emitEvent];
     }),

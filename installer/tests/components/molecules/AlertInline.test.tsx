@@ -18,7 +18,8 @@ describe("AlertInline", () => {
     ));
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveClass("border-destructive");
+    // The destructive variant uses border-destructive/30, so check if it contains border-destructive
+    expect(alert?.className).toContain("border-destructive");
   });
 
   it("applies warning variant", () => {
@@ -27,7 +28,8 @@ describe("AlertInline", () => {
     ));
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveClass("border-warning");
+    // The warning variant uses border-warning/30, so check if it contains border-warning
+    expect(alert?.className).toContain("border-warning");
   });
 
   it("applies info variant", () => {
@@ -36,7 +38,8 @@ describe("AlertInline", () => {
     ));
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveClass("border-info");
+    // The info variant uses border-info/30, so check if it contains border-info
+    expect(alert?.className).toContain("border-info");
   });
 
   it("shows icon by default", () => {

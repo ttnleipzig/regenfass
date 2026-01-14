@@ -126,12 +126,16 @@ describe("StepInstallWaitingForInstallationMethodChoice", () => {
   });
 
   it("renders select field", () => {
-    render(() => (
+    const { container } = render(() => (
       <StepInstallWaitingForInstallationMethodChoice
         state={mockState}
         emitEvent={mockEmitEvent}
       />
     ));
-    expect(screen.getByText(/SelectField a version/)).toBeInTheDocument();
+    // The SelectField should be rendered (checking by trigger button)
+    const selectTrigger = container.querySelector('[role="group"]');
+    expect(selectTrigger).toBeInTheDocument();
+    // Since a value is selected (1.0.0), check for that instead of placeholder
+    expect(screen.getByText("1.0.0")).toBeInTheDocument();
   });
 });
