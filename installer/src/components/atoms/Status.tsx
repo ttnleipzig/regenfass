@@ -1,4 +1,6 @@
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, createSignal, onMount, Show, Switch, Match } from "solid-js";
+import { cn } from "@/libs/cn.ts";
+import { Spinner } from "./Spinner.tsx";
 
 interface StatusProps {
   status: 'idle' | 'loading' | 'success' | 'error';
@@ -6,40 +8,55 @@ interface StatusProps {
 }
 
 const Status: Component<StatusProps> = (props) => {
-  const [bubble, setBubble] = createSignal('bg-green-500');
-
-  const statusBubbles = [
-    {
-      title: "Success",
-      color: "bg-green-500",
-    },
-    {
-      title: "Warning", 
-      color: "bg-yellow-500",
-    },
-    {
-      title: "Error",
-      color: "bg-red-500",
+  const getStatusColor = () => {
+    switch (props.status) {
+      case 'success':
+        return 'bg-green-500';
+      case 'error':
+        return 'bg-destructive';
+      case 'loading':
+        return 'bg-primary';
+      default:
+        return 'bg-muted';
     }
-  ];
+  };
 
-  onMount(() => {
-    // change status every 4 seconds
-    setInterval(() => {
-      setBubble(statusBubbles[Math.floor(Math.random() * statusBubbles.length)].color);
-    }, 4000);
-  });
+  const getPingColor = () => {
+    switch (props.status) {
+      case 'success':
+        return 'bg-green-400';
+      case 'error':
+        return 'bg-destructive/75';
+      case 'loading':
+        return 'bg-primary/75';
+      default:
+        return 'bg-muted/75';
+    }
+  };
 
   return (
-    <span class="relative inline-flex w-40" data-testid="status-indicator">
-      <p class="mb-0 text-sm font-bold pl-5">{props.message}</p>
-      <span 
-        class="absolute top-2 left-0 flex w-3 h-3 -mt-1 -mr-4"
-        title=""
-      >
-        <span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-green-400"></span>
-        <span class={`relative inline-flex w-3 h-3 rounded-full ${bubble()}`}></span>
-      </span>
+    <span class="relative inline-flex items-center gap-2" data-testid="status-indicator">
+      <Switch>
+        <Match when={props.status === 'loading'}>
+          <Spinner size="sm" class="text-primary" />
+        </Match>
+        <Match when={props.status !== 'loading'}>
+          <span 
+            class="relative flex w-3 h-3"
+            title={props.status}
+          >
+            <span class={cn(
+              "absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping",
+              getPingColor()
+            )}></span>
+            <span class={cn(
+              "relative inline-flex w-3 h-3 rounded-full",
+              getStatusColor()
+            )}></span>
+          </span>
+        </Match>
+      </Switch>
+      <p class={cn("mb-0 text-sm font-semibold", "text-foreground")}>{props.message}</p>
     </span>
   );
 };

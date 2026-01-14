@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms/Button.tsx";
-import { IconMoon, IconSun } from "@tabler/icons-solidjs";
+import { Moon, Sun } from "lucide-solid";
 import { useColorMode } from "@kobalte/core/color-mode";
 
 export function ButtonModeToggle() {
@@ -26,7 +26,7 @@ export function ButtonModeToggle() {
 			class="transition-transform duration-200 active:scale-95 text-foreground/80 hover:text-foreground"
 		>
 			<div class="relative h-4 w-4">
-				<IconSun
+				<Sun
 					size={16}
 					class={
 						(colorMode() === "dark"
@@ -35,7 +35,7 @@ export function ButtonModeToggle() {
 						" absolute inset-0 m-auto transition-all duration-300"
 					}
 				/>
-				<IconMoon
+				<Moon
 					size={16}
 					class={
 						(colorMode() === "light"
