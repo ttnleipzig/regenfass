@@ -12,6 +12,7 @@ import {
 import { useParams } from "@solidjs/router";
 import CodeViewer from "./components/CodeViewer";
 import PropsPanel from "./components/PropsPanel";
+import PixelRuler from "./components/PixelRuler";
 import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry, PropInfo } from "./types";
 
 // Dynamic module map for any component under src/components
@@ -28,7 +29,7 @@ const ComponentRenderer: Component = () => {
   const [registry, setRegistry] = createSignal<PlaygroundRegistry | null>(null);
   const [loading, setLoading] = createSignal(true);
   const [error, setError] = createSignal<string | null>(null);
-  const [viewMode, setViewMode] = createSignal<'desktop' | 'tablet' | 'mobile'>('desktop');
+  let previewContainerRef: HTMLDivElement | undefined;
 
   onMount(async () => {
     try {
@@ -427,14 +428,8 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   };
 
   const viewportClasses = () => {
-    switch (viewMode()) {
-      case 'mobile':
-        return 'max-w-sm mx-auto';
-      case 'tablet':
-        return 'max-w-2xl mx-auto';
-      default:
-        return 'w-full';
-    }
+    // Viewport width is now controlled by PixelRuler component
+    return 'w-full';
   };
 
   return (
@@ -478,45 +473,6 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                         </p>
                       </Show>
                     </div>
-
-                    {/* Viewport controls */}
-                    <div class="flex items-center space-x-2">
-                      <div class="flex bg-gray-100 dark:bg-gray-800 rounded-md p-1">
-                        <button
-                          onClick={() => setViewMode('mobile')}
-                          class={`px-3 py-1 text-sm rounded ${
-                            viewMode() === 'mobile'
-                              ? 'bg-white dark:bg-gray-700 shadow-sm'
-                              : 'text-gray-600 dark:text-gray-400'
-                          }`}
-                          title="Mobile view"
-                        >
-                          📱
-                        </button>
-                        <button
-                          onClick={() => setViewMode('tablet')}
-                          class={`px-3 py-1 text-sm rounded ${
-                            viewMode() === 'tablet'
-                              ? 'bg-white dark:bg-gray-700 shadow-sm'
-                              : 'text-gray-600 dark:text-gray-400'
-                          }`}
-                          title="Tablet view"
-                        >
-                          📄
-                        </button>
-                        <button
-                          onClick={() => setViewMode('desktop')}
-                          class={`px-3 py-1 text-sm rounded ${
-                            viewMode() === 'desktop'
-                              ? 'bg-white dark:bg-gray-700 shadow-sm'
-                              : 'text-gray-600 dark:text-gray-400'
-                          }`}
-                          title="Desktop view"
-                        >
-                          🖥️
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -550,7 +506,11 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
 
                 {/* Component preview - shown first on all screen sizes */}
                 <div class="p-6 flex-shrink-0">
-                  <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96">
+                  <div
+                    ref={previewContainerRef}
+                    class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96 overflow-hidden"
+                  >
+                    <PixelRuler containerRef={previewContainerRef} />
                     <div class="p-8">
                       <div class={viewportClasses()}>
                         <DynamicComponent />
