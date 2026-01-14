@@ -32,8 +32,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
       // Build a runtime registry from actual source files so Sidebar is always up-to-date
       const buildRuntimeRegistry = (): PlaygroundRegistry => {
         const loaders = {
-          ...import.meta.glob('@/components/**/*.{ts,tsx}'),
-          ...import.meta.glob('../components/**/*.{ts,tsx}')
+          ...import.meta.glob('../components/**/*.{ts,tsx}', { eager: false })
         };
 
         const categories = ['atoms', 'molecules', 'organisms', 'ui', 'forms'] as const;

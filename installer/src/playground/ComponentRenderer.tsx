@@ -15,45 +15,9 @@ import PropsPanel from "./components/PropsPanel";
 import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry, PropInfo } from "./types";
 
 // Dynamic module map for any component under src/components
+// Note: import.meta.glob doesn't support path aliases, so we use relative paths
 const moduleLoaders: Record<string, () => Promise<any>> = {
-  ...import.meta.glob('../components/**/*.{ts,tsx}'),
-  ...import.meta.glob('@/components/**/*.{ts,tsx}')
-};
-
-const ComponentRendererContent: Component<{ loadedComponent: () => any; props: Record<string, any> }> = ({ loadedComponent, props }) => {
-  const comp = loadedComponent();
-  if (!comp) {
-    return (
-      <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-        <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
-        <p class="text-yellow-600 text-sm mt-1">Component not loaded</p>
-      </div>
-    );
-  }
-  // Ensure comp is callable before rendering
-  if (typeof comp !== 'function' && !(comp && typeof comp === 'object' && 'call' in comp)) {
-    return (
-      <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-        <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
-        <p class="text-yellow-600 text-sm mt-1">
-          Component is not callable. Type: {typeof comp}, Value: {String(comp)}
-        </p>
-      </div>
-    );
-  }
-  // Render the component directly as JSX element
-  // SolidJS JSX handles function components and Proxies correctly
-  try {
-    const Comp = comp as any;
-    return <Comp {...(props as any)} />;
-  } catch (err) {
-    return (
-      <div class="p-4 bg-red-50 border border-red-200 rounded-md">
-        <h3 class="text-red-800 font-medium">Rendering Error</h3>
-        <p class="text-red-600 text-sm mt-1">{String(err)}</p>
-      </div>
-    );
-  }
+  ...import.meta.glob('../components/**/*.{ts,tsx}', { eager: false }),
 };
 
 const ComponentRenderer: Component = () => {
@@ -82,8 +46,7 @@ const ComponentRenderer: Component = () => {
       // Build a runtime registry from actual source files
       const buildRuntimeRegistry = (): PlaygroundRegistry => {
         const loaders = {
-          ...import.meta.glob('@/components/**/*.{ts,tsx}'),
-          ...import.meta.glob('../components/**/*.{ts,tsx}')
+          ...import.meta.glob('../components/**/*.{ts,tsx}', { eager: false })
         };
 
         const categories = ['atoms', 'molecules', 'organisms', 'ui', 'forms'] as const;
@@ -297,6 +260,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
       // Strategy 1: Direct match with normalized paths
       match = Object.entries(moduleLoaders).find(([k]) => {
         // Normalize the key to match the relative path
+        // The glob pattern returns paths like: "../components/atoms/Button.tsx"
         let normalizedKey = k
           .replace(/^.*\/src\/components\//, '')
           .replace(/^\.\.\/components\//, '')
@@ -317,8 +281,9 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
       
       // Strategy 3: Match by component name in path
       if (!match) {
+        const category = relative.split('/')[0];
         match = Object.entries(moduleLoaders).find(([k]) => {
-          return k.includes(name) && (k.includes('atoms') || k.includes(relative.split('/')[0]));
+          return k.includes(name) && (k.includes(category) || k.includes('atoms') || k.includes('molecules') || k.includes('organisms'));
         });
       }
 
@@ -369,14 +334,9 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
           console.warn(`Component "${name}" not found in module from "${importPath}". Available exports:`, Object.keys(mod));
         } catch (err) {
           console.error(`Error loading component "${name}" from "${importPath}":`, err);
+          throw err;
         }
       } else {
-        // Debug: log available keys to help diagnose
-        const availableKeys = Object.keys(moduleLoaders).filter(k => 
-          k.includes('Headline') || k.includes('atoms') || k.includes('headline')
-        );
-        console.warn(`Module not found for import path: ${importPath} (relative: ${relative}). Matching keys:`, availableKeys);
-        
         // Try a more flexible search as fallback
         const fallbackMatch = Object.entries(moduleLoaders).find(([k]) => {
           const fileName = k.split('/').pop()?.replace(/\.(tsx|ts)$/, '');
@@ -394,6 +354,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
             }
           } catch (err) {
             console.error(`Error loading component "${name}" via fallback:`, err);
+            throw err;
           }
         }
       }
@@ -415,7 +376,51 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
         )}
       >
         <Suspense fallback={<div class="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />}>
-          <ComponentRendererContent loadedComponent={loadedComponent} props={props} />
+          {(() => {
+            const comp = loadedComponent();
+            
+            if (!comp) {
+              return (
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+                  <p class="text-yellow-600 text-sm mt-1">Component not loaded</p>
+                </div>
+              );
+            }
+            
+            if (typeof comp !== 'function') {
+              return (
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <h3 class="text-yellow-800 font-medium">Component Loading Error</h3>
+                  <p class="text-yellow-600 text-sm mt-1">
+                    Component is not a function. Type: {typeof comp}
+                  </p>
+                </div>
+              );
+            }
+            
+            try {
+              const Component = comp as any;
+              const { children, ...restProps } = props;
+              if (children !== undefined && children !== null && children !== '') {
+                return <Component {...restProps}>{children}</Component>;
+              }
+              return <Component {...restProps} />;
+            } catch (err) {
+              return (
+                <div class="p-4 bg-red-50 border border-red-200 rounded-md">
+                  <h3 class="text-red-800 font-medium">Rendering Error</h3>
+                  <p class="text-red-600 text-sm mt-1">{String(err)}</p>
+                  {err instanceof Error && err.stack && (
+                    <details class="mt-2">
+                      <summary class="text-xs cursor-pointer">Stack trace</summary>
+                      <pre class="text-xs mt-1 overflow-auto">{err.stack}</pre>
+                    </details>
+                  )}
+                </div>
+              );
+            }
+          })()}
         </Suspense>
       </ErrorBoundary>
     );
