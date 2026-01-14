@@ -13,14 +13,14 @@ import { Headline } from '@/components/ui/headline';
 
 ## Props
 
-| Name      | Type                               | Default | Description                          |
-|-----------|------------------------------------|---------|--------------------------------------|
-| as        | 'h1' | 'h2' | 'h3' | 'h4'        | 'h2'    | Heading level                        |
-| align     | 'left' | 'center' | 'right'      | 'left'  | Text alignment                       |
-| subtitle  | string                             | -       | Optional subtitle line               |
-| icon      | JSX.Element                        | -       | Optional leading icon                |
-| class     | string                             | -       | Additional classes                   |
-| children  | JSX.Element                        | -       | Title content                        |
+| Name     | Type                            | Default  | Description            |
+|----------|---------------------------------|----------|------------------------|
+| as       | `'h1'`, `'h2'`, `'h3'`, `'h4'`  | `'h2'`   | Heading level          |
+| align    | `'left'`, `'center'`, `'right'` | `'left'` | Text alignment         |
+| subtitle | string                          | -        | Optional subtitle line |
+| icon     | JSX.Element                     | -        | Optional leading icon  |
+| class    | string                          | -        | Additional classes     |
+| children | JSX.Element                     | -        | Title content          |
 
 ## Design notes
 

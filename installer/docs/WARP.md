@@ -49,7 +49,7 @@ async function getUser(userId: string): Promise<User> { ... }
 
 Examples:
 
-```
+```text
 feat(auth): add JWT-based authentication
 fix(ui): correct button alignment on mobile
 chore(deps): update dependencies

@@ -26,38 +26,39 @@ import {
 ## Props
 
 ### SelectField
+
 Root select component - inherits all Kobalte SelectField props.
 
-| Name        | Type                    | Default | Description                           |
-|-------------|-------------------------|---------|---------------------------------------|
-| value       | string                  | -       | Current selected value                |
-| onValueChange | (value: string) => void | -      | Callback when selection changes       |
-| disabled    | boolean                 | false   | Disable the select                    |
-| ...         | Kobalte SelectProps     | -       | All Kobalte select root props         |
+| Name          | Type                    | Default | Description                     |
+|---------------|-------------------------|---------|---------------------------------|
+| value         | string                  | -       | Current selected value          |
+| onValueChange | (value: string) => void | -       | Callback when selection changes |
+| disabled      | boolean                 | false   | Disable the select              |
+| ...           | Kobalte SelectProps     | -       | All Kobalte select root props   |
 
 ### SelectTrigger
 
-| Name     | Type                      | Default | Description                     |
-|----------|---------------------------|---------|---------------------------------|
-| class    | string                    | -       | Additional CSS classes          |
-| children | JSX.Element               | -       | Trigger content                 |
-| ...      | Kobalte SelectTriggerProps| -       | All Kobalte trigger props       |
+| Name     | Type                       | Default | Description               |
+|----------|----------------------------|---------|---------------------------|
+| class    | string                     | -       | Additional CSS classes    |
+| children | JSX.Element                | -       | Trigger content           |
+| ...      | Kobalte SelectTriggerProps | -       | All Kobalte trigger props |
 
 ### SelectContent
 
-| Name     | Type                      | Default | Description                     |
-|----------|---------------------------|---------|---------------------------------|
-| class    | string                    | -       | Additional CSS classes          |
-| ...      | Kobalte SelectContentProps| -       | All Kobalte content props       |
+| Name  | Type                       | Default | Description               |
+|-------|----------------------------|---------|---------------------------|
+| class | string                     | -       | Additional CSS classes    |
+| ...   | Kobalte SelectContentProps | -       | All Kobalte content props |
 
 ### SelectItem
 
-| Name     | Type                    | Default | Description                     |
-|----------|-------------------------|---------|---------------------------------|
-| value    | string                  | -       | Item value                      |
-| class    | string                  | -       | Additional CSS classes          |
-| children | JSX.Element             | -       | Item label content              |
-| ...      | Kobalte SelectItemProps | -       | All Kobalte item props          |
+| Name     | Type                    | Default | Description            |
+|----------|-------------------------|---------|------------------------|
+| value    | string                  | -       | Item value             |
+| class    | string                  | -       | Additional CSS classes |
+| children | JSX.Element             | -       | Item label content     |
+| ...      | Kobalte SelectItemProps | -       | All Kobalte item props |
 
 ### SelectValue
 
