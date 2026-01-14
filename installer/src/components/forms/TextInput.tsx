@@ -20,7 +20,6 @@ const TextInput: Component<TextInputProps> = (props) => {
     <FormField
       label={local.label}
       required={local.required}
-      error={local.error}
       id={inputId()}
     >
       <InputField

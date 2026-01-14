@@ -5,6 +5,7 @@ import glob from 'fast-glob';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as chokidar from 'chokidar';
+import { info, success, warn, error, progress, watch as watchLog, header, endGroup } from './misc-cli-utils.mjs';
 
 interface ComponentInfo {
   name: string;
@@ -46,7 +47,7 @@ class ComponentDocGenerator {
 
   private log(message: string) {
     if (this.debug) {
-      console.log(`[${new Date().toISOString()}] ${message}`);
+      info(message, 'DEBUG');
     }
   }
 
@@ -453,7 +454,7 @@ This document contains automatically generated documentation for all components 
 
     markdown += `\n---
 
-*Generated on ${new Date().toLocaleString('de-DE', { 
+*Generated on ${new Date().toLocaleString('en-US', { 
   day: '2-digit', 
   month: 'long', 
   year: 'numeric',
@@ -556,10 +557,10 @@ This document contains automatically generated documentation for all components 
       
       // Write file
       fs.writeFileSync(this.outputPath, content, 'utf8');
-      console.log(`✅ Documentation generated: ${this.outputPath}`);
+      success(`Documentation generated: ${this.outputPath}`);
       return true;
-    } catch (error) {
-      console.error(`❌ Failed to write documentation: ${error}`);
+    } catch (err) {
+      error(`Failed to write documentation: ${err}`);
       return false;
     }
   }
@@ -569,15 +570,18 @@ This document contains automatically generated documentation for all components 
    */
   async generate(): Promise<void> {
     try {
-      console.log('🔍 Discovering components…');
+      header('Component Documentation Generator', 'Discovering and analyzing components');
+      info('Discovering components…');
       const componentFiles = await this.discoverComponents();
       
       if (componentFiles.length === 0) {
-        console.log('⚠️  No component files found');
+        warn('No component files found');
+        endGroup();
         return;
       }
 
-      console.log('📖 Analyzing components…');
+      info(`Found ${componentFiles.length} component files`);
+      info('Analyzing components…');
       const allComponents: ComponentInfo[] = [];
       const componentMap = new Map<string, ComponentInfo>();
       
@@ -596,16 +600,19 @@ This document contains automatically generated documentation for all components 
       }
 
       if (allComponents.length === 0) {
-        console.log('⚠️  No components found');
+        warn('No components found');
+        endGroup();
         return;
       }
 
-      console.log(`📝 Generating documentation for ${allComponents.length} components…`);
+      info(`Generating documentation for ${allComponents.length} components…`);
       const markdown = this.generateMarkdown(allComponents);
       await this.writeMarkdown(markdown);
+      endGroup();
       
-    } catch (error) {
-      console.error('❌ Error generating documentation:', error);
+    } catch (err) {
+      error(`Error generating documentation: ${err}`);
+      endGroup();
       process.exit(1);
     }
   }
@@ -614,7 +621,7 @@ This document contains automatically generated documentation for all components 
    * Watch for changes and regenerate
    */
   async watch(): Promise<void> {
-    console.log('👀 Watching for changes…');
+    watchLog('Watching for changes…');
     
     let debounceTimer: NodeJS.Timeout;
     
@@ -629,22 +636,22 @@ This document contains automatically generated documentation for all components 
     const regenerate = () => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        console.log('🔄 Regenerating documentation…');
+        info('Regenerating documentation…');
         this.generate();
       }, 300);
     };
 
     watcher
-      .on('add', (path) => {
-        console.log(`➕ Added: ${path}`);
+      .on('add', (filePath) => {
+        progress('[ADD]', filePath);
         regenerate();
       })
-      .on('change', (path) => {
-        console.log(`📝 Changed: ${path}`);
+      .on('change', (filePath) => {
+        progress('[CHG]', filePath);
         regenerate();
       })
-      .on('unlink', (path) => {
-        console.log(`➖ Removed: ${path}`);
+      .on('unlink', (filePath) => {
+        progress('[DEL]', filePath);
         regenerate();
       });
 
@@ -653,7 +660,7 @@ This document contains automatically generated documentation for all components 
     
     // Keep process alive
     process.on('SIGINT', () => {
-      console.log('\n👋 Stopping watcher…');
+      info('\nStopping watcher…');
       watcher.close();
       process.exit(0);
     });

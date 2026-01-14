@@ -22,7 +22,7 @@ const InputField: Component<InputProps> = (props) => {
   const inputId = () => local.id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
-    <TextFieldRoot class="space-y-2">
+    <TextFieldRoot class="space-y-2" validationState={local.error ? "invalid" : undefined}>
       {local.label && (
         <TextFieldLabel for={inputId()} class="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {local.label}

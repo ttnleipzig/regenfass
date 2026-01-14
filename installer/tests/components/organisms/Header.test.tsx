@@ -28,7 +28,7 @@ describe("Header", () => {
 		const TestComponent = () => component;
 		return render(() => (
 			<Router>
-				<Route path="/" component={TestComponent} />
+				<Route path="/*" component={TestComponent} />
 			</Router>
 		));
 	};

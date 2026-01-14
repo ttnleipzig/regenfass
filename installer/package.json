@@ -29,6 +29,8 @@
     "@statelyai/inspect": "^0.4.0",
     "@tabler/icons-solidjs": "^3.34.1",
     "@xstate/solid": "^2.0.0",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "esptool-js": "^0.5.7",

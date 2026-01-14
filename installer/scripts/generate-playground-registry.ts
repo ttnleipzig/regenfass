@@ -4,6 +4,7 @@ import { Project, SourceFile, Node, SyntaxKind } from 'ts-morph';
 import glob from 'fast-glob';
 import * as path from 'path';
 import * as fs from 'fs';
+import { info, success, warn, error, header, endGroup, stat } from './misc-cli-utils.mjs';
 
 interface PlaygroundComponent {
   name: string;
@@ -143,8 +144,8 @@ class PlaygroundRegistryGenerator {
           }
         }
       }
-    } catch (error) {
-      console.warn(`Error extracting props: ${error}`);
+      } catch (err) {
+      warn(`Error extracting props: ${err}`, 'Props Extraction');
     }
 
     return props;
@@ -197,8 +198,8 @@ class PlaygroundRegistryGenerator {
         controlType,
         options,
       };
-    } catch (error) {
-      console.warn(`Error extracting prop info: ${error}`);
+    } catch (err) {
+      warn(`Error extracting prop info: ${err}`, 'Prop Info');
       return null;
     }
   }
@@ -365,15 +366,18 @@ class PlaygroundRegistryGenerator {
 
   async generate(): Promise<void> {
     try {
-      console.log('🔍 Discovering components for playground…');
+      header('Playground Registry Generator', 'Discovering and analyzing components for playground');
+      info('Discovering components for playground…');
       const componentFiles = await this.discoverComponents();
 
       if (componentFiles.length === 0) {
-        console.log('⚠️  No component files found');
+        warn('No component files found');
+        endGroup();
         return;
       }
 
-      console.log('📖 Analyzing components…');
+      info(`Found ${componentFiles.length} component files`);
+      info('Analyzing components…');
       const allComponents: PlaygroundComponent[] = [];
 
       for (const filePath of componentFiles) {
@@ -383,7 +387,8 @@ class PlaygroundRegistryGenerator {
       }
 
       if (allComponents.length === 0) {
-        console.log('⚠️  No components found');
+        warn('No components found');
+        endGroup();
         return;
       }
 
@@ -407,12 +412,15 @@ class PlaygroundRegistryGenerator {
       const publicPath = path.resolve(process.cwd(), 'public/registry.json');
       fs.writeFileSync(publicPath, JSON.stringify(registry, null, 2), 'utf8');
 
-      console.log(`✅ Playground registry generated: ${this.outputPath}`);
-      console.log(`✅ Registry copied to public: ${publicPath}`);
-      console.log(`📊 Found ${allComponents.length} components across ${Object.keys(registry).length} categories`);
+      success(`Playground registry generated: ${this.outputPath}`);
+      success(`Registry copied to public: ${publicPath}`);
+      stat('Components found', allComponents.length);
+      stat('Categories', Object.keys(registry).length);
+      endGroup();
 
-    } catch (error) {
-      console.error('❌ Error generating playground registry:', error);
+    } catch (err) {
+      error(`Error generating playground registry: ${err}`);
+      endGroup();
       process.exit(1);
     }
   }
