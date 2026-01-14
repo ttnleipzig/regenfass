@@ -579,11 +579,20 @@ This document contains automatically generated documentation for all components 
 
       console.log('📖 Analyzing components…');
       const allComponents: ComponentInfo[] = [];
+      const componentMap = new Map<string, ComponentInfo>();
       
       for (const filePath of componentFiles) {
         const sourceFile = this.project.addSourceFileAtPath(filePath);
         const components = this.extractComponentInfo(sourceFile);
-        allComponents.push(...components);
+        
+        // Deduplicate components by name and category
+        for (const component of components) {
+          const key = `${component.category}:${component.name}`;
+          if (!componentMap.has(key)) {
+            componentMap.set(key, component);
+            allComponents.push(component);
+          }
+        }
       }
 
       if (allComponents.length === 0) {

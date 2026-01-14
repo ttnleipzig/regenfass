@@ -8,7 +8,6 @@ This document contains automatically generated documentation for all components 
 
 - [Atoms](#atoms)
   - [ButtonAction](#buttonaction)
-  - [ButtonAction](#buttonaction)
   - [ButtonPrimary](#buttonprimary)
   - [ButtonSecondary](#buttonsecondary)
   - [Confetti](#confetti)
@@ -30,24 +29,6 @@ This document contains automatically generated documentation for all components 
   - [TextInput](#textinput)
 
 ## Atoms
-
-### ButtonAction
-
-**Path**: `atoms/ButtonAction.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `@/components`
-- `@/libs`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ButtonAction } from '@/components/atoms/ButtonAction';
-```
 
 ### ButtonAction
 

@@ -26,7 +26,7 @@ import { AlertInline, AlertTitle, AlertDescription } from '@/components/ui/alert
 | variant  | `'default'`, `'info'`, `'warning'`, `'destructive'` | `'default'` | Color/intent variant      |
 | showIcon | boolean                                             | true        | Show matching intent icon |
 | class    | string                                              | -           | Additional classes        |
-| children | ReactNode (use Title/Description)                   | -           | Content inside the alert  |
+| children | JSX.Element (use Title/Description)                 | -           | Content inside the alert  |
 
 ## Design notes
 

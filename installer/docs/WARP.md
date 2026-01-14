@@ -69,7 +69,7 @@ chore(deps): update dependencies
 
 ## Project Structure
 
-This is a TypeScript React project with the following key technologies:
+This is a TypeScript SolidJS project with the following key technologies:
 
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
