@@ -53,13 +53,17 @@ describe("ErrorList", () => {
     const { container } = render(() => <ErrorList errors={["Error"]} />);
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
-    expect(svg).toHaveClass("text-red-400");
+    // Uses shadcn tokens - check for destructive color classes
+    // SVG className is SVGAnimatedString, so use classList or toHaveClass
+    expect(svg).toHaveClass("text-destructive");
   });
 
   it("applies correct styling classes", () => {
     const { container } = render(() => <ErrorList errors={["Error"]} />);
     const errorList = container.querySelector('[role="alert"]');
-    expect(errorList).toHaveClass("bg-red-50", "border-red-200");
+    // Uses shadcn tokens - check for destructive color classes
+    expect(errorList?.className.includes("bg-destructive")).toBeTruthy();
+    expect(errorList?.className.includes("border-destructive")).toBeTruthy();
   });
 
   it("renders errors as list items", () => {

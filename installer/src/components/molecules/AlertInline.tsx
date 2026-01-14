@@ -6,7 +6,7 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { ComponentProps, ParentProps, ValidComponent } from "solid-js";
 import { Show, splitProps } from "solid-js";
-import { IconAlertTriangle, IconCircleX, IconInfoCircle } from "@tabler/icons-solidjs";
+import { AlertTriangle, XCircle, Info } from "lucide-solid";
 
 export const alertVariants = cva(
 	"relative w-full rounded-lg border text-sm bg-card/60 dark:bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-5 py-4 ring-1 ring-border/50 dark:ring-border/60 [&:has(svg)]:pl-12 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-5 [&>svg]:top-4 [&>svg]:text-foreground",
@@ -42,11 +42,11 @@ export const AlertInline = <T extends ValidComponent = "div">(
 	const iconForVariant = () => {
 		switch (local.variant) {
 			case "destructive":
-				return <IconCircleX size={16} />;
+				return <XCircle size={16} />;
 			case "warning":
-				return <IconAlertTriangle size={16} />;
+				return <AlertTriangle size={16} />;
 			case "info":
-				return <IconInfoCircle size={16} />;
+				return <Info size={16} />;
 			default:
 				return null;
 		}
