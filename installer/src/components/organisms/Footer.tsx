@@ -1,4 +1,4 @@
-import { IconBook, IconBrandGithub, IconBrandMatrix } from "@tabler/icons-solidjs";
+import { Book, Github, MessageSquare } from "lucide-solid";
 
 export default function Footer() {
 	return (
@@ -9,19 +9,19 @@ export default function Footer() {
 					<ul class="flex font-medium text-gray-800 gap-x-3 dark:text-gray-400">
 						<li>
 							<a href="https://docs.regenfass.eu/" class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline">
-								<IconBook size={18} />
+								<Book size={18} />
 								<span>Docs</span>
 							</a>
 						</li>
 						<li>
 							<a href="https://github.com/ttnleipzig/regenfass" class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline">
-								<IconBrandGithub size={18} />
+								<Github size={18} />
 								<span>GitHub</span>
 							</a>
 						</li>
 						<li>
 							<a href="https://matrix.to/#/#ttn-leipzig:matrix.org" class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline">
-								<IconBrandMatrix size={18} />
+								<MessageSquare size={18} />
 								<span>Matrix</span>
 							</a>
 						</li>

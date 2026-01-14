@@ -50,9 +50,9 @@ describe("Link", () => {
   it("applies correct styling classes", () => {
     const { container } = render(() => <Link href="/test">Styled Link</Link>);
     const link = container.querySelector("a");
-    expect(link).toHaveClass("text-blue-600");
-    expect(link).toHaveClass("hover:text-blue-800");
-    expect(link).toHaveClass("underline");
+    expect(link).toHaveClass("text-primary");
+    expect(link).toHaveClass("underline-offset-4");
+    expect(link).toHaveClass("hover:underline");
   });
 
   it("handles different external link formats", () => {

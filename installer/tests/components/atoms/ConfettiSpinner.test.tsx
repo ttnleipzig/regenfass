@@ -9,7 +9,8 @@ describe("ConfettiSpinner", () => {
 
   it("renders spinner element", () => {
     const { container } = render(() => <ConfettiSpinner />);
-    const spinner = container.querySelector("div.animate-spin");
+    // Spinner is now an SVG element (LoaderCircle) with animate-spin class
+    const spinner = container.querySelector("svg.animate-spin");
     expect(spinner).toBeInTheDocument();
   });
 
@@ -35,13 +36,11 @@ describe("ConfettiSpinner", () => {
 
   it("has correct spinner structure", () => {
     const { container } = render(() => <ConfettiSpinner />);
-    const spinner = container.querySelector("div.animate-spin");
-    expect(spinner).toHaveClass("w-16");
-    expect(spinner).toHaveClass("h-16");
-    expect(spinner).toHaveClass("border-4");
-    expect(spinner).toHaveClass("border-gray-200");
-    expect(spinner).toHaveClass("border-t-blue-500");
-    expect(spinner).toHaveClass("rounded-full");
+    // Spinner is now LoaderCircle SVG with size-lg (size-6)
+    const spinner = container.querySelector("svg.animate-spin");
+    expect(spinner).toBeInTheDocument();
+    expect(spinner).toHaveClass("size-6");
+    expect(spinner).toHaveClass("text-primary");
   });
 
   it("has correct container structure", () => {

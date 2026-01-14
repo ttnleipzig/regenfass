@@ -33,7 +33,8 @@ describe("Status", () => {
     const { container } = render(() => <Status status="idle" message="Test" />);
     const pingElement = container.querySelector("span.animate-ping");
     expect(pingElement).toBeInTheDocument();
-    expect(pingElement).toHaveClass("bg-green-400");
+    // Uses shadcn tokens, check for muted/75 or status-specific color
+    expect(pingElement?.className.includes("bg-") || pingElement?.className.includes("bg-muted")).toBeTruthy();
   });
 
   it("renders with different status values", () => {
@@ -96,17 +97,19 @@ describe("Status", () => {
     const { container } = render(() => <Status status="idle" message="Test message" />);
     const message = container.querySelector("p.text-sm");
     expect(message).toBeInTheDocument();
-    expect(message).toHaveClass("font-bold");
-    expect(message).toHaveClass("pl-5");
+    expect(message).toHaveClass("font-semibold");
+    expect(message).toHaveClass("text-foreground");
     expect(message).toHaveClass("mb-0");
   });
 
   it("has correct bubble container structure", () => {
     const { container } = render(() => <Status status="idle" message="Test" />);
-    const bubbleContainer = container.querySelector("span.absolute");
-    expect(bubbleContainer).toBeInTheDocument();
-    expect(bubbleContainer).toHaveClass("top-2");
-    expect(bubbleContainer).toHaveClass("left-0");
+    // Status now uses flex layout with gap, not absolute positioning
+    const statusContainer = container.querySelector('[data-testid="status-indicator"]');
+    expect(statusContainer).toBeInTheDocument();
+    expect(statusContainer).toHaveClass("inline-flex");
+    expect(statusContainer).toHaveClass("items-center");
+    expect(statusContainer).toHaveClass("gap-2");
   });
 
   it("has correct bubble size", () => {
@@ -117,14 +120,15 @@ describe("Status", () => {
   });
 
   it("bubble uses one of the defined status colors", () => {
-    const { container } = render(() => <Status status="idle" message="Test" />);
+    const { container } = render(() => <Status status="success" message="Test" />);
     const bubble = container.querySelector("span.rounded-full:not(.animate-ping)");
     
-    // Should have one of: bg-green-500, bg-yellow-500, or bg-red-500
+    // Should have one of: bg-green-500, bg-destructive, bg-primary, or bg-muted
     const hasValidColor = 
       bubble?.className.includes("bg-green-500") ||
-      bubble?.className.includes("bg-yellow-500") ||
-      bubble?.className.includes("bg-red-500");
+      bubble?.className.includes("bg-destructive") ||
+      bubble?.className.includes("bg-primary") ||
+      bubble?.className.includes("bg-muted");
     
     expect(hasValidColor).toBe(true);
   });

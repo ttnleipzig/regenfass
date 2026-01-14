@@ -9,20 +9,20 @@ describe("Confetti", () => {
 
   it("renders confetti elements when active is true", () => {
     const { container } = render(() => <Confetti active={true} />);
-    // Confetti elements have bg-* classes
-    const confettiElements = container.querySelectorAll("div[class*='bg-red-500'], div[class*='bg-blue-500'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
+    // Confetti elements have bg-* classes (including shadcn tokens)
+    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
     expect(confettiElements.length).toBeGreaterThan(0);
   });
 
   it("does not render confetti when active is false", () => {
     const { container } = render(() => <Confetti active={false} />);
-    const confettiElements = container.querySelectorAll("div[class*='bg-red-500'], div[class*='bg-blue-500'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
+    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
     expect(confettiElements.length).toBe(0);
   });
 
   it("does not render confetti when active is undefined", () => {
     const { container } = render(() => <Confetti />);
-    const confettiElements = container.querySelectorAll("div[class*='bg-red-500'], div[class*='bg-blue-500'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
+    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
     expect(confettiElements.length).toBe(0);
   });
 
@@ -43,10 +43,10 @@ describe("Confetti", () => {
     const allConfetti = container.querySelectorAll("div.animate-bounce");
     expect(allConfetti.length).toBe(5);
     
-    // Verify individual colors exist by checking class names
+    // Verify individual colors exist by checking class names (using shadcn tokens)
     const confettiArray = Array.from(allConfetti);
-    const hasRed = confettiArray.some(el => el.className.includes("bg-red-500"));
-    const hasBlue = confettiArray.some(el => el.className.includes("bg-blue-500"));
+    const hasRed = confettiArray.some(el => el.className.includes("bg-destructive"));
+    const hasBlue = confettiArray.some(el => el.className.includes("bg-primary"));
     const hasGreen = confettiArray.some(el => el.className.includes("bg-green-500"));
     const hasYellow = confettiArray.some(el => el.className.includes("bg-yellow-500"));
     const hasPurple = confettiArray.some(el => el.className.includes("bg-purple-500"));

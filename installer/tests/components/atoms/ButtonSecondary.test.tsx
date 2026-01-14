@@ -62,8 +62,7 @@ describe("ButtonSecondary", () => {
     expect(spinner).toHaveClass("text-gray-500");
     expect(spinner).toHaveClass("-ml-1");
     expect(spinner).toHaveClass("mr-3");
-    expect(spinner).toHaveClass("h-4");
-    expect(spinner).toHaveClass("w-4");
+    expect(spinner).toHaveClass("size-3");
   });
 
   it("renders children when not loading", () => {

@@ -63,10 +63,12 @@ describe("Newsletter", () => {
 		expect(form).toHaveClass("flex");
 		expect(form).toHaveClass("px-4");
 		expect(form).toHaveClass("py-2");
-		expect(form).toHaveClass("bg-white");
+		expect(form).toHaveClass("bg-background");
 		expect(form).toHaveClass("rounded-full");
 		expect(form).toHaveClass("focus-within:ring-2");
 		expect(form).toHaveClass("hover:ring-2");
+		expect(form).toHaveClass("border");
+		expect(form).toHaveClass("border-input");
 	});
 
 	it("subscribe button has correct styling", () => {
