@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
-import { TextInput } from "../../components/forms/TextInput";
+import { TextInput } from "@/components/forms/TextInput";
 
 describe("TextInput", () => {
   afterEach(() => {
