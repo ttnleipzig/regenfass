@@ -9,9 +9,10 @@ import (
 )
 
 type Device struct {
-	ID           pgtype.UUID
-	DeviceEui    string
-	MinimumLevel float64
+	ID        pgtype.UUID
+	DeviceEui string
+	RwToken   string
+	RoToken   string
 }
 
 type DeviceChannelMapping struct {
@@ -20,10 +21,23 @@ type DeviceChannelMapping struct {
 	Name      string
 }
 
+type DeviceGroup struct {
+	DeviceID   pgtype.UUID
+	GroupID    pgtype.UUID
+	IsReadonly bool
+}
+
 type DeviceMeasurement struct {
 	ReceivedAt      pgtype.Timestamptz
 	DeviceID        pgtype.UUID
 	ChannelID       int16
 	Value           []byte
 	MeasurementType int16
+}
+
+type Group struct {
+	ID      pgtype.UUID
+	Name    string
+	RwToken string
+	RoToken string
 }

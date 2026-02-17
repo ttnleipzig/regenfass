@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS device_group;
+
+DROP TABLE IF EXISTS "group";
+
+ALTER TABLE device
+	DROP COLUMN IF EXISTS rw_token,
+	DROP COLUMN IF EXISTS ro_token;
+
+DROP FUNCTION IF EXISTS generate_random_token(INT);

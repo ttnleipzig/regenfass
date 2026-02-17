@@ -12,28 +12,42 @@ import (
 )
 
 const getDeviceByEUI = `-- name: GetDeviceByEUI :one
-SELECT id, device_eui, minimum_level FROM device WHERE device_eui = $1
+SELECT id, device_eui, rw_token, ro_token FROM device WHERE device_eui = $1
 `
 
 func (q *Queries) GetDeviceByEUI(ctx context.Context, deviceEui string) (Device, error) {
 	row := q.db.QueryRow(ctx, getDeviceByEUI, deviceEui)
 	var i Device
-	err := row.Scan(&i.ID, &i.DeviceEui, &i.MinimumLevel)
+	err := row.Scan(
+		&i.ID,
+		&i.DeviceEui,
+		&i.RwToken,
+		&i.RoToken,
+	)
 	return i, err
 }
 
-const updateDeviceMinimumLevel = `-- name: UpdateDeviceMinimumLevel :one
-UPDATE device SET minimum_level = $2 WHERE device_eui = $1 RETURNING id
+const getDeviceByEitherToken = `-- name: GetDeviceByEitherToken :one
+SELECT id, device_eui, rw_token, ro_token, (ro_token = $1) AS is_readonly FROM device WHERE ro_token = $1 OR rw_token = $1
 `
 
-type UpdateDeviceMinimumLevelParams struct {
-	DeviceEui    string
-	MinimumLevel float64
+type GetDeviceByEitherTokenRow struct {
+	ID         pgtype.UUID
+	DeviceEui  string
+	RwToken    string
+	RoToken    string
+	IsReadonly bool
 }
 
-func (q *Queries) UpdateDeviceMinimumLevel(ctx context.Context, arg UpdateDeviceMinimumLevelParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, updateDeviceMinimumLevel, arg.DeviceEui, arg.MinimumLevel)
-	var id pgtype.UUID
-	err := row.Scan(&id)
-	return id, err
+func (q *Queries) GetDeviceByEitherToken(ctx context.Context, roToken string) (GetDeviceByEitherTokenRow, error) {
+	row := q.db.QueryRow(ctx, getDeviceByEitherToken, roToken)
+	var i GetDeviceByEitherTokenRow
+	err := row.Scan(
+		&i.ID,
+		&i.DeviceEui,
+		&i.RwToken,
+		&i.RoToken,
+		&i.IsReadonly,
+	)
+	return i, err
 }

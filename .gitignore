@@ -1,5 +1,7 @@
 /*
 
+!/.vscode/launch.json
+
 !/.devcontainer
 !/.github
 !/board_partions
@@ -28,3 +30,4 @@
 /playwright/.cache/
 
 !/backend
+!/frontend

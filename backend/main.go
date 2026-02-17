@@ -14,13 +14,11 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ttn-leipzig/regenfass/internal/api"
-	"github.com/ttn-leipzig/regenfass/internal/db"
 	"github.com/ttn-leipzig/regenfass/sql"
 )
 
 var (
 	pool *pgxpool.Pool
-	q    *db.Queries
 )
 var (
 	logLevelFlag    = flag.String("log-level", "INFO", "Log level")

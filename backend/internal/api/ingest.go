@@ -23,7 +23,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 		} `json:"uplink_message"`
 	}
 
-	log := utils.GetRequestLogger(c)
+	log := a.getRequestLogger(c)
 
 	var body Body
 	if err := c.Bind().JSON(&body); err != nil {
@@ -31,17 +31,17 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "could not parse request body")
 	}
 
-	log = log.With().Str("deviceEUI", body.EndDeviceIDs.DevEUI).Logger()
+	log = a.log.With().Str("deviceEUI", body.EndDeviceIDs.DevEUI).Logger()
 
 	payload, err := base64.StdEncoding.DecodeString(body.UplinkMessage.Payload)
 	if err != nil {
-		log.Error().Err(err).Msg("could not parse message payload")
+		a.log.Error().Err(err).Msg("could not parse message payload")
 		return fiber.NewError(fiber.StatusBadRequest, "could not parse message payload")
 	}
 
-	log.Debug().Hex("decoded", payload).Str("raw", body.UplinkMessage.Payload).Msg("parsed payload")
+	a.log.Debug().Hex("decoded", payload).Str("raw", body.UplinkMessage.Payload).Msg("parsed payload")
 
-	log.Debug().Msg("got request")
+	a.log.Debug().Msg("got request")
 
 	tx, err := a.dbPool.BeginTx(c.Context(), pgx.TxOptions{
 		IsoLevel:       pgx.Serializable,
@@ -49,7 +49,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 		DeferrableMode: pgx.NotDeferrable,
 	})
 	if err != nil {
-		log.Error().Err(err).Msg("could not begin database transaction")
+		a.log.Error().Err(err).Msg("could not begin database transaction")
 		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 	defer tx.Rollback(c.Context())
@@ -57,7 +57,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 
 	device, err := q.GetDeviceByEUI(c.Context(), body.EndDeviceIDs.DevEUI)
 	if err != nil {
-		log.Error().Err(err).Msg("could not get device by EUI")
+		a.log.Error().Err(err).Msg("could not get device by EUI")
 		return fiber.NewError(fiber.StatusInternalServerError, "could not get device by EUI")
 	}
 
@@ -66,18 +66,18 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	// 	MinimumLevel: float64(minimumLevel),
 	// })
 	// if err != nil {
-	// 	log.Error().Err(err).Msg("could not update device's minimum level")
+	// 	a.log.Error().Err(err).Msg("could not update device's minimum level")
 	// 	return fiber.NewError(fiber.StatusInternalServerError)
 	// }
 
 	deviceUUID := utils.PGToUUID(device.ID)
-	log = log.With().Stringer("deviceUUID", deviceUUID).Logger()
+	a.log = a.log.With().Stringer("deviceUUID", deviceUUID).Logger()
 
-	log.Debug().Msg("found device in DB")
+	a.log.Debug().Msg("found device in DB")
 
 	datapoints, err := loraprotocol.Decode(payload)
 	if err != nil {
-		log.Error().Err(err).Msg("could not decode payload")
+		a.log.Error().Err(err).Msg("could not decode payload")
 		return fiber.NewError(fiber.StatusBadRequest, "could not decode payload")
 	}
 
@@ -85,7 +85,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	for _, point := range datapoints {
 		v, err := json.Marshal(point.Value)
 		if err != nil {
-			log.Error().Err(err).Msg("could not marshal point value")
+			a.log.Error().Err(err).Msg("could not marshal point value")
 			return fiber.NewError(fiber.StatusInternalServerError, "could not marshal point value")
 		}
 
@@ -99,12 +99,12 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	}
 
 	if _, err = q.InsertDeviceMeasurements(c.Context(), pointsToInsert); err != nil {
-		log.Error().Err(err).Msg("could not insert device measurement")
+		a.log.Error().Err(err).Msg("could not insert device measurement")
 		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 
 	if err := tx.Commit(c.Context()); err != nil {
-		log.Error().Err(err).Msg("could not commit database transaction")
+		a.log.Error().Err(err).Msg("could not commit database transaction")
 		return fiber.NewError(fiber.StatusInternalServerError)
 	}
 
