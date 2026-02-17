@@ -1,0 +1,287 @@
+basePath: /
+definitions:
+  api.AddDeviceToGroupPayload:
+    description: Request body to add a device to an existing group
+    properties:
+      device_token:
+        example: device_token_123
+        type: string
+    type: object
+  api.CreateGroupPayload:
+    description: Request body to create a new device group
+    properties:
+      name:
+        example: My Rain Barrel Group
+        type: string
+    type: object
+  api.CreateGroupResponse:
+    description: Response with group ID and tokens
+    properties:
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      read_only_token:
+        example: ro_group_token_123
+        type: string
+      read_write_token:
+        example: rw_group_token_123
+        type: string
+    type: object
+  api.DeviceInfoResponse:
+    properties:
+      device_eui:
+        example: AABBCCDDEEFF0011
+        type: string
+      read_only_token:
+        example: ro_token_123
+        type: string
+      read_write_token:
+        example: rw_token_123
+        type: string
+      token:
+        example: dev_token_123
+        type: string
+    type: object
+  api.GroupInfoDevice:
+    description: Device information within a group
+    properties:
+      is_readonly:
+        example: false
+        type: boolean
+      token:
+        example: device_token_123
+        type: string
+    type: object
+  api.GroupInfoResponse:
+    description: Detailed group information including associated devices
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.GroupInfoDevice'
+        type: array
+      is_readonly:
+        example: false
+        type: boolean
+      name:
+        example: My Rain Barrel Group
+        type: string
+    type: object
+  api.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: error message
+        type: string
+    type: object
+  api.IngestRequest:
+    description: Request body for ingesting device measurements from LoRaWAN uplink
+      messages
+    properties:
+      end_device_ids:
+        properties:
+          dev_eui:
+            example: "1234567890123456"
+            type: string
+        type: object
+      uplink_message:
+        properties:
+          frm_payload:
+            example: AQIDBA==
+            type: string
+          received_at:
+            example: "2024-01-15T10:30:00Z"
+            type: string
+        type: object
+    type: object
+host: localhost:64000
+info:
+  contact: {}
+  description: API for managing LoRaWAN rain barrel devices and sensor data
+  title: Regenfass API
+  version: "1.0"
+paths:
+  /device/{deviceToken}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve device details using either read-write or read-only token
+      parameters:
+      - description: Device token (read-write or read-only)
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.DeviceInfoResponse'
+        "400":
+          description: Invalid token
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get device information by token
+      tags:
+      - devices
+  /group:
+    post:
+      consumes:
+      - application/json
+      description: Create a new device group for organizing rain barrel devices
+      parameters:
+      - description: Group name
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateGroupPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.CreateGroupResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a new group
+      tags:
+      - groups
+  /group/{groupToken}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve group details and associated devices using either read-write
+        or read-only token
+      parameters:
+      - description: Group token (read-write or read-only)
+        in: path
+        name: groupToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.GroupInfoResponse'
+        "400":
+          description: Invalid group token
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get group information by token
+      tags:
+      - groups
+  /group/{groupToken}/devices:
+    post:
+      consumes:
+      - application/json
+      description: Add an existing device to a group using the group's read-write
+        token
+      parameters:
+      - description: Group read-write token
+        in: path
+        name: groupToken
+        required: true
+        type: string
+      - description: Device token to add
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.AddDeviceToGroupPayload'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid token or payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Group token is read-only
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Add device to group
+      tags:
+      - groups
+  /healthz:
+    get:
+      consumes:
+      - text/plain
+      description: Check if the API and database connection are healthy
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: database connection unhealthy
+          schema:
+            type: string
+      summary: Health check endpoint
+      tags:
+      - health
+  /ingest:
+    post:
+      consumes:
+      - application/json
+      description: Process LoRaWAN uplink messages and store device measurements
+      parameters:
+      - description: LoRaWAN uplink message
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.IngestRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Ingest LoRaWAN uplink data
+      tags:
+      - ingest
+swagger: "2.0"

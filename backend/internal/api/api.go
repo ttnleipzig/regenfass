@@ -3,13 +3,16 @@ package api
 import (
 	"fmt"
 
+	swaggo "github.com/gofiber/contrib/v3/swaggo"
 	"github.com/gofiber/fiber/v3"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/ttn-leipzig/regenfass/internal/db"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/ttn-leipzig/regenfass/docs"
+	"github.com/ttn-leipzig/regenfass/internal/db"
 )
 
 type API struct {
@@ -32,6 +35,7 @@ func New(dbPool *pgxpool.Pool) *API {
 	api.app.Post("/group", api.handleCreateGroup)
 	api.app.Get("/group/:groupToken", api.handleGroupInfoByToken)
 	api.app.Post("/group/:groupToken/devices", api.handleAddDeviceToGroup)
+	app.Get("/swagger/*", swaggo.HandlerDefault)
 
 	return api
 }
@@ -40,6 +44,16 @@ func (a *API) Listen(addr string) error {
 	return a.app.Listen(addr)
 }
 
+// HealthCheck godoc
+//
+//	@Summary		Health check endpoint
+//	@Description	Check if the API and database connection are healthy
+//	@Tags			health
+//	@Accept			plain
+//	@Produce		plain
+//	@Success		200	{string}	string	"ok"
+//	@Failure		500	{string}	string	"database connection unhealthy"
+//	@Router			/healthz [get]
 func (a *API) handleHealthz(c fiber.Ctx) error {
 	if err := a.dbPool.Ping(c.Context()); err != nil {
 		log.Error().Err(err).Msg("could not ping database")

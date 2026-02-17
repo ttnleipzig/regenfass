@@ -1,3 +1,9 @@
+// @title			Regenfass API
+// @version			1.0
+// @description		API for managing LoRaWAN rain barrel devices and sensor data
+// @host			localhost:64000
+// @BasePath		/
+
 package main
 
 import (

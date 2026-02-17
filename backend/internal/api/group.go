@@ -9,17 +9,33 @@ import (
 	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
 
+// GroupInfoDevice represents a device in a group
+// @Description Device information within a group
 type GroupInfoDevice struct {
-	Token      string `json:"token"`
-	IsReadonly bool   `json:"is_readonly"`
+	Token      string `json:"token" example:"device_token_123"`
+	IsReadonly bool   `json:"is_readonly" example:"false"`
 }
 
+// GroupInfoResponse represents group information response
+// @Description Detailed group information including associated devices
 type GroupInfoResponse struct {
-	Name       string            `json:"name"`
-	IsReadonly bool              `json:"is_readonly"`
+	Name       string            `json:"name" example:"My Rain Barrel Group"`
+	IsReadonly bool              `json:"is_readonly" example:"false"`
 	Devices    []GroupInfoDevice `json:"devices"`
 }
 
+// GetGroupByToken godoc
+//
+//	@Summary		Get group information by token
+//	@Description	Retrieve group details and associated devices using either read-write or read-only token
+//	@Tags			groups
+//	@Accept			json
+//	@Produce		json
+//	@Param			groupToken	path		string			true	"Group token (read-write or read-only)"
+//	@Success		200			{object}	GroupInfoResponse
+//	@Failure		400			{object}	HTTPError	"Invalid group token"
+//	@Failure		500			{object}	HTTPError	"Internal server error"
+//	@Router			/group/{groupToken} [get]
 func (a *API) handleGroupInfoByToken(c fiber.Ctx) error {
 	log := a.getRequestLogger(c)
 
@@ -59,16 +75,34 @@ func (a *API) handleGroupInfoByToken(c fiber.Ctx) error {
 	})
 }
 
+// AddDeviceToGroupPayload represents the request body for adding a device to a group
+// @Description Request body to add a device to an existing group
 type AddDeviceToGroupPayload struct {
-	DeviceToken string `json:"device_token"`
+	DeviceToken string `json:"device_token" example:"device_token_123"`
 }
 
+// AddDeviceToGroupResponse represents the response after adding a device to a group
+// @Description Response with tokens for the added device
 type AddDeviceToGroupResponse struct {
-	ID             uuid.UUID `json:"id"`
-	ReadWriteToken string    `json:"read_write_token"`
-	ReadOnlyToken  string    `json:"read_only_token"`
+	ID             uuid.UUID `json:"id" example:"550e8400-e29b-41d4-a716-446655440000"`
+	ReadWriteToken string    `json:"read_write_token" example:"rw_token_123"`
+	ReadOnlyToken  string    `json:"read_only_token" example:"ro_token_123"`
 }
 
+// AddDeviceToGroup godoc
+//
+//	@Summary		Add device to group
+//	@Description	Add an existing device to a group using the group's read-write token
+//	@Tags			groups
+//	@Accept			json
+//	@Produce		json
+//	@Param			groupToken	path		string					true	"Group read-write token"
+//	@Param			body		body		AddDeviceToGroupPayload	true	"Device token to add"
+//	@Success		204			{string}	string					"No Content"
+//	@Failure		400			{object}	HTTPError				"Invalid token or payload"
+//	@Failure		403			{object}	HTTPError				"Group token is read-only"
+//	@Failure		500			{object}	HTTPError				"Internal server error"
+//	@Router			/group/{groupToken}/devices [post]
 func (a *API) handleAddDeviceToGroup(c fiber.Ctx) error {
 	log := a.getRequestLogger(c)
 
@@ -114,16 +148,32 @@ func (a *API) handleAddDeviceToGroup(c fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
+// CreateGroupPayload represents the request body for creating a group
+// @Description Request body to create a new device group
 type CreateGroupPayload struct {
-	Name string `json:"name"`
+	Name string `json:"name" example:"My Rain Barrel Group"`
 }
 
+// CreateGroupResponse represents the response after creating a group
+// @Description Response with group ID and tokens
 type CreateGroupResponse struct {
-	ID             uuid.UUID `json:"id"`
-	ReadWriteToken string    `json:"read_write_token"`
-	ReadOnlyToken  string    `json:"read_only_token"`
+	ID             uuid.UUID `json:"id" example:"550e8400-e29b-41d4-a716-446655440000"`
+	ReadWriteToken string    `json:"read_write_token" example:"rw_group_token_123"`
+	ReadOnlyToken  string    `json:"read_only_token" example:"ro_group_token_123"`
 }
 
+// CreateGroup godoc
+//
+//	@Summary		Create a new group
+//	@Description	Create a new device group for organizing rain barrel devices
+//	@Tags			groups
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		CreateGroupPayload	true	"Group name"
+//	@Success		201		{object}	CreateGroupResponse
+//	@Failure		400		{object}	HTTPError	"Invalid payload"
+//	@Failure		500		{object}	HTTPError	"Internal server error"
+//	@Router			/group [post]
 func (a *API) handleCreateGroup(c fiber.Ctx) error {
 	log := a.getRequestLogger(c)
 

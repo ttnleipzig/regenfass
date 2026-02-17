@@ -12,6 +12,30 @@ import (
 	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
 
+// IngestRequest represents the incoming LoRaWAN uplink message
+// @Description Request body for ingesting device measurements from LoRaWAN uplink messages
+type IngestRequest struct {
+	EndDeviceIDs struct {
+		DevEUI string `json:"dev_eui" example:"1234567890123456"`
+	} `json:"end_device_ids"`
+	UplinkMessage struct {
+		Payload    string    `json:"frm_payload" example:"AQIDBA=="`
+		ReceivedAt time.Time `json:"received_at" example:"2024-01-15T10:30:00Z"`
+	} `json:"uplink_message"`
+}
+
+// IngestData godoc
+//
+//	@Summary		Ingest LoRaWAN uplink data
+//	@Description	Process LoRaWAN uplink messages and store device measurements
+//	@Tags			ingest
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		IngestRequest	true	"LoRaWAN uplink message"
+//	@Success		204		{string}	string			"No Content"
+//	@Failure		400		{object}	HTTPError		"Bad Request"
+//	@Failure		500		{object}	HTTPError		"Internal Server Error"
+//	@Router			/ingest [post]
 func (a *API) handleIngest(c fiber.Ctx) error {
 	type Body struct {
 		EndDeviceIDs struct {
