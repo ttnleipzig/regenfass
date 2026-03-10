@@ -83,7 +83,7 @@ jobs:
           name: firmware-${{ matrix.environment }}
           path: firmware
       - name: Create firmware zip
-        run: zip -r regenfass-${{ matrix.environment }}.zip firmware/
+        run: zip -j regenfass-${{ matrix.environment }}.zip firmware/*
       - name: Upload firmware to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
