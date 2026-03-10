@@ -1,0 +1,3 @@
+pnpm run docs:components
+pnpm lint:fix
+pnpx lint-staged

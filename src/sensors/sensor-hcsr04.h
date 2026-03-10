@@ -7,5 +7,6 @@ namespace Sensor
     {
         float measureDistanceCm();
         void setup();
+        void loop();
     }
 }

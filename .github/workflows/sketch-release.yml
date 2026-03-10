@@ -2,18 +2,18 @@ name: Sketch - release
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    tags:
+      - "v*"
   workflow_dispatch:
 
 permissions:
   actions: write
   contents: write
   packages: write
-  issues: write
-  pull-requests: write
 
 jobs:
+
   build:
     name: 🏗️ Build
     runs-on: ubuntu-latest
@@ -34,29 +34,16 @@ jobs:
           python-version: "3.9"
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
-
       - name: Build firmware
         run: pio run -e ${{ matrix.environment }}
-
-      - name: Extract firmware metadata
-        run: >-
-          pio project metadata -e '${{ matrix.environment }}' --json-output |
-           jq '.${{ matrix.environment }}.extra' > .pio/build/${{ matrix.environment }}/firmware_metadata.json
-
-      - name: Move files to artifacts
-        run: >-
-          mkdir -p artifacts &&
-          mv .pio/build/${{ matrix.environment }}/firmware.bin artifacts/ &&
-          mv .pio/build/${{ matrix.environment }}/partitions.bin artifacts/ &&
-          mv .pio/build/${{ matrix.environment }}/bootloader.bin artifacts/ &&
-          mv .pio/build/${{ matrix.environment }}/firmware_metadata.json artifacts/ &&
-          cp ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin artifacts/
-
+      - name: Display contents of .pio/build directory
+        run: |
+            ls -R .pio/build
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
-          path: |
-            artifacts/*
+          path: .pio/build/${{ matrix.environment }}/*.bin
+          compression-level: 8
 
   release:
     name: 📦 Release
@@ -65,23 +52,19 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    env:
-      RELEASE_PLEASE_DEBUG: true
     outputs:
       upload-url: ${{ steps.release.outputs.upload_url }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          skip-github-release: false       # Default, erstellt GitHub Release
-          skip-github-pull-request: false  # Default, erstellt PR wenn nötig
-          target-branch: main
+          token: ${{ secrets.RELEASE_PLEASE_ORGANISATION }}
           release-type: simple
       - name: Print the release URL if present
         if: ${{ steps.release.outputs.upload_url }}
         run: |
           echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
+
 
   upload:
     name: 💾 Upload Artifacts
@@ -95,24 +78,18 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: firmware
-          pattern: firmware-${{ matrix.environment }}
+          pattern: firmware-*
           merge-multiple: true
-      - name: ZIP firmware
-        run: |
-          cd firmware
-          zip -r firmware-${{ matrix.environment }}.zip ./*.bin ./*.json
-
       - uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload-url }}
-          asset_path: firmware/firmware-${{ matrix.environment }}.zip
-          asset_name: regenfass-${{ matrix.environment }}.zip
+          asset_path: ./firmware/firmware.bin
+          asset_name: regenfass-${{ matrix.environment }}.bin
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deployment:
-    name: Deployment
     runs-on: ubuntu-latest
     environment:
       name: production

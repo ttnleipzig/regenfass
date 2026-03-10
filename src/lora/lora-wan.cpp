@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <keyhandler.h>
 #include "../config/config.h"
-#include "./protocol.h"
 
 #define DEVICE_SIMPLE
 
@@ -31,6 +30,9 @@
 // practice, a key taken from ttnctl can be copied as-is.
 // constexpr char const appKey[16] = {0xA3, 0x46, 0xE1, 0xB1, 0x2B, 0x0A, 0x15, 0xD1, 0x43, 0xA6, 0x7D, 0x37, 0xE2, 0x8C, 0xEC, 0xE5};
 // void os_getDevKey(u1_t *buf) { memcpy_P(buf, APPKEY, 16); }
+
+static uint8_t mydata[] = "Hello, dirk!";
+uint8_t payload[34];
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
@@ -66,7 +68,7 @@ namespace Lora
             Serial.print(v, HEX);
         }
 
-        void publish2TTN(const std::vector<Lora::Protocol::DataPoint> &data)
+        void publish2TTN(void)
         {
             // Check if there is not a current TX/RX job running
             if (LMIC.getOpMode().test(OpState::TXRXPEND))
@@ -76,9 +78,7 @@ namespace Lora
             }
 
             // Prepare upstream data transmission at the next possible time.
-            std::vector<uint8_t> payload = Lora::Protocol::packDataPoints(data);
-
-            LMIC.setTxData2(1, payload.data(), payload.size(), 0);
+            LMIC.setTxData2(1, mydata, sizeof(mydata) - 1, 0);
             Serial.println(F("Packet queued"));
             // Next TX is scheduled after TX_COMPLETE event.
         }

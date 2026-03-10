@@ -2,7 +2,6 @@
 
 #include <keyhandler.h>
 #include <config.h>
-#include "./protocol.h"
 
 namespace Lora
 {
@@ -11,7 +10,7 @@ namespace Lora
         void setup();
         void loop();
         void printHex2(unsigned v);
-        void publish2TTN(const std::vector<Lora::Protocol::DataPoint> &data);
+        void publish2TTN(void);
 
         // Taken from LMIC keyhandler.h
         class AppEuiGetter

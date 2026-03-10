@@ -12,6 +12,10 @@ insert_final_newline = true
 [*.{c,h,hpp,cpp}]
 indent_style = space
 
-[*.{md,yml,yaml}]
+[*.{md,yml}]
 indent_size = 2
 indent_style = space
+
+# Installer directory uses tab size 2
+[installer/**/*]
+indent_size = 2

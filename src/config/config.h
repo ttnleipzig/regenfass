@@ -9,14 +9,6 @@
     X(appKey)                \
     X(devEUI)
 
-#define REGENFASS_CONFIG_VERSION "1"
-
-// Regenfall config versions:
-// 1:
-//   - appEUI
-//   - appKey
-//   - devEUI
-
 namespace Configuration
 {
     struct Config
