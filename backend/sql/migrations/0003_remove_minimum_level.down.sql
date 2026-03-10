@@ -1,0 +1,2 @@
+ALTER TABLE device
+	ADD COLUMN minimum_level FLOAT DEFAULT 0.0 NOT NULL;
