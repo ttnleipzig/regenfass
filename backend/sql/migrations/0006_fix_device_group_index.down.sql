@@ -1,0 +1,2 @@
+ALTER TABLE device_group
+	DROP CONSTRAINT device_group_device_id_group_id_key;

@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import path from "path";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
@@ -13,13 +13,15 @@ export default defineConfig({
 	test: {
 		environment: "jsdom",
 		globals: true,
-		setupFiles: ["./src/test/setup.ts"],
+		setupFiles: "./tests/setup.ts",
+		exclude: ["**/node_modules/**", "**/dist/**", "**/*.spec.ts"],
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "json", "html"],
 			exclude: [
 				"node_modules/",
 				"src/test/",
+				"tests/",
 				"**/*.d.ts",
 				"**/*.config.*",
 				"**/coverage/**",

@@ -1,11 +1,11 @@
-import { Component, JSX, splitProps } from "solid-js";
+import { splitProps } from "solid-js";
 import {
-  Select as SelectBase,
+  SelectField as SelectBase,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/forms/SelectField.tsx";
 import { FormField } from "./FormField";
 import { cn } from "@/libs/cn";
 
@@ -24,10 +24,8 @@ export interface SelectProps<T> {
 }
 
 const Select = <T,>(props: SelectProps<T>) => {
-  const [local, rest] = splitProps(props, ["label", "required", "error", "helperText", "class", "options", "placeholder", "value", "onChange", "getValue", "getLabel"]);
-
-  const getValueFn = () => local.getValue || ((item: T) => String(item));
-  const getLabelFn = () => local.getLabel || ((item: T) => String(item));
+  const [local] = splitProps(props, ["label", "required", "error", "helperText", "class", "options", "placeholder", "value", "onChange", "getValue", "getLabel"]);
+	const getLabelFn = () => local.getLabel || ((item: T) => String(item));
 
   return (
     <FormField
@@ -40,7 +38,11 @@ const Select = <T,>(props: SelectProps<T>) => {
         options={local.options}
         placeholder={local.placeholder}
         value={local.value}
-        onChange={local.onChange}
+        onChange={local.onChange ? (value: T | null) => {
+          if (value !== null) {
+            local.onChange!(value);
+          }
+        } : undefined}
         itemComponent={(props) => (
           <SelectItem item={props.item}>
             {getLabelFn()(props.item.rawValue)}

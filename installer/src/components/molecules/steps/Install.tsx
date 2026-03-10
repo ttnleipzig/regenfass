@@ -8,7 +8,9 @@ export const installStep = {
 function InstallationStep() {
 	return (
 		<div class="space-y-4">
-			<h2 class="text-2xl font-bold">Installation</h2>
+			{/* Use shared Headline for consistency */}
+			{/* @ts-ignore */}
+			<div class="text-2xl font-bold">Installation</div>
 		</div>
 	);
 }

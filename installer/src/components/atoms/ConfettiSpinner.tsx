@@ -1,11 +1,12 @@
 import { Component } from "solid-js";
+import { Spinner } from "./Spinner.tsx";
 
 const ConfettiSpinner: Component = () => {
   return (
     <div class="flex items-center justify-center w-32 h-32">
       <div class="relative">
         {/* Spinner */}
-        <div class="w-16 h-16 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        <Spinner size="lg" class="text-primary" />
         
         {/* Confetti-Effekt */}
         <div class="absolute inset-0">

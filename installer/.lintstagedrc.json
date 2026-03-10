@@ -1,0 +1,10 @@
+{
+  "**/*.md": [
+    "markdownlint-cli2 --fix",
+    "git add"
+  ],
+  "src/components/**/*.{ts,tsx}": [
+    "npm run docs:components",
+    "git add docs/COMPONENTS.md"
+  ]
+}

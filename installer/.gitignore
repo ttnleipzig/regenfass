@@ -26,3 +26,12 @@ dist-ssr
 *storybook.log
 
 storybook-static
+
+.vite
+*.tsbuildinfo
+
+# pnpm
+.pnpm-store
+
+# test results
+test-results/
