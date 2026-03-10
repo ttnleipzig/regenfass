@@ -2,6 +2,7 @@ name: Sketch - release
 
 on:
   push:
+    branches: [main]
     tags:
       - "v*"
   workflow_dispatch:
@@ -48,13 +49,16 @@ jobs:
     name: 📦 Release
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       upload-url: ${{ steps.release.outputs.upload_url }}
     steps:
       - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          token: ${{ secrets.RELEASE_PLEASE_ORGANISATION }}
           release-type: simple
       - name: Print the release URL if present
         if: ${{ steps.release.outputs.upload_url }}

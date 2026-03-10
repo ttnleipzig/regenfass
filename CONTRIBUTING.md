@@ -100,14 +100,22 @@ The `<type>` must be one of the following:
 feat: add support for new sensor
 ```
 
+Do not put emojis or other characters before the type in the subject line (e.g. use
+`feat: add button tests` instead of `✨ feat: add button tests`). Release Please only
+parses subjects that start with the conventional type.
+
 ### Release management
 
 We use [release please](https://github.com/googleapis/release-please) for this project.
-It is implemented in our [release workflow](.github/workflows/release.yml).
+It is implemented in our [release workflow](.github/workflows/sketch-release.yml).
 It collects all commits since the last release in a release pull request.
 Use the [conventional commit](#conventional-commits) message format for your commits like it is described above.
 Please write your messages very easy to understand for none developers and a bit more
 verbose as useally because it will be used for the Changelog and Release-Notes.
+
+Prefer **squash merging** pull requests into `main` so that each PR becomes a single
+conventional commit. Merge commits (e.g. "Merge pull request #23…") are not parsed by
+Release Please and are skipped for the changelog.
 
 ### Workflow for your new feature
 
