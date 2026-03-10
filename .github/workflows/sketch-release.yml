@@ -63,7 +63,7 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_ORGANISATION }}
           release-type: simple
       - name: Print the release URL if present
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         run: |
           echo "Release created: ${{ steps.release.outputs.tag_name }}"
           echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
