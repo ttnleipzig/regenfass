@@ -365,8 +365,6 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   );
 
   const DynamicComponent = () => {
-    const props = propValues();
-    
     return (
       <ErrorBoundary
         fallback={(err) => (
@@ -402,7 +400,10 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
             
             try {
               const Component = comp as any;
-              const { children, ...restProps } = props;
+              // Access props reactively inside the IIFE - this ensures reactivity
+              const currentProps = propValues();
+              const { children, ...restProps } = currentProps;
+              
               if (children !== undefined && children !== null && children !== '') {
                 return <Component {...restProps}>{children}</Component>;
               }

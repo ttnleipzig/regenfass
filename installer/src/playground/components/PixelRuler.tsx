@@ -24,9 +24,9 @@ const PixelRuler: Component<PixelRulerProps> = (props) => {
   const updateWidth = () => {
     const element = props.containerRef || containerElement;
     if (element) {
-      // Find the viewport container to get its actual width
-      const viewportContainer = element.querySelector('[class*="max-w"]') as HTMLElement;
-      const targetElement = viewportContainer || element;
+      // Find the inner content container (the div with p-8 class that contains the component)
+      const innerContainer = element.querySelector('.p-8 > div') as HTMLElement;
+      const targetElement = innerContainer || element;
       
       if (targetElement) {
         const width = targetElement.offsetWidth;
@@ -39,7 +39,10 @@ const PixelRuler: Component<PixelRulerProps> = (props) => {
     // Update container reference when prop changes
     if (props.containerRef) {
       containerElement = props.containerRef;
-      updateWidth();
+      // Delay to ensure DOM is ready
+      setTimeout(() => {
+        updateWidth();
+      }, 0);
     }
   });
 
@@ -50,12 +53,25 @@ const PixelRuler: Component<PixelRulerProps> = (props) => {
       updateWidth();
       
       const resizeObserver = new ResizeObserver(() => {
-        if (selectedBreakpoint() === 'responsive') {
-          updateWidth();
-        }
+        // Always update width in responsive mode, or when breakpoint is set
+        updateWidth();
       });
 
+      // Observe both the container and the inner content area
       resizeObserver.observe(containerElement);
+      
+      // Find and observe the inner container
+      const findAndObserveInner = () => {
+        const innerContainer = containerElement?.querySelector('.p-8 > div') as HTMLElement;
+        if (innerContainer) {
+          resizeObserver.observe(innerContainer);
+        } else {
+          // Retry if inner container is not yet available
+          setTimeout(findAndObserveInner, 50);
+        }
+      };
+      findAndObserveInner();
+      
       window.addEventListener('resize', updateWidth);
 
       // Initial delay to ensure layout is complete
@@ -72,28 +88,33 @@ const PixelRuler: Component<PixelRulerProps> = (props) => {
     const breakpoint = selectedBreakpoint();
     const breakpointConfig = BREAKPOINTS.find(bp => bp.value === breakpoint);
     
-    // Find the viewport container (the div with viewportClasses)
-    const viewportContainer = containerElement?.querySelector('[class*="max-w"]') as HTMLElement;
-    const targetElement = viewportContainer || containerElement;
-    
-    if (breakpointConfig && breakpointConfig.width !== null && targetElement) {
-      // Apply max-width to the viewport container
-      targetElement.style.maxWidth = `${breakpointConfig.width}px`;
-      targetElement.style.marginLeft = 'auto';
-      targetElement.style.marginRight = 'auto';
-      setCurrentWidth(breakpointConfig.width);
-      props.onBreakpointChange?.(breakpoint, breakpointConfig.width);
-    } else if (breakpoint === 'responsive' && targetElement) {
-      // Remove inline styles to restore CSS classes
-      targetElement.style.maxWidth = '';
-      targetElement.style.marginLeft = '';
-      targetElement.style.marginRight = '';
-      // Use setTimeout to ensure layout has updated
-      setTimeout(() => {
-        updateWidth();
-        props.onBreakpointChange?.('responsive', currentWidth());
-      }, 10);
-    }
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      // Find the inner content container (the div with p-8 class that contains the component)
+      const innerContainer = containerElement?.querySelector('.p-8 > div') as HTMLElement;
+      const targetElement = innerContainer;
+      
+      if (!targetElement) return;
+      
+      if (breakpointConfig && breakpointConfig.width !== null) {
+        // Apply max-width to the inner container
+        targetElement.style.maxWidth = `${breakpointConfig.width}px`;
+        targetElement.style.marginLeft = 'auto';
+        targetElement.style.marginRight = 'auto';
+        setCurrentWidth(breakpointConfig.width);
+        props.onBreakpointChange?.(breakpoint, breakpointConfig.width);
+      } else if (breakpoint === 'responsive') {
+        // Remove inline styles to restore CSS classes - this is critical for reactivity
+        targetElement.style.maxWidth = '';
+        targetElement.style.marginLeft = '';
+        targetElement.style.marginRight = '';
+        // Update width after styles are removed
+        requestAnimationFrame(() => {
+          updateWidth();
+          props.onBreakpointChange?.('responsive', currentWidth());
+        });
+      }
+    });
   });
 
   const generateRulerMarks = () => {
