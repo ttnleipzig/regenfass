@@ -53,7 +53,9 @@ jobs:
       contents: write
       pull-requests: write
     outputs:
-      upload-url: ${{ steps.release.outputs.upload_url }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      upload_url: ${{ steps.release.outputs.upload_url }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - uses: google-github-actions/release-please-action@v4
         id: release
@@ -61,15 +63,16 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_ORGANISATION }}
           release-type: simple
       - name: Print the release URL if present
-        if: ${{ steps.release.outputs.upload_url }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         run: |
+          echo "Release created: ${{ steps.release.outputs.tag_name }}"
           echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
 
 
   upload:
     name: 💾 Upload Artifacts
     runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.upload-url }}
+    if: ${{ needs.release.outputs.release_created == 'true' }}
     needs: release
     strategy:
       matrix:
@@ -77,23 +80,15 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: firmware-${{ matrix.environment }}
           path: firmware
-          pattern: firmware-*
-          merge-multiple: true
-      - uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ needs.release.outputs.upload-url }}
-          asset_path: ./firmware/firmware.bin
-          asset_name: regenfass-${{ matrix.environment }}.bin
-          asset_content_type: application/octet-stream
+      - name: Create firmware zip
+        run: zip -j regenfass-${{ matrix.environment }}.zip firmware/*
+      - name: Upload firmware to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deployment:
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://github.com
-    steps:
-      - name: deploy
-        run: echo "Deployed!"
+        run: |
+          gh release upload ${{ needs.release.outputs.tag_name }} \
+            firmware/firmware.bin#regenfass-${{ matrix.environment }}.bin \
+            regenfass-${{ matrix.environment }}.zip \
+            --repo ${{ github.repository }}
