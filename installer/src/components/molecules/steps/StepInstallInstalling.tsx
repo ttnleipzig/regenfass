@@ -93,15 +93,56 @@ export default function StepInstallInstalling(props: StepProps) {
 			</AlertInline>
 
 			<Show when={isComplete()}>
-				<AlertInline variant="success" class="mt-4 shadow-sm">
-					<AlertTitle class="font-semibold">Installation successful</AlertTitle>
-					<AlertDescription class="mt-1 flex flex-col gap-2">
-						<p>The firmware was installed successfully.</p>
-						<p>
-							The next step is configuration. You will be taken there
-							automatically in a moment.
-						</p>
-					</AlertDescription>
+				<AlertInline
+					variant="success"
+					showIcon={false}
+					class={cn(
+						"mt-4 shadow-sm",
+						"[&:has(svg)]:px-6 sm:[&:has(svg)]:px-7",
+					)}
+				>
+					<div class="flex gap-4 sm:items-start">
+						<div class="relative flex size-12 shrink-0 items-center justify-center">
+							<div
+								class={cn(
+									"relative z-10 flex size-12 items-center justify-center rounded-full",
+									"bg-muted/80 ring-1 ring-border/60",
+								)}
+							>
+								<CircleCheck
+									class={cn(
+										"text-muted-foreground",
+										"motion-safe:animate-success-check",
+									)}
+									size={26}
+									strokeWidth={2.25}
+									aria-hidden="true"
+								/>
+							</div>
+						</div>
+						<div class="min-w-0 flex-1 space-y-1.5 pt-0.5">
+							<AlertTitle
+								class={cn(
+									"text-base font-semibold leading-snug tracking-tight text-foreground sm:text-[1.0625rem]",
+									"motion-safe:animate-success-rise motion-safe:[animation-delay:90ms]",
+								)}
+							>
+								Installation successful
+							</AlertTitle>
+							<AlertDescription
+								class={cn(
+									"flex flex-col gap-2 text-sm leading-relaxed text-muted-foreground",
+									"motion-safe:animate-success-rise motion-safe:[animation-delay:180ms]",
+								)}
+							>
+								<p>The firmware was installed successfully.</p>
+								<p>
+									The next step is configuration. You will be taken there
+									automatically in a moment.
+								</p>
+							</AlertDescription>
+						</div>
+					</div>
 				</AlertInline>
 			</Show>
 		</>

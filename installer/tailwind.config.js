@@ -65,9 +65,18 @@ export default {
           "20%,50%": { opacity: "0" },
         },
         "success-check": {
-          "0%": { opacity: "0", transform: "scale(0)" },
-          "55%": { opacity: "1", transform: "scale(1.12)" },
-          "100%": { opacity: "1", transform: "scale(1)" },
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.92) rotate(-8deg)",
+          },
+          "50%": {
+            opacity: "1",
+            transform: "scale(1.1) rotate(2deg)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scale(1) rotate(0deg)",
+          },
         },
         "success-rise": {
           from: { opacity: "0", transform: "translateY(0.5rem)" },
@@ -81,7 +90,7 @@ export default {
       animation: {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
         "success-check":
-          "success-check 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both",
+          "success-check 0.42s cubic-bezier(0.23, 1, 0.32, 1) both",
         "success-rise": "success-rise 0.5s ease-out both",
         "success-halo": "success-halo 0.75s ease-out both",
       },
