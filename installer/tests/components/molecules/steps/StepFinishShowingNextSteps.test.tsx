@@ -18,7 +18,7 @@ describe("StepFinishShowingNextSteps", () => {
         emitEvent={mockEmitEvent}
       />
     ));
-    expect(screen.getByText("Next steps")).toBeInTheDocument();
+    expect(screen.getByText("Success")).toBeInTheDocument();
   });
 
   it("renders alert with description", () => {

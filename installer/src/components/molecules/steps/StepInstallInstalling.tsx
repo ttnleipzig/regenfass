@@ -111,7 +111,7 @@ export default function StepInstallInstalling(props: StepProps) {
 							>
 								<CircleCheck
 									class={cn(
-										"text-muted-foreground",
+										"text-success",
 										"motion-safe:animate-success-check",
 									)}
 									size={26}

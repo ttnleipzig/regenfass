@@ -36,7 +36,7 @@ export default function StepFinishShowingNextSteps({
 					>
 						<CircleCheck
 							class={cn(
-								"text-muted-foreground",
+								"text-success",
 								"motion-safe:animate-success-check",
 							)}
 							size={26}
@@ -52,7 +52,7 @@ export default function StepFinishShowingNextSteps({
 							"motion-safe:animate-success-rise motion-safe:[animation-delay:90ms]",
 						)}
 					>
-						Next steps
+						Success
 					</AlertTitle>
 					<AlertDescription
 						class={cn(

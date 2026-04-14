@@ -37,7 +37,7 @@ import { AlertInline, AlertTitle, AlertDescription } from '@/components/molecule
 
 - Built on Kobalte AlertInline primitive for accessibility compliance
 - Each variant has semantic colors with appropriate background and border styling
-- Icons automatically match the variant (info: circle, warning: triangle, error: X, success: check)
+- Icons automatically match the variant (info: circle, warning: triangle, error: X, success: check). The success check icon plays a short entrance animation when the user has not asked for reduced motion (`motion-safe:` in Tailwind).
 - Uses backdrop blur effect with semi-transparent backgrounds for modern appearance
 - Icon positioning is handled automatically with proper spacing
 - AlertTitle and AlertDescription components provide structured content layout
