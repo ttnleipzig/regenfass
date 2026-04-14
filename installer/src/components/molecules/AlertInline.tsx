@@ -21,7 +21,7 @@ export const alertVariants = cva(
 				warning:
 					"border-warning/30 text-warning bg-warning/10 dark:border-warning/55 dark:bg-warning/30 dark:text-warning-foreground dark:ring-warning/25 [&>svg]:text-warning dark:[&>svg]:text-warning",
 				success:
-					"border-success/30 text-success bg-success/10 dark:border-success/55 dark:bg-success/30 dark:text-success-foreground dark:ring-success/25 [&>svg]:text-success dark:[&>svg]:text-success",
+					"border-success/30 text-success bg-success/10 dark:border-success/15 dark:bg-success/5 dark:text-foreground/75 dark:ring-border/35 [&>svg]:text-success dark:[&>svg]:text-success/55",
 			},
 		},
 		defaultVariants: {
