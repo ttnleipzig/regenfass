@@ -4,7 +4,9 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
+import { Progress } from "@/components/ui/progress.tsx";
 import { BiSolidMicrochip } from "solid-icons/bi";
+import { createMemo } from "solid-js";
 
 interface StepProps {
 	state: any;
@@ -15,17 +17,34 @@ export default function StepConfigWritingConfiguration({
 	state,
 	emitEvent,
 }: StepProps) {
+	const progressRatio = createMemo(() => {
+		const p = state.context?.configWriteProgress;
+		if (typeof p !== "number" || Number.isNaN(p)) {
+			return 0;
+		}
+		return Math.min(1, Math.max(0, p));
+	});
+
+	const progressPercent = createMemo(() => Math.round(progressRatio() * 100));
+
 	return (
 		<AlertInline>
 			<AlertTitle class="flex items-center gap-2">
 				<Spinner size="lg" />
 				Writing configuration
 			</AlertTitle>
-			<AlertDescription class="space-y-3">
+			<AlertDescription class="flex flex-col gap-3">
 				<p>
 					Your settings are being sent to the microcontroller over USB—please keep
 					the cable connected until this finishes.
 				</p>
+				<div class="flex flex-col gap-2">
+					<div class="flex items-center justify-between gap-2 text-sm text-muted-foreground">
+						<span>Upload progress</span>
+						<span aria-hidden={true}>{progressPercent()}%</span>
+					</div>
+					<Progress value={progressPercent()} getValueLabel={() => `${progressPercent()} percent`} />
+				</div>
 				<div
 					class="flex items-center gap-2 text-muted-foreground"
 					aria-hidden={true}

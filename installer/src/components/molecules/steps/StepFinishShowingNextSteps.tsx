@@ -19,21 +19,36 @@ export default function StepFinishShowingNextSteps({
 	void emitEvent;
 
 	return (
-		<AlertInline class="overflow-hidden">
-			<div class="flex gap-3">
-				<div class="relative mt-0.5 shrink-0">
-					<CircleCheck
+		<AlertInline
+			class={cn(
+				// Override default extra left padding when any SVG is nested (our icon is in-flow).
+				"[&:has(svg)]:px-6 sm:[&:has(svg)]:px-7",
+				"border-border/70 bg-card/80 shadow-sm dark:bg-card/75",
+			)}
+		>
+			<div class="flex gap-4 sm:items-start">
+				<div class="relative flex size-12 shrink-0 items-center justify-center">
+					<div
 						class={cn(
-							"text-primary",
-							"motion-safe:animate-success-check",
+							"relative z-10 flex size-12 items-center justify-center rounded-full",
+							"bg-muted/80 ring-1 ring-border/60",
 						)}
-						size={24}
-						aria-hidden="true"
-					/>
+					>
+						<CircleCheck
+							class={cn(
+								"text-muted-foreground",
+								"motion-safe:animate-success-check",
+							)}
+							size={26}
+							strokeWidth={2.25}
+							aria-hidden="true"
+						/>
+					</div>
 				</div>
-				<div class="min-w-0 flex-1 space-y-1">
+				<div class="min-w-0 flex-1 space-y-1.5 pt-0.5">
 					<AlertTitle
 						class={cn(
+							"text-base font-semibold leading-snug tracking-tight text-foreground sm:text-[1.0625rem]",
 							"motion-safe:animate-success-rise motion-safe:[animation-delay:90ms]",
 						)}
 					>
@@ -41,6 +56,7 @@ export default function StepFinishShowingNextSteps({
 					</AlertTitle>
 					<AlertDescription
 						class={cn(
+							"text-sm leading-relaxed text-muted-foreground",
 							"motion-safe:animate-success-rise motion-safe:[animation-delay:180ms]",
 						)}
 					>

@@ -10,7 +10,7 @@ import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
-import { assign, emit, fromPromise, setup } from "xstate";
+import { assign, emit, fromCallback, fromPromise, setup } from "xstate";
 
 const url =
 	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
@@ -65,12 +65,17 @@ const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 	return info;
 };
 
-const writeConfiguration = async (
+const writeConfigFieldsToDevice = async (
 	adapter: SCPAdapter,
-	config: Config
+	config: Config,
+	onFieldWritten?: (writtenCount: number, totalFields: number) => void,
 ): Promise<Config> => {
-	for (const [key, value] of Object.entries(config)) {
+	const entries = Object.entries(config);
+	const total = entries.length;
+	for (let i = 0; i < total; i++) {
+		const [key, value] = entries[i]!;
 		await writeField(adapter, key, value.toString());
+		onFieldWritten?.(i + 1, total);
 	}
 
 	return config;
@@ -110,6 +115,8 @@ export const setupStateMachine = setup({
 			connection: readonly [SerialPort, SCPAdapter] | null;
 			targetFirmwareVersion: string | null;
 			deviceInfo: Partial<DeviceInfo>;
+			/** 0–1 while `Config_WritingConfiguration` is active; otherwise `null`. */
+			configWriteProgress: number | null;
 		},
 		events: {} as
 			| { type: "start.next" }
@@ -126,7 +133,10 @@ export const setupStateMachine = setup({
 			| { type: "config.saveToFile" }
 			| { type: "config.write" }
 			| { type: "config.next" }
-			| { type: "restart" },
+			| { type: "restart" }
+			| { type: "configWrite.progress"; progress: number }
+			| { type: "configWrite.complete"; output: Config }
+			| { type: "configWrite.error"; error: unknown },
 		emitted: {} as
 			| { type: "config.saveToFile"; configVersion: number; config: Config }
 			| {
@@ -290,15 +300,37 @@ export const setupStateMachine = setup({
 		>(({ input: { connection, desiredVersion } }) =>
 			migrateConfiguration(connection, desiredVersion)
 		),
-		writeConfiguration: fromPromise<
-			Config,
-			{
-				connection: SCPAdapter;
-				configuration: Config;
-			}
-		>(({ input: { connection, configuration } }) =>
-			writeConfiguration(connection, configuration)
-		),
+		writeConfiguration: fromCallback<
+			{ type: string },
+			{ connection: SCPAdapter; configuration: Config }
+		>(({ sendBack, input }) => {
+			void (async () => {
+				try {
+					if (Object.keys(input.configuration).length === 0) {
+						sendBack({ type: "configWrite.progress", progress: 1 });
+					} else {
+						await writeConfigFieldsToDevice(
+							input.connection,
+							input.configuration,
+							(written, total) => {
+								sendBack({
+									type: "configWrite.progress",
+									progress: total > 0 ? written / total : 1,
+								});
+							},
+						);
+					}
+					sendBack({
+						type: "configWrite.complete",
+						output: input.configuration,
+					});
+				} catch (error) {
+					sendBack({ type: "configWrite.error", error });
+				}
+			})();
+
+			return () => {};
+		}),
 	},
 	guards: {
 		webSerialSupported: () => navigator.serial !== undefined,
@@ -318,6 +350,7 @@ export const setupStateMachine = setup({
 		connection: null,
 		deviceInfo: {},
 		targetFirmwareVersion: null,
+		configWriteProgress: null,
 	},
 	exit: ({ context }) => {
 		context.connection?.[1].stop();
@@ -540,17 +573,32 @@ export const setupStateMachine = setup({
 			},
 		},
 		Config_WritingConfiguration: {
+			entry: assign({
+				configWriteProgress: () => 0,
+			}),
+			exit: assign({
+				configWriteProgress: () => null,
+			}),
 			invoke: {
 				src: "writeConfiguration",
 				input: ({ context: { connection, deviceInfo } }) => ({
 					configuration: deviceInfo.config!,
 					connection: connection![1],
 				}),
-				onDone: "Finish_ShowingNextSteps",
-				onError: {
+			},
+			on: {
+				"configWrite.progress": {
+					actions: assign({
+						configWriteProgress: ({ event }) => event.progress,
+					}),
+				},
+				"configWrite.complete": {
+					target: "Finish_ShowingNextSteps",
+				},
+				"configWrite.error": {
 					target: "Finish_ShowingError",
 					actions: assign({
-						error: ({ event: { error } }) => error,
+						error: ({ event }) => event.error,
 					}),
 				},
 			},
