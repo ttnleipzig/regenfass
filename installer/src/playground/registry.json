@@ -436,6 +436,23 @@
         }
       ],
       "importPath": "@/components/atoms/Status"
+    },
+    {
+      "name": "Progress",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Progress.tsx",
+      "relativePath": "atoms/Progress.tsx",
+      "category": "atoms",
+      "description": "Determinate progress bar (Kobalte Progress, shadcn-solid-style).\n`value` is 0\u2013100 when `indeterminate` is false.",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Progress />"
+        }
+      ],
+      "importPath": "@/components/atoms/Progress"
     }
   ],
   "molecules": [
@@ -4109,84 +4126,12 @@
         }
       ],
       "importPath": "@/components/molecules/steps/Steps"
-    }
-  ],
-  "organisms": [
-    {
-      "name": "Footer",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Footer.tsx",
-      "relativePath": "organisms/Footer.tsx",
-      "category": "organisms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Footer />"
-        }
-      ],
-      "importPath": "@/components/organisms/Footer"
     },
-    {
-      "name": "Header",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Header.tsx",
-      "relativePath": "organisms/Header.tsx",
-      "category": "organisms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Header />"
-        }
-      ],
-      "importPath": "@/components/organisms/Header"
-    },
-    {
-      "name": "Newsletter",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Newsletter.tsx",
-      "relativePath": "organisms/Newsletter.tsx",
-      "category": "organisms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Newsletter />"
-        }
-      ],
-      "importPath": "@/components/organisms/Newsletter"
-    },
-    {
-      "name": "Welcome",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Welcome.tsx",
-      "relativePath": "organisms/Welcome.tsx",
-      "category": "organisms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Welcome />"
-        }
-      ],
-      "importPath": "@/components/organisms/Welcome"
-    }
-  ],
-  "ui": [
     {
       "name": "OTPField",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
-      "relativePath": "ui/otp-field.tsx",
-      "category": "ui",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "relativePath": "molecules/OTPField.tsx",
+      "category": "molecules",
       "description": "",
       "props": [],
       "examples": [
@@ -4197,13 +4142,13 @@
           "code": "<OTPField />"
         }
       ],
-      "importPath": "@/components/ui/otp-field"
+      "importPath": "@/components/molecules/OTPField"
     },
     {
       "name": "OTPFieldGroup",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
-      "relativePath": "ui/otp-field.tsx",
-      "category": "ui",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "relativePath": "molecules/OTPField.tsx",
+      "category": "molecules",
       "description": "",
       "props": [
         {
@@ -4576,13 +4521,13 @@
           "code": "<OTPFieldGroup />"
         }
       ],
-      "importPath": "@/components/ui/otp-field"
+      "importPath": "@/components/molecules/OTPField"
     },
     {
       "name": "OTPFieldSeparator",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
-      "relativePath": "ui/otp-field.tsx",
-      "category": "ui",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "relativePath": "molecules/OTPField.tsx",
+      "category": "molecules",
       "description": "",
       "props": [
         {
@@ -4955,13 +4900,13 @@
           "code": "<OTPFieldSeparator />"
         }
       ],
-      "importPath": "@/components/ui/otp-field"
+      "importPath": "@/components/molecules/OTPField"
     },
     {
       "name": "OTPFieldSlot",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
-      "relativePath": "ui/otp-field.tsx",
-      "category": "ui",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "relativePath": "molecules/OTPField.tsx",
+      "category": "molecules",
       "description": "",
       "props": [],
       "examples": [
@@ -4972,26 +4917,80 @@
           "code": "<OTPFieldSlot />"
         }
       ],
-      "importPath": "@/components/ui/otp-field"
-    },
+      "importPath": "@/components/molecules/OTPField"
+    }
+  ],
+  "organisms": [
     {
-      "name": "Progress",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/progress.tsx",
-      "relativePath": "ui/progress.tsx",
-      "category": "ui",
-      "description": "Determinate progress bar (Kobalte Progress, shadcn-solid-style).\n`value` is 0–100 when `indeterminate` is false.",
+      "name": "Footer",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Footer.tsx",
+      "relativePath": "organisms/Footer.tsx",
+      "category": "organisms",
+      "description": "",
       "props": [],
       "examples": [
         {
           "name": "Default",
           "description": "Default component appearance",
           "props": {},
-          "code": "<Progress />"
+          "code": "<Footer />"
         }
       ],
-      "importPath": "@/components/ui/progress"
+      "importPath": "@/components/organisms/Footer"
+    },
+    {
+      "name": "Header",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Header.tsx",
+      "relativePath": "organisms/Header.tsx",
+      "category": "organisms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Header />"
+        }
+      ],
+      "importPath": "@/components/organisms/Header"
+    },
+    {
+      "name": "Newsletter",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Newsletter.tsx",
+      "relativePath": "organisms/Newsletter.tsx",
+      "category": "organisms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Newsletter />"
+        }
+      ],
+      "importPath": "@/components/organisms/Newsletter"
+    },
+    {
+      "name": "Welcome",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Welcome.tsx",
+      "relativePath": "organisms/Welcome.tsx",
+      "category": "organisms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Welcome />"
+        }
+      ],
+      "importPath": "@/components/organisms/Welcome"
     }
   ],
+  "ui": [],
   "forms": [
     {
       "name": "AppKeyHexField",
