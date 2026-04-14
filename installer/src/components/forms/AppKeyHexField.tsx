@@ -22,8 +22,17 @@ export interface AppKeyHexFieldProps {
 /** Row height must match `h-10` (40px) for translate distance. */
 const REEL_ROW_PX = 40;
 
-/** Strong ease-out: fast spin, long slow settle (slot machine). */
-const REEL_EASING = "cubic-bezier(0.03, 0.82, 0.08, 1)";
+/** Pixels past the target row (more negative `translateY`) before springing back. */
+const REEL_OVERSHOOT_PX = 6;
+
+/** Timeline position (0–1) where the reel hits the overshoot; rest is settle-back. */
+const REEL_OVERSHOOT_AT = 0.89;
+
+/** Main spin: high initial speed, then strong deceleration (spinning wheel). */
+const REEL_SPIN_EASING = "cubic-bezier(0.04, 0.72, 0.12, 1)";
+
+/** Short correction from overshoot to exact row. */
+const REEL_SETTLE_EASING = "cubic-bezier(0.33, 0, 0.25, 1)";
 
 const SlotPairReel: Component<{
 	rows: string[];
@@ -39,13 +48,23 @@ const SlotPairReel: Component<{
 			if (!el) return;
 			const rowCount = props.rows.length;
 			const endY = -(rowCount - 1) * REEL_ROW_PX;
+			const pastY = endY - REEL_OVERSHOOT_PX;
 			const duration = 720 + props.reelIndex * 95;
 			anim = el.animate(
 				[
-					{ transform: "translateY(0px)" },
-					{ transform: `translateY(${endY}px)` },
+					{
+						transform: "translateY(0px)",
+						offset: 0,
+						easing: REEL_SPIN_EASING,
+					},
+					{
+						transform: `translateY(${pastY}px)`,
+						offset: REEL_OVERSHOOT_AT,
+						easing: REEL_SETTLE_EASING,
+					},
+					{ transform: `translateY(${endY}px)`, offset: 1 },
 				],
-				{ duration, easing: REEL_EASING, fill: "forwards" },
+				{ duration, fill: "forwards" },
 			);
 			void anim.finished.then(() => props.onFinished()).catch(() => {});
 		});
@@ -70,7 +89,7 @@ const SlotPairReel: Component<{
 	);
 };
 
-/** Single-line AppKey editor: bullet mask + vertical slot reels on reveal + chime. */
+/** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
 export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	const [revealed, setRevealed] = createSignal(false);
 	const [spinning, setSpinning] = createSignal(false);
