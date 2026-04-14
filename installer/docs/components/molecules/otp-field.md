@@ -4,7 +4,7 @@ This is the installer’s styled wrapper around [corvu’s OTP Field](https://co
 
 ## When to use it
 
-Use it when a value is a **fixed length** and should feel easy to type or paste—like **16-character hexadecimal AppEUI and DevEUI** in the configuration step. The **AppKey** (32 hex characters) uses the separate [`AppKeyHexField`](../molecules/app-key-hex-field.md) with custom masking, not this OTP control.
+Use it when a value is a **fixed length** and should feel easy to type or paste—like **16-character hexadecimal AppEUI and DevEUI** in the configuration step. The **AppKey** (32 hex characters) uses the separate [`AppKeyHexField`](./app-key-hex-field.md) with custom masking, not this OTP control.
 
 ## Import
 
@@ -15,7 +15,7 @@ import {
   OTPFieldInput,
   OTPFieldSeparator,
   OTPFieldSlot,
-} from "@/components/ui/otp-field.tsx";
+} from "@/components/molecules/OTPField.tsx";
 ```
 
 ## Example (16 hex characters, eight pairs)
@@ -32,7 +32,7 @@ The configuration step uses the same layout for AppEUI and DevEUI: eight groups 
 ## Building blocks
 
 | Export | Role |
-|--------|------|
+| ------ | ---- |
 | `OTPField` | Root: set `maxLength`, optional `value` / `onValueChange` / `onComplete` |
 | `OTPFieldInput` | The real (visually hidden) input; set `pattern`, `id`, and `name` for labels and forms |
 | `OTPFieldGroup` | Wraps a row of slots |

@@ -13,7 +13,7 @@ import {
 	OTPFieldGroup,
 	OTPFieldInput,
 	OTPFieldSlot,
-} from "@/components/ui/otp-field.tsx";
+} from "@/components/molecules/OTPField.tsx";
 
 interface StepProps {
 	state: any;

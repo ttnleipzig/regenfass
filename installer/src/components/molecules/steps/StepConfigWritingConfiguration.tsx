@@ -4,7 +4,7 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
-import { Progress } from "@/components/ui/progress.tsx";
+import { Progress } from "@/components/atoms/Progress.tsx";
 import { BiSolidMicrochip } from "solid-icons/bi";
 import { createMemo } from "solid-js";
 

@@ -20,7 +20,7 @@ Follow [Atomic Design methodology, chapter 2](https://atomicdesign.bradfrost.com
 
 ## Special folders
 
-- **`installer/src/components/ui/`** — Thin shadcn-solid primitives. Do **not** add installer-specific domain logic here. Follow `.cursor/rules/solid-shadcn-components.mdc` for theming and composition.
+- **`installer/src/components/ui/`** — Optional home for **new** components added via the shadcn-solid CLI (thin primitives). Prefer moving or implementing first-party controls under **`atoms/`** or **`molecules/`** once they are part of the app (see `Progress`, `OTPField`). Do **not** add installer-specific domain logic under `ui/`. Follow `.cursor/rules/solid-shadcn-components.mdc` for theming and composition.
 - **`installer/src/components/forms/`** — Form-oriented building blocks, usually **molecule-level** (label + control + error text, e.g. `InputField.tsx`). May use `ui/` or Kobalte, but not full screens.
 
 ## Import direction

@@ -4,7 +4,7 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
-import { Progress } from "@/components/ui/progress.tsx";
+import { Progress } from "@/components/atoms/Progress.tsx";
 import { cn } from "@/libs/cn.ts";
 import { CircleCheck } from "lucide-solid";
 import { createMemo, Show } from "solid-js";
