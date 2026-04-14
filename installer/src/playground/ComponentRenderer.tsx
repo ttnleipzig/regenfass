@@ -333,8 +333,13 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   };
 
   const viewportClasses = () => {
-    // Viewport width is now controlled by PixelRuler component
-    return 'w-full';
+    // PixelRuler sets max-width inline on this node; surface + border make the frame visible against the gutter.
+    return [
+      "w-full min-h-[18rem] box-border p-6",
+      "bg-white dark:bg-gray-900",
+      "rounded-lg border border-gray-200 dark:border-gray-700",
+      "shadow-sm",
+    ].join(" ");
   };
 
   return (
@@ -404,10 +409,10 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                 <div class="p-6 flex-shrink-0">
                   <div
                     ref={setPreviewRoot}
-                    class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96 overflow-hidden"
+                    class="bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96 overflow-hidden"
                   >
                     <PixelRuler containerRef={previewRoot()} />
-                    <div class="p-8">
+                    <div class="p-8 overflow-x-auto">
                       <div class={viewportClasses()}>
                         <DynamicComponent />
                       </div>
