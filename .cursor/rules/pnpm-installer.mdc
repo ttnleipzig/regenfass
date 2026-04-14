@@ -1,0 +1,15 @@
+---
+description: Run all pnpm commands from the installer package directory
+alwaysApply: true
+---
+
+# pnpm (installer)
+
+Node tooling for this repository lives under **`installer/`** (see root `AGENTS.md`).
+
+When running **any** `pnpm` task (e.g. `install`, `dev`, `build`, `test`, `lint`, `docs:components`, `playground:registry`), **change into `installer` first**, then invoke pnpm:
+
+- Prefer: `cd installer && pnpm <script>`
+- Or run a one-off with an explicit working directory in the shell session so subsequent pnpm calls stay under `installer/`.
+
+Do **not** assume a root-level `pnpm` workspace unless the repo is later changed to use one. Firmware builds use PlatformIO from the repo root, not pnpm.

@@ -24,6 +24,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 ## Package manager and commands
 
 - Use **pnpm** for Node work (see `installer/packageManager` in `installer/package.json`).
+- **Working directory:** Run every `pnpm` command from **`installer/`** (e.g. `cd installer && pnpm …`). There is no root-level Node workspace; do not run installer scripts from the repo root unless you know a wrapper exists.
 - Typical installer workflows (from `installer/`): `pnpm dev`, `pnpm build`, `pnpm test:run`, `pnpm lint`.
 - Firmware: `pio run` (from repo root, PlatformIO).
 - Component docs generation (installer): `pnpm docs:components` (and playground registry: `pnpm playground:registry` when adding components).
@@ -38,7 +39,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 ## Cursor / project rules (quick map)
 
-Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
+Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `pnpm-installer.mdc` (run pnpm from `installer/`), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
 
 ## Coding conventions
 
