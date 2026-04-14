@@ -15,7 +15,9 @@
 !/.editorconfig
 !/.releaserc.yml
 !/.markdownlintignore
+!/.release-please-config.json
 !/.remarkignore
+!/AGENTS.md
 !/app
 !/platformio.ini
 !/CHANGELOG.md
@@ -23,6 +25,7 @@
 !/README.md
 !/LICENSE.md
 !/SECURITY.md
+!/STATES.md
 !/version.txt
 
 !/installer
