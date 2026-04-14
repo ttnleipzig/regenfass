@@ -1,5 +1,5 @@
 import { Component, createSignal, onMount, Suspense } from "solid-js";
-import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
+import { ButtonModeToggle } from "@/components/atoms/ButtonModeToggle.tsx";
 import Sidebar from "./components/Sidebar";
 import { PlaygroundRegistryProvider } from "./PlaygroundRegistryContext";
 import type { PlaygroundRegistry, PlaygroundComponent, ComponentExample } from "./types";
@@ -131,10 +131,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
   };
 
   return (
-    <>
-      <ColorModeScript />
-      <ColorModeProvider>
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
           {loading() ? (
             <div class="flex items-center justify-center h-screen">
               <div class="text-center">
@@ -186,7 +183,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                     </button>
 
                     <div class="flex items-center gap-2">
-                      <button class="px-2 py-1 text-sm border rounded">Theme</button>
+                      <ButtonModeToggle />
                     </div>
                   </div>
                 </header>
@@ -194,7 +191,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                 <header class="hidden lg:flex items-center justify-between bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
                   <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Component Playground</h1>
                   <div class="flex items-center gap-2">
-                    <button class="px-2 py-1 text-sm border rounded">Theme</button>
+                    <ButtonModeToggle />
                   </div>
                 </header>
 
@@ -222,9 +219,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
             </div>
             </PlaygroundRegistryProvider>
           ) : null}
-        </div>
-      </ColorModeProvider>
-    </>
+    </div>
   );
 };
 

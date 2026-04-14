@@ -1,7 +1,7 @@
-import { Component, createSignal, createEffect, onMount, onCleanup, Show, For } from "solid-js";
+import { Component, createSignal, createEffect, onCleanup, Show, For } from "solid-js";
 
 interface PixelRulerProps {
-  containerRef?: HTMLElement;
+  containerRef?: HTMLElement | null;
   onBreakpointChange?: (breakpoint: string, width: number) => void;
 }
 
@@ -19,81 +19,56 @@ const PixelRuler: Component<PixelRulerProps> = (props) => {
   const [selectedBreakpoint, setSelectedBreakpoint] = createSignal<string>("responsive");
   const [showDropdown, setShowDropdown] = createSignal(false);
   let rulerRef: HTMLDivElement | undefined;
-  let containerElement: HTMLElement | null = null;
 
   const updateWidth = () => {
-    const element = props.containerRef || containerElement;
-    if (element) {
-      // Find the inner content container (the div with p-8 class that contains the component)
-      const innerContainer = element.querySelector('.p-8 > div') as HTMLElement;
-      const targetElement = innerContainer || element;
-      
-      if (targetElement) {
-        const width = targetElement.offsetWidth;
-        setCurrentWidth(Math.max(width, 0));
-      }
-    }
+    const root = props.containerRef;
+    if (!root) return;
+    const innerContainer = root.querySelector(".p-8 > div") as HTMLElement | null;
+    const targetElement = innerContainer ?? root;
+    setCurrentWidth(Math.max(targetElement.offsetWidth, 0));
   };
 
   createEffect(() => {
-    // Update container reference when prop changes
-    if (props.containerRef) {
-      containerElement = props.containerRef;
-      // Delay to ensure DOM is ready
-      setTimeout(() => {
-        updateWidth();
-      }, 0);
-    }
-  });
+    const root = props.containerRef;
+    if (!root) return;
 
-  onMount(() => {
-    containerElement = props.containerRef || null;
+    updateWidth();
 
-    if (containerElement) {
-      updateWidth();
-      
-      const resizeObserver = new ResizeObserver(() => {
-        // Always update width in responsive mode, or when breakpoint is set
-        updateWidth();
-      });
+    const resizeObserver = new ResizeObserver(() => updateWidth());
+    resizeObserver.observe(root);
 
-      // Observe both the container and the inner content area
-      resizeObserver.observe(containerElement);
-      
-      // Find and observe the inner container
-      const findAndObserveInner = () => {
-        const innerContainer = containerElement?.querySelector('.p-8 > div') as HTMLElement;
-        if (innerContainer) {
-          resizeObserver.observe(innerContainer);
-        } else {
-          // Retry if inner container is not yet available
-          setTimeout(findAndObserveInner, 50);
-        }
-      };
-      findAndObserveInner();
-      
-      window.addEventListener('resize', updateWidth);
+    let innerRetryTimeout: ReturnType<typeof setTimeout> | undefined;
+    const findAndObserveInner = () => {
+      const innerContainer = root.querySelector(".p-8 > div") as HTMLElement | null;
+      if (innerContainer) {
+        resizeObserver.observe(innerContainer);
+      } else {
+        innerRetryTimeout = setTimeout(findAndObserveInner, 50);
+      }
+    };
+    findAndObserveInner();
 
-      // Initial delay to ensure layout is complete
-      setTimeout(updateWidth, 100);
+    window.addEventListener("resize", updateWidth);
+    const initialMeasure = window.setTimeout(updateWidth, 100);
 
-      onCleanup(() => {
-        resizeObserver.disconnect();
-        window.removeEventListener('resize', updateWidth);
-      });
-    }
+    onCleanup(() => {
+      if (innerRetryTimeout !== undefined) clearTimeout(innerRetryTimeout);
+      clearTimeout(initialMeasure);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateWidth);
+    });
   });
 
   createEffect(() => {
     const breakpoint = selectedBreakpoint();
     const breakpointConfig = BREAKPOINTS.find(bp => bp.value === breakpoint);
-    
+    const root = props.containerRef;
+
     // Use requestAnimationFrame to ensure DOM is ready
     requestAnimationFrame(() => {
-      // Find the inner content container (the div with p-8 class that contains the component)
-      const innerContainer = containerElement?.querySelector('.p-8 > div') as HTMLElement;
+      const innerContainer = root?.querySelector(".p-8 > div") as HTMLElement | undefined;
       const targetElement = innerContainer;
-      
+
       if (!targetElement) return;
       
       if (breakpointConfig && breakpointConfig.width !== null) {

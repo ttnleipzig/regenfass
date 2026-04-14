@@ -30,7 +30,7 @@ const ComponentRenderer: Component = () => {
   const [selectedExample, setSelectedExample] = createSignal<ComponentExample | null>(null);
   const [propValues, setPropValues] = createSignal<Record<string, any>>({});
   const [error, setError] = createSignal<string | null>(null);
-  let previewContainerRef: HTMLDivElement | undefined;
+  const [previewRoot, setPreviewRoot] = createSignal<HTMLDivElement | undefined>();
 
   createEffect(() => {
     const reg = playgroundRegistry;
@@ -403,10 +403,10 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                 {/* Component preview - shown first on all screen sizes */}
                 <div class="p-6 flex-shrink-0">
                   <div
-                    ref={previewContainerRef}
+                    ref={setPreviewRoot}
                     class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg min-h-96 overflow-hidden"
                   >
-                    <PixelRuler containerRef={previewContainerRef} />
+                    <PixelRuler containerRef={previewRoot()} />
                     <div class="p-8">
                       <div class={viewportClasses()}>
                         <DynamicComponent />
