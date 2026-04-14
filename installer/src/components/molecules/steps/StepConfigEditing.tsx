@@ -1,4 +1,9 @@
-import { IconClearAll, IconFileExport, IconFileImport } from "@tabler/icons-solidjs";
+import {
+	IconClearAll,
+	IconDeviceFloppy,
+	IconFileExport,
+	IconFileImport,
+} from "@tabler/icons-solidjs";
 import { For } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
@@ -170,8 +175,12 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						save to file
 					</Button>
 				</div>
-				<Button class="sm:min-w-[7rem]" onClick={() => emitEvent({ type: "config.next" })}>
-					next
+				<Button
+					class="gap-1.5 sm:min-w-[7rem]"
+					onClick={() => emitEvent({ type: "config.next" })}
+				>
+					<IconDeviceFloppy aria-hidden={true} size={16} stroke={1.75} />
+					Save to device
 				</Button>
 			</footer>
 		</div>

@@ -129,11 +129,13 @@ describe("StepConfigEditing", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders next button", () => {
+  it("renders save to device button", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
-    expect(screen.getByRole("button", { name: "next" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save to device" })
+    ).toBeInTheDocument();
   });
 
   it("calls emitEvent when clear button is clicked", () => {
@@ -170,11 +172,11 @@ describe("StepConfigEditing", () => {
     expect(mockEmitEvent).toHaveBeenCalledWith({ type: "config.saveToFile" });
   });
 
-  it("calls emitEvent when next button is clicked", () => {
+  it("calls emitEvent when save to device button is clicked", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
-    const button = screen.getByRole("button", { name: "next" });
+    const button = screen.getByRole("button", { name: "Save to device" });
     fireEvent.click(button);
     expect(mockEmitEvent).toHaveBeenCalledWith({ type: "config.next" });
   });
