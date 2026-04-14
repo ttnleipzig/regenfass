@@ -46,4 +46,25 @@ describe("StepInstallInstalling", () => {
 		));
 		expect(screen.getByText("42%")).toBeInTheDocument();
 	});
+
+	it("shows completion copy when progress reaches 100%", () => {
+		const { container } = render(() => (
+			<StepInstallInstalling
+				state={{ context: { installFlashProgress: 1 } }}
+				emitEvent={mockEmitEvent}
+			/>
+		));
+		expect(screen.getByText("Installation complete")).toBeInTheDocument();
+		expect(screen.getByText("Installation successful")).toBeInTheDocument();
+		expect(container.querySelectorAll('[role="alert"]')).toHaveLength(2);
+		expect(
+			screen.getByText(/The firmware was installed successfully\./),
+		).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				/The next step is configuration\. You will be taken there automatically/,
+			),
+		).toBeInTheDocument();
+		expect(screen.queryByText("Installing firmware")).not.toBeInTheDocument();
+	});
 });
