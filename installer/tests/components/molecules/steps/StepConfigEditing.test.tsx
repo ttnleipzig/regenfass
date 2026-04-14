@@ -1,15 +1,19 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepConfigEditing from "@/components/molecules/steps/StepConfigEditing.tsx";
+import { formatAppKeyHexPairs } from "@/libs/hexKeyDisplay.ts";
+
+const MOCK_APP_KEY_32 =
+  "0123456789ABCDEF0123456789ABCDEF" as const;
 
 describe("StepConfigEditing", () => {
   const mockState = {
     context: {
       deviceInfo: {
         config: {
-          appEUI: "test-app-eui",
-          appKey: "test-app-key",
-          devEUI: "test-dev-eui",
+          appEUI: "AAAABBBBCCCCDDDD",
+          appKey: MOCK_APP_KEY_32,
+          devEUI: "0123456789ABCDEF",
         },
       },
     },
@@ -32,7 +36,10 @@ describe("StepConfigEditing", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
-    expect(screen.getByLabelText("appKey")).toBeInTheDocument();
+    const input = screen.getByLabelText("appKey") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input.type).toBe("text");
+    expect(screen.getByRole("button", { name: "Show app key" })).toBeInTheDocument();
   });
 
   it("renders devEUI field", () => {
@@ -50,9 +57,9 @@ describe("StepConfigEditing", () => {
     const appKeyInput = screen.getByLabelText("appKey") as HTMLInputElement;
     const devEUIInput = screen.getByLabelText("devEUI") as HTMLInputElement;
 
-    expect(appEUIInput.value).toBe("test-app-eui");
-    expect(appKeyInput.value).toBe("test-app-key");
-    expect(devEUIInput.value).toBe("test-dev-eui");
+    expect(appEUIInput.value).toBe("AAAABBBBCCCCDDDD");
+    expect(appKeyInput.value).toBe(formatAppKeyHexPairs(MOCK_APP_KEY_32));
+    expect(devEUIInput.value).toBe("0123456789ABCDEF");
   });
 
   it("calls emitEvent when appEUI changes", () => {
@@ -60,11 +67,11 @@ describe("StepConfigEditing", () => {
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
     const input = screen.getByLabelText("appEUI");
-    fireEvent.change(input, { target: { value: "new-value" } });
+    fireEvent.input(input, { target: { value: "1111222233334444" } });
     expect(mockEmitEvent).toHaveBeenCalledWith({
       type: "config.changeField",
       field: "appEUI",
-      value: "new-value",
+      value: "1111222233334444",
     });
   });
 
@@ -73,11 +80,14 @@ describe("StepConfigEditing", () => {
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
     const input = screen.getByLabelText("appKey");
-    fireEvent.change(input, { target: { value: "new-key" } });
+    const nextCanonical = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+    fireEvent.input(input, {
+      target: { value: formatAppKeyHexPairs(nextCanonical) },
+    });
     expect(mockEmitEvent).toHaveBeenCalledWith({
       type: "config.changeField",
       field: "appKey",
-      value: "new-key",
+      value: nextCanonical,
     });
   });
 
@@ -86,11 +96,11 @@ describe("StepConfigEditing", () => {
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
     const input = screen.getByLabelText("devEUI");
-    fireEvent.change(input, { target: { value: "new-dev-eui" } });
+    fireEvent.input(input, { target: { value: "FEDCBA9876543210" } });
     expect(mockEmitEvent).toHaveBeenCalledWith({
       type: "config.changeField",
       field: "devEUI",
-      value: "new-dev-eui",
+      value: "FEDCBA9876543210",
     });
   });
 

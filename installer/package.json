@@ -25,6 +25,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@corvu/otp-field": "^0.1.4",
     "@kobalte/core": "^0.13.11",
     "@solidjs/router": "^0.15.3",
     "@statelyai/inspect": "^0.4.0",

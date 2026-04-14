@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@corvu/otp-field':
+        specifier: ^0.1.4
+        version: 0.1.4(solid-js@1.9.11)
       '@kobalte/core':
         specifier: ^0.13.11
         version: 0.13.11(solid-js@1.9.11)
@@ -324,6 +327,11 @@ packages:
   '@commitlint/types@20.4.3':
     resolution: {integrity: sha512-51OWa1Gi6ODOasPmfJPq6js4pZoomima4XLZZCrkldaH2V5Nb3bVhNXPeT6XV0gubbainSpTw4zi68NqAeCNCg==}
     engines: {node: '>=v18'}
+
+  '@corvu/otp-field@0.1.4':
+    resolution: {integrity: sha512-3eG7OoUt6CfVqGujIYfqImdrhGR/s4DpKr5ZQT10zzw3nawIlcwVpqoHTam0v4cgv+NXXvl6I8DoA3J+WgW2YA==}
+    peerDependencies:
+      solid-js: ^1.8
 
   '@corvu/utils@0.4.2':
     resolution: {integrity: sha512-Ox2kYyxy7NoXdKWdHeDEjZxClwzO4SKM8plAaVwmAJPxHMqA0rLOoAsa+hBDwRLpctf+ZRnAd/ykguuJidnaTA==}
@@ -2788,6 +2796,11 @@ snapshots:
     dependencies:
       conventional-commits-parser: 6.3.0
       picocolors: 1.1.1
+
+  '@corvu/otp-field@0.1.4(solid-js@1.9.11)':
+    dependencies:
+      '@corvu/utils': 0.4.2(solid-js@1.9.11)
+      solid-js: 1.9.11
 
   '@corvu/utils@0.4.2(solid-js@1.9.11)':
     dependencies:

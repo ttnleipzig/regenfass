@@ -1,6 +1,15 @@
 import { vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
+// @corvu/otp-field uses ResizeObserver via @corvu/utils (jsdom does not provide it)
+if (typeof globalThis.ResizeObserver === "undefined") {
+	globalThis.ResizeObserver = class ResizeObserver {
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+	};
+}
+
 // Web Serial (used by guards / integration tests; jsdom has no navigator.serial)
 if (!("serial" in navigator)) {
 	Object.defineProperty(navigator, "serial", {

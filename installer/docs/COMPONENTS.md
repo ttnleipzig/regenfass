@@ -21,6 +21,7 @@ This document contains automatically generated documentation for all components 
 - [Organisms](#organisms)
   - [Header](#header)
 - [Forms](#forms)
+  - [AppKeyHexField](#appkeyhexfield)
   - [Checkbox](#checkbox)
   - [FileUploader](#fileuploader)
   - [FormField](#formfield)
@@ -215,6 +216,22 @@ import { Header } from '@/components/organisms/Header';
 
 ## Forms
 
+### AppKeyHexField
+
+**Path**: `forms/AppKeyHexField.tsx`
+
+**Dependencies:**
+
+*External:*
+- `@/libs`
+- `lucide-solid`
+- `solid-js`
+
+**Import:**
+```typescript
+import { AppKeyHexField } from '@/components/forms/AppKeyHexField';
+```
+
 ### Checkbox
 
 **Path**: `forms/Checkbox.tsx`
@@ -321,4 +338,4 @@ import { TextInput } from '@/components/forms/TextInput';
 
 ---
 
-*Generated on April 14, 2026 at 09:22 PM*
+*Generated on April 14, 2026 at 10:26 PM*
