@@ -367,6 +367,36 @@
       "importPath": "@/components/atoms/Link"
     },
     {
+      "name": "Spinner",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Spinner.tsx",
+      "relativePath": "atoms/Spinner.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Spinner />"
+        }
+      ],
+      "importPath": "@/components/atoms/Spinner"
+    },
+    {
       "name": "Status",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Status.tsx",
       "relativePath": "atoms/Status.tsx",
@@ -3627,6 +3657,23 @@
       "importPath": "@/components/molecules/Flasher"
     },
     {
+      "name": "StepPaginator",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/StepPaginator.tsx",
+      "relativePath": "molecules/StepPaginator.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<StepPaginator />"
+        }
+      ],
+      "importPath": "@/components/molecules/StepPaginator"
+    },
+    {
       "name": "StepConfigEditing",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConfigEditing.tsx",
       "relativePath": "molecules/steps/StepConfigEditing.tsx",
@@ -4297,6 +4344,13 @@
           "required": false,
           "description": "",
           "controlType": "text"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
         }
       ],
       "examples": [
@@ -4705,5 +4759,23 @@
       "importPath": "@/components/forms/TextInput"
     }
   ],
-  "uncategorized": []
+  "uncategorized": [
+    {
+      "name": "Lorawan-form",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/lorawan-form.tsx",
+      "relativePath": "lorawan-form.tsx",
+      "category": "uncategorized",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Lorawan-form />"
+        }
+      ],
+      "importPath": "@/components/lorawan-form"
+    }
+  ]
 }

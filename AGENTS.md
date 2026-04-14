@@ -48,21 +48,21 @@ Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), 
 
 ## Common tasks
 
-**New sensor (firmware)**
+### New sensor (firmware)
 
 1. Add sensor code under `src/sensors/`.
 2. Wire feature flags in `platformio.ini` if needed.
 3. Integrate in `src/main.cpp` with conditional compilation.
 4. Update the root `README.md` hardware section if relevant.
 
-**New installer UI component**
+### New installer UI component
 
 1. Place it under the right layer: `atoms/`, `molecules/`, or `organisms/`.
 2. Prefer shadcn-solid primitives; add proper TypeScript types.
 3. Run `pnpm docs:components` and update hand-written docs under `installer/docs` as needed.
 4. Register in the playground when the project uses that workflow (`pnpm playground:registry`).
 
-**Configuration**
+### Configuration
 
 - Firmware: `src/config/` (e.g. `config.h` / `config.cpp`).
 - Installer forms and flow: `installer/src/installer/forms/`, state in `installer/src/installer/state.ts`.

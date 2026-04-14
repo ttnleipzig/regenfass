@@ -48,4 +48,17 @@ describe("StepStartWaitingForUser", () => {
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
   });
+
+  it("highlights the step given by activeInstallationStep", () => {
+    const { container } = render(() => (
+      <StepStartWaitingForUser
+        state={mockState}
+        emitEvent={mockEmitEvent}
+        activeInstallationStep={2}
+      />
+    ));
+    const badges = container.querySelectorAll("ol > li > span[aria-hidden='true']");
+    expect(badges[1]?.className).toContain("bg-primary");
+    expect(badges[1]?.className).toContain("text-primary-foreground");
+  });
 });

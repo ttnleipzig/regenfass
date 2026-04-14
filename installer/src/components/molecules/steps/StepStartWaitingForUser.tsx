@@ -3,16 +3,45 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
+import { StepPaginator } from "@/components/molecules/StepPaginator.tsx";
 import { Button } from "@/components/atoms/Button.tsx";
+
+export const INSTALLATION_STEPS = [
+	"Connect your microcontroller with a USB cable to your computer.",
+	"Select the microcontroller type from the drop-down.",
+	"Click the install button.",
+] as const;
+
+/** 1-based step index matching the order of {@link INSTALLATION_STEPS}. */
+export type InstallationWelcomeStep =
+	InstallationStepIndices<typeof INSTALLATION_STEPS>;
+
+type InstallationStepIndices<T extends readonly unknown[]> = T["length"] extends 0
+	? never
+	: number extends T["length"]
+		? number
+		: OneToN<T["length"]>;
+
+/** Builds the union `1 | 2 | … | N` for a finite numeric literal `N`. */
+type OneToN<
+	N extends number,
+	Acc extends unknown[] = [],
+	R extends number[] = [],
+> = Acc["length"] extends N
+	? R[number]
+	: OneToN<N, [...Acc, 0], [...R, [...Acc, 0]["length"]]>;
 
 interface StepProps {
 	state: any;
 	emitEvent: (event: any) => void;
+	/** Highlights this step in the list (1 = first line in {@link INSTALLATION_STEPS}). */
+	activeInstallationStep?: InstallationWelcomeStep;
 }
 
 export default function StepStartWaitingForUser({
 	state,
 	emitEvent,
+	activeInstallationStep,
 }: StepProps) {
 	return (
 		<div class="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-6 sm:px-6">
@@ -44,50 +73,12 @@ export default function StepStartWaitingForUser({
 			</AlertInline>
 
 			<div class="space-y-6">
-				<div class="rounded-lg border border-border bg-card/60 p-5 shadow-sm ring-1 ring-border/40 backdrop-blur supports-[backdrop-filter]:bg-card/50 sm:p-6 dark:bg-card/70 dark:ring-border/50">
-					<p class="mb-4 text-sm font-medium text-foreground">
-						The installation steps are as follows:
-					</p>
-					<ol
-						class="flex list-none flex-col gap-5"
-						aria-label="Installation steps"
-					>
-						<li class="flex gap-4">
-							<span
-								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
-								aria-hidden="true"
-							>
-								1
-							</span>
-							<span class="pt-1.5 text-base leading-relaxed text-foreground">
-								Connect your microcontroller with a USB cable to
-								your computer.
-							</span>
-						</li>
-						<li class="flex gap-4">
-							<span
-								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
-								aria-hidden="true"
-							>
-								2
-							</span>
-							<span class="pt-1.5 text-base leading-relaxed text-foreground">
-								Select the microcontroller type from the drop-down.
-							</span>
-						</li>
-						<li class="flex gap-4">
-							<span
-								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
-								aria-hidden="true"
-							>
-								3
-							</span>
-							<span class="pt-1.5 text-base leading-relaxed text-foreground">
-								Click the install button.
-							</span>
-						</li>
-					</ol>
-				</div>
+				<StepPaginator
+					title="The installation steps are as follows:"
+					steps={INSTALLATION_STEPS}
+					listAriaLabel="Installation steps"
+					activeStep={activeInstallationStep}
+				/>
 
 				<div class="flex justify-stretch sm:justify-end">
 					<Button

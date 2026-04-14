@@ -85,6 +85,7 @@ import { ButtonSecondary } from '@/components/atoms/ButtonSecondary';
 **Dependencies:**
 
 *External:*
+- `@/libs`
 - `solid-js`
 
 **Import:**
@@ -101,6 +102,9 @@ import { Confetti } from '@/components/atoms/Confetti';
 *External:*
 - `solid-js`
 
+*Internal:*
+- `atoms/Spinner`
+
 **Import:**
 ```typescript
 import { ConfettiSpinner } from '@/components/atoms/ConfettiSpinner';
@@ -113,6 +117,7 @@ import { ConfettiSpinner } from '@/components/atoms/ConfettiSpinner';
 **Dependencies:**
 
 *External:*
+- `@/libs`
 - `solid-js`
 
 **Import:**
@@ -127,7 +132,11 @@ import { Link } from '@/components/atoms/Link';
 **Dependencies:**
 
 *External:*
+- `@/libs`
 - `solid-js`
+
+*Internal:*
+- `atoms/Spinner`
 
 **Import:**
 ```typescript
@@ -174,6 +183,7 @@ import { CardTitle } from '@/components/molecules/Card';
 
 *External:*
 - `@/libs`
+- `lucide-solid`
 - `solid-js`
 
 **Import:**
@@ -190,11 +200,13 @@ import { ErrorList } from '@/components/molecules/ErrorList';
 **Dependencies:**
 
 *External:*
+- `@/libs`
 - `@solidjs/router`
 - `solid-js`
 
 *Internal:*
 - `atoms/ButtonModeToggle`
+- `atoms/Link`
 
 **Import:**
 ```typescript
@@ -309,4 +321,4 @@ import { TextInput } from '@/components/forms/TextInput';
 
 ---
 
-*Generated on 14. Januar 2026 um 02:25*
+*Generated on April 14, 2026 at 09:22 PM*
