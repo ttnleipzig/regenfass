@@ -1,20 +1,21 @@
-import { Component, createSignal, onMount, For, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import type { PlaygroundRegistry, ComponentCategory } from "./types";
+import { usePlaygroundRegistry } from "./PlaygroundRegistryContext";
 
 const categoryIcons: Record<ComponentCategory, string> = {
-  atoms: "⚛️",
-  molecules: "🧬", 
-  organisms: "🦠",
-  ui: "🎨",
-  forms: "📝",
-  uncategorized: "📦",
+  atoms: "\u269B\uFE0F",
+  molecules: "\u{1F9EC}",
+  organisms: "\u{1F9A0}",
+  ui: "\u{1F3A8}",
+  forms: "\u{1F4DD}",
+  uncategorized: "\u{1F4E6}",
 };
 
 const categoryNames: Record<ComponentCategory, string> = {
   atoms: "Atoms",
   molecules: "Molecules",
-  organisms: "Organisms", 
+  organisms: "Organisms",
   ui: "UI Components",
   forms: "Form Components",
   uncategorized: "Other",
@@ -30,60 +31,12 @@ const categoryDescriptions: Record<ComponentCategory, string> = {
 };
 
 const PlaygroundHome: Component = () => {
-  const [registry, setRegistry] = createSignal<PlaygroundRegistry | null>(null);
-  const [loading, setLoading] = createSignal(true);
-  const [error, setError] = createSignal<string | null>(null);
-
-  onMount(async () => {
-    try {
-      const response = await fetch('/registry.json');
-      if (!response.ok) {
-        throw new Error('Failed to load component registry');
-      }
-      const data = await response.json();
-      setRegistry(data);
-    } catch (err) {
-      console.error('Error loading registry:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load registry');
-    } finally {
-      setLoading(false);
-    }
-  });
+  const reg = usePlaygroundRegistry();
 
   const getTotalComponents = () => {
-    const reg = registry();
-    if (!reg) return 0;
-    
-    return Object.values(reg).reduce((total, components) => total + components.length, 0);
+    const r = reg as PlaygroundRegistry;
+    return Object.values(r).reduce((total, components) => total + components.length, 0);
   };
-
-  if (loading()) {
-    return (
-      <div class="flex items-center justify-center h-full">
-        <div class="text-center">
-          <div class="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p class="text-gray-600 dark:text-gray-400">Loading components…</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error()) {
-    return (
-      <div class="flex items-center justify-center h-full">
-        <div class="text-center">
-          <div class="text-6xl mb-4">⚠️</div>
-          <h1 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Failed to load playground
-          </h1>
-          <p class="text-gray-600 dark:text-gray-400">{error()}</p>
-        </div>
-      </div>
-    );
-  }
-
-  const reg = registry();
-  if (!reg) return null;
 
   return (
     <div class="max-w-7xl mx-auto px-6 py-8">
@@ -113,7 +66,7 @@ const PlaygroundHome: Component = () => {
 
       {/* Categories Grid */}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <For each={Object.entries(reg) as [ComponentCategory, any[]][]}> 
+        <For each={Object.entries(reg) as [ComponentCategory, PlaygroundRegistry[ComponentCategory]][]}>
           {([category, components]) => (
             <Show when={components.length > 0}>
               <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
@@ -126,11 +79,11 @@ const PlaygroundHome: Component = () => {
                       {categoryNames[category]}
                     </h2>
                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                      {components.length} component{components.length !== 1 ? 's' : ''}
+                      {components.length} component{components.length !== 1 ? "s" : ""}
                     </div>
                   </div>
                 </div>
-                
+
                 <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
                   {categoryDescriptions[category]}
                 </p>
@@ -141,8 +94,7 @@ const PlaygroundHome: Component = () => {
                     {(component) => (
                       <A
                         href={`/playground/${category}/${component.name}`}
-                        class="block p-3 bg-gray-50 dark:bg-gray-800 rounded-md 
-                               hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        class="block p-3 bg-gray-50 dark:bg-gray-800 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         <div class="flex items-center justify-between">
                           <div>
@@ -162,11 +114,11 @@ const PlaygroundHome: Component = () => {
                       </A>
                     )}
                   </For>
-                  
+
                   <Show when={components.length > 4}>
                     <div class="text-center pt-2">
                       <span class="text-xs text-gray-500 dark:text-gray-400">
-                        +{components.length - 4} more component{components.length - 4 !== 1 ? 's' : ''}
+                        +{components.length - 4} more component{components.length - 4 !== 1 ? "s" : ""}
                       </span>
                     </div>
                   </Show>
@@ -193,7 +145,7 @@ const PlaygroundHome: Component = () => {
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-green-600 dark:text-green-400">
-              {Object.values(reg).filter(comps => comps.length > 0).length}
+              {Object.values(reg).filter((comps) => comps.length > 0).length}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Categories
@@ -201,8 +153,11 @@ const PlaygroundHome: Component = () => {
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {Object.values(reg).reduce((total: number, comps: any[]) => 
-                total + comps.reduce((sum: number, comp: any) => sum + comp.props.length, 0), 0
+              {Object.values(reg).reduce(
+                (total: number, comps: PlaygroundRegistry[ComponentCategory]) =>
+                  total +
+                  comps.reduce((sum: number, comp) => sum + comp.props.length, 0),
+                0,
               )}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -211,8 +166,11 @@ const PlaygroundHome: Component = () => {
           </div>
           <div class="text-center">
             <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">
-              {Object.values(reg).reduce((total: number, comps: any[]) => 
-                total + comps.reduce((sum: number, comp: any) => sum + comp.examples.length, 0), 0
+              {Object.values(reg).reduce(
+                (total: number, comps: PlaygroundRegistry[ComponentCategory]) =>
+                  total +
+                  comps.reduce((sum: number, comp) => sum + comp.examples.length, 0),
+                0,
               )}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -230,14 +188,14 @@ const PlaygroundHome: Component = () => {
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 
                    hover:text-gray-900 dark:hover:text-gray-200 hover:underline"
           >
-            📖 View Documentation
+            {"\u{1F4D6}"} View Documentation
           </A>
           <A
             href="/"
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 
                    hover:text-gray-900 dark:hover:text-gray-200 hover:underline"
           >
-            🏠 Back to App
+            {"\u{1F3E0}"} Back to App
           </A>
         </div>
       </div>

@@ -8,7 +8,8 @@ interface LinkProps extends JSX.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const Link: Component<LinkProps> = (props) => {
   const [local, rest] = splitProps(props, ["href", "children", "class"]);
-  const isExternal = () => local.href.startsWith('http');
+  const isExternal = () =>
+    typeof local.href === "string" && local.href.startsWith("http");
   
   return (
     <a

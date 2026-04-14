@@ -2,7 +2,6 @@ import {
   Component,
   createSignal,
   createEffect,
-  onMount,
   Show,
   For,
   ErrorBoundary,
@@ -13,6 +12,9 @@ import { useParams } from "@solidjs/router";
 import CodeViewer from "./components/CodeViewer";
 import PropsPanel from "./components/PropsPanel";
 import PixelRuler from "./components/PixelRuler";
+import { PlaygroundPreviewShell } from "./PlaygroundPreviewShell";
+import { mergePlaygroundExtras } from "./playgroundDefaults";
+import { usePlaygroundRegistry } from "./PlaygroundRegistryContext";
 import type { PlaygroundComponent, ComponentExample, PlaygroundRegistry, PropInfo } from "./types";
 
 // Dynamic module map for any component under src/components
@@ -23,180 +25,75 @@ const moduleLoaders: Record<string, () => Promise<any>> = {
 
 const ComponentRenderer: Component = () => {
   const params = useParams<{ category: string; component: string }>();
+  const playgroundRegistry = usePlaygroundRegistry();
   const [component, setComponent] = createSignal<PlaygroundComponent | null>(null);
   const [selectedExample, setSelectedExample] = createSignal<ComponentExample | null>(null);
   const [propValues, setPropValues] = createSignal<Record<string, any>>({});
-  const [registry, setRegistry] = createSignal<PlaygroundRegistry | null>(null);
-  const [loading, setLoading] = createSignal(true);
   const [error, setError] = createSignal<string | null>(null);
   let previewContainerRef: HTMLDivElement | undefined;
 
-  onMount(async () => {
-    try {
-      // Load base registry from file
-      let baseRegistry: PlaygroundRegistry | null = null;
-      try {
-        const response = await fetch('/registry.json');
-        if (response.ok) {
-          baseRegistry = await response.json();
-        }
-      } catch {
-        // Ignore if registry.json doesn't exist
-      }
-
-      // Build a runtime registry from actual source files
-      const buildRuntimeRegistry = (): PlaygroundRegistry => {
-        const loaders = {
-          ...import.meta.glob('../components/**/*.{ts,tsx}', { eager: false })
-        };
-
-        const categories = ['atoms', 'molecules', 'organisms', 'ui', 'forms'] as const;
-        const result: PlaygroundRegistry = {
-          atoms: [],
-          molecules: [],
-          organisms: [],
-          ui: [],
-          forms: [],
-          uncategorized: [],
-        };
-
-        const seen = new Set<string>();
-
-        Object.keys(loaders).forEach((key) => {
-          // Compute relative path under components/
-          let rel = key
-            .replace(/^.*\/src\/components\//, '')
-            .replace(/^\.\.\/components\//, '');
-
-          if (!rel || rel.endsWith('.d.ts')) return;
-
-          const withoutExt = rel.replace(/\.(tsx|ts)$/i, '');
-          const segments = withoutExt.split('/');
-          const first = segments[0];
-          const category = (categories as readonly string[]).includes(first) ? first : 'uncategorized';
-          const fileBase = segments[segments.length - 1];
-
-          // Derive component name from filename
-          const name = fileBase.charAt(0).toUpperCase() + fileBase.slice(1);
-          const importPath = `@/components/${withoutExt}`;
-
-          const keyId = `${category}:${name}`;
-          if (seen.has(keyId)) return;
-          seen.add(keyId);
-
-          const examples: ComponentExample[] = [
-            {
-              name: 'Default',
-              description: 'Default component appearance',
-              props: {},
-              code: `<${name} />`,
-            },
-          ];
-
-          const entry: PlaygroundComponent = {
-            name,
-            filePath: '',
-            relativePath: rel,
-            category,
-            description: '',
-            props: [],
-            examples,
-            importPath,
-          };
-
-          (result as any)[category].push(entry);
-        });
-
-        return result;
-      };
-
-      const runtimeRegistry = buildRuntimeRegistry();
-
-      // Merge base registry (from file) with runtime entries, preferring base metadata when present
-      const merged: PlaygroundRegistry = {
-        atoms: [], molecules: [], organisms: [], ui: [], forms: [], uncategorized: []
-      } as PlaygroundRegistry;
-
-      const mergeCategory = (cat: keyof PlaygroundRegistry) => {
-        const base = baseRegistry?.[cat] ?? [];
-        const fromRuntime = runtimeRegistry[cat];
-        const byName = new Map<string, PlaygroundComponent>();
-        base.forEach(c => byName.set(c.name, c));
-        fromRuntime.forEach(c => {
-          if (!byName.has(c.name)) byName.set(c.name, c);
-        });
-        (merged as any)[cat] = Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
-      };
-
-      (['atoms','molecules','organisms','ui','forms','uncategorized'] as (keyof PlaygroundRegistry)[])
-        .forEach(mergeCategory);
-
-      setRegistry(merged);
-    } catch (err) {
-      console.error('Error loading registry:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load registry');
-    } finally {
-      setLoading(false);
-    }
-  });
-
   createEffect(() => {
-    const reg = registry();
+    const reg = playgroundRegistry;
     const category = params.category;
     const componentName = params.component;
 
-    if (reg && category && componentName) {
-      const categoryComponents = reg[category as keyof PlaygroundRegistry];
-      const foundComponent = categoryComponents?.find(c => c.name === componentName);
+    if (!category || !componentName) {
+      return;
+    }
 
-      if (foundComponent) {
-        setComponent(foundComponent);
-        setSelectedExample(foundComponent.examples[0] || null);
+    const categoryComponents = reg[category as keyof PlaygroundRegistry];
+    const foundComponent = categoryComponents?.find((c) => c.name === componentName);
 
-        // Initialize prop values with defaults
-        const initialProps: Record<string, any> = {};
-        foundComponent.props.forEach(prop => {
-          if (prop.defaultValue !== undefined) {
-            initialProps[prop.name] = prop.defaultValue;
-          }
-        });
-        
-        // Set component-specific default values if no props are defined
-        if (foundComponent.props.length === 0) {
-          if (foundComponent.name === 'Headline') {
-            initialProps.children = 'Example Headline';
-            initialProps.as = 'h2';
-            initialProps.align = 'left';
-          } else if (foundComponent.name === 'Button') {
-            initialProps.children = 'Click me';
-          } else if (foundComponent.name === 'ButtonPrimary') {
-            initialProps.children = 'Primary Button';
-            initialProps.loading = false;
-          } else if (foundComponent.name === 'ButtonSecondary') {
-            initialProps.children = 'Secondary Button';
-            initialProps.loading = false;
-          } else if (foundComponent.name === 'Badge') {
-            initialProps.children = 'Badge';
-            initialProps.variant = 'default';
-          } else if (foundComponent.name === 'Link') {
-            initialProps.href = '#';
-            initialProps.children = 'Example Link';
-          } else if (foundComponent.name === 'Status') {
-            initialProps.status = 'idle';
-            initialProps.message = 'Status message';
-          } else if (foundComponent.name === 'AlertInline') {
-            initialProps.children = 'Alert message';
-            initialProps.variant = 'default';
-            initialProps.showIcon = true;
-          } else if (foundComponent.name === 'Card') {
-            initialProps.children = 'Card content';
-          }
+    if (foundComponent) {
+      setError(null);
+      setComponent(foundComponent);
+      setSelectedExample(foundComponent.examples[0] || null);
+
+      // Initialize prop values with defaults
+      const initialProps: Record<string, any> = {};
+      foundComponent.props.forEach((prop) => {
+        if (prop.defaultValue !== undefined) {
+          initialProps[prop.name] = prop.defaultValue;
         }
-        
-        setPropValues(initialProps);
-      } else {
-        setError(`Component "${componentName}" not found in category "${category}"`);
+      });
+
+      // Set component-specific default values if no props are defined
+      if (foundComponent.props.length === 0) {
+        if (foundComponent.name === "Headline") {
+          initialProps.children = "Example Headline";
+          initialProps.as = "h2";
+          initialProps.align = "left";
+        } else if (foundComponent.name === "Button") {
+          initialProps.children = "Click me";
+        } else if (foundComponent.name === "ButtonPrimary") {
+          initialProps.children = "Primary Button";
+          initialProps.loading = false;
+        } else if (foundComponent.name === "ButtonSecondary") {
+          initialProps.children = "Secondary Button";
+          initialProps.loading = false;
+        } else if (foundComponent.name === "Badge") {
+          initialProps.children = "Badge";
+          initialProps.variant = "default";
+        } else if (foundComponent.name === "Link") {
+          initialProps.href = "#";
+          initialProps.children = "Example Link";
+        } else if (foundComponent.name === "Status") {
+          initialProps.status = "idle";
+          initialProps.message = "Status message";
+        } else if (foundComponent.name === "AlertInline") {
+          initialProps.children = "Alert message";
+          initialProps.variant = "default";
+          initialProps.showIcon = true;
+        } else if (foundComponent.name === "Card") {
+          initialProps.children = "Card content";
+        }
       }
+
+      mergePlaygroundExtras(foundComponent.name, initialProps);
+      setPropValues(initialProps);
+    } else {
+      setComponent(null);
+      setError(`Component "${componentName}" not found in category "${category}"`);
     }
   });
 
@@ -403,11 +300,18 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
               // Access props reactively inside the IIFE - this ensures reactivity
               const currentProps = propValues();
               const { children, ...restProps } = currentProps;
-              
-              if (children !== undefined && children !== null && children !== '') {
-                return <Component {...restProps}>{children}</Component>;
-              }
-              return <Component {...restProps} />;
+              const shellName = component()?.name ?? "";
+
+              const inner =
+                children !== undefined && children !== null && children !== "" ? (
+                  <Component {...restProps}>{children}</Component>
+                ) : (
+                  <Component {...restProps} />
+                );
+
+              return (
+                <PlaygroundPreviewShell componentName={shellName}>{inner}</PlaygroundPreviewShell>
+              );
             } catch (err) {
               return (
                 <div class="p-4 bg-red-50 border border-red-200 rounded-md">
@@ -434,16 +338,7 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
   };
 
   return (
-    <Show
-      when={!loading()}
-      fallback={
-        <div class="flex items-center justify-center h-full">
-          <div class="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
-        </div>
-      }
-    >
-      <Show
-        when={!error()}
+    <Show when={!error()}
         fallback={
           <div class="flex items-center justify-center h-full">
             <div class="text-center">
@@ -757,7 +652,6 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
               </div>
             </div>
           )}
-        </Show>
       </Show>
     </Show>
   );

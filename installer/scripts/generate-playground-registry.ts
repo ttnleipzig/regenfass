@@ -34,6 +34,9 @@ interface ComponentExample {
   code: string;
 }
 
+/** Export names that only work inside a parent primitive (e.g. Kobalte listbox `item` context). */
+const PLAYGROUND_EXCLUDED_EXPORT_NAMES = new Set<string>(['SelectItem']);
+
 class PlaygroundRegistryGenerator {
   private project: Project;
   private componentsRoot: string;
@@ -326,6 +329,10 @@ class PlaygroundRegistryGenerator {
         if (this.isComponentDeclaration(declaration)) {
           const name = exportName === 'default' ? this.getDefaultExportName(relativePath) : exportName;
 
+          if (PLAYGROUND_EXCLUDED_EXPORT_NAMES.has(name)) {
+            continue;
+          }
+
           let description = '';
           try {
             if (Node.isFunctionDeclaration(declaration) || Node.isVariableDeclaration(declaration)) {
@@ -426,5 +433,13 @@ class PlaygroundRegistryGenerator {
   }
 }
 
-const generator = new PlaygroundRegistryGenerator();
-generator.generate();
+async function main(): Promise<void> {
+  const generator = new PlaygroundRegistryGenerator();
+  await generator.generate();
+}
+
+main().catch((err) => {
+  error(`Unhandled error: ${err}`);
+  endGroup();
+  process.exit(1);
+});

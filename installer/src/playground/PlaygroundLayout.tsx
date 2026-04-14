@@ -1,6 +1,7 @@
 import { Component, createSignal, onMount, Suspense } from "solid-js";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import Sidebar from "./components/Sidebar";
+import { PlaygroundRegistryProvider } from "./PlaygroundRegistryContext";
 import type { PlaygroundRegistry, PlaygroundComponent, ComponentExample } from "./types";
 
 interface PlaygroundLayoutProps {
@@ -160,6 +161,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
               </div>
             </div>
           ) : registry() ? (
+            <PlaygroundRegistryProvider value={registry()!}>
             <div class="flex h-screen overflow-hidden">
               {/* Sidebar */}
               <Sidebar
@@ -218,6 +220,7 @@ const PlaygroundLayout: Component<PlaygroundLayoutProps> = (props) => {
                 />
               )}
             </div>
+            </PlaygroundRegistryProvider>
           ) : null}
         </div>
       </ColorModeProvider>

@@ -4181,8 +4181,876 @@
       "importPath": "@/components/organisms/Welcome"
     }
   ],
-  "ui": [],
+  "ui": [
+    {
+      "name": "OTPField",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
+      "relativePath": "ui/otp-field.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<OTPField />"
+        }
+      ],
+      "importPath": "@/components/ui/otp-field"
+    },
+    {
+      "name": "OTPFieldGroup",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
+      "relativePath": "ui/otp-field.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<OTPFieldGroup />"
+        }
+      ],
+      "importPath": "@/components/ui/otp-field"
+    },
+    {
+      "name": "OTPFieldSeparator",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
+      "relativePath": "ui/otp-field.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [
+        {
+          "name": "innerText",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "controlType": "number",
+          "options": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "accesskey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autocorrect",
+          "type": "\"on\" | \"off\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "on",
+            "off"
+          ]
+        },
+        {
+          "name": "contenteditable",
+          "type": "\"true\" | \"false\" | boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "dir",
+          "type": "HTMLDir | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean | \"false\" | \"true\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "enterkeyhint",
+          "type": "\"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"search\" | \"send\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "enter",
+            "done",
+            "go",
+            "next",
+            "previous",
+            "search",
+            "send"
+          ]
+        },
+        {
+          "name": "exportparts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | \"hidden\" | \"until-found\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "hidden",
+            "until-found"
+          ]
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "inputmode",
+          "type": "| \"decimal\" | \"email\" | \"none\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "is",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "part",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "popover",
+          "type": "boolean | \"manual\" | \"auto\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "manual",
+            "auto"
+          ]
+        },
+        {
+          "name": "spellcheck",
+          "type": "\"true\" | \"false\" | boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "true",
+            "false",
+            "boolean"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "translate",
+          "type": "\"yes\" | \"no\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        {
+          "name": "accessKey",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "autoCapitalize",
+          "type": "HTMLAutocapitalize | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contentEditable",
+          "type": "boolean | \"plaintext-only\" | \"inherit\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean",
+          "options": [
+            "boolean",
+            "plaintext-only",
+            "inherit"
+          ]
+        },
+        {
+          "name": "exportParts",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inputMode",
+          "type": "| \"none\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | \"search\" | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemid",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemprop",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemref",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemscope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemtype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemId",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemProp",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemRef",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "itemScope",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "boolean"
+        },
+        {
+          "name": "itemType",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "about",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "datatype",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "inlist",
+          "type": "any | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "prefix",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "resource",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "typeof",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "vocab",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextmenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "contextMenu",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<OTPFieldSeparator />"
+        }
+      ],
+      "importPath": "@/components/ui/otp-field"
+    },
+    {
+      "name": "OTPFieldSlot",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/otp-field.tsx",
+      "relativePath": "ui/otp-field.tsx",
+      "category": "ui",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<OTPFieldSlot />"
+        }
+      ],
+      "importPath": "@/components/ui/otp-field"
+    },
+    {
+      "name": "Progress",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/ui/progress.tsx",
+      "relativePath": "ui/progress.tsx",
+      "category": "ui",
+      "description": "Determinate progress bar (Kobalte Progress, shadcn-solid-style).\n`value` is 0–100 when `indeterminate` is false.",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Progress />"
+        }
+      ],
+      "importPath": "@/components/ui/progress"
+    }
+  ],
   "forms": [
+    {
+      "name": "AppKeyHexField",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/AppKeyHexField.tsx",
+      "relativePath": "forms/AppKeyHexField.tsx",
+      "category": "forms",
+      "description": "",
+      "props": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "onCanonicalChange",
+          "type": "(canonical: string) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "id": "Example id",
+            "name": "Example name",
+            "value": "Example value",
+            "onCanonicalChange": "Example onCanonicalChange"
+          },
+          "code": "<AppKeyHexField id=\"Example id\" name=\"Example name\" value=\"Example value\" onCanonicalChange=\"Example onCanonicalChange\" />"
+        }
+      ],
+      "importPath": "@/components/forms/AppKeyHexField"
+    },
     {
       "name": "Checkbox",
       "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/Checkbox.tsx",
@@ -4583,23 +5451,6 @@
           "description": "Default component appearance",
           "props": {},
           "code": "<SelectContent />"
-        }
-      ],
-      "importPath": "@/components/forms/SelectField"
-    },
-    {
-      "name": "SelectItem",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
-      "relativePath": "forms/SelectField.tsx",
-      "category": "forms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<SelectItem />"
         }
       ],
       "importPath": "@/components/forms/SelectField"
