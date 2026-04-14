@@ -73,14 +73,19 @@ export class SCPAdapter extends EventEmitter<SCPReaderEvents> {
 	}
 
 	async #pump() {
+		// Another pump may be scheduled via setTimeout; stop() clears #reader first.
 		if (!this.#reader) {
-			throw new Error(
-				`Could not pump, #reader is undefined; did you start the reader?`
-			);
+			this.#timeout = null;
+			return;
 		}
 
 		try {
 			const { done, value } = await this.#reader.read();
+			// stop() may run while awaiting read (e.g. field resolved, timeout).
+			if (!this.#reader) {
+				this.#timeout = null;
+				return;
+			}
 			if (done) {
 				this.emit("done");
 				this.#timeout = null;
@@ -105,7 +110,12 @@ export class SCPAdapter extends EventEmitter<SCPReaderEvents> {
 			console.error(err);
 		}
 
-		this.#timeout = setTimeout(() => this.#pump());
+		// emit("line") can call stop() synchronously; do not schedule another pump then.
+		if (this.#reader) {
+			this.#timeout = setTimeout(() => this.#pump());
+		} else {
+			this.#timeout = null;
+		}
 	}
 
 	write(line: Line) {
