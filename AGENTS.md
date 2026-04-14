@@ -31,13 +31,14 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 ## Installer UI stack (mandatory choices)
 
 - **Framework**: **SolidJS only** — do not introduce React.
+- **Atomic Design**: Follow `.cursor/rules/atomic-design-installer.mdc` (Brad Frost methodology mapped to `atoms/`, `molecules/`, `organisms/`, `forms/`, `ui/`, plus templates and pages via layouts and routes).
 - **Components**: Prefer [shadcn-solid](https://shadcn-solid.com/docs/components/) patterns; follow their setup and keep theming consistent.
 - **Icons**: Use **solid-icons** in the installer UI.
 - **State / routing**: Respect existing patterns (e.g. XState, `@solidjs/router`) already used in the codebase.
 
 ## Cursor / project rules (quick map)
 
-Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
+Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
 
 ## Coding conventions
 

@@ -1,0 +1,57 @@
+---
+description: Atomic Design (Brad Frost, chapter 2) for the installer component hierarchy
+globs: installer/**/*
+alwaysApply: true
+---
+
+# Atomic Design (installer)
+
+Follow [Atomic Design methodology, chapter 2](https://atomicdesign.bradfrost.com/chapter-2/) as the mental model for the installer UI. The five stages are **atoms**, **molecules**, **organisms**, **templates**, and **pages**. This is **not a linear workflow** (“build all atoms first, then molecules…”). Treat it as a way to move between **detail** (individual pieces) and **whole** (layouts and real content) while you work.
+
+## Mapping in this repository
+
+| Stage | Where it lives |
+| ----- | -------------- |
+| **Atoms** | `installer/src/components/atoms/` — smallest meaningful UI pieces (buttons, links, badges, headlines, status, …). |
+| **Molecules** | `installer/src/components/molecules/` — simple groups of elements that work as one unit (e.g. Card, step views, Flasher). |
+| **Organisms** | `installer/src/components/organisms/` — distinct sections of the interface (Header, Footer, Welcome, …). |
+| **Templates** | Page-level layouts focused on **structure and placeholders**, e.g. `MainApp` in `installer/src/App.tsx`, playground shells under `installer/src/playground/`. |
+| **Pages** | Concrete route or screen **instances** with realistic content and states (`/`, playground routes, future routes). Use this level to test variations and resilience of the system. |
+
+## Special folders
+
+- **`installer/src/components/ui/`** — Thin shadcn-solid primitives. Do **not** add installer-specific domain logic here. Follow `.cursor/rules/solid-shadcn-components.mdc` for theming and composition.
+- **`installer/src/components/forms/`** — Form-oriented building blocks, usually **molecule-level** (label + control + error text, e.g. `InputField.tsx`). May use `ui/` or Kobalte, but not full screens.
+
+## Import direction
+
+- **Atoms** must not import from `molecules/` or `organisms/`.
+- **Molecules** may use atoms, `ui/`, and shared libs; must not import `organisms/`.
+- **Organisms** compose lower layers as needed.
+- **Exception:** Atoms may use **primitives** (Kobalte, `ui/*`) — analogous to base HTML elements in the methodology.
+
+## New components
+
+Prefer `atoms/`, `molecules/`, or `organisms/`. Avoid new loose files under `installer/src/components/` root unless there is a documented reason (e.g. a temporary migration).
+
+## Tests and documentation
+
+- Component tests: mirror `installer/src/components/` under `installer/tests/components/` (see `.cursor/rules/test-structure.mdc`).
+- New or changed props: update types, hand-written docs under `installer/docs` when applicable, and generated docs per project hooks.
+
+## Composition overview
+
+```mermaid
+flowchart TB
+  ui[ui_shadcn_primitives]
+  atoms[atoms]
+  molecules[molecules]
+  organisms[organisms]
+  templates[templates_layouts]
+  pages[pages_routes]
+  ui --> atoms
+  atoms --> molecules
+  molecules --> organisms
+  organisms --> templates
+  templates --> pages
+```
