@@ -12,15 +12,16 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
   actions: write
   checks: write
 
 env:
+  NODE_VERSION: '20'
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
   PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
 
 jobs:
-
   ############################################################################################
   # https://github.com/marketplace/actions/playwright-test-report
   ############################################################################################
@@ -28,12 +29,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
-      - name: List all files
-        run: ls -lisah
-      - name: Generate report
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: './installer/pnpm-lock.yaml'
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('installer/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        run: cd ./installer && pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: cd ./installer && pnpm exec playwright install --with-deps chromium
+
+      - name: Publish Playwright report
         uses: sidharthv96/playwright-report-action@v2.0-rc.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: installer
           package-manager: pnpm
+          skip-step: install
+          test-script: pnpm exec playwright test --reporter=json,line

@@ -35,9 +35,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -52,7 +52,7 @@ jobs:
         with:
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('installer/pnpm-lock.yaml') }}
 
       - name: Install dependencies
         run: cd ./installer && pnpm install --frozen-lockfile
@@ -71,6 +71,12 @@ jobs:
 
       - name: Run tests with coverage
         run: cd ./installer && pnpm run test:coverage
+
+      - name: Install Playwright browsers
+        run: cd ./installer && pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright E2E tests
+        run: cd ./installer && pnpm exec playwright test --reporter=line
 
       ##############################################################################################
       # Publish test results

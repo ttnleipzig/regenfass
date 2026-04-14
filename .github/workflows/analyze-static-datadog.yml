@@ -6,6 +6,7 @@ name: Analysis Static - Datadog
 
 jobs:
   static-analysis:
+    if: ${{ secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != '' }}
     runs-on: ubuntu-latest
     name: Datadog Static Analyzer
     steps:
@@ -17,7 +18,5 @@ jobs:
       with:
         dd_api_key: ${{ secrets.DD_API_KEY }}
         dd_app_key: ${{ secrets.DD_APP_KEY }}
-        dd_service: my-app
-        dd_env: ci
         dd_site: datadoghq.eu
         cpu_count: 2
