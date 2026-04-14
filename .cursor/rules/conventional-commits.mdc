@@ -1,0 +1,11 @@
+---
+description: Conventional Commits in English for all Git commit messages
+alwaysApply: true
+---
+
+# Conventional Commits
+
+Follow the **Conventional Commits** section in the repository root **`AGENTS.md`** for subject format, allowed types, breaking changes, examples, and anti-patterns.
+
+- Subjects in **English**, **imperative** mood, per [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+- Installer commits are linted with **`@commitlint/config-conventional`** — see `installer/commitlint.config.cjs`.
