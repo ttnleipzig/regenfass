@@ -1,0 +1,111 @@
+/* Radial burst on inner layer; screen-space fall on outer carrier. Only transform + opacity. */
+
+.confetti-burst__carrier {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 0;
+	height: 0;
+	will-change: transform;
+	transform: translate(-50%, -50%) translateY(0);
+	animation-name: confetti-fall-y;
+	animation-duration: var(--confetti-dur, 1600ms);
+	animation-delay: var(--confetti-delay, 0ms);
+	animation-fill-mode: forwards;
+}
+
+.confetti-burst__radial {
+	position: relative;
+	width: 0;
+	height: 0;
+	will-change: transform, opacity;
+	transform: rotate(var(--confetti-angle, 0deg)) translateY(0) rotate(0deg);
+	transform-origin: center center;
+	opacity: 1;
+	animation-name: confetti-radial-burst;
+	animation-duration: var(--confetti-dur, 1600ms);
+	animation-delay: var(--confetti-delay, 0ms);
+	animation-fill-mode: forwards;
+}
+
+.confetti-burst__shard {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0.5rem;
+	height: 0.75rem;
+	border-radius: 2px;
+	transform: translate(-50%, -50%);
+}
+
+/* Hold position during burst, then accelerate downward (gravity-style, segment easing). */
+@keyframes confetti-fall-y {
+	0% {
+		transform: translate(-50%, -50%) translateY(0);
+		animation-timing-function: linear;
+	}
+	/* Fall segment: accelerate downward (gravity-ish; avoids weak default ease-in). */
+	28% {
+		transform: translate(-50%, -50%) translateY(0);
+		animation-timing-function: cubic-bezier(0.45, 0.02, 0.85, 1);
+	}
+	100% {
+		transform: translate(-50%, -50%) translateY(var(--confetti-fall, 92vh));
+	}
+}
+
+@keyframes confetti-radial-burst {
+	0% {
+		transform: rotate(var(--confetti-angle)) translateY(0) rotate(0deg);
+		opacity: 1;
+		animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+	}
+	28% {
+		transform: rotate(var(--confetti-angle)) translateY(calc(-1 * var(--confetti-travel, 50vmin)))
+			rotate(200deg);
+		opacity: 1;
+		animation-timing-function: linear;
+	}
+	72% {
+		transform: rotate(var(--confetti-angle)) translateY(calc(-1 * var(--confetti-travel)))
+			rotate(var(--confetti-spin-mid, 420deg));
+		opacity: 1;
+	}
+	100% {
+		transform: rotate(var(--confetti-angle)) translateY(calc(-1 * var(--confetti-travel)))
+			rotate(var(--confetti-spin-end, 720deg));
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.confetti-burst__carrier {
+		animation-name: confetti-fall-y-reduced;
+		animation-duration: 350ms;
+		animation-timing-function: ease-out;
+	}
+
+	.confetti-burst__radial {
+		animation-name: confetti-radial-reduced;
+		animation-duration: 350ms;
+		animation-timing-function: ease-out;
+	}
+
+	@keyframes confetti-fall-y-reduced {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) translateY(0);
+		}
+	}
+
+	@keyframes confetti-radial-reduced {
+		0% {
+			transform: scale(1);
+			opacity: 0.55;
+		}
+		100% {
+			transform: scale(1.12);
+			opacity: 0;
+		}
+	}
+}

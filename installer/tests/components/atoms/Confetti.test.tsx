@@ -1,81 +1,63 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { render, screen, cleanup } from "@solidjs/testing-library";
-import Confetti from "@/components/atoms/Confetti.tsx";
+import { render, cleanup } from "@solidjs/testing-library";
+import Confetti, {
+	CONFETTI_PARTICLE_COUNT,
+} from "@/components/atoms/Confetti.tsx";
 
 describe("Confetti", () => {
-  afterEach(() => {
-    cleanup();
-  });
+	afterEach(() => {
+		cleanup();
+	});
 
-  it("renders confetti elements when active is true", () => {
-    const { container } = render(() => <Confetti active={true} />);
-    // Confetti elements have bg-* classes (including shadcn tokens)
-    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
-    expect(confettiElements.length).toBeGreaterThan(0);
-  });
+	it("renders fullscreen burst with many colored pieces when active", () => {
+		const { container } = render(() => <Confetti active={true} />);
+		const root = container.querySelector(".confetti-burst");
+		expect(root).toBeInTheDocument();
+		expect(root).toHaveClass("fixed", "inset-0");
 
-  it("does not render confetti when active is false", () => {
-    const { container } = render(() => <Confetti active={false} />);
-    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
-    expect(confettiElements.length).toBe(0);
-  });
+		const carriers = container.querySelectorAll(".confetti-burst__carrier");
+		expect(carriers.length).toBe(CONFETTI_PARTICLE_COUNT);
 
-  it("does not render confetti when active is undefined", () => {
-    const { container } = render(() => <Confetti />);
-    const confettiElements = container.querySelectorAll("div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500']");
-    expect(confettiElements.length).toBe(0);
-  });
+		const shards = container.querySelectorAll(".confetti-burst__shard");
+		expect(shards.length).toBe(CONFETTI_PARTICLE_COUNT);
 
-  it("shows correct status text when active", () => {
-    render(() => <Confetti active={true} />);
-    expect(screen.getByText(/confetti.*aktiv/i)).toBeInTheDocument();
-  });
+		const confettiElements = container.querySelectorAll(
+			"div[class*='bg-destructive'], div[class*='bg-primary'], div[class*='bg-green-500'], div[class*='bg-yellow-500'], div[class*='bg-purple-500'], div[class*='bg-blue-500'], div[class*='bg-pink-500'], div[class*='bg-orange-500']",
+		);
+		expect(confettiElements.length).toBe(CONFETTI_PARTICLE_COUNT);
+	});
 
-  it("shows correct status text when inactive", () => {
-    render(() => <Confetti active={false} />);
-    expect(screen.getByText(/confetti.*inaktiv/i)).toBeInTheDocument();
-  });
+	it("does not render burst when active is false", () => {
+		const { container } = render(() => <Confetti active={false} />);
+		expect(container.querySelector(".confetti-burst")).not.toBeInTheDocument();
+	});
 
-  it("renders multiple confetti elements with different colors", () => {
-    const { container } = render(() => <Confetti active={true} />);
-    
-    // All confetti elements have animate-bounce class, so find them first
-    const allConfetti = container.querySelectorAll("div.animate-bounce");
-    expect(allConfetti.length).toBe(5);
-    
-    // Verify individual colors exist by checking class names (using shadcn tokens)
-    const confettiArray = Array.from(allConfetti);
-    const hasRed = confettiArray.some(el => el.className.includes("bg-destructive"));
-    const hasBlue = confettiArray.some(el => el.className.includes("bg-primary"));
-    const hasGreen = confettiArray.some(el => el.className.includes("bg-green-500"));
-    const hasYellow = confettiArray.some(el => el.className.includes("bg-yellow-500"));
-    const hasPurple = confettiArray.some(el => el.className.includes("bg-purple-500"));
-    
-    expect(hasRed).toBe(true);
-    expect(hasBlue).toBe(true);
-    expect(hasGreen).toBe(true);
-    expect(hasYellow).toBe(true);
-    expect(hasPurple).toBe(true);
-  });
+	it("does not render burst when active is undefined", () => {
+		const { container } = render(() => <Confetti />);
+		expect(container.querySelector(".confetti-burst")).not.toBeInTheDocument();
+	});
 
-  it("applies correct animation classes to confetti elements", () => {
-    const { container } = render(() => <Confetti active={true} />);
-    const confettiElements = container.querySelectorAll("div.animate-bounce");
-    expect(confettiElements.length).toBeGreaterThan(0);
-  });
+	it("includes palette variety across particles", () => {
+		const { container } = render(() => <Confetti active={true} />);
+		const pieces = Array.from(container.querySelectorAll(".confetti-burst__shard"));
 
-  it("has correct container structure", () => {
-    const { container } = render(() => <Confetti active={true} />);
-    const mainContainer = container.querySelector("div.relative");
-    expect(mainContainer).toBeInTheDocument();
-    expect(mainContainer).toHaveClass("w-48");
-    expect(mainContainer).toHaveClass("h-48");
-  });
+		expect(pieces.some((el) => el.className.includes("bg-destructive"))).toBe(true);
+		expect(pieces.some((el) => el.className.includes("bg-primary"))).toBe(true);
+		expect(pieces.some((el) => el.className.includes("bg-green-500"))).toBe(true);
+		expect(pieces.some((el) => el.className.includes("bg-yellow-500"))).toBe(true);
+		expect(pieces.some((el) => el.className.includes("bg-purple-500"))).toBe(true);
+	});
 
-  it("renders status text container", () => {
-    const { container } = render(() => <Confetti active={true} />);
-    const textContainer = container.querySelector("div.text-center");
-    expect(textContainer).toBeInTheDocument();
-    expect(textContainer).toHaveClass("mt-32");
-  });
+	it("marks overlay as decorative for assistive tech", () => {
+		const { container } = render(() => <Confetti active={true} />);
+		const root = container.querySelector(".confetti-burst");
+		expect(root).toHaveAttribute("aria-hidden", "true");
+		expect(root).toHaveAttribute("role", "presentation");
+	});
+
+	it("does not block pointer events", () => {
+		const { container } = render(() => <Confetti active={true} />);
+		const root = container.querySelector(".confetti-burst");
+		expect(root).toHaveClass("pointer-events-none");
+	});
 });
