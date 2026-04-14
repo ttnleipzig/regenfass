@@ -11,25 +11,28 @@ describe("StepConfigWritingConfiguration", () => {
     vi.clearAllMocks();
   });
 
-  it("renders writing configuration message", () => {
+  it("renders writing configuration title and description", () => {
     render(() => (
       <StepConfigWritingConfiguration
         state={mockState}
         emitEvent={mockEmitEvent}
       />
     ));
-    expect(screen.getByText("Writing configuration...")).toBeInTheDocument();
+    expect(screen.getByText("Writing configuration")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Your settings are being sent to the microcontroller/i),
+    ).toBeInTheDocument();
   });
 
-  it("renders as span element", () => {
-    const { container } = render(() => (
+  it("shows an accessible loading indicator", () => {
+    render(() => (
       <StepConfigWritingConfiguration
         state={mockState}
         emitEvent={mockEmitEvent}
       />
     ));
-    const span = container.querySelector("span");
-    expect(span).toBeInTheDocument();
-    expect(span?.textContent).toBe("Writing configuration...");
+    expect(
+      screen.getByRole("status", { name: /loading/i }),
+    ).toBeInTheDocument();
   });
 });

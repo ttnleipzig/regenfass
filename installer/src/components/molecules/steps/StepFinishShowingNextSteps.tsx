@@ -12,9 +12,12 @@ interface StepProps {
 }
 
 export default function StepFinishShowingNextSteps({
-	state: _state,
-	emitEvent: _emitEvent,
+	state,
+	emitEvent,
 }: StepProps) {
+	void state;
+	void emitEvent;
+
 	return (
 		<AlertInline class="overflow-hidden">
 			<div class="flex gap-3">
