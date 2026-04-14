@@ -11,7 +11,7 @@ This document contains automatically generated documentation for all components 
   - [ButtonPrimary](#buttonprimary)
   - [ButtonSecondary](#buttonsecondary)
   - [Confetti](#confetti)
-  - [ConfettiSpinner](#confettispinner)
+  - [SpinnerConfetti](#spinnerconfetti)
   - [Link](#link)
   - [Status](#status)
 - [Molecules](#molecules)
@@ -94,9 +94,9 @@ import { ButtonSecondary } from '@/components/atoms/ButtonSecondary';
 import { Confetti } from '@/components/atoms/Confetti';
 ```
 
-### ConfettiSpinner
+### SpinnerConfetti
 
-**Path**: `atoms/ConfettiSpinner.tsx`
+**Path**: `atoms/SpinnerConfetti.tsx`
 
 **Dependencies:**
 
@@ -108,7 +108,7 @@ import { Confetti } from '@/components/atoms/Confetti';
 
 **Import:**
 ```typescript
-import { ConfettiSpinner } from '@/components/atoms/ConfettiSpinner';
+import SpinnerConfetti from '@/components/atoms/SpinnerConfetti';
 ```
 
 ### Link

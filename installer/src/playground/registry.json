@@ -281,9 +281,9 @@
       "importPath": "@/components/atoms/Confetti"
     },
     {
-      "name": "ConfettiSpinner",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ConfettiSpinner.tsx",
-      "relativePath": "atoms/ConfettiSpinner.tsx",
+      "name": "SpinnerConfetti",
+      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/SpinnerConfetti.tsx",
+      "relativePath": "atoms/SpinnerConfetti.tsx",
       "category": "atoms",
       "description": "",
       "props": [],
@@ -292,10 +292,10 @@
           "name": "Default",
           "description": "Default component appearance",
           "props": {},
-          "code": "<ConfettiSpinner />"
+          "code": "<SpinnerConfetti />"
         }
       ],
-      "importPath": "@/components/atoms/ConfettiSpinner"
+      "importPath": "@/components/atoms/SpinnerConfetti"
     },
     {
       "name": "Headline",

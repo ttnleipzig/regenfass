@@ -10,7 +10,7 @@ This directory documents UI components following Atomic Design (Atoms → Molecu
 
 This documentation covers all UI components organized by their complexity level. Each component includes usage examples, props documentation, and design guidelines.
 
-**Atoms** provide the foundational building blocks including Badge, Button, Headline, Link, Confetti, ConfettiSpinner, **Progress**, Spinner, and Status. These are simple, reusable primitives that form the basis of the design system.
+**Atoms** provide the foundational building blocks including Badge, Button, Headline, Link, Confetti, **Progress**, Spinner, SpinnerConfetti, and Status. These are simple, reusable primitives that form the basis of the design system.
 
 **Molecules** combine atoms into more complex components such as AlertInline Dialog, Checkbox, ErrorList, FileUploader, FormField, FormLayout, ButtonPrimary, ButtonSecondary, TextInput, ButtonModeToggle, and **OTPField** (multi-slot entry). These components handle common UI patterns and interactions.
 
