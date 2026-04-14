@@ -28,7 +28,7 @@ export default function Steps() {
 	const send = actorRef.send;
 
 	return (
-		<div class="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
+		<div class="mx-auto w-full min-w-0 max-w-3xl px-4 sm:px-6 py-6 space-y-6">
 			<Switch fallback={<pre>{JSON.stringify(snapshot().toJSON(), null, 2)}</pre>}>
 				<Match when={snapshot().matches("Start_CheckingWebSerialSupport")}>
 					<StepStartCheckingWebSerialSupport state={snapshot()} emitEvent={send} />

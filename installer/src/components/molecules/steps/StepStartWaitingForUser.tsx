@@ -21,7 +21,7 @@ interface StepProps {
 
 export default function StepStartWaitingForUser({ state, emitEvent }: StepProps) {
 	return (
-		<div class="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-6 sm:px-6">
+		<div class="flex w-full min-w-0 flex-col gap-8">
 			<section class="space-y-4">
 				<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
 					Hi there! 👋

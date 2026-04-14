@@ -14,7 +14,7 @@ interface StepProps {
 
 export default function StepConnectReadingVersion({ state, emitEvent }: StepProps) {
 	return (
-		<div class="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-6 sm:px-6">
+		<div class="flex w-full min-w-0 flex-col gap-8">
 			<AlertInline>
 				<AlertTitle>Reading firmware version</AlertTitle>
 				<AlertDescription>Gathering device information.</AlertDescription>
