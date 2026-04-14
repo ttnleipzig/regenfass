@@ -15,54 +15,89 @@ export default function StepStartWaitingForUser({
 	emitEvent,
 }: StepProps) {
 	return (
-		<div class="space-y-4">
-			<section class="max-w-screen-lg px-3 py-6 mx-auto">
-				<div class="flex flex-col items-center md:flex-row md:justify-between md:gap-x-24">
-					<div>
-						<h1 class="text-3xl font-bold">Hi there! 👋</h1>
-						<p class="mt-6 text-xl leading-9">
-							This project is about a smart water tank. It
-							measures the water level and sends the data to a
-							server. The server can be used to control the water
-							pump. The pump can be controlled via a web interface
-							or via a telegram bot. It uses a HC-SR04 ultrasonic
-							sensor to measure the water level. The data is sent
-							to
-							<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
-								The Things Network
-							</span>
-							via a
-							<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
-								LoRaWAN</span>
-							gateway.
-						</p>
-					</div>
-				</div>
+		<div class="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-6 sm:px-6">
+			<section class="space-y-4">
+				<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+					Hi there! 👋
+				</h1>
+				<p class="text-lg leading-relaxed text-muted-foreground">
+					This project is about a smart water tank. It measures the
+					water level and sends the data to a server. The server can be
+					used to control the water pump. The pump can be controlled
+					via a web interface or via a telegram bot. It uses an HC-SR04
+					ultrasonic sensor to measure the water level. The data is
+					sent to{" "}
+					<span class="bg-gradient-to-br from-primary to-sky-500 bg-clip-text font-medium text-transparent">
+						The Things Network
+					</span>{" "}
+					via a{" "}
+					<span class="bg-gradient-to-br from-primary to-sky-500 bg-clip-text font-medium text-transparent">
+						LoRaWAN
+					</span>{" "}
+					gateway.
+				</p>
 			</section>
-			<AlertInline>
+
+			<AlertInline variant="info">
 				<AlertTitle>Waiting for your confirmation</AlertTitle>
 				<AlertDescription>Please confirm to continue.</AlertDescription>
 			</AlertInline>
-			<div class="pt-1">
-				<div class="p-4 text-lg">
-					<ol class="ml-4 text-gray-700 list-inside dark:text-gray-400">
-						<li class="flex items-center gap-3">
-							<span class="text-4xl text-sky-500">❶</span>
-							<span>
-								Connect your microcontroller with an USB cable to your computer.
+
+			<div class="space-y-6">
+				<div class="rounded-lg border border-border bg-card/60 p-5 shadow-sm ring-1 ring-border/40 backdrop-blur supports-[backdrop-filter]:bg-card/50 sm:p-6 dark:bg-card/70 dark:ring-border/50">
+					<p class="mb-4 text-sm font-medium text-foreground">
+						Before you continue
+					</p>
+					<ol
+						class="flex list-none flex-col gap-5"
+						aria-label="Installation steps"
+					>
+						<li class="flex gap-4">
+							<span
+								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
+								aria-hidden="true"
+							>
+								1
+							</span>
+							<span class="pt-1.5 text-base leading-relaxed text-foreground">
+								Connect your microcontroller with a USB cable to
+								your computer.
 							</span>
 						</li>
-						<li class="flex items-center gap-3">
-							<span class="text-4xl text-sky-500">❷</span>
-							<span>Select the microcontroller type from the drop down.</span>
+						<li class="flex gap-4">
+							<span
+								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
+								aria-hidden="true"
+							>
+								2
+							</span>
+							<span class="pt-1.5 text-base leading-relaxed text-foreground">
+								Select the microcontroller type from the drop-down.
+							</span>
 						</li>
-						<li class="flex items-center gap-3">
-							<span class="text-4xl text-sky-500">❸</span>
-							<span>Click the install button.</span>
+						<li class="flex gap-4">
+							<span
+								class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold tabular-nums text-primary"
+								aria-hidden="true"
+							>
+								3
+							</span>
+							<span class="pt-1.5 text-base leading-relaxed text-foreground">
+								Click the install button.
+							</span>
 						</li>
 					</ol>
 				</div>
-				<Button onClick={() => emitEvent({ type: "start.next" })}>Next</Button>
+
+				<div class="flex justify-stretch sm:justify-end">
+					<Button
+						class="w-full sm:w-auto"
+						size="lg"
+						onClick={() => emitEvent({ type: "start.next" })}
+					>
+						Next
+					</Button>
+				</div>
 			</div>
 		</div>
 	);
