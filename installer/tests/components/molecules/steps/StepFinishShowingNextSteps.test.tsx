@@ -43,4 +43,15 @@ describe("StepFinishShowingNextSteps", () => {
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
   });
+
+  it("renders success icon for visual affordance", () => {
+    const { container } = render(() => (
+      <StepFinishShowingNextSteps
+        state={mockState}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+    const icon = container.querySelector('svg[aria-hidden="true"]');
+    expect(icon).toBeInTheDocument();
+  });
 });

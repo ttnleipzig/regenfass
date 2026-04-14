@@ -60,9 +60,21 @@ export default {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        "success-check": {
+          "0%": { opacity: "0", transform: "scale(0)" },
+          "55%": { opacity: "1", transform: "scale(1.12)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "success-rise": {
+          from: { opacity: "0", transform: "translateY(0.5rem)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        "success-check":
+          "success-check 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        "success-rise": "success-rise 0.5s ease-out both",
       },
     },
   },
