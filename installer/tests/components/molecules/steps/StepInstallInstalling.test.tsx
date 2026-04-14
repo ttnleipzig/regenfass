@@ -15,7 +15,7 @@ describe("StepInstallInstalling", () => {
 		render(() => (
 			<StepInstallInstalling state={mockState} emitEvent={mockEmitEvent} />
 		));
-		expect(screen.getByText("Installing")).toBeInTheDocument();
+		expect(screen.getByText("Installing firmware")).toBeInTheDocument();
 	});
 
 	it("renders description about USB and firmware", () => {
