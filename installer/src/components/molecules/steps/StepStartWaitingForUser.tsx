@@ -7,10 +7,11 @@ import { StepPaginator } from "@/components/molecules/StepPaginator.tsx";
 import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
 import { Button } from "@/components/atoms/Button.tsx";
 
+/** Labels align with `getInstallationActiveStep`: connect phase → method choice → `Install_Installing`. */
 export const INSTALLATION_STEPS = [
-	"Connect your microcontroller with a USB cable to your computer.",
-	"Select the microcontroller type from the drop-down.",
-	"Click the install button.",
+	"Confirm to start, connect your board over USB, choose the device type, then read the firmware version from the device.",
+	"Pick a firmware version from the list, then choose Install or Configure.",
+	"Wait while the installer flashes firmware to your device.",
 ] as const;
 
 interface StepProps {

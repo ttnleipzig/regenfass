@@ -3,9 +3,9 @@
  * `StepPaginator`, aligned with `INSTALLATION_STEPS` in
  * `StepStartWaitingForUser.tsx`:
  *
- * - **1** — Connect USB: `Start_WaitingForUser`, `Connect_Connecting`, `Connect_ReadingVersion`
- * - **2** — Choose board / version: `Install_WaitingForInstallationMethodChoice`
- * - **3** — Flashing: `Install_Installing`
+ * - **1** — Connect & identify: `Start_WaitingForUser`, `Connect_Connecting`, `Connect_ReadingVersion`
+ * - **2** — Version + method: `Install_WaitingForInstallationMethodChoice`
+ * - **3** — Flash: `Install_Installing`
  * - **undefined** — Any other state (loading, config, finish, error): no single step highlighted
  */
 
