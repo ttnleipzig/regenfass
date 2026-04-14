@@ -42,6 +42,15 @@ describe("AlertInline", () => {
     expect(alert?.className).toContain("border-info");
   });
 
+  it("applies success variant", () => {
+    const { container } = render(() => (
+      <AlertInline variant="success">Success message</AlertInline>
+    ));
+    const alert = container.querySelector('[role="alert"]');
+    expect(alert).toBeInTheDocument();
+    expect(alert?.className).toContain("border-success");
+  });
+
   it("shows icon by default", () => {
     const { container } = render(() => (
       <AlertInline variant="destructive">Error</AlertInline>

@@ -14,14 +14,6 @@ interface StepProps {
 	emitEvent: (event: any) => void;
 }
 
-const successAlertClass = cn(
-	"mt-4 shadow-sm",
-	"border-emerald-600/40 bg-emerald-500/10 text-emerald-950",
-	"ring-1 ring-emerald-600/20",
-	"dark:border-emerald-500/45 dark:bg-emerald-950/50 dark:text-emerald-50",
-	"dark:ring-emerald-500/30",
-);
-
 export default function StepInstallInstalling(props: StepProps) {
 	const progressRatio = createMemo(() => {
 		const p = props.state.context?.installFlashProgress;
@@ -101,15 +93,9 @@ export default function StepInstallInstalling(props: StepProps) {
 			</AlertInline>
 
 			<Show when={isComplete()}>
-				<AlertInline
-					variant="default"
-					showIcon={false}
-					class={successAlertClass}
-				>
-					<AlertTitle class="font-semibold text-emerald-950 dark:text-emerald-50">
-						Installation successful
-					</AlertTitle>
-					<AlertDescription class="mt-1 flex flex-col gap-2 text-emerald-900/90 dark:text-emerald-100/90">
+				<AlertInline variant="success" class="mt-4 shadow-sm">
+					<AlertTitle class="font-semibold">Installation successful</AlertTitle>
+					<AlertDescription class="mt-1 flex flex-col gap-2">
 						<p>The firmware was installed successfully.</p>
 						<p>
 							The next step is configuration. You will be taken there

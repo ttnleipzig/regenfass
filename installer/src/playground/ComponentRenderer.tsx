@@ -717,11 +717,11 @@ ${hasChildren ? `${openTag}${childrenValue}${closeTag}` : `<${comp.name}${propsS
                       if (!propNames.includes('variant')) {
                         base.push({
                           name: 'variant',
-                          type: "'default' | 'destructive' | 'info' | 'warning'",
+                          type: "'default' | 'destructive' | 'info' | 'warning' | 'success'",
                           required: false,
                           description: 'Alert variant',
                           controlType: 'select',
-                          options: ['default', 'destructive', 'info', 'warning'],
+                          options: ['default', 'destructive', 'info', 'warning', 'success'],
                           defaultValue: 'default',
                         } as unknown as PropInfo);
                       }
