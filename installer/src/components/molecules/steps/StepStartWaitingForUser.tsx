@@ -46,7 +46,7 @@ export default function StepStartWaitingForUser({
 			<div class="space-y-6">
 				<div class="rounded-lg border border-border bg-card/60 p-5 shadow-sm ring-1 ring-border/40 backdrop-blur supports-[backdrop-filter]:bg-card/50 sm:p-6 dark:bg-card/70 dark:ring-border/50">
 					<p class="mb-4 text-sm font-medium text-foreground">
-						Before you continue
+						The installation steps are as follows:
 					</p>
 					<ol
 						class="flex list-none flex-col gap-5"
