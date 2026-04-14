@@ -3,7 +3,9 @@ import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepStartWaitingForUser from "@/components/molecules/steps/StepStartWaitingForUser.tsx";
 
 describe("StepStartWaitingForUser", () => {
-  const mockState = {};
+  const mockState = {
+    matches: vi.fn((id: string) => id === "Start_WaitingForUser"),
+  };
   const mockEmitEvent = vi.fn();
 
   afterEach(() => {
@@ -49,16 +51,12 @@ describe("StepStartWaitingForUser", () => {
     expect(alert).toBeInTheDocument();
   });
 
-  it("highlights the step given by activeInstallationStep", () => {
+  it("highlights installation step 1 from machine state", () => {
     const { container } = render(() => (
-      <StepStartWaitingForUser
-        state={mockState}
-        emitEvent={mockEmitEvent}
-        activeInstallationStep={2}
-      />
+      <StepStartWaitingForUser state={mockState} emitEvent={mockEmitEvent} />
     ));
     const badges = container.querySelectorAll("ol > li > span[aria-hidden='true']");
-    expect(badges[1]?.className).toContain("bg-primary");
-    expect(badges[1]?.className).toContain("text-primary-foreground");
+    expect(badges[0]?.className).toContain("bg-primary");
+    expect(badges[0]?.className).toContain("text-primary-foreground");
   });
 });

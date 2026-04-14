@@ -58,11 +58,21 @@ export const getFormComponent = (stateName: InstallerStateNames): ComponentType<
   return stateToFormMap[stateName] || LoadingComponent;
 };
 
+/** States that use shared loading / progress UI (not a dedicated form component). */
+const GENERIC_FORM_STATES: readonly InstallerStateNames[] = [
+	"Start_CheckingWebSerialSupport",
+	"Start_FetchUpstreamVersions",
+	"Connect_ReadingVersion",
+	"Install_Installing",
+	"Install_Updating",
+	"Install_MigratingConfiguration",
+	"Config_LoadingConfiguration",
+	"Config_WritingConfiguration",
+];
+
 // Helper function to check if a state has a custom form
-export const hasCustomForm = (stateName: InstallerStateNames): boolean => {
-  const component = stateToFormMap[stateName];
-  return component !== LoadingComponent && component !== ProgressComponent;
-};
+export const hasCustomForm = (stateName: InstallerStateNames): boolean =>
+	!GENERIC_FORM_STATES.includes(stateName);
 
 // Helper function to get state display name
 export const getStateDisplayName = (stateName: InstallerStateNames): string => {

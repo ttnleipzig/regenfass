@@ -4,6 +4,7 @@ import {
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
 import { StepPaginator } from "@/components/molecules/StepPaginator.tsx";
+import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
 import { Button } from "@/components/atoms/Button.tsx";
 
 export const INSTALLATION_STEPS = [
@@ -12,37 +13,12 @@ export const INSTALLATION_STEPS = [
 	"Click the install button.",
 ] as const;
 
-/** 1-based step index matching the order of {@link INSTALLATION_STEPS}. */
-export type InstallationWelcomeStep =
-	InstallationStepIndices<typeof INSTALLATION_STEPS>;
-
-type InstallationStepIndices<T extends readonly unknown[]> = T["length"] extends 0
-	? never
-	: number extends T["length"]
-		? number
-		: OneToN<T["length"]>;
-
-/** Builds the union `1 | 2 | … | N` for a finite numeric literal `N`. */
-type OneToN<
-	N extends number,
-	Acc extends unknown[] = [],
-	R extends number[] = [],
-> = Acc["length"] extends N
-	? R[number]
-	: OneToN<N, [...Acc, 0], [...R, [...Acc, 0]["length"]]>;
-
 interface StepProps {
 	state: any;
 	emitEvent: (event: any) => void;
-	/** Highlights this step in the list (1 = first line in {@link INSTALLATION_STEPS}). */
-	activeInstallationStep?: InstallationWelcomeStep;
 }
 
-export default function StepStartWaitingForUser({
-	state,
-	emitEvent,
-	activeInstallationStep,
-}: StepProps) {
+export default function StepStartWaitingForUser({ state, emitEvent }: StepProps) {
 	return (
 		<div class="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-6 sm:px-6">
 			<section class="space-y-4">
@@ -74,10 +50,10 @@ export default function StepStartWaitingForUser({
 
 			<div class="space-y-6">
 				<StepPaginator
-					title="The installation steps are as follows:"
+					title="Installation"
 					steps={INSTALLATION_STEPS}
 					listAriaLabel="Installation steps"
-					activeStep={activeInstallationStep}
+					activeStep={getInstallationActiveStep(state)}
 				/>
 
 				<div class="flex justify-stretch sm:justify-end">

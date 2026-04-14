@@ -1,5 +1,5 @@
 import type { Component, JSX } from "solid-js";
-import { splitProps } from "solid-js";
+import { createMemo, splitProps } from "solid-js";
 import { cn } from "@/libs/cn.ts";
 import {
   TextFieldRoot,
@@ -19,7 +19,9 @@ export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
 const InputField: Component<InputProps> = (props) => {
   const [local, rest] = splitProps(props, ["class", "error", "label", "helperText", "id"]);
 
-  const inputId = () => local.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const inputId = createMemo(
+    () => local.id || `input-${Math.random().toString(36).substring(2, 11)}`,
+  );
 
   return (
     <TextFieldRoot class="space-y-2" validationState={local.error ? "invalid" : undefined}>
@@ -37,7 +39,6 @@ const InputField: Component<InputProps> = (props) => {
           local.class,
         )}
         aria-invalid={!!local.error}
-        aria-describedby={local.error ? `${inputId()}-error` : local.helperText ? `${inputId()}-helper` : undefined}
       />
       {local.error ? (
         <TextFieldErrorMessage id={`${inputId()}-error`} class="text-sm text-red-600 dark:text-red-400" role="alert">

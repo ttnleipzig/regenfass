@@ -3,6 +3,9 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
+import { StepPaginator } from "@/components/molecules/StepPaginator.tsx";
+import { INSTALLATION_STEPS } from "@/components/molecules/steps/StepStartWaitingForUser.tsx";
+import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
 import { Button } from "@/components/atoms/Button.tsx";
 import {
 	SelectContent,
@@ -23,12 +26,20 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 }: StepProps) {
 	return (
 		<div class="space-y-4">
+			<StepPaginator
+				title="Installation"
+				steps={INSTALLATION_STEPS}
+				listAriaLabel="Installation steps"
+				activeStep={getInstallationActiveStep(state)}
+			/>
+
 			<AlertInline>
 				<AlertTitle>Choose installation method</AlertTitle>
 				<AlertDescription>
 					Install fresh or update existing firmware.
 				</AlertDescription>
 			</AlertInline>
+
 			<div class="flex gap-3">
 				<Button
 					disabled={!state.can({ type: "install.install" })}
@@ -59,9 +70,7 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 				)}
 			>
 				<SelectTrigger class="w-[180px]">
-					<SelectValue<string>>
-						{(state) => state.selectedOption()}
-					</SelectValue>
+					<SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
 				</SelectTrigger>
 				<SelectContent />
 			</SelectField>

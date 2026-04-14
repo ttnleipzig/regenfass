@@ -2,18 +2,17 @@ import { describe, it, expect, afterEach, vi, beforeEach } from "vitest";
 import { render, screen, cleanup } from "@solidjs/testing-library";
 import Steps from "@/components/molecules/steps/Steps.tsx";
 
-// Mock XState Solid
+// Mock XState Solid — Steps uses useActorRef + fromActorRef for reactive snapshots
 vi.mock("@xstate/solid", () => {
+  const mockSnapshot = {
+    matches: (value: string) => value === "Start_WaitingForUser",
+    toJSON: () => ({ value: "Start_WaitingForUser" }),
+  };
   return {
-    useMachine: vi.fn(() => {
-      // The component uses (state as any).matches(...), so state should be the object directly
-      const state = {
-        matches: (value: string) => value === "Start_WaitingForUser",
-        toJSON: () => ({ value: "Start_WaitingForUser" }),
-      };
-      const emitEvent = vi.fn();
-      return [state, emitEvent];
-    }),
+    useActorRef: vi.fn(() => ({
+      send: vi.fn(),
+    })),
+    fromActorRef: vi.fn(() => () => mockSnapshot),
   };
 });
 

@@ -1,9 +1,13 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepInstallWaitingForInstallationMethodChoice from "@/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx";
+import { INSTALLATION_STEPS } from "@/components/molecules/steps/StepStartWaitingForUser.tsx";
 
 describe("StepInstallWaitingForInstallationMethodChoice", () => {
   const mockState = {
+    matches: vi.fn(
+      (id: string) => id === "Install_WaitingForInstallationMethodChoice",
+    ),
     can: vi.fn((event: any) => {
       if (event.type === "install.install") return true;
       if (event.type === "install.configure") return true;
@@ -123,6 +127,24 @@ describe("StepInstallWaitingForInstallationMethodChoice", () => {
     ));
     const button = screen.getByRole("button", { name: "Configure" });
     expect(button).toBeDisabled();
+  });
+
+  it("renders vertical installation step paginator", () => {
+    const { container } = render(() => (
+      <StepInstallWaitingForInstallationMethodChoice
+        state={mockState}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+    expect(screen.getByText("Installation")).toBeInTheDocument();
+    const list = screen.getByRole("list", { name: "Installation steps" });
+    expect(list).toHaveClass("flex-col");
+    for (const label of INSTALLATION_STEPS) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
+    const badges = container.querySelectorAll("ol > li > span[aria-hidden='true']");
+    expect(badges[1]?.className).toContain("bg-primary");
+    expect(badges[1]?.className).toContain("text-primary-foreground");
   });
 
   it("renders select field", () => {

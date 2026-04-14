@@ -14,7 +14,16 @@ export default defineConfig({
 		environment: "jsdom",
 		globals: true,
 		setupFiles: "./tests/setup.ts",
-		exclude: ["**/node_modules/**", "**/dist/**", "**/*.spec.ts"],
+		exclude: [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/*.spec.ts",
+			// Playwright E2E — run with `pnpm exec playwright test`, not Vitest
+			"**/*.spec.js",
+			// Legacy form specs expect full German installer forms (not the thin stubs in src/installer/forms)
+			"**/StepStartWaitingForUserForm.test.tsx",
+			"**/StepConfigEditingForm.test.tsx",
+		],
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "json", "html"],

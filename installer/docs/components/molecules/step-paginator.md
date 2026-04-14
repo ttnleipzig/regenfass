@@ -9,6 +9,8 @@ There are two looks:
 
 You can optionally mark one step as **active** (for example the step someone is on right now). If you skip that, every step looks the same, which is fine for a simple “here is the order” list.
 
+In the main installer flow, the app passes `activeStep` from the setup wizard: it uses `getInstallationActiveStep` (see `src/libs/install/installationActiveStep.ts`) to turn the current step of the state machine into a 1-based index, so the highlighted line always matches where someone is in connect → choose version → flash without hard-coding numbers in each screen.
+
 ```tsx
 import { StepPaginator } from '@/components/molecules/StepPaginator';
 
