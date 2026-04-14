@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
+import { render, screen, fireEvent, cleanup, waitFor } from "@solidjs/testing-library";
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
 import { formatAppKeyHexPairs } from "@/libs/hexKeyDisplay.ts";
 
@@ -29,7 +29,7 @@ describe("AppKeyHexField", () => {
 		expect(screen.getByRole("button", { name: "Show app key" })).toBeInTheDocument();
 	});
 
-	it("toggles reveal label on the visibility button", () => {
+	it("toggles reveal label on the visibility button after slot animation", async () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
@@ -43,7 +43,25 @@ describe("AppKeyHexField", () => {
 		));
 		const btn = screen.getByRole("button", { name: "Show app key" });
 		fireEvent.click(btn);
-		expect(screen.getByRole("button", { name: "Hide app key" })).toBeInTheDocument();
+		await waitFor(
+			() => {
+				expect(screen.getByRole("button", { name: "Hide app key" })).toBeInTheDocument();
+			},
+			{ timeout: 3000 },
+		);
+	});
+
+	it("reveals immediately when value is empty", async () => {
+		render(() => (
+			<>
+				<label for="ak">appKey</label>
+				<AppKeyHexField id="ak" name="appKey" value="" onCanonicalChange={onChange} />
+			</>
+		));
+		fireEvent.click(screen.getByRole("button", { name: "Show app key" }));
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "Hide app key" })).toBeInTheDocument();
+		});
 	});
 
 	it("emits canonical hex without spaces on input", () => {

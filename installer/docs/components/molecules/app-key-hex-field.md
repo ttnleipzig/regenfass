@@ -6,8 +6,9 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 
 - Stores a **32-character hexadecimal** AppKey (same as before) and notifies the parent via `onCanonicalChange`.
 - Shows **two hex digits at a time** with a **space** between pairs.
-- While hidden, hex digits are shown as **bullet dots** (`•`) in the same layout, so spacing matches the reference design.
-- An **eye** button toggles between masked and **plain hex** (for checking what you typed).
+- While hidden, hex digits are shown as **bullet dots** (`•`) **per column** (same bordered cells as after reveal), not one long line.
+- An **eye** button reveals the key with **vertical slot reels**—one column per hex pair—scrolling random values that **start fast and ease out** (like a fruit machine), then the real digits lock in. A short **success chime** plays at the end (Web Audio API; silent if audio is unavailable).
+- After the animation, the key **stays in the same bordered columns** as the reels (one cell per pair). The real `<input>` stays on top with **transparent text** so focus, caret, and typing still work.
 
 ## Props
 
