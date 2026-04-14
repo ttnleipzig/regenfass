@@ -12,9 +12,9 @@ function MainApp() {
 	return (
 		<div class="min-h-screen flex flex-col">
 			<Header />
-			<div class="flex flex-col w-full flex-1">
+			<main class="flex flex-col w-full flex-1">
 				<Steps />
-			</div>
+			</main>
 			<Footer />
 		</div>
 	);
