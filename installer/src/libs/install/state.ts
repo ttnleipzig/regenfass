@@ -117,6 +117,8 @@ export const setupStateMachine = setup({
 			deviceInfo: Partial<DeviceInfo>;
 			/** 0–1 while `Config_WritingConfiguration` is active; otherwise `null`. */
 			configWriteProgress: number | null;
+			/** 0–1 while `Install_Installing` is active; otherwise `null`. */
+			installFlashProgress: number | null;
 		},
 		events: {} as
 			| { type: "start.next" }
@@ -136,14 +138,15 @@ export const setupStateMachine = setup({
 			| { type: "restart" }
 			| { type: "configWrite.progress"; progress: number }
 			| { type: "configWrite.complete"; output: Config }
-			| { type: "configWrite.error"; error: unknown },
-		emitted: {} as
-			| { type: "config.saveToFile"; configVersion: number; config: Config }
-			| {
-					type: "install.progress";
-					/** Between 0 and 1 */
-					progress: number;
-			  },
+			| { type: "configWrite.error"; error: unknown }
+			| { type: "installFlash.progress"; progress: number }
+			| { type: "installFlash.complete"; output: [string, SCPAdapter] }
+			| { type: "installFlash.error"; error: unknown },
+		emitted: {} as {
+			type: "config.saveToFile";
+			configVersion: number;
+			config: Config;
+		},
 	},
 	actors: {
 		checkIfWebSerialIsSupported: fromPromise(
@@ -164,70 +167,75 @@ export const setupStateMachine = setup({
 			const result: [SerialPort, SCPAdapter] = [port, SCPAdapter.forSerialPort(port)];
 			return result;
 		}),
-		installFirmware: fromPromise<
-			[string, SCPAdapter],
+		installFirmware: fromCallback<
+			| { type: "installFlash.progress"; progress: number }
+			| { type: "installFlash.complete"; output: [string, SCPAdapter] }
+			| { type: "installFlash.error"; error: unknown },
 			{ connection: SerialPort; version: string }
-		>(async ({ input: { connection: port, version } }) => {
-			const z = new JSZip();
+		>(({ sendBack, input }) => {
+			void (async () => {
+				const { connection: port, version } = input;
+				const z = new JSZip();
 
-			const res = await fetch(url);
-			const zipBuf = res.arrayBuffer();
-			const zip = await z.loadAsync(zipBuf);
+				const res = await fetch(url);
+				const zipBuf = res.arrayBuffer();
+				const zip = await z.loadAsync(zipBuf);
 
-			const firmwareMetadata: {
-				flash_images: {
-					offset: string;
-					path: string;
-				}[];
-				application_offset: string;
-			} = JSON.parse(await zip.file("firmware_metadata.json")!.async("text"));
+				const firmwareMetadata: {
+					flash_images: {
+						offset: string;
+						path: string;
+					}[];
+					application_offset: string;
+				} = JSON.parse(await zip.file("firmware_metadata.json")!.async("text"));
 
-			await port.close();
-			console.log("CLOSED PORT BEFORE FLASHING");
+				await port.close();
+				console.log("CLOSED PORT BEFORE FLASHING");
 
-			const transport = new Transport(port, true);
+				const transport = new Transport(port, true);
 
-			const espLoaderTerminal = {
-				clean() {
-					console.clear();
-				},
-				writeLine(data: unknown) {
-					console.log(data);
-				},
-				write(data: unknown) {
-					console.log(data);
-				},
-			};
+				const espLoaderTerminal = {
+					clean() {
+						console.clear();
+					},
+					writeLine(data: unknown) {
+						console.log(data);
+					},
+					write(data: unknown) {
+						console.log(data);
+					},
+				};
 
-			const loaderOpts: LoaderOptions = {
-				transport,
-				baudrate: 115200,
-				romBaudrate: 115200,
-				terminal: espLoaderTerminal,
-				debugLogging: true,
-				// romBaudrate:
-			};
-			const esploader = new ESPLoader(loaderOpts);
+				const loaderOpts: LoaderOptions = {
+					transport,
+					baudrate: 115200,
+					romBaudrate: 115200,
+					terminal: espLoaderTerminal,
+					debugLogging: true,
+					// romBaudrate:
+				};
+				const esploader = new ESPLoader(loaderOpts);
 
-			try {
-				const chip = await esploader.main();
-				console.log(chip);
+				let installError: unknown = null;
 
-				const bootloaderBin = await zip
-					.file("bootloader.bin")!
-					.async("binarystring");
-				const partitionsBin = await zip
-					.file("partitions.bin")!
-					.async("binarystring");
-				const bootApp0Bin = await zip
-					.file("boot_app0.bin")!
-					.async("binarystring");
-				const firmwareBin = await zip
-					.file("firmware.bin")!
-					.async("binarystring");
+				try {
+					const chip = await esploader.main();
+					console.log(chip);
 
-				await esploader.writeFlash({
-					fileArray: [
+					const bootloaderBin = await zip
+						.file("bootloader.bin")!
+						.async("binarystring");
+					const partitionsBin = await zip
+						.file("partitions.bin")!
+						.async("binarystring");
+					const bootApp0Bin = await zip
+						.file("boot_app0.bin")!
+						.async("binarystring");
+					const firmwareBin = await zip
+						.file("firmware.bin")!
+						.async("binarystring");
+
+					const fileArray = [
 						{
 							data: bootloaderBin,
 							address: parseInt(
@@ -259,37 +267,58 @@ export const setupStateMachine = setup({
 							data: firmwareBin,
 							address: parseInt(firmwareMetadata.application_offset, 16),
 						},
-					],
-					eraseAll: false,
-					compress: true,
-					reportProgress: (fileIndex, written, total) => {
-						console.log(`file ${fileIndex}: ${written}/${total} bytes`);
-					},
-					calculateMD5Hash: (image) => MD5(EncLatin1.parse(image)).toString(),
-					flashMode: "keep",
-					flashFreq: "keep",
-					flashSize: "keep",
-				});
-				await esploader.after();
-			} catch (error) {
-				console.error("installing failed:", error);
-				throw error;
-			} finally {
-				await hardReset(transport);
-				await transport.disconnect();
-				console.log("DISCONNECTED TRANSPORT AFTER FLASHING");
-			}
+					];
+					const fileCount = fileArray.length;
 
-			await sleep(1000);
-			await port.open({ baudRate: 115200 });
-			console.log("REOPENED PORT AFTER FLASHING");
+					await esploader.writeFlash({
+						fileArray,
+						eraseAll: false,
+						compress: true,
+						reportProgress: (fileIndex, written, total) => {
+							console.log(`file ${fileIndex}: ${written}/${total} bytes`);
+							const ratio =
+								(fileIndex + (total > 0 ? written / total : 0)) / fileCount;
+							const progress = Math.min(1, Math.max(0, ratio));
+							sendBack({ type: "installFlash.progress", progress });
+						},
+						calculateMD5Hash: (image) => MD5(EncLatin1.parse(image)).toString(),
+						flashMode: "keep",
+						flashFreq: "keep",
+						flashSize: "keep",
+					});
+					await esploader.after();
+				} catch (error) {
+					console.error("installing failed:", error);
+					installError = error;
+				} finally {
+					await hardReset(transport);
+					await transport.disconnect();
+					console.log("DISCONNECTED TRANSPORT AFTER FLASHING");
+				}
 
-			console.log(firmwareMetadata);
+				if (installError !== null) {
+					sendBack({ type: "installFlash.error", error: installError });
+					return;
+				}
 
-			await sleep(1000);
-			const adapter = SCPAdapter.forSerialPort(port);
-			const tuple: [string, SCPAdapter] = [version, adapter];
-			return Promise.resolve(tuple);
+				try {
+					await sleep(1000);
+					await port.open({ baudRate: 115200 });
+					console.log("REOPENED PORT AFTER FLASHING");
+
+					console.log(firmwareMetadata);
+
+					await sleep(1000);
+					const adapter = SCPAdapter.forSerialPort(port);
+					const tuple: [string, SCPAdapter] = [version, adapter];
+					sendBack({ type: "installFlash.complete", output: tuple });
+				} catch (error) {
+					console.error("installing failed after flash:", error);
+					sendBack({ type: "installFlash.error", error });
+				}
+			})();
+
+			return () => {};
 		}),
 		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
 			({ input: { connection } }) => loadDeviceInfo(connection)
@@ -351,6 +380,7 @@ export const setupStateMachine = setup({
 		deviceInfo: {},
 		targetFirmwareVersion: null,
 		configWriteProgress: null,
+		installFlashProgress: null,
 	},
 	exit: ({ context }) => {
 		context.connection?.[1].stop();
@@ -470,33 +500,53 @@ export const setupStateMachine = setup({
 		},
 
 		Install_Installing: {
+			entry: assign({
+				installFlashProgress: () => 0,
+			}),
+			exit: assign({
+				installFlashProgress: () => null,
+			}),
 			invoke: {
 				src: "installFirmware",
 				input: ({ context: { connection, targetFirmwareVersion } }) => ({
 					connection: connection![0],
 					version: targetFirmwareVersion!,
 				}),
-				onDone: {
+			},
+			on: {
+				"installFlash.progress": {
+					actions: assign({
+						installFlashProgress: ({ event }) => event.progress,
+					}),
+				},
+				"installFlash.complete": {
 					target: "Install_MigratingConfiguration",
 					actions: assign({
-						deviceInfo: ({ event: { output }, context: { deviceInfo } }) => ({
-							config:
-								deviceInfo.config ??
-								getLatestConfigVersion().getDefaultValues(),
-							configVersion:
-								deviceInfo.configVersion ?? getLatestConfigVersion().version,
-							firmwareVersion: output[0],
-						}),
-						connection: ({ context: { connection }, event: { output } }) => {
-							const result: [SerialPort, SCPAdapter] = [connection![0], output[1]];
+						deviceInfo: ({ event, context: { deviceInfo } }) => {
+							const output = event.output;
+							return {
+								config:
+									deviceInfo.config ??
+									getLatestConfigVersion().getDefaultValues(),
+								configVersion:
+									deviceInfo.configVersion ?? getLatestConfigVersion().version,
+								firmwareVersion: output[0],
+							};
+						},
+						connection: ({ context: { connection }, event }) => {
+							const output = event.output;
+							const result: [SerialPort, SCPAdapter] = [
+								connection![0],
+								output[1],
+							];
 							return result;
 						},
 					}),
 				},
-				onError: {
+				"installFlash.error": {
 					target: "Finish_ShowingError",
 					actions: assign({
-						error: ({ event: { error } }) => error,
+						error: ({ event }) => event.error,
 					}),
 				},
 			},
