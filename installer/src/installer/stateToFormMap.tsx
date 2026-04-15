@@ -1,4 +1,4 @@
-import { ComponentType } from "solid-js";
+import type { Component } from "solid-js";
 import { StepStartWaitingForUserForm } from "./forms/StepStartWaitingForUserForm";
 import { StepConnectConnectingForm } from "./forms/StepConnectConnectingForm";
 import { StepInstallWaitingForInstallationMethodChoiceForm } from "./forms/StepInstallWaitingForInstallationMethodChoiceForm";
@@ -8,7 +8,7 @@ import { StepFinishShowingErrorForm } from "./forms/StepFinishShowingErrorForm";
 import type { FormProps, InstallerStateNames } from "./types";
 
 // Progress/Loading Components for automatic states
-const LoadingComponent: ComponentType<FormProps> = (props) => (
+const LoadingComponent: Component<FormProps> = (_props) => (
   <div class="flex items-center justify-center min-h-64">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -17,7 +17,7 @@ const LoadingComponent: ComponentType<FormProps> = (props) => (
   </div>
 );
 
-const ProgressComponent: ComponentType<FormProps & { message?: string }> = (props) => (
+const ProgressComponent: Component<FormProps & { message?: string }> = (props) => (
   <div class="flex items-center justify-center min-h-64">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
@@ -27,7 +27,7 @@ const ProgressComponent: ComponentType<FormProps & { message?: string }> = (prop
 );
 
 // State to Form Component Mapping
-export const stateToFormMap: Record<InstallerStateNames, ComponentType<FormProps>> = {
+export const stateToFormMap: Record<InstallerStateNames, Component<FormProps>> = {
   // Start States
   "Start_CheckingWebSerialSupport": LoadingComponent,
   "Start_FetchUpstreamVersions": LoadingComponent,
@@ -39,14 +39,14 @@ export const stateToFormMap: Record<InstallerStateNames, ComponentType<FormProps
 
   // Install States
   "Install_WaitingForInstallationMethodChoice": StepInstallWaitingForInstallationMethodChoiceForm,
-  "Install_Installing": () => <ProgressComponent message="Installiere Firmware..." />,
-  "Install_Updating": () => <ProgressComponent message="Aktualisiere Firmware..." />,
-  "Install_MigratingConfiguration": () => <ProgressComponent message="Migriere Konfiguration..." />,
+  "Install_Installing": (props: FormProps) => <ProgressComponent {...props} message="Installiere Firmware..." />,
+  "Install_Updating": (props: FormProps) => <ProgressComponent {...props} message="Aktualisiere Firmware..." />,
+  "Install_MigratingConfiguration": (props: FormProps) => <ProgressComponent {...props} message="Migriere Konfiguration..." />,
 
   // Config States
-  "Config_LoadingConfiguration": () => <ProgressComponent message="Lade Konfiguration..." />,
+  "Config_LoadingConfiguration": (props: FormProps) => <ProgressComponent {...props} message="Lade Konfiguration..." />,
   "Config_Editing": StepConfigEditingForm,
-  "Config_WritingConfiguration": () => <ProgressComponent message="Speichere Konfiguration..." />,
+  "Config_WritingConfiguration": (props: FormProps) => <ProgressComponent {...props} message="Speichere Konfiguration..." />,
 
   // Finish States
   "Finish_ShowingNextSteps": StepFinishShowingNextStepsForm,
@@ -54,7 +54,7 @@ export const stateToFormMap: Record<InstallerStateNames, ComponentType<FormProps
 };
 
 // Helper function to get form component for a state
-export const getFormComponent = (stateName: InstallerStateNames): ComponentType<FormProps> => {
+export const getFormComponent = (stateName: InstallerStateNames): Component<FormProps> => {
   return stateToFormMap[stateName] || LoadingComponent;
 };
 

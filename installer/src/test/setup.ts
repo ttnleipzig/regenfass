@@ -1,4 +1,4 @@
-import { beforeEach, expect, vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@solidjs/testing-library";
 

@@ -59,14 +59,12 @@ describe("Status", () => {
     
     // Initially should have a bubble color
     let bubble = container.querySelector("span.rounded-full:not(.animate-ping)");
-    const initialColor = bubble?.className || "";
     
     // Advance timer by 4 seconds
     vi.advanceTimersByTime(4000);
     
     // Bubble color should have changed
     bubble = container.querySelector("span.rounded-full:not(.animate-ping)");
-    const newColor = bubble?.className || "";
     
     // The color should potentially be different (though random, so we just check it exists)
     expect(bubble).toBeInTheDocument();

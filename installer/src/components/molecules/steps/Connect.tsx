@@ -6,9 +6,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/forms/SelectField.tsx";
-import { SelectBaseItemComponentProps } from "@kobalte/core/src/select/select-base.jsx";
-import { SelectValueState } from "@kobalte/core/src/select/select-value.jsx";
+import type { SelectRootItemComponentProps } from "@kobalte/core/select";
+import type { Accessor } from "solid-js";
 import { For } from "solid-js";
+
+interface SelectValueState<Option> {
+	selectedOption: Accessor<Option>;
+	selectedOptions: Accessor<Option[]>;
+	remove: (option: Option) => void;
+	clear: () => void;
+}
 
 export const connectStep = {
 	title: "Connect",
@@ -70,7 +77,7 @@ function Connect() {
 				]}
 				placeholder="SelectField a board..."
 				itemComponent={(
-					props: SelectBaseItemComponentProps<[string, string]>
+					props: SelectRootItemComponentProps<[string, string]>
 				) => (
 					<SelectItem
 						item={props.item}

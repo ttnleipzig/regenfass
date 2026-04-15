@@ -30,7 +30,7 @@ describe("SelectField", () => {
 					onChange={setValue}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
@@ -38,7 +38,7 @@ describe("SelectField", () => {
 						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
+									? (state.selectedOption() as any)?.label
 									: "Select"
 							}
 						</SelectValue>
@@ -61,16 +61,16 @@ describe("SelectField", () => {
 					onChange={setValue}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Select an option">
+						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
-									: null
+									? (state.selectedOption() as any)?.label
+									: "Select an option"
 							}
 						</SelectValue>
 					</SelectTrigger>
@@ -95,7 +95,7 @@ describe("SelectField", () => {
 					onChange={setValue}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
@@ -103,7 +103,7 @@ describe("SelectField", () => {
 						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
+									? (state.selectedOption() as any)?.label
 									: "Select"
 							}
 						</SelectValue>
@@ -134,7 +134,7 @@ describe("SelectField", () => {
 					onChange={setValue}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
@@ -142,7 +142,7 @@ describe("SelectField", () => {
 						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
+									? (state.selectedOption() as any)?.label
 									: "Select"
 							}
 						</SelectValue>
@@ -174,7 +174,7 @@ describe("SelectField", () => {
 					}}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
@@ -182,7 +182,7 @@ describe("SelectField", () => {
 						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
+									? (state.selectedOption() as any)?.label
 									: "Select"
 							}
 						</SelectValue>
@@ -208,7 +208,7 @@ describe("SelectField", () => {
 					onChange={setValue}
 					itemComponent={(props) => (
 						<SelectItem item={props.item}>
-							{props.item.rawValue.label}
+							{(props.item.rawValue as any)?.label}
 						</SelectItem>
 					)}
 				>
@@ -216,7 +216,7 @@ describe("SelectField", () => {
 						<SelectValue>
 							{(state) =>
 								state.selectedOption()
-									? state.selectedOption()!.rawValue.label
+									? (state.selectedOption() as any)?.label
 									: "Select"
 							}
 						</SelectValue>
