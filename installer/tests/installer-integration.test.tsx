@@ -1,6 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@solidjs/testing-library";
-import { createSignal, createMemo } from "solid-js";
 
 // Mock the entire installer workflow
 describe("Installer Integration Tests", () => {
@@ -14,25 +12,6 @@ describe("Installer Integration Tests", () => {
       // This would test the entire state machine flow
       // Starting from Start_WaitingForUser to Finish_ShowingNextSteps
       
-      const mockSend = vi.fn();
-      const [currentState, setCurrentState] = createSignal("Start_WaitingForUser");
-      
-      // Mock a simplified state machine
-      const mockStateMachine = {
-        send: mockSend,
-        state: createMemo(() => ({ value: currentState() })),
-        context: createMemo(() => ({
-          upstreamVersions: ["1.0.0", "1.1.0"],
-          configuration: {
-            appEUI: "",
-            appKey: "",
-            devEUI: "",
-            firmwareVersion: "",
-            configVersion: ""
-          }
-        }))
-      };
-
       // Test would render the InstallerRoot with mocked state machine
       // and simulate user interactions through the entire flow
       
@@ -86,7 +65,7 @@ describe("Installer Integration Tests", () => {
       try {
         await port.open({ baudRate: 115200 });
       } catch (error) {
-        expect(error.message).toBe("Port busy");
+        expect((error as Error).message).toBe("Port busy");
       }
     });
   });
@@ -240,7 +219,7 @@ describe("Installer Integration Tests", () => {
       try {
         await readFile(invalidConfigFile);
       } catch (error) {
-        expect(error.message).toBe("Invalid JSON format");
+        expect((error as Error).message).toBe("Invalid JSON format");
       }
     });
   });

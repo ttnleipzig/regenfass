@@ -202,7 +202,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					name={props.name}
 					type="text"
 					autocomplete="off"
-					spellCheck={false}
+					spellcheck={false}
 					maxLength={47}
 					value={display()}
 					disabled={spinInProgress()}

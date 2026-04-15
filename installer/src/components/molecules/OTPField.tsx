@@ -42,9 +42,9 @@ export const OTPFieldSeparator = (props: ComponentProps<"div">) => {
 				<title>Separator</title>
 				<path
 					fill="currentColor"
-					fillRule="evenodd"
+					fill-rule="evenodd"
 					d="M5 7.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5"
-					clipRule="evenodd"
+					clip-rule="evenodd"
 				/>
 			</svg>
 		</div>

@@ -51,7 +51,7 @@ describe("ButtonModeToggle", () => {
   });
 
   it("toggles color mode on click", () => {
-    const { container } = render(() => <ButtonModeToggle />);
+    render(() => <ButtonModeToggle />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     // Initially should be light mode

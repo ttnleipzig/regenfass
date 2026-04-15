@@ -40,7 +40,7 @@ describe("Welcome", () => {
 	});
 
 	it("applies gradient styling to The Things Network", () => {
-		const { container } = render(() => <Welcome />);
+		render(() => <Welcome />);
 		const ttNetwork = screen.getByText("The Things Network");
 		const span = ttNetwork.closest("span");
 		expect(span).toHaveClass("text-transparent");

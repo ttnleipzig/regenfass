@@ -59,7 +59,7 @@ describe("FileUploader", () => {
 			0: file,
 			length: 1,
 			item: (index: number) => (index === 0 ? file : null),
-		} as FileList;
+		} as unknown as FileList;
 
 		Object.defineProperty(input, "files", {
 			value: fileList,
@@ -82,7 +82,7 @@ describe("FileUploader", () => {
 			0: file,
 			length: 1,
 			item: (index: number) => (index === 0 ? file : null),
-		} as FileList;
+		} as unknown as FileList;
 
 		Object.defineProperty(input, "files", {
 			value: fileList,
@@ -106,7 +106,7 @@ describe("FileUploader", () => {
 			0: file,
 			length: 1,
 			item: (index: number) => (index === 0 ? file : null),
-		} as FileList;
+		} as unknown as FileList;
 
 		Object.defineProperty(input, "files", {
 			value: fileList,
@@ -130,7 +130,7 @@ describe("FileUploader", () => {
 			0: file,
 			length: 1,
 			item: (index: number) => (index === 0 ? file : null),
-		} as FileList;
+		} as unknown as FileList;
 
 		Object.defineProperty(input, "files", {
 			value: fileList,

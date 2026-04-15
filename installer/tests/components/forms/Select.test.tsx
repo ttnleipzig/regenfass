@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
+import { render, screen, cleanup } from "@solidjs/testing-library";
 import { Select } from "@/components/forms/Select.tsx";
 
 describe("Select", () => {
@@ -46,7 +46,7 @@ describe("Select", () => {
 	});
 
 	it("displays placeholder", () => {
-		const { container } = render(() => (
+		render(() => (
 			<Select
 				label="Test Label"
 				options={options}

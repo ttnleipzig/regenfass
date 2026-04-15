@@ -144,7 +144,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={() => emitEvent({ type: "config.clear" })}
 					>
-						<IconClearAll aria-hidden={true} size={16} stroke={1.75} />
+						<IconClearAll aria-hidden={true} size={16} stroke="1.75" />
 						clear
 					</Button>
 					<Button
@@ -162,7 +162,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 							})
 						}
 					>
-						<IconFileImport aria-hidden={true} size={16} stroke={1.75} />
+						<IconFileImport aria-hidden={true} size={16} stroke="1.75" />
 						load from file
 					</Button>
 					<Button
@@ -171,7 +171,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={() => emitEvent({ type: "config.saveToFile" })}
 					>
-						<IconFileExport aria-hidden={true} size={16} stroke={1.75} />
+						<IconFileExport aria-hidden={true} size={16} stroke="1.75" />
 						save to file
 					</Button>
 				</div>
@@ -179,7 +179,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 					class="gap-1.5 sm:min-w-[7rem]"
 					onClick={() => emitEvent({ type: "config.next" })}
 				>
-					<IconDeviceFloppy aria-hidden={true} size={16} stroke={1.75} />
+					<IconDeviceFloppy aria-hidden={true} size={16} stroke="1.75" />
 					Save to device
 				</Button>
 			</footer>

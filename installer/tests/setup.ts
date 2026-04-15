@@ -27,7 +27,7 @@ if (typeof HTMLElement !== "undefined" && !HTMLElement.prototype.animate) {
 					resolve();
 				});
 			}),
-		} as Animation;
+		} as unknown as Animation;
 	};
 }
 
