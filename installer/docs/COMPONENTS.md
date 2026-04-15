@@ -11,8 +11,8 @@ This document contains automatically generated documentation for all components 
   - [ButtonPrimary](#buttonprimary)
   - [ButtonSecondary](#buttonsecondary)
   - [Confetti](#confetti)
-  - [SpinnerConfetti](#spinnerconfetti)
   - [Link](#link)
+  - [SpinnerConfetti](#spinnerconfetti)
   - [Status](#status)
 - [Molecules](#molecules)
   - [CardTitle](#cardtitle)
@@ -89,26 +89,12 @@ import { ButtonSecondary } from '@/components/atoms/ButtonSecondary';
 - `@/libs`
 - `solid-js`
 
+*Internal:*
+- `atoms/Confetti.css`
+
 **Import:**
 ```typescript
 import { Confetti } from '@/components/atoms/Confetti';
-```
-
-### SpinnerConfetti
-
-**Path**: `atoms/SpinnerConfetti.tsx`
-
-**Dependencies:**
-
-*External:*
-- `solid-js`
-
-*Internal:*
-- `atoms/Spinner`
-
-**Import:**
-```typescript
-import SpinnerConfetti from '@/components/atoms/SpinnerConfetti';
 ```
 
 ### Link
@@ -124,6 +110,24 @@ import SpinnerConfetti from '@/components/atoms/SpinnerConfetti';
 **Import:**
 ```typescript
 import { Link } from '@/components/atoms/Link';
+```
+
+### SpinnerConfetti
+
+**Path**: `atoms/SpinnerConfetti.tsx`
+
+**Dependencies:**
+
+*External:*
+- `solid-js`
+
+*Internal:*
+- `atoms/Spinner`
+- `atoms/SpinnerConfetti.css`
+
+**Import:**
+```typescript
+import { SpinnerConfetti } from '@/components/atoms/SpinnerConfetti';
 ```
 
 ### Status
@@ -338,4 +342,4 @@ import { TextInput } from '@/components/forms/TextInput';
 
 ---
 
-*Generated on April 15, 2026 at 12:54 AM*
+*Generated on April 15, 2026 at 09:17 AM*

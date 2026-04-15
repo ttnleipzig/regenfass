@@ -5,8 +5,15 @@ on:
 name: Analysis Static - Datadog
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pipeline started
+        run: echo "Checking preconditions for static analysis"
+
   static-analysis:
-    if: ${{ secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != '' }}
+    needs: setup
+    if: secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != ''
     runs-on: ubuntu-latest
     name: Datadog Static Analyzer
     steps:

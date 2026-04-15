@@ -2,7 +2,7 @@
   "atoms": [
     {
       "name": "Badge",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Badge.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Badge.tsx",
       "relativePath": "atoms/Badge.tsx",
       "category": "atoms",
       "description": "",
@@ -19,7 +19,7 @@
     },
     {
       "name": "Button",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Button.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Button.tsx",
       "relativePath": "atoms/Button.tsx",
       "category": "atoms",
       "description": "",
@@ -44,7 +44,7 @@
     },
     {
       "name": "ButtonAction",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonAction.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/ButtonAction.tsx",
       "relativePath": "atoms/ButtonAction.tsx",
       "category": "atoms",
       "description": "",
@@ -98,7 +98,7 @@
     },
     {
       "name": "ButtonAction",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonAction.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/ButtonAction.tsx",
       "relativePath": "atoms/ButtonAction.tsx",
       "category": "atoms",
       "description": "",
@@ -152,7 +152,7 @@
     },
     {
       "name": "ButtonModeToggle",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonModeToggle.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/ButtonModeToggle.tsx",
       "relativePath": "atoms/ButtonModeToggle.tsx",
       "category": "atoms",
       "description": "",
@@ -177,7 +177,7 @@
     },
     {
       "name": "ButtonPrimary",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonPrimary.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/ButtonPrimary.tsx",
       "relativePath": "atoms/ButtonPrimary.tsx",
       "category": "atoms",
       "description": "",
@@ -217,7 +217,7 @@
     },
     {
       "name": "ButtonSecondary",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/ButtonSecondary.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/ButtonSecondary.tsx",
       "relativePath": "atoms/ButtonSecondary.tsx",
       "category": "atoms",
       "description": "",
@@ -257,7 +257,7 @@
     },
     {
       "name": "Confetti",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Confetti.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Confetti.tsx",
       "relativePath": "atoms/Confetti.tsx",
       "category": "atoms",
       "description": "",
@@ -266,7 +266,7 @@
           "name": "active",
           "type": "boolean",
           "required": false,
-          "description": "Whether the confetti animation should be active",
+          "description": "When true, shows a one-shot fullscreen burst from the center of the viewport",
           "controlType": "boolean"
         }
       ],
@@ -281,25 +281,8 @@
       "importPath": "@/components/atoms/Confetti"
     },
     {
-      "name": "SpinnerConfetti",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/SpinnerConfetti.tsx",
-      "relativePath": "atoms/SpinnerConfetti.tsx",
-      "category": "atoms",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<SpinnerConfetti />"
-        }
-      ],
-      "importPath": "@/components/atoms/SpinnerConfetti"
-    },
-    {
       "name": "Headline",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Headline.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Headline.tsx",
       "relativePath": "atoms/Headline.tsx",
       "category": "atoms",
       "description": "",
@@ -316,7 +299,7 @@
     },
     {
       "name": "Headline",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Headline.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Headline.tsx",
       "relativePath": "atoms/Headline.tsx",
       "category": "atoms",
       "description": "",
@@ -333,7 +316,7 @@
     },
     {
       "name": "Link",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Link.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Link.tsx",
       "relativePath": "atoms/Link.tsx",
       "category": "atoms",
       "description": "",
@@ -367,8 +350,25 @@
       "importPath": "@/components/atoms/Link"
     },
     {
+      "name": "Progress",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Progress.tsx",
+      "relativePath": "atoms/Progress.tsx",
+      "category": "atoms",
+      "description": "Determinate progress bar (Kobalte Progress, shadcn-solid-style).\n`value` is 0–100 when `indeterminate` is false.",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Progress />"
+        }
+      ],
+      "importPath": "@/components/atoms/Progress"
+    },
+    {
       "name": "Spinner",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Spinner.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Spinner.tsx",
       "relativePath": "atoms/Spinner.tsx",
       "category": "atoms",
       "description": "",
@@ -397,8 +397,25 @@
       "importPath": "@/components/atoms/Spinner"
     },
     {
+      "name": "SpinnerConfetti",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/SpinnerConfetti.tsx",
+      "relativePath": "atoms/SpinnerConfetti.tsx",
+      "category": "atoms",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<SpinnerConfetti />"
+        }
+      ],
+      "importPath": "@/components/atoms/SpinnerConfetti"
+    },
+    {
       "name": "Status",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Status.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/atoms/Status.tsx",
       "relativePath": "atoms/Status.tsx",
       "category": "atoms",
       "description": "",
@@ -436,29 +453,12 @@
         }
       ],
       "importPath": "@/components/atoms/Status"
-    },
-    {
-      "name": "Progress",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/atoms/Progress.tsx",
-      "relativePath": "atoms/Progress.tsx",
-      "category": "atoms",
-      "description": "Determinate progress bar (Kobalte Progress, shadcn-solid-style).\n`value` is 0\u2013100 when `indeterminate` is false.",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Progress />"
-        }
-      ],
-      "importPath": "@/components/atoms/Progress"
     }
   ],
   "molecules": [
     {
       "name": "AlertDialogContent",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -475,7 +475,7 @@
     },
     {
       "name": "AlertDialogHeader",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -854,7 +854,7 @@
     },
     {
       "name": "AlertDialogFooter",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -1233,7 +1233,7 @@
     },
     {
       "name": "AlertDialogTitle",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -1250,7 +1250,7 @@
     },
     {
       "name": "AlertDialogDescription",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -1267,7 +1267,7 @@
     },
     {
       "name": "AlertDialogClose",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -1284,7 +1284,7 @@
     },
     {
       "name": "AlertDialogAction",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertDialog.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertDialog.tsx",
       "relativePath": "molecules/AlertDialog.tsx",
       "category": "molecules",
       "description": "",
@@ -1301,7 +1301,7 @@
     },
     {
       "name": "AlertInline",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertInline.tsx",
       "relativePath": "molecules/AlertInline.tsx",
       "category": "molecules",
       "description": "",
@@ -1318,7 +1318,7 @@
     },
     {
       "name": "AlertTitle",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertInline.tsx",
       "relativePath": "molecules/AlertInline.tsx",
       "category": "molecules",
       "description": "",
@@ -1697,7 +1697,7 @@
     },
     {
       "name": "AlertDescription",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/AlertInline.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/AlertInline.tsx",
       "relativePath": "molecules/AlertInline.tsx",
       "category": "molecules",
       "description": "",
@@ -2076,7 +2076,7 @@
     },
     {
       "name": "Card",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -2455,7 +2455,7 @@
     },
     {
       "name": "CardHeader",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -2834,7 +2834,7 @@
     },
     {
       "name": "CardTitle",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -2851,7 +2851,7 @@
     },
     {
       "name": "CardDescription",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -2868,7 +2868,7 @@
     },
     {
       "name": "CardContent",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -3247,7 +3247,7 @@
     },
     {
       "name": "CardFooter",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Card.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Card.tsx",
       "relativePath": "molecules/Card.tsx",
       "category": "molecules",
       "description": "",
@@ -3626,7 +3626,7 @@
     },
     {
       "name": "ErrorList",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/ErrorList.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/ErrorList.tsx",
       "relativePath": "molecules/ErrorList.tsx",
       "category": "molecules",
       "description": "",
@@ -3658,7 +3658,7 @@
     },
     {
       "name": "Flasher",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/Flasher.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/Flasher.tsx",
       "relativePath": "molecules/Flasher.tsx",
       "category": "molecules",
       "description": "",
@@ -3674,462 +3674,8 @@
       "importPath": "@/components/molecules/Flasher"
     },
     {
-      "name": "StepPaginator",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/StepPaginator.tsx",
-      "relativePath": "molecules/StepPaginator.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<StepPaginator />"
-        }
-      ],
-      "importPath": "@/components/molecules/StepPaginator"
-    },
-    {
-      "name": "StepConfigEditing",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConfigEditing.tsx",
-      "relativePath": "molecules/steps/StepConfigEditing.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepConfigEditing state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepConfigEditing"
-    },
-    {
-      "name": "StepConfigWritingConfiguration",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConfigWritingConfiguration.tsx",
-      "relativePath": "molecules/steps/StepConfigWritingConfiguration.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepConfigWritingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepConfigWritingConfiguration"
-    },
-    {
-      "name": "StepConnectConnecting",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConnectConnecting.tsx",
-      "relativePath": "molecules/steps/StepConnectConnecting.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepConnectConnecting state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepConnectConnecting"
-    },
-    {
-      "name": "StepConnectReadingVersion",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepConnectReadingVersion.tsx",
-      "relativePath": "molecules/steps/StepConnectReadingVersion.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepConnectReadingVersion state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepConnectReadingVersion"
-    },
-    {
-      "name": "StepFinishShowingError",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepFinishShowingError.tsx",
-      "relativePath": "molecules/steps/StepFinishShowingError.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepFinishShowingError state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepFinishShowingError"
-    },
-    {
-      "name": "StepFinishShowingNextSteps",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepFinishShowingNextSteps.tsx",
-      "relativePath": "molecules/steps/StepFinishShowingNextSteps.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepFinishShowingNextSteps state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepFinishShowingNextSteps"
-    },
-    {
-      "name": "StepInstallInstalling",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallInstalling.tsx",
-      "relativePath": "molecules/steps/StepInstallInstalling.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepInstallInstalling state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepInstallInstalling"
-    },
-    {
-      "name": "StepInstallMigratingConfiguration",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallMigratingConfiguration.tsx",
-      "relativePath": "molecules/steps/StepInstallMigratingConfiguration.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepInstallMigratingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepInstallMigratingConfiguration"
-    },
-    {
-      "name": "StepInstallWaitingForInstallationMethodChoice",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
-      "relativePath": "molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepInstallWaitingForInstallationMethodChoice state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice"
-    },
-    {
-      "name": "StepStartCheckingWebSerialSupport",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartCheckingWebSerialSupport.tsx",
-      "relativePath": "molecules/steps/StepStartCheckingWebSerialSupport.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepStartCheckingWebSerialSupport state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepStartCheckingWebSerialSupport"
-    },
-    {
-      "name": "StepStartFetchUpstreamVersions",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartFetchUpstreamVersions.tsx",
-      "relativePath": "molecules/steps/StepStartFetchUpstreamVersions.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepStartFetchUpstreamVersions state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepStartFetchUpstreamVersions"
-    },
-    {
-      "name": "StepStartWaitingForUser",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/StepStartWaitingForUser.tsx",
-      "relativePath": "molecules/steps/StepStartWaitingForUser.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [
-        {
-          "name": "state",
-          "type": "any",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        },
-        {
-          "name": "emitEvent",
-          "type": "(event: any) => void",
-          "required": true,
-          "description": "",
-          "controlType": "text"
-        }
-      ],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {
-            "state": "Example state",
-            "emitEvent": "Example emitEvent"
-          },
-          "code": "<StepStartWaitingForUser state=\"Example state\" emitEvent=\"Example emitEvent\" />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/StepStartWaitingForUser"
-    },
-    {
-      "name": "Steps",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/steps/Steps.tsx",
-      "relativePath": "molecules/steps/Steps.tsx",
-      "category": "molecules",
-      "description": "",
-      "props": [],
-      "examples": [
-        {
-          "name": "Default",
-          "description": "Default component appearance",
-          "props": {},
-          "code": "<Steps />"
-        }
-      ],
-      "importPath": "@/components/molecules/steps/Steps"
-    },
-    {
       "name": "OTPField",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/OTPField.tsx",
       "relativePath": "molecules/OTPField.tsx",
       "category": "molecules",
       "description": "",
@@ -4146,7 +3692,7 @@
     },
     {
       "name": "OTPFieldGroup",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/OTPField.tsx",
       "relativePath": "molecules/OTPField.tsx",
       "category": "molecules",
       "description": "",
@@ -4525,7 +4071,7 @@
     },
     {
       "name": "OTPFieldSeparator",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/OTPField.tsx",
       "relativePath": "molecules/OTPField.tsx",
       "category": "molecules",
       "description": "",
@@ -4904,7 +4450,7 @@
     },
     {
       "name": "OTPFieldSlot",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/molecules/OTPField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/OTPField.tsx",
       "relativePath": "molecules/OTPField.tsx",
       "category": "molecules",
       "description": "",
@@ -4918,12 +4464,466 @@
         }
       ],
       "importPath": "@/components/molecules/OTPField"
+    },
+    {
+      "name": "StepPaginator",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/StepPaginator.tsx",
+      "relativePath": "molecules/StepPaginator.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<StepPaginator />"
+        }
+      ],
+      "importPath": "@/components/molecules/StepPaginator"
+    },
+    {
+      "name": "StepConfigEditing",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepConfigEditing.tsx",
+      "relativePath": "molecules/steps/StepConfigEditing.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConfigEditing state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConfigEditing"
+    },
+    {
+      "name": "StepConfigWritingConfiguration",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepConfigWritingConfiguration.tsx",
+      "relativePath": "molecules/steps/StepConfigWritingConfiguration.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConfigWritingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConfigWritingConfiguration"
+    },
+    {
+      "name": "StepConnectConnecting",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepConnectConnecting.tsx",
+      "relativePath": "molecules/steps/StepConnectConnecting.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConnectConnecting state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConnectConnecting"
+    },
+    {
+      "name": "StepConnectReadingVersion",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepConnectReadingVersion.tsx",
+      "relativePath": "molecules/steps/StepConnectReadingVersion.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepConnectReadingVersion state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepConnectReadingVersion"
+    },
+    {
+      "name": "StepFinishShowingError",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepFinishShowingError.tsx",
+      "relativePath": "molecules/steps/StepFinishShowingError.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepFinishShowingError state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepFinishShowingError"
+    },
+    {
+      "name": "StepFinishShowingNextSteps",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepFinishShowingNextSteps.tsx",
+      "relativePath": "molecules/steps/StepFinishShowingNextSteps.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepFinishShowingNextSteps state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepFinishShowingNextSteps"
+    },
+    {
+      "name": "StepInstallInstalling",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepInstallInstalling.tsx",
+      "relativePath": "molecules/steps/StepInstallInstalling.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallInstalling state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallInstalling"
+    },
+    {
+      "name": "StepInstallMigratingConfiguration",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepInstallMigratingConfiguration.tsx",
+      "relativePath": "molecules/steps/StepInstallMigratingConfiguration.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallMigratingConfiguration state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallMigratingConfiguration"
+    },
+    {
+      "name": "StepInstallWaitingForInstallationMethodChoice",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
+      "relativePath": "molecules/steps/StepInstallWaitingForInstallationMethodChoice.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepInstallWaitingForInstallationMethodChoice state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepInstallWaitingForInstallationMethodChoice"
+    },
+    {
+      "name": "StepStartCheckingWebSerialSupport",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepStartCheckingWebSerialSupport.tsx",
+      "relativePath": "molecules/steps/StepStartCheckingWebSerialSupport.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartCheckingWebSerialSupport state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartCheckingWebSerialSupport"
+    },
+    {
+      "name": "StepStartFetchUpstreamVersions",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepStartFetchUpstreamVersions.tsx",
+      "relativePath": "molecules/steps/StepStartFetchUpstreamVersions.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartFetchUpstreamVersions state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartFetchUpstreamVersions"
+    },
+    {
+      "name": "StepStartWaitingForUser",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/StepStartWaitingForUser.tsx",
+      "relativePath": "molecules/steps/StepStartWaitingForUser.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [
+        {
+          "name": "state",
+          "type": "any",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "emitEvent",
+          "type": "(event: any) => void",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {
+            "state": "Example state",
+            "emitEvent": "Example emitEvent"
+          },
+          "code": "<StepStartWaitingForUser state=\"Example state\" emitEvent=\"Example emitEvent\" />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/StepStartWaitingForUser"
+    },
+    {
+      "name": "Steps",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/molecules/steps/Steps.tsx",
+      "relativePath": "molecules/steps/Steps.tsx",
+      "category": "molecules",
+      "description": "",
+      "props": [],
+      "examples": [
+        {
+          "name": "Default",
+          "description": "Default component appearance",
+          "props": {},
+          "code": "<Steps />"
+        }
+      ],
+      "importPath": "@/components/molecules/steps/Steps"
     }
   ],
   "organisms": [
     {
       "name": "Footer",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Footer.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/organisms/Footer.tsx",
       "relativePath": "organisms/Footer.tsx",
       "category": "organisms",
       "description": "",
@@ -4940,7 +4940,7 @@
     },
     {
       "name": "Header",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Header.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/organisms/Header.tsx",
       "relativePath": "organisms/Header.tsx",
       "category": "organisms",
       "description": "",
@@ -4957,7 +4957,7 @@
     },
     {
       "name": "Newsletter",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Newsletter.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/organisms/Newsletter.tsx",
       "relativePath": "organisms/Newsletter.tsx",
       "category": "organisms",
       "description": "",
@@ -4974,7 +4974,7 @@
     },
     {
       "name": "Welcome",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/organisms/Welcome.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/organisms/Welcome.tsx",
       "relativePath": "organisms/Welcome.tsx",
       "category": "organisms",
       "description": "",
@@ -4994,7 +4994,7 @@
   "forms": [
     {
       "name": "AppKeyHexField",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/AppKeyHexField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/AppKeyHexField.tsx",
       "relativePath": "forms/AppKeyHexField.tsx",
       "category": "forms",
       "description": "",
@@ -5052,7 +5052,7 @@
     },
     {
       "name": "Checkbox",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/Checkbox.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/Checkbox.tsx",
       "relativePath": "forms/Checkbox.tsx",
       "category": "forms",
       "description": "",
@@ -5105,7 +5105,7 @@
     },
     {
       "name": "FileUploader",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FileUploader.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/FileUploader.tsx",
       "relativePath": "forms/FileUploader.tsx",
       "category": "forms",
       "description": "",
@@ -5179,7 +5179,7 @@
     },
     {
       "name": "FormField",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FormField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/FormField.tsx",
       "relativePath": "forms/FormField.tsx",
       "category": "forms",
       "description": "",
@@ -5232,7 +5232,7 @@
     },
     {
       "name": "FormLayout",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/FormLayout.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/FormLayout.tsx",
       "relativePath": "forms/FormLayout.tsx",
       "category": "forms",
       "description": "",
@@ -5271,7 +5271,7 @@
     },
     {
       "name": "InputField",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/InputField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/InputField.tsx",
       "relativePath": "forms/InputField.tsx",
       "category": "forms",
       "description": "",
@@ -5325,7 +5325,7 @@
     },
     {
       "name": "Select",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/Select.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/Select.tsx",
       "relativePath": "forms/Select.tsx",
       "category": "forms",
       "description": "",
@@ -5422,7 +5422,7 @@
     },
     {
       "name": "SelectTrigger",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/SelectField.tsx",
       "relativePath": "forms/SelectField.tsx",
       "category": "forms",
       "description": "",
@@ -5439,7 +5439,7 @@
     },
     {
       "name": "SelectContent",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/SelectField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/SelectField.tsx",
       "relativePath": "forms/SelectField.tsx",
       "category": "forms",
       "description": "",
@@ -5456,7 +5456,7 @@
     },
     {
       "name": "TextFieldRoot",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextField.tsx",
       "relativePath": "forms/TextField.tsx",
       "category": "forms",
       "description": "",
@@ -5473,7 +5473,7 @@
     },
     {
       "name": "TextFieldLabel",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextField.tsx",
       "relativePath": "forms/TextField.tsx",
       "category": "forms",
       "description": "",
@@ -5490,7 +5490,7 @@
     },
     {
       "name": "TextFieldInput",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextField.tsx",
       "relativePath": "forms/TextField.tsx",
       "category": "forms",
       "description": "",
@@ -5515,7 +5515,7 @@
     },
     {
       "name": "TextFieldDescription",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextField.tsx",
       "relativePath": "forms/TextField.tsx",
       "category": "forms",
       "description": "",
@@ -5532,7 +5532,7 @@
     },
     {
       "name": "TextFieldErrorMessage",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextField.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextField.tsx",
       "relativePath": "forms/TextField.tsx",
       "category": "forms",
       "description": "",
@@ -5549,7 +5549,7 @@
     },
     {
       "name": "TextInput",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/forms/TextInput.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/forms/TextInput.tsx",
       "relativePath": "forms/TextInput.tsx",
       "category": "forms",
       "description": "",
@@ -5612,7 +5612,7 @@
   "uncategorized": [
     {
       "name": "Lorawan-form",
-      "filePath": "/Users/andrelademann/Development/ttnleipzig/regenfass/installer/src/components/lorawan-form.tsx",
+      "filePath": "/home/runner/work/regenfass/regenfass/installer/src/components/lorawan-form.tsx",
       "relativePath": "lorawan-form.tsx",
       "category": "uncategorized",
       "description": "",
