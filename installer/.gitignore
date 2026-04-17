@@ -35,3 +35,6 @@ storybook-static
 
 # test results
 test-results/
+
+# coverage reports
+coverage/

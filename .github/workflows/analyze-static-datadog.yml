@@ -4,11 +4,27 @@ on:
 
 name: Analysis Static - Datadog
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Pipeline started
+        run: echo "Checking preconditions for static analysis"
+
   static-analysis:
-    if: ${{ secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != '' }}
+    needs: setup
+    if: secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != ''
     runs-on: ubuntu-latest
     name: Datadog Static Analyzer
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: Checkout
       uses: actions/checkout@v3

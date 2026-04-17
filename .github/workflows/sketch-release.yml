@@ -11,6 +11,7 @@ permissions:
   actions: write
   contents: write
   packages: write
+  pull-requests: write
 
 jobs:
 
@@ -60,7 +61,7 @@ jobs:
       - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.RELEASE_PLEASE_ORGANISATION }}
+          token: ${{ secrets.RELEASE_PLEASE_ORGANISATION || github.token }}
           release-type: simple
       - name: Print the release URL if present
         if: ${{ steps.release.outputs.release_created == 'true' }}
