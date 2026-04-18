@@ -267,7 +267,7 @@ class ComponentDocGenerator {
         const declarations = propsSymbol.getDeclarations();
         
         for (const declaration of declarations) {
-          if (Node.isInterfaceDeclaration(declaration) || Node.isTypeLiteralNode(declaration)) {
+          if (Node.isInterfaceDeclaration(declaration) || Node.isTypeLiteral(declaration)) {
             const properties = Node.isInterfaceDeclaration(declaration) 
               ? declaration.getProperties()
               : declaration.getProperties();

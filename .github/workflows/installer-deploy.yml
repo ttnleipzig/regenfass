@@ -12,6 +12,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -31,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
           cache-dependency-path: './installer/pnpm-lock.yaml'
       - name: Install dependencies
@@ -40,6 +43,8 @@ jobs:
         run: cd ./installer && pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

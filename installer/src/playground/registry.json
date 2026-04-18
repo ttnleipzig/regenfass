@@ -286,13 +286,69 @@
       "relativePath": "atoms/Headline.tsx",
       "category": "atoms",
       "description": "",
-      "props": [],
+      "props": [
+        {
+          "name": "as",
+          "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\"",
+          "required": false,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"left\" | \"center\" | \"right\"",
+          "required": false,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "icon",
+          "type": "JSX.Element",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "children",
+          "type": "JSX.Element",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
       "examples": [
         {
           "name": "Default",
           "description": "Default component appearance",
-          "props": {},
-          "code": "<Headline />"
+          "props": {
+            "children": "Example children"
+          },
+          "code": "<Headline children=\"Example children\" />"
         }
       ],
       "importPath": "@/components/atoms/Headline"
@@ -303,13 +359,69 @@
       "relativePath": "atoms/Headline.tsx",
       "category": "atoms",
       "description": "",
-      "props": [],
+      "props": [
+        {
+          "name": "as",
+          "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\"",
+          "required": false,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"left\" | \"center\" | \"right\"",
+          "required": false,
+          "description": "",
+          "controlType": "select",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "icon",
+          "type": "JSX.Element",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "children",
+          "type": "JSX.Element",
+          "required": true,
+          "description": "",
+          "controlType": "text"
+        }
+      ],
       "examples": [
         {
           "name": "Default",
           "description": "Default component appearance",
-          "props": {},
-          "code": "<Headline />"
+          "props": {
+            "children": "Example children"
+          },
+          "code": "<Headline children=\"Example children\" />"
         }
       ],
       "importPath": "@/components/atoms/Headline"
@@ -4471,13 +4583,58 @@
       "relativePath": "molecules/StepPaginator.tsx",
       "category": "molecules",
       "description": "",
-      "props": [],
+      "props": [
+        {
+          "name": "steps",
+          "type": "readonly string[]",
+          "required": true,
+          "description": "Step labels in order (shown as 1, 2, …).",
+          "controlType": "text"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Optional heading above the list.",
+          "controlType": "text"
+        },
+        {
+          "name": "variant",
+          "type": "StepPaginatorVariant",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "listAriaLabel",
+          "type": "string",
+          "required": false,
+          "description": "Accessible name for the step list.",
+          "controlType": "text"
+        },
+        {
+          "name": "class",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "controlType": "text"
+        },
+        {
+          "name": "activeStep",
+          "type": "number",
+          "required": false,
+          "description": "1-based index of the active step; omit for a static, equal-weight list.",
+          "controlType": "number"
+        }
+      ],
       "examples": [
         {
           "name": "Default",
           "description": "Default component appearance",
-          "props": {},
-          "code": "<StepPaginator />"
+          "props": {
+            "steps": "Example steps"
+          },
+          "code": "<StepPaginator steps=\"Example steps\" />"
         }
       ],
       "importPath": "@/components/molecules/StepPaginator"
