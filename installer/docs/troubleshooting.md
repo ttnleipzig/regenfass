@@ -9,11 +9,13 @@ This guide covers common problems you might encounter when developing or using t
 ### Web Serial API Not Supported
 
 **Symptoms:**
+
 - Error message: "Ihr Browser unterstützt die Web Serial API nicht"
 - `navigator.serial` is undefined
 - Cannot connect to devices
 
 **Causes:**
+
 - Using unsupported browser (Firefox, Safari)
 - Browser version too old
 - Site not served over HTTPS
@@ -21,6 +23,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Use Supported Browser:**
+
    ```bash
    Supported browsers:
    - Chrome 89+
@@ -34,6 +37,7 @@ This guide covers common problems you might encounter when developing or using t
    - Restart browser after update
 
 3. **Serve Over HTTPS:**
+
    ```bash
    # Development with HTTPS
    pnpm dev --https
@@ -43,6 +47,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 4. **Check Feature Detection:**
+
    ```javascript
    // Test in browser console
    console.log('Serial API support:', 'serial' in navigator);
@@ -52,6 +57,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Permission Denied Errors
 
 **Symptoms:**
+
 - "Zugriff auf den Serial Port wurde verweigert"
 - Port selection dialog doesn't appear
 - Connection fails immediately
@@ -69,7 +75,8 @@ This guide covers common problems you might encounter when developing or using t
    - Site must be in "Allow" list
 
 3. **Browser Flags (Development):**
-   ```
+
+   ```text
    chrome://flags/#enable-web-serial
    Ensure this is enabled
    ```
@@ -79,6 +86,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Device Not Found
 
 **Symptoms:**
+
 - Empty device list in selection dialog
 - "Kein kompatibles Gerät gefunden"
 - Connection timeout
@@ -86,6 +94,7 @@ This guide covers common problems you might encounter when developing or using t
 **Diagnostics:**
 
 1. **Check Physical Connection:**
+
    ```bash
    # Linux: List USB devices
    lsusb
@@ -100,6 +109,7 @@ This guide covers common problems you might encounter when developing or using t
    - Download from manufacturer website
 
 3. **Test with Other Software:**
+
    ```bash
    # Arduino IDE
    # PlatformIO
@@ -110,6 +120,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Install Correct Drivers:**
+
    ```bash
    # ESP32 (CP210x)
    https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
@@ -131,6 +142,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Connection Timeout
 
 **Symptoms:**
+
 - Connection starts but times out
 - "Verbindung nicht möglich"
 - Device disconnects during process
@@ -138,6 +150,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check Baud Rate:**
+
    ```javascript
    // Common baud rates to try
    const baudRates = [115200, 9600, 57600, 38400];
@@ -154,6 +167,7 @@ This guide covers common problems you might encounter when developing or using t
    - Try connection again
 
 4. **Check System Resources:**
+
    ```bash
    # Check if port is in use
    # Linux
@@ -168,6 +182,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Upload Fails
 
 **Symptoms:**
+
 - Installation starts but fails midway
 - "Firmware-Installation fehlgeschlagen"
 - Device becomes unresponsive
@@ -175,7 +190,8 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Put Device in Boot Mode:**
-   ```
+
+   ```text
    ESP32:
    1. Hold BOOT button
    2. Press and release RESET
@@ -200,6 +216,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Verification Errors
 
 **Symptoms:**
+
 - Upload completes but verification fails
 - "Firmware-Verifikation fehlgeschlagen"
 - Device doesn't boot after flash
@@ -212,6 +229,7 @@ This guide covers common problems you might encounter when developing or using t
    - Use shorter USB cable
 
 2. **Check Flash Size:**
+
    ```javascript
    // Verify device flash size matches firmware
    const deviceInfo = await esptool.readDeviceInfo();
@@ -228,6 +246,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Invalid LoRaWAN Parameters
 
 **Symptoms:**
+
 - "AppEUI muss 16 Hexadezimalzeichen lang sein"
 - Configuration validation errors
 - Unable to save configuration
@@ -235,6 +254,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check Parameter Format:**
+
    ```javascript
    // Valid formats
    AppEUI: "0000000000000000" (16 hex chars)
@@ -253,6 +273,7 @@ This guide covers common problems you might encounter when developing or using t
    - Check for hidden characters
 
 3. **Validate Externally:**
+
    ```bash
    # Online hex validator
    # Check with LoRaWAN provider
@@ -262,6 +283,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Configuration Import Fails
 
 **Symptoms:**
+
 - "Ungültige Konfigurationsdatei"
 - JSON parsing errors
 - File upload rejected
@@ -269,6 +291,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check JSON Format:**
+
    ```json
    {
      "appEUI": "0000000000000000",
@@ -279,6 +302,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Validate JSON:**
+
    ```bash
    # Use online JSON validator
    # Check for trailing commas
@@ -295,6 +319,7 @@ This guide covers common problems you might encounter when developing or using t
 ### GitHub API Rate Limiting
 
 **Symptoms:**
+
 - "API rate limit exceeded"
 - Cannot fetch firmware versions
 - 403 Forbidden errors
@@ -302,6 +327,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Wait for Reset:**
+
    ```javascript
    // Check rate limit status
    fetch('https://api.github.com/rate_limit')
@@ -310,6 +336,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Use Authentication (Development):**
+
    ```bash
    # Create GitHub personal access token
    # Add to environment variables
@@ -324,6 +351,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Network Connectivity
 
 **Symptoms:**
+
 - Cannot load firmware versions
 - Network errors in console
 - Offline mode not working
@@ -331,6 +359,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check Internet Connection:**
+
    ```bash
    # Test GitHub API access
    curl https://api.github.com/repos/ttnleipzig/regenfass/releases
@@ -342,6 +371,7 @@ This guide covers common problems you might encounter when developing or using t
    - Try from different network
 
 3. **DNS Issues:**
+
    ```bash
    # Test DNS resolution
    nslookup api.github.com
@@ -352,6 +382,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Build Errors
 
 **Symptoms:**
+
 - TypeScript compilation errors
 - Vite build failures
 - Module resolution errors
@@ -359,6 +390,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Clear Cache:**
+
    ```bash
    # Clear all caches
    rm -rf node_modules/.vite
@@ -367,6 +399,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Check Node Version:**
+
    ```bash
    # Verify Node.js version
    node --version  # Should be 18+
@@ -377,6 +410,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 3. **Fix Import Paths:**
+
    ```typescript
    // Use absolute imports
    import { TextInput } from "@/components/forms/TextInput";
@@ -388,6 +422,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Test Failures
 
 **Symptoms:**
+
 - Tests pass locally but fail in CI
 - Flaky test results
 - Mock-related errors
@@ -395,6 +430,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check Test Environment:**
+
    ```bash
    # Ensure consistent Node version
    # Check environment variables
@@ -402,6 +438,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Fix Async Issues:**
+
    ```typescript
    // Use waitFor for async operations
    await waitFor(() => {
@@ -413,6 +450,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 3. **Mock Cleanup:**
+
    ```typescript
    beforeEach(() => {
      vi.clearAllMocks();
@@ -423,6 +461,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Hot Reload Issues
 
 **Symptoms:**
+
 - Changes not reflected in browser
 - Full page reloads instead of HMR
 - Console warnings about HMR
@@ -430,6 +469,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Check File Extensions:**
+
    ```typescript
    // Use .tsx for JSX files
    // Use .ts for TypeScript only
@@ -437,6 +477,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Restart Dev Server:**
+
    ```bash
    # Kill dev server
    Ctrl+C
@@ -446,6 +487,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 3. **Clear Browser Cache:**
+
    ```bash
    # Hard refresh
    Ctrl+Shift+R (Windows/Linux)
@@ -457,6 +499,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Slow Installation Process
 
 **Symptoms:**
+
 - Firmware upload takes very long
 - Browser becomes unresponsive
 - Memory usage increases
@@ -464,6 +507,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Reduce Baud Rate:**
+
    ```javascript
    // Try slower speeds for stability
    const baudRates = [115200, 57600, 38400, 9600];
@@ -482,6 +526,7 @@ This guide covers common problems you might encounter when developing or using t
 ### High Memory Usage
 
 **Symptoms:**
+
 - Browser tab crashes
 - System becomes slow
 - Out of memory errors
@@ -489,6 +534,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Restart Browser:**
+
    ```bash
    # Close all tabs
    # Restart browser completely
@@ -496,6 +542,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Check for Memory Leaks:**
+
    ```javascript
    // Monitor in DevTools
    // Performance tab → Memory
@@ -512,6 +559,7 @@ This guide covers common problems you might encounter when developing or using t
 ### Content Security Policy
 
 **Symptoms:**
+
 - CSP violation errors in console
 - Resources blocked from loading
 - Serial API blocked
@@ -519,6 +567,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Update CSP Headers:**
+
    ```html
    <!-- Allow serial API -->
    <meta http-equiv="Content-Security-Policy" 
@@ -533,6 +582,7 @@ This guide covers common problems you might encounter when developing or using t
 ### HTTPS Requirements
 
 **Symptoms:**
+
 - Serial API not available over HTTP
 - Security warnings in browser
 - Features disabled
@@ -540,6 +590,7 @@ This guide covers common problems you might encounter when developing or using t
 **Solutions:**
 
 1. **Use HTTPS in Production:**
+
    ```nginx
    # Nginx configuration
    server {
@@ -550,6 +601,7 @@ This guide covers common problems you might encounter when developing or using t
    ```
 
 2. **Development HTTPS:**
+
    ```bash
    # Use mkcert for local HTTPS
    mkcert localhost
@@ -563,6 +615,7 @@ This guide covers common problems you might encounter when developing or using t
 When reporting issues, include:
 
 1. **Browser Information:**
+
    ```javascript
    console.log('User Agent:', navigator.userAgent);
    console.log('Serial Support:', 'serial' in navigator);
@@ -570,6 +623,7 @@ When reporting issues, include:
    ```
 
 2. **Device Information:**
+
    ```bash
    # Operating System and version
    # USB device IDs (lsusb output)
@@ -607,7 +661,7 @@ console.log('Debug info:', JSON.stringify(logs, null, 2));
 
 ### Support Channels
 
-1. **GitHub Issues**: https://github.com/ttnleipzig/regenfass/issues
+1. **GitHub Issues**: <https://github.com/ttnleipzig/regenfass/issues>
 2. **Documentation**: Check docs/ directory
 3. **Community Forum**: For user discussions
 4. **Technical Support**: For critical issues

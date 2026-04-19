@@ -10,9 +10,9 @@ The Regenfass Installer is a web-based application built with SolidJS that provi
 - [Installation Flow](#installation-flow)
 - [Components](#components)
 - [State Management](#state-management)
-- [Testing](#testing)
-- [Development Setup](#development-setup)
-- [Deployment](#deployment)
+- [Error Handling](#error-handling)
+- [Performance Considerations](#performance-considerations)
+- [Security Considerations](#security-considerations)
 
 ## Architecture
 
@@ -27,7 +27,7 @@ The Regenfass Installer is a web-based application built with SolidJS that provi
 
 ### Project Structure
 
-```
+```text
 installer/
 ├── src/
 │   ├── components/          # Reusable UI components
@@ -57,26 +57,31 @@ installer/
 The installer follows a structured workflow managed by an XState state machine:
 
 ### 1. Start Phase
+
 - **CheckingWebSerialSupport**: Verify browser compatibility
 - **FetchUpstreamVersions**: Load available firmware versions from GitHub
 - **WaitingForUser**: Present welcome screen and preparation instructions
 
 ### 2. Connect Phase
+
 - **Connecting**: Establish serial connection with the device
 - **ReadingVersion**: Read current firmware version from device
 
 ### 3. Install Phase
+
 - **WaitingForInstallationMethodChoice**: User selects install or update
 - **Installing**: Flash new firmware to blank device
 - **Updating**: Update existing firmware
 - **MigratingConfiguration**: Migrate settings between firmware versions
 
 ### 4. Config Phase
+
 - **LoadingConfiguration**: Read current device configuration
 - **Editing**: User edits LoRaWAN parameters
 - **WritingConfiguration**: Write configuration to device
 
 ### 5. Finish Phase
+
 - **ShowingNextSteps**: Display completion and next steps
 - **ShowingError**: Handle and display errors with recovery options
 
@@ -85,12 +90,15 @@ The installer follows a structured workflow managed by an XState state machine:
 ### Core Components
 
 #### InstallerRoot
+
 Main application component that orchestrates the installation process.
 
 **Props:**
+
 - None (self-contained)
 
 **Features:**
+
 - State machine integration
 - Error boundary handling
 - Progress tracking

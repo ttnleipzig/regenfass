@@ -452,7 +452,7 @@ This document contains automatically generated documentation for all components 
       }
     }
 
-    markdown += `\n---
+    markdown += `---
 
 *Generated on ${new Date().toLocaleString('en-US', { 
   day: '2-digit', 
@@ -515,7 +515,7 @@ This document contains automatically generated documentation for all components 
       markdown += `**Dependencies:**\n\n`;
       
       if (component.dependencies.external.length > 0) {
-        markdown += `*External:*\n`;
+        markdown += `*External:*\n\n`;
         for (const dep of component.dependencies.external) {
           markdown += `- \`${dep}\`\n`;
         }
@@ -523,7 +523,7 @@ This document contains automatically generated documentation for all components 
       }
       
       if (component.dependencies.internal.length > 0) {
-        markdown += `*Internal:*\n`;
+        markdown += `*Internal:*\n\n`;
         for (const dep of component.dependencies.internal) {
           markdown += `- \`${dep}\`\n`;
         }
@@ -533,7 +533,7 @@ This document contains automatically generated documentation for all components 
 
     // Import example
     const importPath = component.relativePath.replace(/\.tsx?$/, '').replace(/\/index$/, '');
-    markdown += `**Import:**\n\`\`\`typescript\nimport { ${component.name} } from '@/components/${importPath}';\n\`\`\`\n\n`;
+    markdown += `**Import:**\n\n\`\`\`typescript\nimport { ${component.name} } from '@/components/${importPath}';\n\`\`\`\n\n`;
 
     return markdown;
   }
