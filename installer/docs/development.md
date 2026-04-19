@@ -62,7 +62,7 @@ pnpm test:ui
 
 ### Project Structure
 
-```
+```text
 installer/
 ├── src/
 │   ├── components/          # Reusable UI components
@@ -473,6 +473,7 @@ Create `.vscode/launch.json`:
 **Problem**: `navigator.serial` is undefined
 
 **Solutions**:
+
 1. Use Chrome, Edge, or Opera (not Firefox/Safari)
 2. Serve over HTTPS or localhost
 3. Check browser version (89+ required)
@@ -482,6 +483,7 @@ Create `.vscode/launch.json`:
 **Problem**: TypeScript compilation errors
 
 **Solutions**:
+
 1. Clear TypeScript cache: `rm -rf node_modules/.vite`
 2. Restart TypeScript server in VS Code
 3. Check `tsconfig.json` configuration
@@ -491,6 +493,7 @@ Create `.vscode/launch.json`:
 **Problem**: Tests fail in CI but pass locally
 
 **Solutions**:
+
 1. Check Node.js version compatibility
 2. Verify all mocks are properly set up
 3. Use `waitFor` for async operations
@@ -584,10 +587,10 @@ Ensure HTTPS is enabled for Web Serial API functionality.
 
 ### Resources
 
-- **SolidJS Documentation**: https://www.solidjs.com/docs
-- **Vitest Documentation**: https://vitest.dev
-- **TailwindCSS Documentation**: https://tailwindcss.com/docs
-- **XState Documentation**: https://xstate.js.org/docs
+- **SolidJS Documentation**: <https://www.solidjs.com/docs>
+- **Vitest Documentation**: <https://vitest.dev>
+- **TailwindCSS Documentation**: <https://tailwindcss.com/docs>
+- **XState Documentation**: <https://xstate.js.org/docs>
 
 ### Support Channels
 

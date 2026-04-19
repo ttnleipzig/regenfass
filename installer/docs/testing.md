@@ -24,7 +24,7 @@ The Regenfass Installer uses Vitest as the primary testing framework with compre
 
 ### Directory Structure
 
-```
+```text
 installer/
 ├── tests/                          # Main test directory
 │   ├── unit/                      # Unit tests

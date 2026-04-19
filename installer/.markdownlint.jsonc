@@ -13,6 +13,9 @@
   
   // Allow inline HTML
   "MD041": false,
+
+  // Allow link text that matches a component name (e.g. an atom named "Link")
+  "MD059": false,
   
   // Ignore docs directory cache if any
   "ignores": [

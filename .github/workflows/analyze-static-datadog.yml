@@ -11,15 +11,28 @@ permissions:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    outputs:
+      has_datadog_secrets: ${{ steps.check-secrets.outputs.has_datadog_secrets }}
     permissions:
       contents: read
     steps:
       - name: Pipeline started
         run: echo "Checking preconditions for static analysis"
+      - name: Check Datadog secrets
+        id: check-secrets
+        env:
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_APP_KEY: ${{ secrets.DD_APP_KEY }}
+        run: |
+          if [ -n "${DD_API_KEY}" ] && [ -n "${DD_APP_KEY}" ]; then
+            echo "has_datadog_secrets=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "has_datadog_secrets=false" >> "${GITHUB_OUTPUT}"
+          fi
 
   static-analysis:
     needs: setup
-    if: secrets.DD_API_KEY != '' && secrets.DD_APP_KEY != ''
+    if: needs.setup.outputs.has_datadog_secrets == 'true'
     runs-on: ubuntu-latest
     name: Datadog Static Analyzer
     permissions:
