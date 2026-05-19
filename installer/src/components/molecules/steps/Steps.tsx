@@ -15,14 +15,16 @@ import StepConfigWritingConfiguration from "./StepConfigWritingConfiguration.tsx
 import StepFinishShowingNextSteps from "./StepFinishShowingNextSteps.tsx";
 import StepFinishShowingError from "./StepFinishShowingError.tsx";
 
-const { inspect } = createBrowserInspector();
+const inspect = import.meta.env.DEV
+	? createBrowserInspector().inspect
+	: undefined;
 
 export default function Steps() {
 	// useMachine’s first tuple value is a one-shot snapshot in @xstate/solid 2.0.0 (it calls
 	// `fromActorRef(actorRef)()`), so Switch/Match would never see transitions. Use the actor
 	// ref + `fromActorRef` accessor so `snapshot()` stays in sync with the running machine.
 	const actorRef = useActorRef(setupStateMachine, {
-		inspect,
+		...(inspect ? { inspect } : {}),
 	});
 	const snapshot = fromActorRef(actorRef);
 	const send = actorRef.send;
