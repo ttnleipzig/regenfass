@@ -31,6 +31,7 @@ func New(dbPool *pgxpool.Pool) *API {
 
 	api.app.Get("/healthz", api.handleHealthz)
 	api.app.Post("/ingest", api.handleIngest)
+	api.app.Post("/device", api.handleRegisterDevice)
 	api.app.Get("/device/:deviceToken", api.handleDeviceInfoByToken)
 	api.app.Post("/group", api.handleCreateGroup)
 	api.app.Get("/group/:groupToken", api.handleGroupInfoByToken)
@@ -62,4 +63,10 @@ func (a *API) handleHealthz(c fiber.Ctx) error {
 	}
 
 	return c.SendString("ok")
+}
+
+// HTTPError represents an HTTP error response
+type HTTPError struct {
+	Code    int    `json:"code" example:"400"`
+	Message string `json:"message" example:"error message"`
 }

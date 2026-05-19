@@ -6,7 +6,6 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 	"github.com/ttn-leipzig/regenfass/internal/db"
-	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
 
 // GroupInfoDevice represents a device in a group
@@ -155,11 +154,10 @@ type CreateGroupPayload struct {
 }
 
 // CreateGroupResponse represents the response after creating a group
-// @Description Response with group ID and tokens
+// @Description Response with tokens
 type CreateGroupResponse struct {
-	ID             uuid.UUID `json:"id" example:"550e8400-e29b-41d4-a716-446655440000"`
-	ReadWriteToken string    `json:"read_write_token" example:"rw_group_token_123"`
-	ReadOnlyToken  string    `json:"read_only_token" example:"ro_group_token_123"`
+	ReadWriteToken string `json:"read_write_token" example:"rw_group_token_123"`
+	ReadOnlyToken  string `json:"read_only_token" example:"ro_group_token_123"`
 }
 
 // CreateGroup godoc
@@ -189,8 +187,7 @@ func (a *API) handleCreateGroup(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "could not save group in database")
 	}
 
-	return c.JSON(CreateGroupResponse{
-		ID:             utils.PGToUUID(created.ID),
+	return c.Status(fiber.StatusCreated).JSON(CreateGroupResponse{
 		ReadWriteToken: created.RwToken,
 		ReadOnlyToken:  created.RoToken,
 	})

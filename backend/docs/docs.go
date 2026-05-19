@@ -15,6 +15,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/device": {
+            "post": {
+                "description": "Register a device using it's device EUI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Register a device",
+                "parameters": [
+                    {
+                        "description": "Device to register",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.RegisterDevicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.RegisterDeviceResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/device/{deviceToken}": {
             "get": {
                 "description": "Retrieve device details using either read-write or read-only token",
@@ -312,13 +352,9 @@ const docTemplate = `{
             }
         },
         "api.CreateGroupResponse": {
-            "description": "Response with group ID and tokens",
+            "description": "Response with tokens",
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string",
-                    "example": "550e8400-e29b-41d4-a716-446655440000"
-                },
                 "read_only_token": {
                     "type": "string",
                     "example": "ro_group_token_123"
@@ -422,6 +458,28 @@ const docTemplate = `{
                             "example": "2024-01-15T10:30:00Z"
                         }
                     }
+                }
+            }
+        },
+        "api.RegisterDevicePayload": {
+            "type": "object",
+            "properties": {
+                "device_eui": {
+                    "type": "string",
+                    "example": "AABBCCDDEEFF0011"
+                }
+            }
+        },
+        "api.RegisterDeviceResponse": {
+            "type": "object",
+            "properties": {
+                "read_only_token": {
+                    "type": "string",
+                    "example": "ro_token_123"
+                },
+                "read_write_token": {
+                    "type": "string",
+                    "example": "rw_token_123"
                 }
             }
         }

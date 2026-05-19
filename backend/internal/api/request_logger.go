@@ -12,6 +12,7 @@ func (a *API) getRequestLogger(c fiber.Ctx) zerolog.Logger {
 	ip := c.IP()
 
 	return a.log.With().
+		Ctx(c.RequestCtx()).
 		Uint64("requestID", id).
 		Str("httpMethod", method).
 		Str("httpPath", path).

@@ -15,11 +15,8 @@ definitions:
         type: string
     type: object
   api.CreateGroupResponse:
-    description: Response with group ID and tokens
+    description: Response with tokens
     properties:
-      id:
-        example: 550e8400-e29b-41d4-a716-446655440000
-        type: string
       read_only_token:
         example: ro_group_token_123
         type: string
@@ -95,6 +92,21 @@ definitions:
             type: string
         type: object
     type: object
+  api.RegisterDevicePayload:
+    properties:
+      device_eui:
+        example: AABBCCDDEEFF0011
+        type: string
+    type: object
+  api.RegisterDeviceResponse:
+    properties:
+      read_only_token:
+        example: ro_token_123
+        type: string
+      read_write_token:
+        example: rw_token_123
+        type: string
+    type: object
 host: localhost:64000
 info:
   contact: {}
@@ -102,6 +114,32 @@ info:
   title: Regenfass API
   version: "1.0"
 paths:
+  /device:
+    post:
+      consumes:
+      - application/json
+      description: Register a device using it's device EUI
+      parameters:
+      - description: Device to register
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegisterDevicePayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.RegisterDeviceResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Register a device
+      tags:
+      - devices
   /device/{deviceToken}:
     get:
       consumes:
