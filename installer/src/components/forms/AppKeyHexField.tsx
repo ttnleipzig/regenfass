@@ -7,7 +7,8 @@ import {
 	splitCanonicalHexPairs,
 } from "@/libs/hexKeyDisplay.ts";
 import { playSlotRevealSound } from "@/libs/slotRevealSound.ts";
-import { Eye, EyeOff } from "lucide-solid";
+import Eye from "lucide-solid/icons/eye";
+import EyeOff from "lucide-solid/icons/eye-off";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 

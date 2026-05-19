@@ -1,4 +1,6 @@
-import { Book, Github, MessageSquare } from "lucide-solid";
+import Book from "lucide-solid/icons/book";
+import Github from "lucide-solid/icons/github";
+import MessageSquare from "lucide-solid/icons/message-square";
 
 export default function Footer() {
 	return (

@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button.tsx";
-import { Moon, Sun } from "lucide-solid";
+import Moon from "lucide-solid/icons/moon";
+import Sun from "lucide-solid/icons/sun";
 import { useColorMode } from "@kobalte/core/color-mode";
 
 export function ButtonModeToggle() {

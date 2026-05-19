@@ -6,7 +6,7 @@ import {
 } from "@/components/molecules/AlertInline.tsx";
 import { Progress } from "@/components/atoms/Progress.tsx";
 import { cn } from "@/libs/cn.ts";
-import { CircleCheck } from "lucide-solid";
+import CircleCheck from "lucide-solid/icons/circle-check";
 import { createMemo, Show } from "solid-js";
 
 interface StepProps {

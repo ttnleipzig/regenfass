@@ -6,7 +6,10 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { ComponentProps, ParentProps, ValidComponent } from "solid-js";
 import { Show, splitProps } from "solid-js";
-import { AlertTriangle, CircleCheck, XCircle, Info } from "lucide-solid";
+import AlertTriangle from "lucide-solid/icons/alert-triangle";
+import CircleCheck from "lucide-solid/icons/circle-check";
+import XCircle from "lucide-solid/icons/x-circle";
+import Info from "lucide-solid/icons/info";
 
 export const alertVariants = cva(
 	"relative w-full rounded-lg border text-sm bg-card/60 dark:bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-5 py-4 ring-1 ring-border/50 dark:ring-border/80 [&:has(svg)]:pl-12 [&>svg+div]:translate-y-[-2px] [&>svg]:absolute [&>svg]:left-5 [&>svg]:top-4 [&>svg]:text-foreground",

@@ -1,6 +1,6 @@
 import { Component, For, JSX } from "solid-js";
 import { cn } from "@/libs/cn.ts";
-import { XCircle } from "lucide-solid";
+import XCircle from "lucide-solid/icons/x-circle";
 
 export interface ErrorListProps extends JSX.HTMLAttributes<HTMLDivElement> {
   errors?: string[];

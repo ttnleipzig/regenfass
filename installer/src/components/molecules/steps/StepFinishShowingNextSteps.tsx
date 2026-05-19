@@ -4,7 +4,7 @@ import {
 	AlertTitle,
 } from "@/components/molecules/AlertInline.tsx";
 import { cn } from "@/libs/cn.ts";
-import { CircleCheck } from "lucide-solid";
+import CircleCheck from "lucide-solid/icons/circle-check";
 
 interface StepProps {
 	state: any;
