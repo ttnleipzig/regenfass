@@ -86,7 +86,7 @@ describe("Header", () => {
 		expect(header).toHaveClass("w-full");
 		expect(header).toHaveClass("py-6");
 
-		const innerDiv = container.querySelector("div.mx-auto");
+		const innerDiv = container.querySelector(".site-container");
 		expect(innerDiv).toHaveClass("max-w-6xl");
 		expect(innerDiv).toHaveClass("px-4");
 		expect(innerDiv).toHaveClass("flex");

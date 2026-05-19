@@ -85,6 +85,12 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply min-h-screen bg-background text-foreground bg-fixed;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto w-full min-w-0 max-w-6xl px-4;
   }
 }

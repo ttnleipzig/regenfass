@@ -92,7 +92,7 @@ describe("Steps", () => {
 
   it("renders steps container", () => {
     const { container } = render(() => <Steps />);
-    const containerElement = container.querySelector(".mx-auto.max-w-3xl");
+    const containerElement = container.querySelector(".site-container");
     expect(containerElement).toBeInTheDocument();
   });
 
@@ -103,7 +103,7 @@ describe("Steps", () => {
 
   it("has correct container classes", () => {
     const { container } = render(() => <Steps />);
-    const containerElement = container.querySelector(".mx-auto.max-w-3xl");
-    expect(containerElement).toHaveClass("px-4", "sm:px-6", "py-6", "space-y-6");
+    const containerElement = container.querySelector(".site-container");
+    expect(containerElement).toHaveClass("px-4", "py-6", "space-y-6");
   });
 });

@@ -2,6 +2,7 @@ import { Router, Route } from "@solidjs/router";
 import Steps from "./components/molecules/steps/Steps";
 import Footer from "./components/organisms/Footer";
 import Header from "./components/organisms/Header";
+import Newsletter from "./components/organisms/Newsletter";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import PlaygroundLayout from "./playground/PlaygroundLayout";
 import PlaygroundHome from "./playground/PlaygroundHome";
@@ -15,6 +16,7 @@ function MainApp() {
 			<main class="flex flex-col w-full flex-1">
 				<Steps />
 			</main>
+			<Newsletter />
 			<Footer />
 		</div>
 	);

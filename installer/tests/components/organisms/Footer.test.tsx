@@ -60,8 +60,9 @@ describe("Footer", () => {
 	it("applies correct container classes", () => {
 		const { container } = render(() => <Footer />);
 		const footer = container.querySelector("footer");
-		expect(footer).toHaveClass("max-w-screen-lg");
-		expect(footer).toHaveClass("px-3");
+		expect(footer).toHaveClass("site-container");
+		expect(footer).toHaveClass("max-w-6xl");
+		expect(footer).toHaveClass("px-4");
 		expect(footer).toHaveClass("py-6");
 		expect(footer).toHaveClass("mx-auto");
 	});

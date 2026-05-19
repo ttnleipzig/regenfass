@@ -7,7 +7,7 @@ import { cn } from "@/libs/cn.ts";
 const Header: Component = () => {
   return (
     <header class="w-full py-6 border-b border-border">
-      <div class="mx-auto max-w-6xl px-4 flex justify-between items-center">
+      <div class="site-container flex justify-between items-center">
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
           Regenfass
         </h1>

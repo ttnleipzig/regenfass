@@ -51,8 +51,9 @@ describe("Newsletter", () => {
 	it("applies correct container classes", () => {
 		const { container } = render(() => <Newsletter />);
 		const aside = container.querySelector("aside");
-		expect(aside).toHaveClass("max-w-screen-lg");
-		expect(aside).toHaveClass("px-3");
+		expect(aside).toHaveClass("site-container");
+		expect(aside).toHaveClass("max-w-6xl");
+		expect(aside).toHaveClass("px-4");
 		expect(aside).toHaveClass("py-6");
 		expect(aside).toHaveClass("mx-auto");
 	});

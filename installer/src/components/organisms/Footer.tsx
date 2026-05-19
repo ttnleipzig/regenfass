@@ -2,7 +2,7 @@ import { Book, Github, MessageSquare } from "lucide-solid";
 
 export default function Footer() {
 	return (
-		<footer class="max-w-screen-lg px-3 py-6 mx-auto">
+		<footer class="site-container py-6">
 			<div class="pt-5 text-xs sm:text-sm  antialiased text-gray-400 border-t border-gray-300 dark:border-gray-00 dark:text-gray-400">
 				{/* Mobile links (hidden on md and up) */}
 				<nav class="md:hidden mb-4">

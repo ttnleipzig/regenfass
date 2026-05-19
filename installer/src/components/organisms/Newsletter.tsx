@@ -8,7 +8,7 @@ import { cn } from "@/libs/cn.ts";
 
 export default function Newsletter() {
 	return (
-		<aside id="newsletter" class="max-w-screen-lg px-3 py-6 mx-auto">
+		<aside id="newsletter" class="site-container py-6">
 			<div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
 				<div class="sm:w-7/12">
 					<Headline as="h2">
