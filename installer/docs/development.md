@@ -524,6 +524,17 @@ npx vite-bundle-analyzer dist
 
 ## Deployment
 
+Production URL: **https://install.regenfass.eu/**
+
+The installer is published automatically via GitHub Pages when changes land on `main`, when a release is published, or when you run the **Installer - Deploy** workflow manually (Actions tab in the `regenfass` repository).
+
+### GitHub Pages
+
+- **Workflow:** `.github/workflows/installer-deploy.yml` builds `installer/dist` and deploys it with GitHub Actions.
+- **Custom domain:** `install.regenfass.eu` (DNS: CNAME to `ttnleipzig.github.io`). The domain is also recorded in `installer/public/CNAME` so it stays attached across deployments.
+- **Fallback URL:** https://ttnleipzig.github.io/regenfass/
+- **HTTPS** is required for the Web Serial API; it is enforced on GitHub Pages.
+
 ### Build Process
 
 ```bash
@@ -545,16 +556,9 @@ VITE_GITHUB_REPO_NAME=regenfass
 VITE_SENTRY_DSN=your-sentry-dsn
 ```
 
-### Static File Serving
+### Other static hosting
 
-The built installer can be served from any static hosting:
-
-- GitHub Pages
-- Netlify
-- Vercel
-- S3 + CloudFront
-
-Ensure HTTPS is enabled for Web Serial API functionality.
+The built installer can also be served from Netlify, Vercel, or S3 + CloudFront if needed. Ensure HTTPS is enabled for Web Serial API functionality.
 
 ## Contributing
 
