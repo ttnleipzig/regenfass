@@ -95,6 +95,22 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 				</TextFieldRoot>
 
 				<TextFieldRoot class="space-y-0">
+					<HexOtp16
+						labelText="devEUI"
+						inputId="devEUI-otp"
+						field="devEUI"
+						value={state.context.deviceInfo.config.devEUI}
+						onValueChange={(value) =>
+							emitEvent({
+								type: "config.changeField",
+								field: "devEUI",
+								value,
+							})
+						}
+					/>
+				</TextFieldRoot>
+
+				<TextFieldRoot class="space-y-0">
 					<label
 						class="block text-sm font-medium leading-none tracking-tight text-foreground"
 						for="appKey-input"
@@ -117,22 +133,6 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 							}}
 						/>
 					</div>
-				</TextFieldRoot>
-
-				<TextFieldRoot class="space-y-0">
-					<HexOtp16
-						labelText="devEUI"
-						inputId="devEUI-otp"
-						field="devEUI"
-						value={state.context.deviceInfo.config.devEUI}
-						onValueChange={(value) =>
-							emitEvent({
-								type: "config.changeField",
-								field: "devEUI",
-								value,
-							})
-						}
-					/>
 				</TextFieldRoot>
 			</div>
 
