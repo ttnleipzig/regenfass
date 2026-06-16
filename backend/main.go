@@ -10,6 +10,7 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"net/url"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -19,6 +20,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ttn-leipzig/regenfass/docs"
 	"github.com/ttn-leipzig/regenfass/internal/api"
 	"github.com/ttn-leipzig/regenfass/sql"
 )
@@ -30,6 +32,7 @@ var (
 	logLevelFlag    = flag.String("log-level", "INFO", "Log level")
 	databaseUriFlag = flag.String("database-uri", "postgres://postgres:password@127.0.0.1:5434/regenfass", "TimescaleDB Database URI")
 	listenAddrFlag  = flag.String("listen-addr", ":64000", "Address to listen on")
+	baseUrlFlag     = flag.String("base-url", "http://localhost:64000", "Public base URL used for the Swagger UI (host + base path)")
 )
 
 func init() {
@@ -45,6 +48,14 @@ func main() {
 		log.Fatal().Err(err).Msg("could not parse log level")
 	}
 	zerolog.SetGlobalLevel(level)
+
+	baseUrl, err := url.Parse(*baseUrlFlag)
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not parse base URL")
+	}
+	docs.SwaggerInfo.Host = baseUrl.Host
+	docs.SwaggerInfo.BasePath = baseUrl.Path
+	docs.SwaggerInfo.Schemes = []string{baseUrl.Scheme}
 
 	if *databaseUriFlag == "" {
 		flag.PrintDefaults()
