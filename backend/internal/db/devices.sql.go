@@ -12,7 +12,7 @@ import (
 )
 
 const createDevice = `-- name: CreateDevice :one
-INSERT INTO device (device_eui) VALUES ($1) RETURNING id, rw_token, ro_token
+INSERT INTO device (device_eui) VALUES (UPPER($1)) RETURNING id, rw_token, ro_token
 `
 
 type CreateDeviceRow struct {
@@ -21,8 +21,8 @@ type CreateDeviceRow struct {
 	RoToken string
 }
 
-func (q *Queries) CreateDevice(ctx context.Context, deviceEui string) (CreateDeviceRow, error) {
-	row := q.db.QueryRow(ctx, createDevice, deviceEui)
+func (q *Queries) CreateDevice(ctx context.Context, upper interface{}) (CreateDeviceRow, error) {
+	row := q.db.QueryRow(ctx, createDevice, upper)
 	var i CreateDeviceRow
 	err := row.Scan(&i.ID, &i.RwToken, &i.RoToken)
 	return i, err
@@ -45,11 +45,11 @@ func (q *Queries) EnsureDeviceChannelMapping(ctx context.Context, arg EnsureDevi
 }
 
 const getDeviceByEUI = `-- name: GetDeviceByEUI :one
-SELECT id, device_eui, rw_token, ro_token FROM device WHERE device_eui = $1
+SELECT id, device_eui, rw_token, ro_token FROM device WHERE device_eui = UPPER($1)
 `
 
-func (q *Queries) GetDeviceByEUI(ctx context.Context, deviceEui string) (Device, error) {
-	row := q.db.QueryRow(ctx, getDeviceByEUI, deviceEui)
+func (q *Queries) GetDeviceByEUI(ctx context.Context, upper interface{}) (Device, error) {
+	row := q.db.QueryRow(ctx, getDeviceByEUI, upper)
 	var i Device
 	err := row.Scan(
 		&i.ID,

@@ -36,4 +36,6 @@
 /playwright/.cache/
 
 !/frontend
+
 !/backend
+/backend/tmp
