@@ -13,11 +13,13 @@ function getModemAudio(): HTMLAudioElement {
 	return modemAudio;
 }
 
-/** Classic modem handshake after flash or serial config I/O completes. */
-export function playModemSound(): void {
+/** Loop modem audio while a progress bar step is active (flash / config write). */
+export function startModemSound(): void {
 	if (!isSoundEnabled()) return;
 	try {
 		const audio = getModemAudio();
+		if (!audio.paused && audio.loop) return;
+		audio.loop = true;
 		audio.currentTime = 0;
 		void audio.play();
 	} catch {
@@ -25,7 +27,20 @@ export function playModemSound(): void {
 	}
 }
 
+/** Stop modem audio when leaving a progress bar step. */
+export function stopModemSound(): void {
+	if (!modemAudio) return;
+	try {
+		modemAudio.pause();
+		modemAudio.currentTime = 0;
+		modemAudio.loop = false;
+	} catch {
+		/* missing audio */
+	}
+}
+
 /** @internal Reset cached audio element between tests. */
 export function resetModemSoundForTests(): void {
+	stopModemSound();
 	modemAudio = null;
 }

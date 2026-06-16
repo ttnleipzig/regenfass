@@ -11,7 +11,7 @@ import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
 import { playErrorSound } from "@/libs/errorSound.ts";
-import { playModemSound } from "@/libs/modemSound.ts";
+import { startModemSound, stopModemSound } from "@/libs/modemSound.ts";
 import { assign, fromCallback, fromPromise, setup } from "xstate";
 
 const url =
@@ -145,8 +145,11 @@ export const setupStateMachine = setup({
 			| { type: "installFlash.error"; error: unknown },
 	},
 	actions: {
-		playModemSound: () => {
-			playModemSound();
+		startModemSound: () => {
+			startModemSound();
+		},
+		stopModemSound: () => {
+			stopModemSound();
 		},
 		playErrorSound: () => {
 			playErrorSound();
@@ -460,12 +463,9 @@ export const setupStateMachine = setup({
 				}),
 				onDone: {
 					target: "Install_WaitingForInstallationMethodChoice",
-					actions: [
-						assign({
-							deviceInfo: ({ event: { output } }) => output,
-						}),
-						"playModemSound",
-					],
+					actions: assign({
+						deviceInfo: ({ event: { output } }) => output,
+					}),
 				},
 				onError: {
 					target: "Install_WaitingForInstallationMethodChoice",
@@ -507,12 +507,18 @@ export const setupStateMachine = setup({
 		},
 
 		Install_Installing: {
-			entry: assign({
-				installFlashProgress: () => 0,
-			}),
-			exit: assign({
-				installFlashProgress: () => null,
-			}),
+			entry: [
+				assign({
+					installFlashProgress: () => 0,
+				}),
+				"startModemSound",
+			],
+			exit: [
+				assign({
+					installFlashProgress: () => null,
+				}),
+				"stopModemSound",
+			],
 			invoke: {
 				src: "installFirmware",
 				input: ({ context: { connection, targetFirmwareVersion } }) => ({
@@ -528,31 +534,28 @@ export const setupStateMachine = setup({
 				},
 				"installFlash.complete": {
 					target: "Install_MigratingConfiguration",
-					actions: [
-						assign({
-							deviceInfo: ({ event, context: { deviceInfo } }) => {
-								const output = event.output;
-								return {
-									config:
-										deviceInfo.config ??
-										getLatestConfigVersion().getDefaultValues(),
-									configVersion:
-										deviceInfo.configVersion ??
-										getLatestConfigVersion().version,
-									firmwareVersion: output[0],
-								};
-							},
-							connection: ({ context: { connection }, event }) => {
-								const output = event.output;
-								const result: [SerialPort, SCPAdapter] = [
-									connection![0],
-									output[1],
-								];
-								return result;
-							},
-						}),
-						"playModemSound",
-					],
+					actions: assign({
+						deviceInfo: ({ event, context: { deviceInfo } }) => {
+							const output = event.output;
+							return {
+								config:
+									deviceInfo.config ??
+									getLatestConfigVersion().getDefaultValues(),
+								configVersion:
+									deviceInfo.configVersion ??
+									getLatestConfigVersion().version,
+								firmwareVersion: output[0],
+							};
+						},
+						connection: ({ context: { connection }, event }) => {
+							const output = event.output;
+							const result: [SerialPort, SCPAdapter] = [
+								connection![0],
+								output[1],
+							];
+							return result;
+						},
+					}),
 				},
 				"installFlash.error": {
 					target: "Finish_ShowingError",
@@ -631,12 +634,18 @@ export const setupStateMachine = setup({
 			},
 		},
 		Config_WritingConfiguration: {
-			entry: assign({
-				configWriteProgress: () => 0,
-			}),
-			exit: assign({
-				configWriteProgress: () => null,
-			}),
+			entry: [
+				assign({
+					configWriteProgress: () => 0,
+				}),
+				"startModemSound",
+			],
+			exit: [
+				assign({
+					configWriteProgress: () => null,
+				}),
+				"stopModemSound",
+			],
 			invoke: {
 				src: "writeConfiguration",
 				input: ({ context: { connection, deviceInfo } }) => ({
@@ -652,7 +661,6 @@ export const setupStateMachine = setup({
 				},
 				"configWrite.complete": {
 					target: "Finish_ShowingNextSteps",
-					actions: "playModemSound",
 				},
 				"configWrite.error": {
 					target: "Finish_ShowingError",
