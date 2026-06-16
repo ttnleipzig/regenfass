@@ -6,7 +6,10 @@ import {
 	normalizeAppKeyHexInput,
 	splitCanonicalHexPairs,
 } from "@/libs/hexKeyDisplay.ts";
-import { playSlotRevealSound } from "@/libs/slotRevealSound.ts";
+import {
+	playSlotRevealFinishSound,
+	warmUpSlotAudio,
+} from "@/libs/slotRevealSound.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
 import { BiRegularClipboard } from "solid-icons/bi";
@@ -37,6 +40,11 @@ const REEL_SPIN_EASING = "cubic-bezier(0.04, 0.72, 0.12, 1)";
 /** Short correction from overshoot to exact row. */
 const REEL_SETTLE_EASING = "cubic-bezier(0.33, 0, 0.25, 1)";
 
+const REEL_BASE_DURATION_MS = 720;
+const REEL_STAGGER_MS = 95;
+/** Start finish bings before the last reel lands. */
+const REVEAL_SOUND_EARLY_MS = 400;
+
 const SlotPairReel: Component<{
 	rows: string[];
 	reelIndex: number;
@@ -52,7 +60,7 @@ const SlotPairReel: Component<{
 			const rowCount = props.rows.length;
 			const endY = -(rowCount - 1) * REEL_ROW_PX;
 			const pastY = endY - REEL_OVERSHOOT_PX;
-			const duration = 720 + props.reelIndex * 95;
+			const duration = REEL_BASE_DURATION_MS + props.reelIndex * REEL_STAGGER_MS;
 			anim = el.animate(
 				[
 					{
@@ -102,11 +110,16 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	const [reelMatrix, setReelMatrix] = createSignal<string[][] | null>(null);
 	const [copied, setCopied] = createSignal(false);
 	let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
+	let finishSoundTimeout: ReturnType<typeof setTimeout> | undefined;
+	let finishSoundPlayed = false;
 
 	let finishedCount = 0;
 	let expectedReels = 0;
 
 	const resetSpinState = () => {
+		clearTimeout(finishSoundTimeout);
+		finishSoundTimeout = undefined;
+		finishSoundPlayed = false;
 		setSpinning(false);
 		setReelMatrix(null);
 		finishedCount = 0;
@@ -125,13 +138,30 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	const columnLayoutActive = () =>
 		!spinInProgress() && (revealed() || canonicalPairs().length > 0);
 
+	const playFinishSoundOnce = () => {
+		if (finishSoundPlayed) return;
+		finishSoundPlayed = true;
+		playSlotRevealFinishSound();
+	};
+
 	const onReelFinished = () => {
 		finishedCount += 1;
 		if (finishedCount >= expectedReels) {
-			playSlotRevealSound();
+			clearTimeout(finishSoundTimeout);
+			finishSoundTimeout = undefined;
+			playFinishSoundOnce();
 			resetSpinState();
 			setRevealed(true);
 		}
+	};
+
+	const scheduleFinishSound = (reelCount: number) => {
+		const lastReelMs = REEL_BASE_DURATION_MS + (reelCount - 1) * REEL_STAGGER_MS;
+		const soundDelayMs = Math.max(0, lastReelMs - REVEAL_SOUND_EARLY_MS);
+		finishSoundTimeout = setTimeout(() => {
+			finishSoundTimeout = undefined;
+			playFinishSoundOnce();
+		}, soundDelayMs);
 	};
 
 	const startRevealSpin = () => {
@@ -146,6 +176,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 		const matrix = pairs.map((pair, i) => buildSlotReelRows(pair, i));
 		setReelMatrix(matrix);
 		setSpinning(true);
+		scheduleFinishSound(pairs.length);
 	};
 
 	const handleToggleReveal = () => {
@@ -155,6 +186,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 			return;
 		}
 		if (spinInProgress()) return;
+		warmUpSlotAudio();
 		startRevealSpin();
 	};
 

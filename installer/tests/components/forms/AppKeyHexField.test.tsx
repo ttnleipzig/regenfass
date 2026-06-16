@@ -3,6 +3,14 @@ import { render, screen, fireEvent, cleanup, waitFor } from "@solidjs/testing-li
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
 import { formatAppKeyHexPairs } from "@/libs/hexKeyDisplay.ts";
 
+const warmUpSlotAudio = vi.fn();
+const playSlotRevealFinishSound = vi.fn();
+
+vi.mock("@/libs/slotRevealSound.ts", () => ({
+	warmUpSlotAudio: (...args: unknown[]) => warmUpSlotAudio(...args),
+	playSlotRevealFinishSound: (...args: unknown[]) => playSlotRevealFinishSound(...args),
+}));
+
 describe("AppKeyHexField", () => {
 	const key32 = "0123456789ABCDEF0123456789ABCDEF";
 	const onChange = vi.fn();
@@ -10,6 +18,8 @@ describe("AppKeyHexField", () => {
 	afterEach(() => {
 		cleanup();
 		onChange.mockClear();
+		warmUpSlotAudio.mockClear();
+		playSlotRevealFinishSound.mockClear();
 	});
 
 	it("shows formatted value in the input and a show/hide control", () => {
@@ -43,12 +53,14 @@ describe("AppKeyHexField", () => {
 		));
 		const btn = screen.getByRole("button", { name: "Show app key" });
 		fireEvent.click(btn);
+		expect(warmUpSlotAudio).toHaveBeenCalledTimes(1);
 		await waitFor(
 			() => {
 				expect(screen.getByRole("button", { name: "Hide app key" })).toBeInTheDocument();
 			},
 			{ timeout: 3000 },
 		);
+		expect(playSlotRevealFinishSound).toHaveBeenCalledTimes(1);
 	});
 
 	it("reveals immediately when value is empty", async () => {

@@ -80,6 +80,11 @@ describe("Header", () => {
 		expect(toggleButton).toBeInTheDocument();
 	});
 
+	it("renders ButtonSoundToggle", () => {
+		renderWithRouter(() => <Header />);
+		expect(screen.getByLabelText("Mute sounds")).toBeInTheDocument();
+	});
+
 	it("applies correct container classes", () => {
 		const { container } = renderWithRouter(() => <Header />);
 		const header = container.querySelector("header");

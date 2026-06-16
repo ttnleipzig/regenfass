@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 import { A } from "@solidjs/router";
 import { ButtonModeToggle } from "../atoms/ButtonModeToggle.tsx";
+import { ButtonSoundToggle } from "../atoms/ButtonSoundToggle.tsx";
 import Link from "../atoms/Link.tsx";
 import { cn } from "@/libs/cn.ts";
 
@@ -40,7 +41,10 @@ const Header: Component = () => {
           </ul>
         </nav>
 
-        <ButtonModeToggle />
+        <div class="flex items-center gap-1">
+          <ButtonSoundToggle />
+          <ButtonModeToggle />
+        </div>
       </div>
     </header>
   );
