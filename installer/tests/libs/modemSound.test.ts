@@ -35,6 +35,7 @@ describe("modemSound", () => {
 	});
 
 	it("starts looping modem.mp3", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(createAudioElement);
 		vi.stubGlobal("Audio", AudioMock);
 
@@ -47,6 +48,7 @@ describe("modemSound", () => {
 	});
 
 	it("reuses the same audio element on repeat start while playing", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(createAudioElement);
 		vi.stubGlobal("Audio", AudioMock);
 
@@ -58,6 +60,7 @@ describe("modemSound", () => {
 	});
 
 	it("stopModemSound pauses and clears loop", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(createAudioElement);
 		vi.stubGlobal("Audio", AudioMock);
 

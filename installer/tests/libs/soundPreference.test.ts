@@ -15,8 +15,8 @@ describe("soundPreference", () => {
 		resetSoundPreferenceForTests();
 	});
 
-	it("defaults to sounds enabled", () => {
-		expect(isSoundEnabled()).toBe(true);
+	it("defaults to sounds disabled", () => {
+		expect(isSoundEnabled()).toBe(false);
 	});
 
 	it("updates in-memory preference when disabled", () => {
@@ -34,9 +34,9 @@ describe("soundPreference", () => {
 	});
 
 	it("toggleSoundEnabled flips the value", () => {
-		expect(toggleSoundEnabled()).toBe(false);
-		expect(isSoundEnabled()).toBe(false);
 		expect(toggleSoundEnabled()).toBe(true);
 		expect(isSoundEnabled()).toBe(true);
+		expect(toggleSoundEnabled()).toBe(false);
+		expect(isSoundEnabled()).toBe(false);
 	});
 });

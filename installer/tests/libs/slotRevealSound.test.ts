@@ -73,6 +73,7 @@ describe("slotRevealSound", () => {
 	});
 
 	it("warmUpSlotAudio creates a shared AudioContext once", () => {
+		setSoundEnabled(true);
 		const { MockAudioContext, resume } = installMockAudioContext();
 
 		warmUpSlotAudio();
@@ -83,6 +84,7 @@ describe("slotRevealSound", () => {
 	});
 
 	it("playSlotRevealFinishSound schedules five high-pitch bings", () => {
+		setSoundEnabled(true);
 		const { createOscillator, oscillators } = installMockAudioContext();
 
 		playSlotRevealFinishSound();

@@ -16,6 +16,7 @@ describe("errorSound", () => {
 	});
 
 	it("plays the error.mp3 sample", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(() => ({
 			preload: "",
 			currentTime: 0,
@@ -30,6 +31,7 @@ describe("errorSound", () => {
 	});
 
 	it("reuses the same audio element on repeat play", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(() => ({
 			preload: "",
 			currentTime: 0,

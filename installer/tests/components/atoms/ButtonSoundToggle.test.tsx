@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { ButtonSoundToggle } from "@/components/atoms/ButtonSoundToggle.tsx";
-import { resetSoundPreferenceForTests } from "@/libs/soundPreference.ts";
+import { resetSoundPreferenceForTests, setSoundEnabled } from "@/libs/soundPreference.ts";
 
 describe("ButtonSoundToggle", () => {
 	beforeEach(() => {
@@ -13,19 +13,8 @@ describe("ButtonSoundToggle", () => {
 		resetSoundPreferenceForTests();
 	});
 
-	it("renders mute control with sounds enabled by default", () => {
+	it("renders unmute control when sounds are disabled by default", () => {
 		render(() => <ButtonSoundToggle />);
-		expect(screen.getByRole("button", { name: /mute sounds/i })).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: /mute sounds/i })).toHaveAttribute(
-			"aria-pressed",
-			"false",
-		);
-	});
-
-	it("toggles to unmute label when clicked", () => {
-		render(() => <ButtonSoundToggle />);
-		const button = screen.getByRole("button", { name: /mute sounds/i });
-		fireEvent.click(button);
 		expect(screen.getByRole("button", { name: /unmute sounds/i })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /unmute sounds/i })).toHaveAttribute(
 			"aria-pressed",
@@ -33,11 +22,22 @@ describe("ButtonSoundToggle", () => {
 		);
 	});
 
-	it("restores mute label on second click", () => {
+	it("toggles to mute label when sounds are enabled", () => {
+		setSoundEnabled(true);
 		render(() => <ButtonSoundToggle />);
-		const button = screen.getByRole("button", { name: /mute sounds/i });
-		fireEvent.click(button);
-		fireEvent.click(screen.getByRole("button", { name: /unmute sounds/i }));
 		expect(screen.getByRole("button", { name: /mute sounds/i })).toBeInTheDocument();
+		fireEvent.click(screen.getByRole("button", { name: /mute sounds/i }));
+		expect(screen.getByRole("button", { name: /unmute sounds/i })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /unmute sounds/i })).toHaveAttribute(
+			"aria-pressed",
+			"true",
+		);
+	});
+
+	it("restores unmute label on second click from muted default", () => {
+		render(() => <ButtonSoundToggle />);
+		fireEvent.click(screen.getByRole("button", { name: /unmute sounds/i }));
+		fireEvent.click(screen.getByRole("button", { name: /mute sounds/i }));
+		expect(screen.getByRole("button", { name: /unmute sounds/i })).toBeInTheDocument();
 	});
 });

@@ -5,10 +5,10 @@ const STORAGE_KEY = "regenfass-sound-enabled";
 function readStored(): boolean {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
-		if (raw === null) return true;
+		if (raw === null) return false;
 		return raw === "true";
 	} catch {
-		return true;
+		return false;
 	}
 }
 
@@ -43,7 +43,7 @@ export function toggleSoundEnabled(): boolean {
 
 /** @internal Reset preference between tests. */
 export function resetSoundPreferenceForTests(): void {
-	setSoundEnabledSignal(true);
+	setSoundEnabledSignal(false);
 	try {
 		localStorage.removeItem(STORAGE_KEY);
 	} catch {

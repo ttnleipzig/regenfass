@@ -80,9 +80,10 @@ describe("Header", () => {
 		expect(toggleButton).toBeInTheDocument();
 	});
 
-	it("renders ButtonSoundToggle", () => {
+	it("does not render ButtonSoundToggle", () => {
 		renderWithRouter(() => <Header />);
-		expect(screen.getByLabelText("Mute sounds")).toBeInTheDocument();
+		expect(screen.queryByLabelText("Mute sounds")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Unmute sounds")).not.toBeInTheDocument();
 	});
 
 	it("applies correct container classes", () => {

@@ -16,6 +16,7 @@ describe("cameraCopySound", () => {
 	});
 
 	it("plays the photo.mp3 sample", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(() => ({
 			preload: "",
 			currentTime: 0,
@@ -30,6 +31,7 @@ describe("cameraCopySound", () => {
 	});
 
 	it("reuses the same audio element on repeat play", () => {
+		setSoundEnabled(true);
 		const AudioMock = vi.fn(() => ({
 			preload: "",
 			currentTime: 0,
