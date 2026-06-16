@@ -3,6 +3,12 @@ import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepConfigEditing from "@/components/molecules/steps/StepConfigEditing.tsx";
 import { formatAppKeyHexPairs } from "@/libs/hexKeyDisplay.ts";
 
+const playErrorSound = vi.fn();
+
+vi.mock("@/libs/errorSound.ts", () => ({
+	playErrorSound: (...args: unknown[]) => playErrorSound(...args),
+}));
+
 const MOCK_APP_KEY_32 =
   "0123456789ABCDEF0123456789ABCDEF" as const;
 
@@ -24,6 +30,7 @@ describe("StepConfigEditing", () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    playErrorSound.mockClear();
   });
 
   it("renders appEUI field", () => {
@@ -207,6 +214,7 @@ describe("StepConfigEditing", () => {
     fireEvent.change(fileInput);
 
     expect(await screen.findByText("Invalid JSON format")).toBeInTheDocument();
+    expect(playErrorSound).toHaveBeenCalledTimes(1);
     expect(mockEmitEvent).not.toHaveBeenCalled();
   });
 

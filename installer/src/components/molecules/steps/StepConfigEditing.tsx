@@ -10,6 +10,7 @@ import {
 	downloadConfigAsJson,
 	readConfigFromFile,
 } from "@/libs/downloadConfig.ts";
+import { playErrorSound } from "@/libs/errorSound.ts";
 import { BiRegularClipboard } from "solid-icons/bi";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
@@ -139,6 +140,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 				...(configVersion != null ? { configVersion } : {}),
 			});
 		} catch (error) {
+			playErrorSound();
 			if (error instanceof ConfigFileError) {
 				setImportError(error.message);
 			} else {

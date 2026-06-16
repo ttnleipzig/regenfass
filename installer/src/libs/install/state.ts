@@ -10,6 +10,7 @@ import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
+import { playErrorSound } from "@/libs/errorSound.ts";
 import { playModemSound } from "@/libs/modemSound.ts";
 import { assign, fromCallback, fromPromise, setup } from "xstate";
 
@@ -146,6 +147,9 @@ export const setupStateMachine = setup({
 	actions: {
 		playModemSound: () => {
 			playModemSound();
+		},
+		playErrorSound: () => {
+			playErrorSound();
 		},
 	},
 	actors: {
@@ -664,6 +668,7 @@ export const setupStateMachine = setup({
 			type: "final",
 		},
 		Finish_ShowingError: {
+			entry: "playErrorSound",
 			on: {
 				restart: {
 					target: "Start_WaitingForUser",
