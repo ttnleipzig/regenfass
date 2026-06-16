@@ -10,6 +10,7 @@ import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
+import { playModemSound } from "@/libs/modemSound.ts";
 import { assign, fromCallback, fromPromise, setup } from "xstate";
 
 const url =
@@ -141,6 +142,11 @@ export const setupStateMachine = setup({
 			| { type: "installFlash.progress"; progress: number }
 			| { type: "installFlash.complete"; output: [string, SCPAdapter] }
 			| { type: "installFlash.error"; error: unknown },
+	},
+	actions: {
+		playModemSound: () => {
+			playModemSound();
+		},
 	},
 	actors: {
 		checkIfWebSerialIsSupported: fromPromise(
@@ -450,9 +456,12 @@ export const setupStateMachine = setup({
 				}),
 				onDone: {
 					target: "Install_WaitingForInstallationMethodChoice",
-					actions: assign({
-						deviceInfo: ({ event: { output } }) => output,
-					}),
+					actions: [
+						assign({
+							deviceInfo: ({ event: { output } }) => output,
+						}),
+						"playModemSound",
+					],
 				},
 				onError: {
 					target: "Install_WaitingForInstallationMethodChoice",
@@ -515,27 +524,31 @@ export const setupStateMachine = setup({
 				},
 				"installFlash.complete": {
 					target: "Install_MigratingConfiguration",
-					actions: assign({
-						deviceInfo: ({ event, context: { deviceInfo } }) => {
-							const output = event.output;
-							return {
-								config:
-									deviceInfo.config ??
-									getLatestConfigVersion().getDefaultValues(),
-								configVersion:
-									deviceInfo.configVersion ?? getLatestConfigVersion().version,
-								firmwareVersion: output[0],
-							};
-						},
-						connection: ({ context: { connection }, event }) => {
-							const output = event.output;
-							const result: [SerialPort, SCPAdapter] = [
-								connection![0],
-								output[1],
-							];
-							return result;
-						},
-					}),
+					actions: [
+						assign({
+							deviceInfo: ({ event, context: { deviceInfo } }) => {
+								const output = event.output;
+								return {
+									config:
+										deviceInfo.config ??
+										getLatestConfigVersion().getDefaultValues(),
+									configVersion:
+										deviceInfo.configVersion ??
+										getLatestConfigVersion().version,
+									firmwareVersion: output[0],
+								};
+							},
+							connection: ({ context: { connection }, event }) => {
+								const output = event.output;
+								const result: [SerialPort, SCPAdapter] = [
+									connection![0],
+									output[1],
+								];
+								return result;
+							},
+						}),
+						"playModemSound",
+					],
 				},
 				"installFlash.error": {
 					target: "Finish_ShowingError",
@@ -635,6 +648,7 @@ export const setupStateMachine = setup({
 				},
 				"configWrite.complete": {
 					target: "Finish_ShowingNextSteps",
+					actions: "playModemSound",
 				},
 				"configWrite.error": {
 					target: "Finish_ShowingError",
