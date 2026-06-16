@@ -10,6 +10,7 @@ describe("StepConfigEditing", () => {
   const mockState = {
     context: {
       deviceInfo: {
+        configVersion: 1,
         config: {
           appEUI: "AAAABBBBCCCCDDDD",
           appKey: MOCK_APP_KEY_32,
@@ -163,13 +164,50 @@ describe("StepConfigEditing", () => {
     });
   });
 
-  it("calls emitEvent when save to file button is clicked", () => {
+  it("starts json download with current config when save to file is clicked", async () => {
+    const createObjectURL = vi.fn().mockReturnValue("blob:mock-url");
+    const revokeObjectURL = vi.fn();
+    const click = vi.fn();
+    const originalCreateElement = document.createElement.bind(document);
+
+    vi.stubGlobal("URL", { createObjectURL, revokeObjectURL });
+    vi.spyOn(document, "createElement").mockImplementation((tagName, options) => {
+      if (tagName === "a") {
+        return {
+          href: "",
+          download: "",
+          click,
+        } as HTMLAnchorElement;
+      }
+      return originalCreateElement(tagName, options);
+    });
+
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
-    const button = screen.getByRole("button", { name: "save to file" });
-    fireEvent.click(button);
-    expect(mockEmitEvent).toHaveBeenCalledWith({ type: "config.saveToFile" });
+    fireEvent.click(screen.getByRole("button", { name: "save to file" }));
+
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(click).toHaveBeenCalledTimes(1);
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
+
+    const blob = createObjectURL.mock.calls[0][0] as Blob;
+    const text = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(blob);
+    });
+    expect(JSON.parse(text)).toEqual({
+      configVersion: 1,
+      appEUI: "AAAABBBBCCCCDDDD",
+      appKey: MOCK_APP_KEY_32,
+      devEUI: "0123456789ABCDEF",
+    });
+    expect(mockEmitEvent).not.toHaveBeenCalled();
+
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it("renders appEUI copy button", () => {

@@ -10,7 +10,7 @@ import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
-import { assign, emit, fromCallback, fromPromise, setup } from "xstate";
+import { assign, fromCallback, fromPromise, setup } from "xstate";
 
 const url =
 	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
@@ -132,7 +132,6 @@ export const setupStateMachine = setup({
 			  }
 			| { type: "config.clear" }
 			| { type: "config.loadFromFile"; config: Config }
-			| { type: "config.saveToFile" }
 			| { type: "config.write" }
 			| { type: "config.next" }
 			| { type: "restart" }
@@ -142,11 +141,6 @@ export const setupStateMachine = setup({
 			| { type: "installFlash.progress"; progress: number }
 			| { type: "installFlash.complete"; output: [string, SCPAdapter] }
 			| { type: "installFlash.error"; error: unknown },
-		emitted: {} as {
-			type: "config.saveToFile";
-			configVersion: number;
-			config: Config;
-		},
 	},
 	actors: {
 		checkIfWebSerialIsSupported: fromPromise(
@@ -609,13 +603,6 @@ export const setupStateMachine = setup({
 							config,
 						}),
 					}),
-				},
-				"config.saveToFile": {
-					actions: emit(({ context: { deviceInfo } }) => ({
-						type: "config.saveToFile",
-						configVersion: deviceInfo.configVersion!,
-						config: deviceInfo.config!,
-					})),
 				},
 				"config.next": {
 					target: "Config_WritingConfiguration",

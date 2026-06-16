@@ -5,6 +5,7 @@ import {
 	IconFileImport,
 } from "@tabler/icons-solidjs";
 import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
+import { downloadConfigAsJson } from "@/libs/downloadConfig.ts";
 import { BiRegularClipboard } from "solid-icons/bi";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
@@ -214,7 +215,12 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						class="gap-1.5"
 						variant="outline"
 						size="sm"
-						onClick={() => emitEvent({ type: "config.saveToFile" })}
+						onClick={() =>
+							downloadConfigAsJson(
+								state.context.deviceInfo.config,
+								state.context.deviceInfo.configVersion
+							)
+						}
 					>
 						<IconFileExport aria-hidden={true} size={16} stroke="1.75" />
 						save to file
