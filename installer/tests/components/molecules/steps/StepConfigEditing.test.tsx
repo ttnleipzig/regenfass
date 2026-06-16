@@ -172,6 +172,75 @@ describe("StepConfigEditing", () => {
     expect(mockEmitEvent).toHaveBeenCalledWith({ type: "config.saveToFile" });
   });
 
+  it("renders appEUI copy button", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    expect(
+      screen.getByRole("button", { name: /copy appEUI to clipboard/i })
+    ).toBeInTheDocument();
+  });
+
+  it("renders devEUI copy button", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    expect(
+      screen.getByRole("button", { name: /copy devEUI to clipboard/i })
+    ).toBeInTheDocument();
+  });
+
+  it("copies appEUI to clipboard as uppercase hex", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    const button = screen.getByRole("button", {
+      name: /copy appEUI to clipboard/i,
+    });
+    fireEvent.click(button);
+
+    expect(writeText).toHaveBeenCalledWith("AAAABBBBCCCCDDDD");
+  });
+
+  it("copies devEUI to clipboard as uppercase hex", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    const button = screen.getByRole("button", {
+      name: /copy devEUI to clipboard/i,
+    });
+    fireEvent.click(button);
+
+    expect(writeText).toHaveBeenCalledWith("0123456789ABCDEF");
+  });
+
+  it("disables devEUI copy button when value is empty", () => {
+    const emptyDevEUIState = {
+      context: {
+        deviceInfo: {
+          config: {
+            ...mockState.context.deviceInfo.config,
+            devEUI: "",
+          },
+        },
+      },
+    };
+
+    render(() => (
+      <StepConfigEditing state={emptyDevEUIState} emitEvent={mockEmitEvent} />
+    ));
+    const button = screen.getByRole("button", {
+      name: /copy devEUI to clipboard/i,
+    });
+    expect(button).toBeDisabled();
+  });
+
   it("calls emitEvent when save to device button is clicked", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />

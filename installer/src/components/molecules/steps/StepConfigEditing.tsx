@@ -4,7 +4,8 @@ import {
 	IconFileExport,
 	IconFileImport,
 } from "@tabler/icons-solidjs";
-import { For } from "solid-js";
+import { BiRegularClipboard } from "solid-icons/bi";
+import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
 import { TextFieldRoot } from "@/components/forms/TextField.tsx";
@@ -28,7 +29,32 @@ function HexOtp16(props: {
 	field: HexOtp16Field;
 	value: string;
 	onValueChange: (value: string) => void;
+	showCopyButton?: boolean;
 }) {
+	const [copied, setCopied] = createSignal(false);
+	let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
+
+	const copyToClipboard = async () => {
+		if (!props.value) return;
+		try {
+			await navigator.clipboard.writeText(props.value.toUpperCase());
+			setCopied(true);
+			clearTimeout(copiedTimeout);
+			copiedTimeout = setTimeout(() => setCopied(false), 2000);
+		} catch (err) {
+			console.error(`Failed to copy ${props.labelText}:`, err);
+		}
+	};
+
+	onCleanup(() => {
+		clearTimeout(copiedTimeout);
+	});
+
+	const copyLabel = () =>
+		copied()
+			? `Copied ${props.labelText}`
+			: `Copy ${props.labelText} to clipboard`;
+
 	return (
 		<>
 			<label
@@ -39,27 +65,42 @@ function HexOtp16(props: {
 					{props.labelText}
 				</span>
 			</label>
-			<OTPField
-				class="mt-2 gap-1.5"
-				maxLength={16}
-				value={props.value}
-				onValueChange={props.onValueChange}
-			>
-				<OTPFieldInput
-					id={props.inputId}
-					name={props.field}
-					pattern="^[0-9A-Fa-f]*$"
-					autocomplete="off"
-				/>
-				<For each={[0, 2, 4, 6, 8, 10, 12, 14]}>
-					{(pairStart) => (
-						<OTPFieldGroup>
-							<OTPFieldSlot index={pairStart} />
-							<OTPFieldSlot index={pairStart + 1} />
-						</OTPFieldGroup>
-					)}
-				</For>
-			</OTPField>
+			<div class="mt-2 flex items-center gap-1.5">
+				<OTPField
+					class="gap-1.5"
+					maxLength={16}
+					value={props.value}
+					onValueChange={props.onValueChange}
+				>
+					<OTPFieldInput
+						id={props.inputId}
+						name={props.field}
+						pattern="^[0-9A-Fa-f]*$"
+						autocomplete="off"
+					/>
+					<For each={[0, 2, 4, 6, 8, 10, 12, 14]}>
+						{(pairStart) => (
+							<OTPFieldGroup>
+								<OTPFieldSlot index={pairStart} />
+								<OTPFieldSlot index={pairStart + 1} />
+							</OTPFieldGroup>
+						)}
+					</For>
+				</OTPField>
+				<Show when={props.showCopyButton}>
+					<Button
+						type="button"
+						variant="ghost"
+						size="icon"
+						class="h-9 w-9 shrink-0 text-muted-foreground"
+						disabled={!props.value}
+						aria-label={copyLabel()}
+						onClick={copyToClipboard}
+					>
+						<BiRegularClipboard aria-hidden={true} size={16} />
+					</Button>
+				</Show>
+			</div>
 		</>
 	);
 }
@@ -84,6 +125,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						inputId="appEUI-otp"
 						field="appEUI"
 						value={state.context.deviceInfo.config.appEUI}
+						showCopyButton
 						onValueChange={(value) =>
 							emitEvent({
 								type: "config.changeField",
@@ -100,6 +142,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						inputId="devEUI-otp"
 						field="devEUI"
 						value={state.context.deviceInfo.config.devEUI}
+						showCopyButton
 						onValueChange={(value) =>
 							emitEvent({
 								type: "config.changeField",
