@@ -241,6 +241,29 @@ describe("StepConfigEditing", () => {
     expect(button).toBeDisabled();
   });
 
+  it("renders appKey copy button", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    expect(
+      screen.getByRole("button", { name: /copy appKey to clipboard/i })
+    ).toBeInTheDocument();
+  });
+
+  it("copies appKey to clipboard as uppercase hex", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    fireEvent.click(
+      screen.getByRole("button", { name: /copy appKey to clipboard/i })
+    );
+
+    expect(writeText).toHaveBeenCalledWith(MOCK_APP_KEY_32);
+  });
+
   it("calls emitEvent when save to device button is clicked", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />

@@ -9,6 +9,7 @@ import {
 import { playSlotRevealSound } from "@/libs/slotRevealSound.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
+import { BiRegularClipboard } from "solid-icons/bi";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 
@@ -18,6 +19,7 @@ export interface AppKeyHexFieldProps {
 	value: string;
 	onCanonicalChange: (canonical: string) => void;
 	class?: string;
+	showCopyButton?: boolean;
 }
 
 /** Row height must match `h-10` (40px) for translate distance. */
@@ -90,11 +92,16 @@ const SlotPairReel: Component<{
 	);
 };
 
+/** Width of 16 hex pair columns (`w-9` each), aligned with AppEUI/DevEUI slot rows. */
+const APP_KEY_HEX_COLUMNS_CLASS = "w-[36rem]";
+
 /** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
 export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	const [revealed, setRevealed] = createSignal(false);
 	const [spinning, setSpinning] = createSignal(false);
 	const [reelMatrix, setReelMatrix] = createSignal<string[][] | null>(null);
+	const [copied, setCopied] = createSignal(false);
+	let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	let finishedCount = 0;
 	let expectedReels = 0;
@@ -108,6 +115,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 
 	onCleanup(() => {
 		resetSpinState();
+		clearTimeout(copiedTimeout);
 	});
 
 	const display = () => formatAppKeyHexPairs(props.value ?? "");
@@ -150,14 +158,30 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 		startRevealSpin();
 	};
 
+	const copyLabel = () =>
+		copied() ? "Copied appKey" : "Copy appKey to clipboard";
+
+	const copyToClipboard = async () => {
+		const canonical = props.value ?? "";
+		if (!canonical) return;
+		try {
+			await navigator.clipboard.writeText(canonical.toUpperCase());
+			setCopied(true);
+			clearTimeout(copiedTimeout);
+			copiedTimeout = setTimeout(() => setCopied(false), 2000);
+		} catch (err) {
+			console.error("Failed to copy appKey:", err);
+		}
+	};
+
 	return (
 		<div
 			class={cn(
-				"flex h-10 w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+				"flex h-10 w-fit max-w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
 				props.class,
 			)}
 		>
-			<div class="relative min-h-10 min-w-0 flex-1">
+			<div class={cn("relative min-h-10 shrink-0", APP_KEY_HEX_COLUMNS_CLASS)}>
 				<Show when={!revealed() && !spinInProgress() && canonicalPairs().length > 0}>
 					<div
 						aria-hidden="true"
@@ -219,6 +243,17 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					}}
 				/>
 			</div>
+			<Show when={props.showCopyButton}>
+				<button
+					type="button"
+					disabled={spinInProgress() || !(props.value ?? "")}
+					class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
+					aria-label={copyLabel()}
+					onClick={copyToClipboard}
+				>
+					<BiRegularClipboard aria-hidden={true} size={16} />
+				</button>
+			</Show>
 			<button
 				type="button"
 				disabled={spinInProgress()}

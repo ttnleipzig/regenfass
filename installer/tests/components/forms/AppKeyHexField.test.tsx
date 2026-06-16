@@ -72,4 +72,57 @@ describe("AppKeyHexField", () => {
 		fireEvent.input(input, { target: { value: "AB CD" } });
 		expect(onChange).toHaveBeenCalledWith("ABCD");
 	});
+
+	it("renders copy button when showCopyButton is set", () => {
+		render(() => (
+			<>
+				<label for="ak">appKey</label>
+				<AppKeyHexField
+					id="ak"
+					name="appKey"
+					value={key32}
+					showCopyButton
+					onCanonicalChange={onChange}
+				/>
+			</>
+		));
+		expect(
+			screen.getByRole("button", { name: /copy appKey to clipboard/i }),
+		).toBeInTheDocument();
+	});
+
+	it("copies appKey as uppercase hex", async () => {
+		const writeText = vi.fn().mockResolvedValue(undefined);
+		Object.assign(navigator, { clipboard: { writeText } });
+
+		render(() => (
+			<AppKeyHexField
+				id="ak"
+				name="appKey"
+				value={key32}
+				showCopyButton
+				onCanonicalChange={onChange}
+			/>
+		));
+		fireEvent.click(
+			screen.getByRole("button", { name: /copy appKey to clipboard/i }),
+		);
+
+		expect(writeText).toHaveBeenCalledWith(key32);
+	});
+
+	it("disables copy button when value is empty", () => {
+		render(() => (
+			<AppKeyHexField
+				id="ak"
+				name="appKey"
+				value=""
+				showCopyButton
+				onCanonicalChange={onChange}
+			/>
+		));
+		expect(
+			screen.getByRole("button", { name: /copy appKey to clipboard/i }),
+		).toBeDisabled();
+	});
 });

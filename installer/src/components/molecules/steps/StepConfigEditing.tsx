@@ -165,6 +165,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 							id="appKey-input"
 							name="appKey"
 							value={state.context.deviceInfo.config.appKey ?? ""}
+							showCopyButton
 							onCanonicalChange={(next) => {
 								if (next !== (state.context.deviceInfo.config.appKey ?? "")) {
 									emitEvent({
