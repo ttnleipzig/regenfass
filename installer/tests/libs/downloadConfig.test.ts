@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { downloadConfigAsJson } from "@/libs/downloadConfig.ts";
+import {
+	ConfigFileError,
+	downloadConfigAsJson,
+	parseConfigFileContent,
+	readConfigFromFile,
+} from "@/libs/downloadConfig.ts";
 
 async function readBlobText(blob: Blob): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -101,5 +106,117 @@ describe("downloadConfigAsJson", () => {
 
 		const anchor = document.createElement("a");
 		expect(anchor.download).toBe("custom-config.json");
+	});
+});
+
+describe("parseConfigFileContent", () => {
+	const validPayload = {
+		configVersion: 1,
+		appEUI: "aaaabbbbccccdddd",
+		appKey: "0123456789abcdef0123456789abcdef",
+		devEUI: "0123456789abcdef",
+	};
+
+	it("parses valid export payload with configVersion", () => {
+		expect(parseConfigFileContent(JSON.stringify(validPayload))).toEqual({
+			configVersion: 1,
+			config: {
+				appEUI: "AAAABBBBCCCCDDDD",
+				appKey: "0123456789ABCDEF0123456789ABCDEF",
+				devEUI: "0123456789ABCDEF",
+			},
+		});
+	});
+
+	it("parses credentials-only json without configVersion", () => {
+		const { configVersion: _, ...credentialsOnly } = validPayload;
+		expect(parseConfigFileContent(JSON.stringify(credentialsOnly))).toEqual({
+			config: {
+				appEUI: "AAAABBBBCCCCDDDD",
+				appKey: "0123456789ABCDEF0123456789ABCDEF",
+				devEUI: "0123456789ABCDEF",
+			},
+		});
+	});
+
+	it("ignores unknown extra keys", () => {
+		expect(
+			parseConfigFileContent(
+				JSON.stringify({ ...validPayload, firmwareVersion: "1.0.0" })
+			)
+		).toEqual({
+			configVersion: 1,
+			config: {
+				appEUI: "AAAABBBBCCCCDDDD",
+				appKey: "0123456789ABCDEF0123456789ABCDEF",
+				devEUI: "0123456789ABCDEF",
+			},
+		});
+	});
+
+	it("rejects invalid json", () => {
+		expect(() => parseConfigFileContent("not json")).toThrow(ConfigFileError);
+		expect(() => parseConfigFileContent("not json")).toThrow(
+			"Invalid JSON format"
+		);
+	});
+
+	it("rejects missing credential fields", () => {
+		expect(() =>
+			parseConfigFileContent(
+				JSON.stringify({
+					appEUI: "AAAABBBBCCCCDDDD",
+					devEUI: "0123456789ABCDEF",
+				})
+			)
+		).toThrow("Missing or invalid appKey");
+	});
+
+	it("rejects wrong hex lengths", () => {
+		expect(() =>
+			parseConfigFileContent(
+				JSON.stringify({
+					...validPayload,
+					appEUI: "AAAA",
+				})
+			)
+		).toThrow("appEUI must be 16 hex digits");
+	});
+
+	it("rejects unsupported configVersion", () => {
+		expect(() =>
+			parseConfigFileContent(
+				JSON.stringify({
+					...validPayload,
+					configVersion: 99,
+				})
+			)
+		).toThrow("Unsupported config version: 99");
+	});
+});
+
+describe("readConfigFromFile", () => {
+	it("reads and parses a json file", async () => {
+		const file = new File(
+			[
+				JSON.stringify({
+					configVersion: 1,
+					appEUI: "AAAABBBBCCCCDDDD",
+					appKey: "0123456789ABCDEF0123456789ABCDEF",
+					devEUI: "0123456789ABCDEF",
+				}),
+			],
+			"regenfass-config.json",
+			{ type: "application/json" }
+		);
+
+		await expect(readConfigFromFile(file)).resolves.toEqual({
+			configVersion: 1,
+			config: {
+				appEUI: "AAAABBBBCCCCDDDD",
+				appKey: "0123456789ABCDEF0123456789ABCDEF",
+				devEUI: "0123456789ABCDEF",
+			},
+		});
 	});
 });

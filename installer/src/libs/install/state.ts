@@ -131,7 +131,7 @@ export const setupStateMachine = setup({
 					value: string;
 			  }
 			| { type: "config.clear" }
-			| { type: "config.loadFromFile"; config: Config }
+			| { type: "config.loadFromFile"; config: Config; configVersion?: number }
 			| { type: "config.write" }
 			| { type: "config.next" }
 			| { type: "restart" }
@@ -598,9 +598,13 @@ export const setupStateMachine = setup({
 				},
 				"config.loadFromFile": {
 					actions: assign({
-						deviceInfo: ({ event: { config }, context: { deviceInfo } }) => ({
+						deviceInfo: ({
+							event: { config, configVersion },
+							context: { deviceInfo },
+						}) => ({
 							...deviceInfo,
 							config,
+							...(configVersion != null ? { configVersion } : {}),
 						}),
 					}),
 				},

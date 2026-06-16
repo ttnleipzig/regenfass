@@ -148,20 +148,66 @@ describe("StepConfigEditing", () => {
     expect(mockEmitEvent).toHaveBeenCalledWith({ type: "config.clear" });
   });
 
-  it("calls emitEvent when load from file button is clicked", () => {
+  it("loads config from json file and emits config.loadFromFile", async () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
     ));
-    const button = screen.getByRole("button", { name: "load from file" });
-    fireEvent.click(button);
-    expect(mockEmitEvent).toHaveBeenCalledWith({
-      type: "config.loadFromFile",
-      config: {
-        appEUI: "",
-        appKey: "",
-        devEUI: "",
-      },
+
+    const fileInput = screen.getByLabelText(
+      "Load configuration from JSON file"
+    ) as HTMLInputElement;
+    const file = new File(
+      [
+        JSON.stringify({
+          configVersion: 1,
+          appEUI: "aaaabbbbccccdddd",
+          appKey: "0123456789abcdef0123456789abcdef",
+          devEUI: "0123456789abcdef",
+        }),
+      ],
+      "regenfass-config.json",
+      { type: "application/json" }
+    );
+
+    Object.defineProperty(fileInput, "files", {
+      configurable: true,
+      value: [file],
     });
+    fireEvent.change(fileInput);
+
+    await vi.waitFor(() => {
+      expect(mockEmitEvent).toHaveBeenCalledWith({
+        type: "config.loadFromFile",
+        config: {
+          appEUI: "AAAABBBBCCCCDDDD",
+          appKey: "0123456789ABCDEF0123456789ABCDEF",
+          devEUI: "0123456789ABCDEF",
+        },
+        configVersion: 1,
+      });
+    });
+  });
+
+  it("shows error when json file is invalid", async () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+
+    const fileInput = screen.getByLabelText(
+      "Load configuration from JSON file"
+    ) as HTMLInputElement;
+    const file = new File(["not json"], "config.json", {
+      type: "application/json",
+    });
+
+    Object.defineProperty(fileInput, "files", {
+      configurable: true,
+      value: [file],
+    });
+    fireEvent.change(fileInput);
+
+    expect(await screen.findByText("Invalid JSON format")).toBeInTheDocument();
+    expect(mockEmitEvent).not.toHaveBeenCalled();
   });
 
   it("starts json download with current config when save to file is clicked", async () => {

@@ -5,12 +5,21 @@ import {
 	IconFileImport,
 } from "@tabler/icons-solidjs";
 import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
-import { downloadConfigAsJson } from "@/libs/downloadConfig.ts";
+import {
+	ConfigFileError,
+	downloadConfigAsJson,
+	readConfigFromFile,
+} from "@/libs/downloadConfig.ts";
 import { BiRegularClipboard } from "solid-icons/bi";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
 import { TextFieldRoot } from "@/components/forms/TextField.tsx";
+import {
+	AlertDescription,
+	AlertInline,
+	AlertTitle,
+} from "@/components/molecules/AlertInline.tsx";
 import {
 	OTPField,
 	OTPFieldGroup,
@@ -108,6 +117,38 @@ function HexOtp16(props: {
 }
 
 export default function StepConfigEditing({ state, emitEvent }: StepProps) {
+	const [importError, setImportError] = createSignal<string | null>(null);
+	let fileInputRef: HTMLInputElement | undefined;
+
+	const handleLoadFromFileClick = () => {
+		setImportError(null);
+		fileInputRef?.click();
+	};
+
+	const handleFileInputChange = async (event: Event) => {
+		const input = event.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		setImportError(null);
+		try {
+			const { config, configVersion } = await readConfigFromFile(file);
+			emitEvent({
+				type: "config.loadFromFile",
+				config,
+				...(configVersion != null ? { configVersion } : {}),
+			});
+		} catch (error) {
+			if (error instanceof ConfigFileError) {
+				setImportError(error.message);
+			} else {
+				setImportError("Could not read the configuration file.");
+			}
+		} finally {
+			input.value = "";
+		}
+	};
+
 	return (
 		<div class="rounded-xl border border-border bg-card p-6 shadow-sm ring-1 ring-border/50 dark:ring-border/80">
 			<header class="mb-6 space-y-1.5 border-b border-border pb-5">
@@ -182,6 +223,24 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 				</TextFieldRoot>
 			</div>
 
+			<Show when={importError()}>
+				{(message) => (
+					<AlertInline variant="destructive" class="mt-6">
+						<AlertTitle>Could not load configuration</AlertTitle>
+						<AlertDescription>{message()}</AlertDescription>
+					</AlertInline>
+				)}
+			</Show>
+
+			<input
+				ref={fileInputRef}
+				type="file"
+				accept=".json,application/json"
+				class="sr-only"
+				aria-label="Load configuration from JSON file"
+				onChange={handleFileInputChange}
+			/>
+
 			<footer class="mt-8 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
 				<div class="flex flex-wrap gap-2">
 					<Button
@@ -197,16 +256,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						class="gap-1.5"
 						variant="outline"
 						size="sm"
-						onClick={() =>
-							emitEvent({
-								type: "config.loadFromFile",
-								config: {
-									appEUI: "",
-									appKey: "",
-									devEUI: "",
-								},
-							})
-						}
+						onClick={handleLoadFromFileClick}
 					>
 						<IconFileImport aria-hidden={true} size={16} stroke="1.75" />
 						load from file
