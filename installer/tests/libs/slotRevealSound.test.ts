@@ -5,6 +5,7 @@ import {
 	warmUpSlotAudio,
 } from "@/libs/slotRevealSound.ts";
 import { resetSoundPreferenceForTests, setSoundEnabled } from "@/libs/soundPreference.ts";
+import { resetWebAudioContextForTests } from "@/libs/webAudioContext.ts";
 
 const PARTIALS_PER_BING = 3;
 const FINISH_BING_COUNT = 5;
@@ -66,6 +67,7 @@ function installMockAudioContext() {
 describe("slotRevealSound", () => {
 	afterEach(() => {
 		resetSlotAudioForTests();
+		resetWebAudioContextForTests();
 		resetSoundPreferenceForTests();
 		vi.unstubAllGlobals();
 	});

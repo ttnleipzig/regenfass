@@ -23,4 +23,4 @@ This component accepts no props — it reads and updates the global sound prefer
 - Uses **solid-icons** volume icons: full when sounds are on, muted when off.
 - Placed in the header next to the dark/light mode toggle.
 - `aria-pressed` is `true` when sounds are muted.
-- All Web Audio effects (for example AppKey reel dings) respect this preference.
+- All Web Audio effects (for example AppKey reel dings and the camera shutter on copy) respect this preference.

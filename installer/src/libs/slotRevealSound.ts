@@ -1,4 +1,5 @@
 import { isSoundEnabled } from "@/libs/soundPreference.ts";
+import { getAudioContext, resumeAudioContext } from "@/libs/webAudioContext.ts";
 
 /** High boxing-bell strike (fixed pitch). */
 const BING_FREQ_HZ = 1568;
@@ -16,25 +17,10 @@ const BING_PEAK_GAIN = 0.11;
 const FINISH_BING_COUNT = 5;
 const FINISH_BING_INTERVAL_S = 0.22;
 
-let audioContext: AudioContext | null = null;
 let reverbDelay: DelayNode | null = null;
 let reverbFeedback: GainNode | null = null;
 let reverbWet: GainNode | null = null;
 let reverbDry: GainNode | null = null;
-
-function getAudioContext(): AudioContext | null {
-	try {
-		if (audioContext) return audioContext;
-		const AC =
-			window.AudioContext ||
-			(window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-		if (!AC) return null;
-		audioContext = new AC();
-		return audioContext;
-	} catch {
-		return null;
-	}
-}
 
 function getReverbChain(ctx: AudioContext): {
 	dry: GainNode;
@@ -86,8 +72,7 @@ function scheduleBing(ctx: AudioContext, startTime: number): void {
 /** Prime audio on user gesture so later reel dings are not blocked by autoplay policy. */
 export function warmUpSlotAudio(): void {
 	if (!isSoundEnabled()) return;
-	const ctx = getAudioContext();
-	if (ctx) void ctx.resume();
+	resumeAudioContext();
 }
 
 /** Five high boxing-bell bings with reverb near the end of the reveal animation. */
@@ -106,9 +91,8 @@ export function playSlotRevealFinishSound(): void {
 	}
 }
 
-/** @internal Reset shared context between tests. */
+/** @internal Reset reverb chain between tests. */
 export function resetSlotAudioForTests(): void {
-	audioContext = null;
 	reverbDelay = null;
 	reverbFeedback = null;
 	reverbWet = null;

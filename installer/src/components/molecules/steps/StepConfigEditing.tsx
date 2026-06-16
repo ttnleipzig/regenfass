@@ -4,6 +4,7 @@ import {
 	IconFileExport,
 	IconFileImport,
 } from "@tabler/icons-solidjs";
+import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import { BiRegularClipboard } from "solid-icons/bi";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
@@ -36,14 +37,14 @@ function HexOtp16(props: {
 
 	const copyToClipboard = async () => {
 		if (!props.value) return;
-		try {
-			await navigator.clipboard.writeText(props.value.toUpperCase());
-			setCopied(true);
-			clearTimeout(copiedTimeout);
-			copiedTimeout = setTimeout(() => setCopied(false), 2000);
-		} catch (err) {
-			console.error(`Failed to copy ${props.labelText}:`, err);
+		const ok = await copyTextToClipboard(props.value.toUpperCase());
+		if (!ok) {
+			console.error(`Failed to copy ${props.labelText}`);
+			return;
 		}
+		setCopied(true);
+		clearTimeout(copiedTimeout);
+		copiedTimeout = setTimeout(() => setCopied(false), 2000);
 	};
 
 	onCleanup(() => {

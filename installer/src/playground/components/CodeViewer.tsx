@@ -1,4 +1,5 @@
 import { Component, createEffect, createSignal } from "solid-js";
+import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import Prism from "prismjs";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-jsx";
@@ -17,13 +18,13 @@ const CodeViewer: Component<CodeViewerProps> = (props) => {
   let codeRef: HTMLElement | undefined;
 
   const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(props.code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy code:', err);
+    const ok = await copyTextToClipboard(props.code);
+    if (!ok) {
+      console.error("Failed to copy code");
+      return;
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   // Render highlighted HTML with Prism (keeps soft-wrap)

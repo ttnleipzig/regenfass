@@ -8,7 +8,7 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 - Shows **two hex digits at a time** with a **space** between pairs.
 - While hidden, hex digits are shown as **bullet dots** (`•`) **per column** (same bordered cells as after reveal), not one long line.
 - An **eye** button reveals the key with **vertical reels**—one column per hex pair—like a **spinning wheel**: random values **move fast at first, then ease off**, each column **rolls slightly past** the final pair and **springs back** so the real digits align exactly. Near the end of the spin, **five high-pitched boxing-bell bings** with a little **reverb** play (slightly before the last column stops; Web Audio API; silent if audio is unavailable or sounds are muted in the header).
-- Optional **copy** button (`showCopyButton`) copies the canonical AppKey as **uppercase hex** (32 characters, no spaces) to the clipboard.
+- Optional **copy** button (`showCopyButton`) copies the canonical AppKey as **uppercase hex** (32 characters, no spaces) to the clipboard and plays a short **camera shutter** sample (unless sounds are muted).
 - After the animation, the key **stays in the same bordered columns** as the reels (one cell per pair). The real `<input>` stays on top with **transparent text** so focus, caret, and typing still work.
 
 ## Props

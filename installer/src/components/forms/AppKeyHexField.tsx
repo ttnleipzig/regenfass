@@ -10,6 +10,7 @@ import {
 	playSlotRevealFinishSound,
 	warmUpSlotAudio,
 } from "@/libs/slotRevealSound.ts";
+import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
 import { BiRegularClipboard } from "solid-icons/bi";
@@ -196,14 +197,14 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	const copyToClipboard = async () => {
 		const canonical = props.value ?? "";
 		if (!canonical) return;
-		try {
-			await navigator.clipboard.writeText(canonical.toUpperCase());
-			setCopied(true);
-			clearTimeout(copiedTimeout);
-			copiedTimeout = setTimeout(() => setCopied(false), 2000);
-		} catch (err) {
-			console.error("Failed to copy appKey:", err);
+		const ok = await copyTextToClipboard(canonical.toUpperCase());
+		if (!ok) {
+			console.error("Failed to copy appKey");
+			return;
 		}
+		setCopied(true);
+		clearTimeout(copiedTimeout);
+		copiedTimeout = setTimeout(() => setCopied(false), 2000);
 	};
 
 	return (
