@@ -28,6 +28,22 @@ func (q *Queries) CreateDevice(ctx context.Context, deviceEui string) (CreateDev
 	return i, err
 }
 
+const ensureDeviceChannelMapping = `-- name: EnsureDeviceChannelMapping :exec
+INSERT INTO device_channel_mapping (device_id, channel_id, name)
+VALUES ($1, $2, 'Unmapped')
+ON CONFLICT (device_id, channel_id) DO NOTHING
+`
+
+type EnsureDeviceChannelMappingParams struct {
+	DeviceID  pgtype.UUID
+	ChannelID int16
+}
+
+func (q *Queries) EnsureDeviceChannelMapping(ctx context.Context, arg EnsureDeviceChannelMappingParams) error {
+	_, err := q.db.Exec(ctx, ensureDeviceChannelMapping, arg.DeviceID, arg.ChannelID)
+	return err
+}
+
 const getDeviceByEUI = `-- name: GetDeviceByEUI :one
 SELECT id, device_eui, rw_token, ro_token FROM device WHERE device_eui = $1
 `

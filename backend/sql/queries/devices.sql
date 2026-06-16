@@ -6,3 +6,8 @@ SELECT *, (ro_token = $1) AS is_readonly FROM device WHERE ro_token = $1 OR rw_t
 
 -- name: CreateDevice :one
 INSERT INTO device (device_eui) VALUES ($1) RETURNING id, rw_token, ro_token;
+
+-- name: EnsureDeviceChannelMapping :exec
+INSERT INTO device_channel_mapping (device_id, channel_id, name)
+VALUES ($1, $2, 'Unmapped')
+ON CONFLICT (device_id, channel_id) DO NOTHING;

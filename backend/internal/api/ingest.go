@@ -106,6 +106,7 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 	}
 
 	pointsToInsert := make([]db.InsertDeviceMeasurementsParams, 0, len(datapoints))
+	seenChannels := make(map[int16]struct{}, len(datapoints))
 	for _, point := range datapoints {
 		v, err := json.Marshal(point.Value)
 		if err != nil {
@@ -113,10 +114,22 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 			return fiber.NewError(fiber.StatusInternalServerError, "could not marshal point value")
 		}
 
+		channelID := int16(point.ChannelID)
+		if _, ok := seenChannels[channelID]; !ok {
+			if err := q.EnsureDeviceChannelMapping(c.Context(), db.EnsureDeviceChannelMappingParams{
+				DeviceID:  device.ID,
+				ChannelID: channelID,
+			}); err != nil {
+				a.log.Error().Err(err).Int16("channelID", channelID).Msg("could not ensure device channel mapping")
+				return fiber.NewError(fiber.StatusInternalServerError)
+			}
+			seenChannels[channelID] = struct{}{}
+		}
+
 		pointsToInsert = append(pointsToInsert, db.InsertDeviceMeasurementsParams{
 			DeviceID:        device.ID,
 			MeasurementType: int16(point.Type),
-			ChannelID:       int16(point.ChannelID),
+			ChannelID:       channelID,
 			Value:           v,
 			ReceivedAt:      utils.TimeToPG(body.UplinkMessage.ReceivedAt),
 		})
