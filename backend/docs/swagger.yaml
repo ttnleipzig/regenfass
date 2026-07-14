@@ -51,6 +51,25 @@ definitions:
         example: rw_token_123
         type: string
     type: object
+  api.DeviceMeasurement:
+    description: A measurement reading from one of a device's channels at a point
+      in time
+    properties:
+      channel_id:
+        example: 1
+        type: integer
+      channel_name:
+        example: Water Level
+        type: string
+      measurement_type:
+        example: 4
+        type: integer
+      received_at:
+        example: "2024-01-15T10:30:00Z"
+        type: string
+      value:
+        type: object
+    type: object
   api.GroupInfoDevice:
     description: Device information within a group
     properties:
@@ -114,6 +133,29 @@ definitions:
               type: object
             type: array
         type: object
+    type: object
+  api.RangedMeasurementsResponse:
+    description: 'Downsampled measurement series for a device over a time range. The
+      resolution adapts to the span: the wider the range, the coarser the buckets
+      (never finer than one point per minute, never coarser than three points per
+      day). `bucket_seconds` reports the bucket width that was actually used.'
+    properties:
+      bucket_seconds:
+        example: 302.4
+        type: number
+      channel_id:
+        example: 1
+        type: integer
+      end:
+        example: "2024-01-08T00:00:00Z"
+        type: string
+      measurements:
+        items:
+          $ref: '#/definitions/api.DeviceMeasurement'
+        type: array
+      start:
+        example: "2024-01-01T00:00:00Z"
+        type: string
     type: object
   api.RegisterDevicePayload:
     properties:
@@ -261,6 +303,59 @@ paths:
           schema:
             $ref: '#/definitions/api.HTTPError'
       summary: Update device fields
+      tags:
+      - devices
+  /device/{deviceToken}/measurements:
+    get:
+      consumes:
+      - application/json
+      description: 'Retrieve a device''s measurement history between `start` and `end`,
+        downsampled to a resolution that scales with the span. The endpoint aims for
+        roughly 2000 data points per channel: wider ranges are bucketed more coarsely
+        (never coarser than three points per day) and narrower ranges more finely
+        (never finer than one point per minute). Each bucket is represented by its
+        newest reading. Optionally restrict to a single channel. Authenticated by
+        either the read-write or read-only device token.'
+      parameters:
+      - description: Device token (read-write or read-only)
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Start of the range, inclusive (RFC3339)
+        in: query
+        name: start
+        required: true
+        type: string
+      - description: End of the range, inclusive (RFC3339)
+        in: query
+        name: end
+        required: true
+        type: string
+      - description: Only return measurements for this channel id
+        in: query
+        name: channel
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RangedMeasurementsResponse'
+        "400":
+          description: Invalid token or query parameter
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get downsampled device measurements over a time range
       tags:
       - devices
   /group:
