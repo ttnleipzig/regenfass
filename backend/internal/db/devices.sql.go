@@ -45,7 +45,7 @@ func (q *Queries) EnsureDeviceChannelMapping(ctx context.Context, arg EnsureDevi
 }
 
 const getDeviceByEUI = `-- name: GetDeviceByEUI :one
-SELECT id, device_eui, rw_token, ro_token FROM device WHERE device_eui = UPPER($1)
+SELECT id, device_eui, rw_token, ro_token, name, latitude, longitude FROM device WHERE device_eui = UPPER($1)
 `
 
 func (q *Queries) GetDeviceByEUI(ctx context.Context, upper interface{}) (Device, error) {
@@ -56,12 +56,15 @@ func (q *Queries) GetDeviceByEUI(ctx context.Context, upper interface{}) (Device
 		&i.DeviceEui,
 		&i.RwToken,
 		&i.RoToken,
+		&i.Name,
+		&i.Latitude,
+		&i.Longitude,
 	)
 	return i, err
 }
 
 const getDeviceByEitherToken = `-- name: GetDeviceByEitherToken :one
-SELECT id, device_eui, rw_token, ro_token, (ro_token = $1) AS is_readonly FROM device WHERE ro_token = $1 OR rw_token = $1
+SELECT id, device_eui, rw_token, ro_token, name, latitude, longitude, (ro_token = $1) AS is_readonly FROM device WHERE ro_token = $1 OR rw_token = $1
 `
 
 type GetDeviceByEitherTokenRow struct {
@@ -69,6 +72,9 @@ type GetDeviceByEitherTokenRow struct {
 	DeviceEui  string
 	RwToken    string
 	RoToken    string
+	Name       string
+	Latitude   pgtype.Float8
+	Longitude  pgtype.Float8
 	IsReadonly bool
 }
 
@@ -80,6 +86,9 @@ func (q *Queries) GetDeviceByEitherToken(ctx context.Context, roToken string) (G
 		&i.DeviceEui,
 		&i.RwToken,
 		&i.RoToken,
+		&i.Name,
+		&i.Latitude,
+		&i.Longitude,
 		&i.IsReadonly,
 	)
 	return i, err
