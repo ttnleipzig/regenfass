@@ -49,3 +49,36 @@
     mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
   }
 }
+
+/* Root CHANGELOG.md rendered on the marketing site */
+.changelog-prose {
+  @apply text-sm text-foreground leading-relaxed;
+}
+.changelog-prose h1,
+.changelog-prose h2,
+.changelog-prose h3 {
+  @apply font-semibold tracking-tight text-foreground mt-6 mb-2;
+}
+.changelog-prose h1 {
+  @apply text-xl;
+}
+.changelog-prose h2 {
+  @apply text-lg;
+}
+.changelog-prose h3 {
+  @apply text-base;
+}
+.changelog-prose p,
+.changelog-prose ul,
+.changelog-prose ol {
+  @apply mb-3 text-muted-foreground;
+}
+.changelog-prose ul {
+  @apply list-disc pl-5 space-y-1;
+}
+.changelog-prose a {
+  @apply text-primary underline-offset-2 hover:underline;
+}
+.changelog-prose code {
+  @apply font-mono text-xs bg-muted px-1 py-0.5 rounded;
+}

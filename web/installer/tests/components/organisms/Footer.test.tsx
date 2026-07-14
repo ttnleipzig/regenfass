@@ -69,4 +69,14 @@ describe("Footer", () => {
 		const svgIcons = container.querySelectorAll("svg");
 		expect(svgIcons.length).toBeGreaterThan(0);
 	});
+
+	it("renders shared product version and release notes link", () => {
+		render(() => <Footer />);
+		expect(screen.getByText(/^v\d+\.\d+\.\d+/)).toBeInTheDocument();
+		const releaseLink = screen.getByText("Release notes");
+		expect(releaseLink.closest("a")).toHaveAttribute(
+			"href",
+			"https://github.com/ttnleipzig/regenfass/releases",
+		);
+	});
 });
