@@ -134,6 +134,113 @@ definitions:
             type: array
         type: object
     type: object
+  api.LatestChannelMeasurement:
+    description: Latest reading for a single channel of a device
+    properties:
+      channel_id:
+        example: 1
+        type: integer
+      channel_name:
+        example: Water Level
+        type: string
+      measurement_type:
+        example: 4
+        type: integer
+      received_at:
+        example: "2024-01-15T10:30:00Z"
+        type: string
+      value:
+        type: object
+    type: object
+  api.LatestDevice:
+    description: Device identity, name, location and its latest reading per channel.
+      `name` is the user-set name, or a stable auto-generated nickname if none has
+      been set. `is_readonly` is only set on endpoints that resolve a device through
+      a specific token (e.g. `/overview`); it is omitted where read/write access is
+      not token-scoped.
+    properties:
+      device_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_readonly:
+        example: false
+        type: boolean
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      measurements:
+        items:
+          $ref: '#/definitions/api.LatestChannelMeasurement'
+        type: array
+      name:
+        example: Happy Barrel
+        type: string
+    type: object
+  api.LatestMeasurementsPayload:
+    description: Tokens identifying the devices of interest. Devices may be referenced
+      directly by their token, or transitively via the token of a group they belong
+      to.
+    properties:
+      devices:
+        example:
+        - dev_token_123
+        - dev_token_456
+        items:
+          type: string
+        type: array
+      groups:
+        example:
+        - gr_token_123
+        - gr_token_456
+        items:
+          type: string
+        type: array
+    type: object
+  api.LatestMeasurementsResponse:
+    description: One entry per requested device. Devices that have not reported yet
+      still appear here, with an empty measurements list and no location.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+    type: object
+  api.OverviewGroup:
+    description: A subscribed group and the devices that belong to it. `token` echoes
+      back the token from the request that resolved to this group so the client can
+      correlate it with its stored subscription.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+      is_readonly:
+        example: false
+        type: boolean
+      name:
+        example: My Rain Barrel Group
+        type: string
+      token:
+        example: gr_token_123
+        type: string
+    type: object
+  api.OverviewResponse:
+    description: Devices grouped under their groups, plus every directly-subscribed
+      device in `devices`. A device that is both a group member and subscribed directly
+      appears in both places.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+      groups:
+        items:
+          $ref: '#/definitions/api.OverviewGroup'
+        type: array
+    type: object
   api.RangedMeasurementsResponse:
     description: 'Downsampled measurement series for a device over a time range. The
       resolution adapts to the span: the wider the range, the coarser the buckets
@@ -507,4 +614,72 @@ paths:
       summary: Ingest LoRaWAN uplink data
       tags:
       - ingest
+  /measurements/latest:
+    post:
+      consumes:
+      - application/json
+      description: Returns one entry per device referenced (directly via `devices`
+        or transitively via `groups`), including its name, location, and the most
+        recent measurement per channel. Devices with no measurements yet still appear
+        with an empty `measurements` list.
+      parameters:
+      - description: Tokens selecting devices and/or groups
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.LatestMeasurementsPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LatestMeasurementsResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get latest measurements grouped per device
+      tags:
+      - measurements
+  /overview:
+    post:
+      consumes:
+      - application/json
+      description: 'Returns the dashboard view for a set of subscription tokens: every
+        referenced group with its member devices nested inside, plus every directly-referenced
+        device in `devices`. A device that is both a group member and subscribed directly
+        appears in both places. Each device carries its latest reading per channel,
+        exactly as in `/measurements/latest`. Unlike that endpoint, group membership
+        is preserved so the UI can render devices under their groups.'
+      parameters:
+      - description: Tokens selecting groups and/or devices
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.LatestMeasurementsPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.OverviewResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get subscriptions organized by group
+      tags:
+      - measurements
 swagger: "2.0"

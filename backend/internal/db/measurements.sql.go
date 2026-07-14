@@ -89,6 +89,109 @@ func (q *Queries) GetDeviceMeasurementsRanged(ctx context.Context, arg GetDevice
 	return items, nil
 }
 
+const getDevicesForTokens = `-- name: GetDevicesForTokens :many
+SELECT d.id, d.device_eui, d.name, d.latitude, d.longitude
+FROM device d
+WHERE d.id IN (
+	SELECT id FROM device
+		WHERE rw_token = ANY($1::TEXT[]) OR ro_token = ANY($1::TEXT[])
+	UNION
+	SELECT device_group.device_id FROM device_group
+		JOIN "group" ON "group".id = device_group.group_id
+		WHERE "group".rw_token = ANY($2::TEXT[]) OR "group".ro_token = ANY($2::TEXT[])
+)
+`
+
+type GetDevicesForTokensParams struct {
+	DeviceTokens []string
+	GroupTokens  []string
+}
+
+type GetDevicesForTokensRow struct {
+	ID        pgtype.UUID
+	DeviceEui string
+	Name      string
+	Latitude  pgtype.Float8
+	Longitude pgtype.Float8
+}
+
+func (q *Queries) GetDevicesForTokens(ctx context.Context, arg GetDevicesForTokensParams) ([]GetDevicesForTokensRow, error) {
+	rows, err := q.db.Query(ctx, getDevicesForTokens, arg.DeviceTokens, arg.GroupTokens)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetDevicesForTokensRow
+	for rows.Next() {
+		var i GetDevicesForTokensRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DeviceEui,
+			&i.Name,
+			&i.Latitude,
+			&i.Longitude,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLatestMeasurementsForDeviceIDs = `-- name: GetLatestMeasurementsForDeviceIDs :many
+SELECT DISTINCT ON (dm.device_id, dm.channel_id)
+	dm.device_id,
+	dm.received_at,
+	dm.channel_id,
+	dcm.name AS channel_name,
+	dm.measurement_type,
+	dm.value
+FROM device_measurement dm
+JOIN device_channel_mapping dcm
+	ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
+WHERE dm.device_id = ANY($1::UUID[])
+ORDER BY dm.device_id, dm.channel_id, dm.received_at DESC
+`
+
+type GetLatestMeasurementsForDeviceIDsRow struct {
+	DeviceID        pgtype.UUID
+	ReceivedAt      pgtype.Timestamptz
+	ChannelID       int16
+	ChannelName     string
+	MeasurementType int16
+	Value           []byte
+}
+
+func (q *Queries) GetLatestMeasurementsForDeviceIDs(ctx context.Context, deviceIds []pgtype.UUID) ([]GetLatestMeasurementsForDeviceIDsRow, error) {
+	rows, err := q.db.Query(ctx, getLatestMeasurementsForDeviceIDs, deviceIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLatestMeasurementsForDeviceIDsRow
+	for rows.Next() {
+		var i GetLatestMeasurementsForDeviceIDsRow
+		if err := rows.Scan(
+			&i.DeviceID,
+			&i.ReceivedAt,
+			&i.ChannelID,
+			&i.ChannelName,
+			&i.MeasurementType,
+			&i.Value,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const insertDeviceMeasurement = `-- name: InsertDeviceMeasurement :exec
 INSERT INTO device_measurement (device_id, measurement_type, channel_id, "value", received_at) VALUES ($1, $2, $3, $4, $5)
 `

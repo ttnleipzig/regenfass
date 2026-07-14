@@ -32,3 +32,29 @@ FROM (
 		AND (sqlc.narg('channel_id')::SMALLINT IS NULL OR dm.channel_id = sqlc.narg('channel_id'))
 ) m
 ORDER BY m.channel_id, m.bucket, m.received_at DESC;
+
+-- name: GetDevicesForTokens :many
+SELECT d.id, d.device_eui, d.name, d.latitude, d.longitude
+FROM device d
+WHERE d.id IN (
+	SELECT id FROM device
+		WHERE rw_token = ANY(@device_tokens::TEXT[]) OR ro_token = ANY(@device_tokens::TEXT[])
+	UNION
+	SELECT device_group.device_id FROM device_group
+		JOIN "group" ON "group".id = device_group.group_id
+		WHERE "group".rw_token = ANY(@group_tokens::TEXT[]) OR "group".ro_token = ANY(@group_tokens::TEXT[])
+);
+
+-- name: GetLatestMeasurementsForDeviceIDs :many
+SELECT DISTINCT ON (dm.device_id, dm.channel_id)
+	dm.device_id,
+	dm.received_at,
+	dm.channel_id,
+	dcm.name AS channel_name,
+	dm.measurement_type,
+	dm.value
+FROM device_measurement dm
+JOIN device_channel_mapping dcm
+	ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
+WHERE dm.device_id = ANY(@device_ids::UUID[])
+ORDER BY dm.device_id, dm.channel_id, dm.received_at DESC;

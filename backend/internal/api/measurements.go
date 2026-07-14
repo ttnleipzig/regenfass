@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/ttn-leipzig/regenfass/internal/db"
@@ -38,6 +39,118 @@ func rangedBucketSeconds(span time.Duration) float64 {
 		return maxRangedBucketSeconds
 	}
 	return bucket
+}
+
+// LatestChannelMeasurement represents the latest reading for a single channel of a device
+// @Description Latest reading for a single channel of a device
+type LatestChannelMeasurement struct {
+	ReceivedAt      time.Time       `json:"received_at" example:"2024-01-15T10:30:00Z"`
+	ChannelID       int16           `json:"channel_id" example:"1"`
+	ChannelName     string          `json:"channel_name" example:"Water Level"`
+	MeasurementType int16           `json:"measurement_type" example:"4"`
+	Value           json.RawMessage `json:"value" swaggertype:"object"`
+}
+
+// LatestDevice represents a device with its latest measurements
+// @Description Device identity, name, location and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.
+type LatestDevice struct {
+	DeviceID     uuid.UUID                  `json:"device_id" example:"550e8400-e29b-41d4-a716-446655440000"`
+	Name         string                     `json:"name" example:"Happy Barrel"`
+	Latitude     *float64                   `json:"latitude,omitempty" example:"51.3397"`
+	Longitude    *float64                   `json:"longitude,omitempty" example:"12.3731"`
+	IsReadonly   *bool                      `json:"is_readonly,omitempty" example:"false"`
+	Measurements []LatestChannelMeasurement `json:"measurements"`
+}
+
+// LatestMeasurementsPayload selects which devices to return latest measurements for
+// @Description Tokens identifying the devices of interest. Devices may be referenced directly by their token, or transitively via the token of a group they belong to.
+type LatestMeasurementsPayload struct {
+	Groups  []string `json:"groups" example:"gr_token_123,gr_token_456"`
+	Devices []string `json:"devices" example:"dev_token_123,dev_token_456"`
+}
+
+// LatestMeasurementsResponse holds every requested device with its latest reading per channel
+// @Description One entry per requested device. Devices that have not reported yet still appear here, with an empty measurements list and no location.
+type LatestMeasurementsResponse struct {
+	Devices []LatestDevice `json:"devices"`
+}
+
+// GetLatestMeasurements godoc
+//
+//	@Summary		Get latest measurements grouped per device
+//	@Description	Returns one entry per device referenced (directly via `devices` or transitively via `groups`), including its name, location, and the most recent measurement per channel. Devices with no measurements yet still appear with an empty `measurements` list.
+//	@Tags			measurements
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		LatestMeasurementsPayload	true	"Tokens selecting devices and/or groups"
+//	@Success		200		{object}	LatestMeasurementsResponse
+//	@Failure		400		{object}	HTTPError	"Invalid payload"
+//	@Failure		500		{object}	HTTPError	"Internal server error"
+//	@Router			/measurements/latest [post]
+func (a *API) handleLatestMeasurements(c fiber.Ctx) error {
+	log := a.getRequestLogger(c)
+
+	var payload LatestMeasurementsPayload
+	if err := c.Bind().Body(&payload); err != nil {
+		log.Error().Err(err).Msg("could not parse message payload")
+		return fiber.NewError(fiber.StatusBadRequest, "could not parse message payload")
+	}
+
+	if payload.Devices == nil {
+		payload.Devices = []string{}
+	}
+	if payload.Groups == nil {
+		payload.Groups = []string{}
+	}
+
+	if len(payload.Devices) == 0 && len(payload.Groups) == 0 {
+		return c.JSON(LatestMeasurementsResponse{Devices: []LatestDevice{}})
+	}
+
+	devices, err := a.db.GetDevicesForTokens(c.Context(), db.GetDevicesForTokensParams{
+		DeviceTokens: payload.Devices,
+		GroupTokens:  payload.Groups,
+	})
+	if err != nil {
+		log.Error().Err(err).Msg("could not load devices for tokens")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not load devices for tokens")
+	}
+
+	if len(devices) == 0 {
+		return c.JSON(LatestMeasurementsResponse{Devices: []LatestDevice{}})
+	}
+
+	deviceIDs := make([]pgtype.UUID, len(devices))
+	for i, d := range devices {
+		deviceIDs[i] = d.ID
+	}
+
+	rows, err := a.db.GetLatestMeasurementsForDeviceIDs(c.Context(), deviceIDs)
+	if err != nil {
+		log.Error().Err(err).Msg("could not load latest device measurements")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not load latest device measurements")
+	}
+
+	// Index measurements per device UUID so we can attach them to the device
+	// entries below in a single pass.
+	measurementsByDevice := make(map[uuid.UUID][]LatestChannelMeasurement, len(devices))
+	for _, r := range rows {
+		id := utils.PGToUUID(r.DeviceID)
+		measurementsByDevice[id] = append(measurementsByDevice[id], LatestChannelMeasurement{
+			ReceivedAt:      r.ReceivedAt.Time,
+			ChannelID:       r.ChannelID,
+			ChannelName:     r.ChannelName,
+			MeasurementType: r.MeasurementType,
+			Value:           json.RawMessage(r.Value),
+		})
+	}
+
+	out := make([]LatestDevice, len(devices))
+	for i, d := range devices {
+		out[i] = buildLatestDevice(d.ID, d.Name, d.Latitude, d.Longitude, nil, measurementsByDevice)
+	}
+
+	return c.JSON(LatestMeasurementsResponse{Devices: out})
 }
 
 // RangedMeasurementsResponse holds a downsampled measurement series for a device

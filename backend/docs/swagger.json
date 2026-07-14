@@ -455,6 +455,98 @@
                     }
                 }
             }
+        },
+        "/measurements/latest": {
+            "post": {
+                "description": "Returns one entry per device referenced (directly via `devices` or transitively via `groups`), including its name, location, and the most recent measurement per channel. Devices with no measurements yet still appear with an empty `measurements` list.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "measurements"
+                ],
+                "summary": "Get latest measurements grouped per device",
+                "parameters": [
+                    {
+                        "description": "Tokens selecting devices and/or groups",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/overview": {
+            "post": {
+                "description": "Returns the dashboard view for a set of subscription tokens: every referenced group with its member devices nested inside, plus every directly-referenced device in `devices`. A device that is both a group member and subscribed directly appears in both places. Each device carries its latest reading per channel, exactly as in `/measurements/latest`. Unlike that endpoint, group membership is preserved so the UI can render devices under their groups.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "measurements"
+                ],
+                "summary": "Get subscriptions organized by group",
+                "parameters": [
+                    {
+                        "description": "Tokens selecting groups and/or devices",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.OverviewResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -639,6 +731,143 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "api.LatestChannelMeasurement": {
+            "description": "Latest reading for a single channel of a device",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "channel_name": {
+                    "type": "string",
+                    "example": "Water Level"
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "received_at": {
+                    "type": "string",
+                    "example": "2024-01-15T10:30:00Z"
+                },
+                "value": {
+                    "type": "object"
+                }
+            }
+        },
+        "api.LatestDevice": {
+            "description": "Device identity, name, location and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.",
+            "type": "object",
+            "properties": {
+                "device_id": {
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestChannelMeasurement"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Happy Barrel"
+                }
+            }
+        },
+        "api.LatestMeasurementsPayload": {
+            "description": "Tokens identifying the devices of interest. Devices may be referenced directly by their token, or transitively via the token of a group they belong to.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "dev_token_123",
+                        "dev_token_456"
+                    ]
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "gr_token_123",
+                        "gr_token_456"
+                    ]
+                }
+            }
+        },
+        "api.LatestMeasurementsResponse": {
+            "description": "One entry per requested device. Devices that have not reported yet still appear here, with an empty measurements list and no location.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                }
+            }
+        },
+        "api.OverviewGroup": {
+            "description": "A subscribed group and the devices that belong to it. `token` echoes back the token from the request that resolved to this group so the client can correlate it with its stored subscription.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Rain Barrel Group"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "gr_token_123"
+                }
+            }
+        },
+        "api.OverviewResponse": {
+            "description": "Devices grouped under their groups, plus every directly-subscribed device in `devices`. A device that is both a group member and subscribed directly appears in both places.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.OverviewGroup"
                     }
                 }
             }

@@ -94,6 +94,50 @@ func (q *Queries) GetDeviceByEitherToken(ctx context.Context, roToken string) (G
 	return i, err
 }
 
+const getDevicesForDeviceTokens = `-- name: GetDevicesForDeviceTokens :many
+SELECT d.id, d.device_eui, d.name, d.latitude, d.longitude, (d.ro_token = t.token) AS is_readonly
+FROM unnest($1::TEXT[]) AS t(token)
+JOIN device d ON d.ro_token = t.token OR d.rw_token = t.token
+`
+
+type GetDevicesForDeviceTokensRow struct {
+	ID         pgtype.UUID
+	DeviceEui  string
+	Name       string
+	Latitude   pgtype.Float8
+	Longitude  pgtype.Float8
+	IsReadonly bool
+}
+
+// Resolve each provided device token (read-write or read-only) to its device.
+// `is_readonly` reflects whether the provided token was the read-only token.
+func (q *Queries) GetDevicesForDeviceTokens(ctx context.Context, deviceTokens []string) ([]GetDevicesForDeviceTokensRow, error) {
+	rows, err := q.db.Query(ctx, getDevicesForDeviceTokens, deviceTokens)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetDevicesForDeviceTokensRow
+	for rows.Next() {
+		var i GetDevicesForDeviceTokensRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.DeviceEui,
+			&i.Name,
+			&i.Latitude,
+			&i.Longitude,
+			&i.IsReadonly,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateDeviceLocation = `-- name: UpdateDeviceLocation :exec
 UPDATE device SET latitude = $2, longitude = $3 WHERE id = $1
 `
