@@ -1,0 +1,99 @@
+name: Web Deploy Netlify
+
+# Build web apps on GitHub Actions, then publish static `dist/` to Netlify.
+# Netlify site builders are skipped via `ignore = "exit 0"` in each `web/*/netlify.toml`.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/web-deploy-netlify.yml"
+      - "CHANGELOG.md"
+      - "version.txt"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-deploy-netlify-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-and-deploy:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web packages
+        run: pnpm -r --filter "./web/**" --if-present run build
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli@23
+
+      - name: Deploy marketing → regenfass.eu
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_MARKETING }}
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping marketing deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_MARKETING)"
+            exit 0
+          fi
+          netlify deploy --prod --dir=web/marketing/dist --message "gha ${{ github.sha }}"
+
+      - name: Deploy docs → docs.regenfass.eu
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DOCS }}
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping docs deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_DOCS)"
+            exit 0
+          fi
+          netlify deploy --prod --dir=web/docs/dist --message "gha ${{ github.sha }}"
+
+      - name: Deploy installer → install.regenfass.eu
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_INSTALLER }}
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping installer deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_INSTALLER)"
+            exit 0
+          fi
+          netlify deploy --prod --dir=web/installer/dist --message "gha ${{ github.sha }}"
+
+      - name: Deploy brand showcase → brand.regenfass.eu
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_BRAND }}
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping brand deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_BRAND)"
+            exit 0
+          fi
+          netlify deploy --prod --dir=web/brand-showcase/dist --message "gha ${{ github.sha }}"

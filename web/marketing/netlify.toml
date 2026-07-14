@@ -1,7 +1,10 @@
-# Netlify site: set Base directory to `web/marketing` in the Netlify UI.
+# Prefer GitHub Actions for builds (see .github/workflows/web-deploy-netlify.yml).
+# Keep Base directory empty (repository root) if this site is linked in Netlify UI.
+# `ignore = "exit 0"` skips Netlify’s own builder so deploys come from GHA via netlify-cli.
 [build]
-  command = "cd ../.. && corepack enable && pnpm install && pnpm --filter @ttnleipzig/regenfass-marketing build"
-  publish = "dist"
+  command = "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @ttnleipzig/regenfass-marketing build"
+  publish = "web/marketing/dist"
+  ignore = "exit 0"
 
 [[redirects]]
   from = "/*"
