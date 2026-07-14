@@ -18,6 +18,7 @@ This document contains automatically generated documentation for all components 
   - [CardTitle](#cardtitle)
   - [CardDescription](#carddescription)
   - [ErrorList](#errorlist)
+  - [SensorGraph](#sensorgraph)
 - [Organisms](#organisms)
   - [Header](#header)
 - [Forms](#forms)
@@ -28,6 +29,9 @@ This document contains automatically generated documentation for all components 
   - [FormLayout](#formlayout)
   - [InputField](#inputfield)
   - [TextInput](#textinput)
+- [Uncategorized](#uncategorized)
+  - [Dashboard](#dashboard)
+  - [LeipzigMap](#leipzigmap)
 
 ## Atoms
 
@@ -219,6 +223,25 @@ import { CardTitle } from '@/components/molecules/Card';
 import { ErrorList } from '@/components/molecules/ErrorList';
 ```
 
+### SensorGraph
+
+**Path**: `molecules/SensorGraph.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `apexcharts`
+- `lucide-solid`
+- `solid-apexcharts`
+- `solid-js`
+
+**Import:**
+
+```typescript
+import { SensorGraph } from '@/components/molecules/SensorGraph';
+```
+
 ## Organisms
 
 ### Header
@@ -382,6 +405,52 @@ import { InputField } from '@/components/forms/InputField';
 import { TextInput } from '@/components/forms/TextInput';
 ```
 
+## Uncategorized
+
+### Dashboard
+
+**Path**: `pages/Dashboard.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `@solidjs/router`
+- `lucide-solid`
+- `solid-js`
+
+*Internal:*
+
+- `molecules/SensorGraph`
+- `pages/LeipzigMap`
+- `ui/select`
+- `ui/text-input`
+
+**Import:**
+
+```typescript
+import { Dashboard } from '@/components/pages/Dashboard';
+```
+
+### LeipzigMap
+
+**Path**: `pages/LeipzigMap.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `@protomaps/basemaps`
+- `maplibre-gl`
+- `solid-js`
+- `solid-maplibre`
+
+**Import:**
+
+```typescript
+import { LeipzigMap } from '@/components/pages/LeipzigMap';
+```
+
 ---
 
-*Generated on April 19, 2026 at 08:13 AM*
+*Generated on July 14, 2026 at 06:17 PM*

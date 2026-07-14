@@ -7,9 +7,10 @@ import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import PlaygroundLayout from "./playground/PlaygroundLayout";
 import PlaygroundHome from "./playground/PlaygroundHome";
 import ComponentRenderer from "./playground/ComponentRenderer";
+import Dashboard from "./components/pages/Dashboard";
 
-// Main app layout for the installer
-function MainApp() {
+// Installer flow — the web-serial firmware installation experience.
+function InstallApp() {
 	return (
 		<div class="min-h-screen flex flex-col">
 			<Header />
@@ -45,7 +46,8 @@ function App() {
 			<ColorModeScript />
 			<ColorModeProvider>
 				<Router>
-					<Route path="/" component={MainApp} />
+					<Route path="/" component={Dashboard} />
+					<Route path="/install" component={InstallApp} />
 					<Route path="/playground" component={PlaygroundHomeWrapper} />
 					<Route path="/playground/:category/:component" component={ComponentRendererWrapper} />
 				</Router>
