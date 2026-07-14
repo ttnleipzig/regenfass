@@ -1,6 +1,6 @@
 # Agent instructions
 
-This file orients coding agents and automation working on **regenfass**: firmware (Arduino / PlatformIO, C++) plus **web apps** under `web/` (installer, brand, marketing, docs site, brand showcase) and an optional Go **backend**. **regenfass** (“rain barrel”) is an IoT project: water-level sensing and LoRaWAN data via The Things Network (TTN). Always-on, path-specific rules also live in `.cursor/rules/` (see the `*.mdc` files and, for installer-focused defaults, `.cursor/rules/AGENT.md`).
+This file orients coding agents and automation working on **regenfass**: firmware (Arduino / PlatformIO, C++) plus **web apps** under `web/` (installer, brand, marketing, docs site, brand showcase) and an optional Go **backend**. **regenfass** (“rain barrel”) is an IoT project: water-level sensing and LoRaWAN data via The Things Network (TTN). Always-on, path-specific rules also live in `.agents/rules/` (see the `*.mdc` files and, for installer-focused defaults, `.agents/rules/AGENT.md`).
 
 ## Scope of the repository
 
@@ -18,7 +18,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 ## Architecture (overview)
 
-**Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `src/`, with shared SCP (Serial Configuration Protocol) code under `lib/scp/` for device configuration. **Hardware** partition tables live under `board_partitions/`. Do not paste full directory trees into docs (see `.cursor/rules/filetree.mdc`).
+**Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `src/`, with shared SCP (Serial Configuration Protocol) code under `lib/scp/` for device configuration. **Hardware** partition tables live under `board_partitions/`. Do not paste full directory trees into docs (see `.agents/rules/filetree.mdc`).
 
 **Installer** is a SolidJS app for device settings, flashing ESP32 hardware, and Web Serial. Shared UI comes from `@regenfass/brand` (`web/brand`). Installer-specific UI lives under `web/installer/src/components/` (for example flash steps); installer logic and state under `web/installer/src/installer/`; shared utilities and SCP under `web/installer/src/libs/`. The component gallery is the brand showcase (`web/brand-showcase`), not an installer playground.
 
@@ -40,14 +40,14 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 ## Installer UI stack (mandatory choices)
 
 - **Framework**: **SolidJS only** — do not introduce React.
-- **Atomic Design**: Follow `.cursor/rules/atomic-design-installer.mdc` (Brad Frost methodology mapped to `atoms/`, `molecules/`, `organisms/`, `forms/`, `ui/`, plus templates and pages via layouts and routes).
+- **Atomic Design**: Follow `.agents/rules/atomic-design-installer.mdc` (Brad Frost methodology mapped to `atoms/`, `molecules/`, `organisms/`, `forms/`, `ui/`, plus templates and pages via layouts and routes).
 - **Components**: Prefer [shadcn-solid](https://shadcn-solid.com/docs/components/) patterns; follow their setup and keep theming consistent.
 - **Icons**: Use **solid-icons** in the installer UI.
 - **State / routing**: Respect existing patterns (e.g. XState, `@solidjs/router`) already used in the codebase.
 
 ## Cursor / project rules (quick map)
 
-Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `pnpm-installer.mdc` (pnpm from workspace / `web/installer`), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
+Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `pnpm-installer.mdc` (pnpm from workspace / `web/installer`), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
 
 ## Coding conventions
 
@@ -88,13 +88,13 @@ Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), 
 
 ## Tests
 
-- Component tests live under `web/installer/tests/components/` and **must mirror** the folder layout of `web/installer/src/components/` (same relative path, `*.test.tsx` naming). See `.cursor/rules/test-structure.mdc`.
+- Component tests live under `web/installer/tests/components/` and **must mirror** the folder layout of `web/installer/src/components/` (same relative path, `*.test.tsx` naming). See `.agents/rules/test-structure.mdc`.
 
 ## Documentation
 
 - Write **end-user and contributor-facing docs in friendly English**; audience is not assumed to be deeply technical (contributor `docs/` wiki can stay technical).
-- **Do not paste full directory trees** into Markdown docs (`.cursor/rules/filetree.mdc`).
-- For **architecture and flow diagrams** in documentation, prefer **Mermaid** (`.cursor/rules/architekturdiagramme.mdc`).
+- **Do not paste full directory trees** into Markdown docs (`.agents/rules/filetree.mdc`).
+- For **architecture and flow diagrams** in documentation, prefer **Mermaid** (`.agents/rules/architekturdiagramme.mdc`).
 - **Installer UI components**: place hand-written docs under `web/installer/docs`, matching the existing layout. Do not manually edit auto-generated files such as `web/installer/docs/COMPONENTS.md` (generated by `web/installer/scripts/generate-components-doc.ts`; runs on prebuild / hooks).
 - **Contributor wiki source**: flat files in `/docs` (no nested folders — GitHub Wiki limitation). Synced by `.github/workflows/wiki-sync.yml`.
 - When you add or change **component props**, update types, any related docs, and generated/living docs as required by the project pipeline.
@@ -102,11 +102,11 @@ Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), 
 ## Code quality and Git
 
 - Prefer **TypeScript**, strict typing; avoid `any` unless unavoidable and localized.
-- Use the proper ellipsis character **…** where an ellipsis is intended (see **Typography** in `.cursor/rules/AGENT.md`).
+- Use the proper ellipsis character **…** where an ellipsis is intended (see **Typography** in `.agents/rules/AGENT.md`).
 
 ## Conventional Commits
 
-Commit **subjects** follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) and are written in **English**. Cursor always applies `.cursor/rules/conventional-commits.mdc`, which defers to this section. When committing from the installer package, messages are checked against `@commitlint/config-conventional` (`web/installer/commitlint.config.cjs`).
+Commit **subjects** follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) and are written in **English**. Cursor always applies `.agents/rules/conventional-commits.mdc`, which defers to this section. When committing from the installer package, messages are checked against `@commitlint/config-conventional` (`web/installer/commitlint.config.cjs`).
 
 ### Subject line
 
@@ -164,7 +164,7 @@ chore(deps): bump vite in installer
 - Installer app entry: `web/installer/src/App.tsx`, `web/installer/components.json` (shadcn-solid).
 - Shared brand: `web/brand`.
 - Contributor wiki source: `docs/`.
-- Cursor/agent rules: `.cursor/rules/`.
+- Cursor/agent rules: `.agents/rules/`.
 - High-level product overview: root `README.md`.
 
 ## Additional resources

@@ -20,7 +20,7 @@ Follow [Atomic Design methodology, chapter 2](https://atomicdesign.bradfrost.com
 
 ## Special folders
 
-- **`web/brand/src/components/ui/`** (or installer `ui/` for app-local primitives) — Optional home for **new** components added via the shadcn-solid CLI (thin primitives). Prefer moving or implementing first-party controls under **`atoms/`** or **`molecules/`** once they are part of the app (see `Progress`, `OTPField`). Do **not** add installer-specific domain logic under `ui/`. Follow `.cursor/rules/solid-shadcn-components.mdc` for theming and composition.
+- **`web/brand/src/components/ui/`** (or installer `ui/` for app-local primitives) — Optional home for **new** components added via the shadcn-solid CLI (thin primitives). Prefer moving or implementing first-party controls under **`atoms/`** or **`molecules/`** once they are part of the app (see `Progress`, `OTPField`). Do **not** add installer-specific domain logic under `ui/`. Follow `.agents/rules/solid-shadcn-components.mdc` for theming and composition.
 - **`web/brand/src/components/forms/`** (shared form building blocks) — Form-oriented building blocks, usually **molecule-level** (label + control + error text, e.g. `InputField.tsx`). May use `ui/` or Kobalte, but not full screens.
 
 ## Import direction
@@ -36,7 +36,7 @@ Prefer `atoms/`, `molecules/`, or `organisms/`. Avoid new loose files under `web
 
 ## Tests and documentation
 
-- Component tests: mirror `web/installer/src/components/` under `web/installer/tests/components/` (see `.cursor/rules/test-structure.mdc`).
+- Component tests: mirror `web/installer/src/components/` under `web/installer/tests/components/` (see `.agents/rules/test-structure.mdc`).
 - New or changed props: update types, hand-written docs under `web/installer/docs` when applicable, and generated docs per project hooks.
 
 ## Composition overview

@@ -35,7 +35,7 @@ Full detail: root `AGENTS.md` → Conventional Commits, and [CONTRIBUTING.md](ht
 - **Contributor wiki** (`docs/`): friendly English that stays technical and accurate.
 - **Installer UI component docs** under `web/installer/docs`: friendly English; audience is not assumed to be deep experts.
 - Prefer **Mermaid** for architecture/flow diagrams.
-- Do **not** paste full file trees into Markdown (`.cursor/rules/filetree.mdc`).
+- Do **not** paste full file trees into Markdown (`.agents/rules/filetree.mdc`).
 - Do not hand-edit generated files such as `web/installer/docs/COMPONENTS.md` — run `pnpm docs:components`.
 
 ## Icons and components

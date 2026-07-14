@@ -20,7 +20,7 @@ From repo root: `pnpm test` → filter `@ttnleipzig/regenfass-installer` `test:r
 
 ### Component test layout
 
-Paths under `web/installer/tests/components/` must **mirror** `web/installer/src/components/` (same relative path, `*.test.tsx`). See `.cursor/rules/test-structure.mdc`.
+Paths under `web/installer/tests/components/` must **mirror** `web/installer/src/components/` (same relative path, `*.test.tsx`). See `.agents/rules/test-structure.mdc`.
 
 ### End-to-end (Playwright)
 

@@ -47,4 +47,4 @@ flowchart TB
 - Hand-written component docs: `web/installer/docs/` (match existing layout).
 - After prop changes on shared components: update types in `web/brand`, hand-written docs if needed, and verify brand-showcase still renders.
 
-Cursor rule: `.cursor/rules/atomic-design-installer.mdc`.
+Cursor rule: `.agents/rules/atomic-design-installer.mdc`.
