@@ -93,3 +93,18 @@ func (q *Queries) GetDeviceByEitherToken(ctx context.Context, roToken string) (G
 	)
 	return i, err
 }
+
+const updateDeviceLocation = `-- name: UpdateDeviceLocation :exec
+UPDATE device SET latitude = $2, longitude = $3 WHERE id = $1
+`
+
+type UpdateDeviceLocationParams struct {
+	ID        pgtype.UUID
+	Latitude  pgtype.Float8
+	Longitude pgtype.Float8
+}
+
+func (q *Queries) UpdateDeviceLocation(ctx context.Context, arg UpdateDeviceLocationParams) error {
+	_, err := q.db.Exec(ctx, updateDeviceLocation, arg.ID, arg.Latitude, arg.Longitude)
+	return err
+}

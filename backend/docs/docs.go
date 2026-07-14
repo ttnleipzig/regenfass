@@ -453,9 +453,26 @@ const docTemplate = `{
                             "type": "string",
                             "example": "AQIDBA=="
                         },
+                        "locations": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/api.TTNLocation"
+                            }
+                        },
                         "received_at": {
                             "type": "string",
                             "example": "2024-01-15T10:30:00Z"
+                        },
+                        "rx_metadata": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "location": {
+                                        "$ref": "#/definitions/api.TTNLocation"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -480,6 +497,28 @@ const docTemplate = `{
                 "read_write_token": {
                     "type": "string",
                     "example": "rw_token_123"
+                }
+            }
+        },
+        "api.TTNLocation": {
+            "description": "A geo point sent by The Things Network (device locations map or gateway metadata)",
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "type": "number",
+                    "example": 113
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "source": {
+                    "type": "string",
+                    "example": "SOURCE_REGISTRY"
                 }
             }
         }

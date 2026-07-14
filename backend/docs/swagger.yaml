@@ -87,9 +87,20 @@ definitions:
           frm_payload:
             example: AQIDBA==
             type: string
+          locations:
+            additionalProperties:
+              $ref: '#/definitions/api.TTNLocation'
+            type: object
           received_at:
             example: "2024-01-15T10:30:00Z"
             type: string
+          rx_metadata:
+            items:
+              properties:
+                location:
+                  $ref: '#/definitions/api.TTNLocation'
+              type: object
+            type: array
         type: object
     type: object
   api.RegisterDevicePayload:
@@ -105,6 +116,23 @@ definitions:
         type: string
       read_write_token:
         example: rw_token_123
+        type: string
+    type: object
+  api.TTNLocation:
+    description: A geo point sent by The Things Network (device locations map or gateway
+      metadata)
+    properties:
+      altitude:
+        example: 113
+        type: number
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      source:
+        example: SOURCE_REGISTRY
         type: string
     type: object
 host: localhost:64000

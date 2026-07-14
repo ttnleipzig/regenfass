@@ -11,3 +11,6 @@ INSERT INTO device (device_eui) VALUES (UPPER($1)) RETURNING id, rw_token, ro_to
 INSERT INTO device_channel_mapping (device_id, channel_id, name)
 VALUES ($1, $2, 'Unmapped')
 ON CONFLICT (device_id, channel_id) DO NOTHING;
+
+-- name: UpdateDeviceLocation :exec
+UPDATE device SET latitude = $2, longitude = $3 WHERE id = $1;
