@@ -15,11 +15,14 @@ import StepConfigWritingConfiguration from "./StepConfigWritingConfiguration.tsx
 import StepFinishShowingNextSteps from "./StepFinishShowingNextSteps.tsx";
 import StepFinishShowingError from "./StepFinishShowingError.tsx";
 
-const inspect = import.meta.env.DEV
-	? createBrowserInspector().inspect
-	: undefined;
-
 export default function Steps() {
+	// Create the inspector inside the component so it only opens when the installer is actually
+	// mounted — otherwise the module-level call runs at import time and pops the Stately debugger
+	// on every route (e.g. the main dashboard page) in dev.
+	const inspect = import.meta.env.DEV
+		? createBrowserInspector().inspect
+		: undefined;
+
 	// useMachine’s first tuple value is a one-shot snapshot in @xstate/solid 2.0.0 (it calls
 	// `fromActorRef(actorRef)()`), so Switch/Match would never see transitions. Use the actor
 	// ref + `fromActorRef` accessor so `snapshot()` stays in sync with the running machine.
