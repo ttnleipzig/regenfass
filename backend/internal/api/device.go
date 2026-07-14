@@ -49,7 +49,7 @@ func (a *API) handleRegisterDevice(c fiber.Ctx) error {
 
 // DeviceInfoResponse represents device information response
 type DeviceInfoResponse struct {
-	Token          string `json:"token" example:"dev_token_123"`
+	IsReadonly     bool `json:"is_readonly" example:"false"`
 	ReadWriteToken string `json:"read_write_token" example:"rw_token_123"`
 	ReadOnlyToken  string `json:"read_only_token" example:"ro_token_123"`
 	DeviceEUI      string `json:"device_eui" example:"AABBCCDDEEFF0011"`
@@ -69,5 +69,24 @@ type DeviceInfoResponse struct {
 //	@Failure		500			{object}	HTTPError	"Internal server error"
 //	@Router			/device/{deviceToken} [get]
 func (a *API) handleDeviceInfoByToken(c fiber.Ctx) error {
-	return nil
+	log := a.getRequestLogger(c)
+
+	deviceToken := c.Params("deviceToken")
+	if deviceToken == "" {
+		log.Error().Msg("invalid device token")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid device token")
+	}
+
+	deviceInfo, err := a.db.GetDeviceByEitherToken(c.Context(), deviceToken)
+	if err != nil {
+		log.Error().Err(err).Msg("could not find device in database")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not find device in database")
+	}
+
+	return c.JSON(DeviceInfoResponse{
+		DeviceEUI:      deviceInfo.DeviceEui,
+		ReadOnlyToken:	deviceInfo.RoToken,
+		ReadWriteToken:	deviceInfo.RwToken,
+		IsReadonly:		deviceInfo.IsReadonly,
+	})
 }

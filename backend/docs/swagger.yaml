@@ -35,9 +35,9 @@ definitions:
       read_write_token:
         example: rw_token_123
         type: string
-      token:
-        example: dev_token_123
-        type: string
+      is_read_only:
+        example: true
+        type: boolean
     type: object
   api.GroupInfoDevice:
     description: Device information within a group
