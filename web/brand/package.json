@@ -1,0 +1,30 @@
+{
+  "name": "@regenfass/brand",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css",
+    "./tailwind.preset.cjs": "./tailwind.preset.cjs"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.9.0",
+    "@solidjs/router": "^0.15.0",
+    "@kobalte/core": "^0.13.0"
+  },
+  "dependencies": {
+    "@corvu/otp-field": "^0.1.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-solid": "^0.543.0",
+    "solid-icons": "^1.1.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@kobalte/core": "^0.13.11",
+    "@solidjs/router": "^0.15.3",
+    "solid-js": "^1.9.9",
+    "typescript": "^5.9.2"
+  }
+}

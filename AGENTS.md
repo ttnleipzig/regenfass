@@ -20,7 +20,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 **Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `src/`, with shared SCP (Serial Configuration Protocol) code under `lib/scp/` for device configuration. **Hardware** partition tables live under `board_partitions/`. Do not paste full directory trees into docs (see `.cursor/rules/filetree.mdc`).
 
-**Installer** is a SolidJS app (atomic design: atoms, molecules, organisms) for device settings, flashing ESP32 hardware, and Web Serial. Main areas include `web/installer/src/components/`, installer logic and state under `web/installer/src/installer/`, shared utilities and SCP under `web/installer/src/libs/`, and `web/installer/src/playground/` for UI development. Shared look & feel comes from `@regenfass/brand`.
+**Installer** is a SolidJS app for device settings, flashing ESP32 hardware, and Web Serial. Shared UI comes from `@regenfass/brand` (`web/brand`). Installer-specific UI lives under `web/installer/src/components/` (for example flash steps); installer logic and state under `web/installer/src/installer/`; shared utilities and SCP under `web/installer/src/libs/`. The component gallery is the brand showcase (`web/brand-showcase`), not an installer playground.
 
 ## Technology stack
 
@@ -70,7 +70,7 @@ Important rule files under `.cursor/rules/` include: `framework.mdc` (SolidJS), 
 1. Place it under the right layer: `atoms/`, `molecules/`, or `organisms/`.
 2. Prefer shadcn-solid primitives; add proper TypeScript types.
 3. Run `pnpm docs:components` and update hand-written docs under `web/installer/docs` as needed.
-4. Register in the playground when the project uses that workflow (`pnpm playground:registry`).
+4. If the component is shared, expose it from `@regenfass/brand` and verify it in the brand showcase (`pnpm dev:brand`).
 
 ### Configuration
 
