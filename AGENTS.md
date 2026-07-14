@@ -163,6 +163,54 @@ chore(deps): bump vite in installer
 - SolidJS: <https://www.solidjs.com/>
 - PlatformIO: <https://platformio.org/>
 
+## Cursor Cloud specific instructions
+
+These notes are for cloud agents working in the automated VM. Dependencies for
+the **installer** are refreshed on startup (`pnpm install` inside `installer/`);
+you should not need to reinstall them.
+
+### What is runnable here
+
+- **Installer** (SolidJS web app) is the runnable product in this VM. Start it
+  with `pnpm dev` from `installer/` (see `installer/README.md`); it serves on
+  <http://localhost:5173>. `pnpm` is pinned via corepack (`packageManager`
+  in `installer/package.json`); always run pnpm from `installer/`.
+- **Firmware** (`pio run`, PlatformIO) and **backend** (`backend/`, Go + Docker
+  Compose with Postgres/Grafana) are **not** part of the default cloud setup.
+  Firmware flashing needs a physical ESP32 over USB, and `backend/` requires
+  Go 1.25+ plus Docker; install those yourself if a task needs them.
+
+### Web Serial / hardware boundary (expected, not a bug)
+
+- The installer startup machine auto-advances to the "Hi there! 👋" welcome
+  without any network (firmware versions are currently hardcoded in
+  `src/libs/install/state.ts`). Clicking **Next** calls
+  `navigator.serial.requestPort()`. In the VM there is no device, so Chrome
+  shows "No compatible devices found"; cancelling shows a graceful "Critical
+  error" screen with **Restart**. This is expected — real flashing/config over
+  serial needs a physical ESP32.
+- For hardware-free UI work, the component playground at
+  <http://localhost:5173/playground> renders every component interactively.
+
+### Known pre-existing failures (do not chase these during setup)
+
+- `pnpm lint:md` fails on 2 bare-URL errors in `docs/development.md`
+  (`pnpm lint:ts` passes).
+- `pnpm test:run` has a few failing tests asserting outdated CSS classes
+  (e.g. expecting `max-w-6xl`/`px-4` where the source now uses `site-container`).
+- `pnpm build` fails at its `tsc -b` step due to type errors in test files
+  (`tests/libs/downloadConfig.test.ts`,
+  `tests/components/molecules/steps/StepConfigEditing.test.tsx`). Dev mode
+  (`pnpm dev`) is unaffected.
+
+### Generated files
+
+- `pnpm build`/`prebuild` runs codegen (`docs:components`,
+  `playground:registry`) that rewrites committed files
+  (`installer/docs/COMPONENTS.md`, `installer/public/registry.json`,
+  `installer/src/playground/registry.json`). Don't commit those incidental
+  regenerated diffs unless the change is intentional.
+
 ---
 
 Keep this file accurate when workflows or stack constraints change.
