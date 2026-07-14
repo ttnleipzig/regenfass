@@ -26,6 +26,7 @@
 !/SECURITY.md
 !/STATES.md
 !/version.txt
+!/codecov.yml
 !/package.json
 !/pnpm-workspace.yaml
 !/pnpm-lock.yaml

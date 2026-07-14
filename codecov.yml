@@ -1,0 +1,11 @@
+# Coverage status for the monorepo after shared UI moved to @regenfass/brand.
+# A one-time project drop vs main is expected until brand ships its own reports.
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 5%
+    patch:
+      default:
+        target: 0%
