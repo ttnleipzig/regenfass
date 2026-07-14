@@ -1,7 +1,0 @@
----
-description: Verwende  solidjs
-globs: installer/**/*
-alwaysApply: true
----
-
-Verwende immer solidjs und kein react

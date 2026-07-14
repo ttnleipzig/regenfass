@@ -1,0 +1,16 @@
+---
+description: Run pnpm from the workspace root or web package directories
+alwaysApply: true
+---
+
+# pnpm (web workspace)
+
+Node tooling lives in the **pnpm workspace** under **`web/*`** (see root `AGENTS.md` and `pnpm-workspace.yaml`).
+
+- **Install** from the repository root: `pnpm install`.
+- For the **installer**, either:
+  - `cd web/installer && pnpm <script>`, or
+  - `pnpm --filter @ttnleipzig/regenfass-installer <script>`, or
+  - root helpers such as `pnpm dev:installer`, `pnpm test`, `pnpm lint`.
+
+Do **not** use the obsolete top-level `installer/` path. Do **not** use npm/yarn for this repo. Firmware builds use PlatformIO from the repo root, not pnpm.

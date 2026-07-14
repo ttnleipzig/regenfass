@@ -1,0 +1,15 @@
+---
+description: Test directory structure mirrors component structure
+globs: web/installer/tests/**/*
+alwaysApply: true
+---
+
+The directory structure under `web/installer/tests/components` must mirror the structure under `web/installer/src/components`.
+
+For example:
+- `web/installer/src/components/atoms/Headline.tsx` → `web/installer/tests/components/atoms/Headline.test.tsx`
+- `web/installer/src/components/forms/TextInput.tsx` → `web/installer/tests/components/forms/TextInput.test.tsx`
+- `web/installer/src/components/molecules/steps/Steps.tsx` → `web/installer/tests/components/molecules/steps/Steps.test.tsx`
+- `web/installer/src/components/organisms/Header.tsx` → `web/installer/tests/components/organisms/Header.test.tsx`
+
+When creating new component tests, place them in the corresponding directory structure under `web/installer/tests/components/` that matches their location under `web/installer/src/components/`.

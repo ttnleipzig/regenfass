@@ -8,10 +8,22 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/ttnleipzig/regenfass)
 [![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
 
-Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN).
+Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN), plus SolidJS web apps for flashing, brand, marketing, and docs.
 
 Our documentation is the best place for
-[getting started](https://regenfass.ttn-leipzig.de).
+[getting started](https://regenfass.ttn-leipzig.de). Contributor technical docs live in [`docs/`](docs/Home.md) (GitHub Wiki sync).
+
+### Web apps (`web/`)
+
+| Package | Path | Role |
+| ------- | ---- | ---- |
+| Installer | `web/installer` | Flash & configure devices (Web Serial) |
+| Brand | `web/brand` | Shared `@regenfass/brand` UI kit |
+| Brand showcase | `web/brand-showcase` | Design playground |
+| Marketing | `web/marketing` | Marketing site |
+| Docs site | `web/docs` | User-facing documentation site |
+
+From the repo root: `corepack enable && pnpm install`, then `pnpm dev:installer` (or other `dev:*` scripts in root `package.json`).
 
 ## 🚀 Features
 

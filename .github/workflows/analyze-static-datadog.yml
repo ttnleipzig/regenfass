@@ -40,12 +40,17 @@ jobs:
       security-events: write
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Check code meets quality and security standards
       id: datadog-static-analysis
-      uses: DataDog/datadog-static-analyzer-github-action@v1
+      continue-on-error: true
+      uses: DataDog/datadog-static-analyzer-github-action@v3
       with:
         dd_api_key: ${{ secrets.DD_API_KEY }}
         dd_app_key: ${{ secrets.DD_APP_KEY }}
         dd_site: datadoghq.eu
         cpu_count: 2
+    - name: Warn if Datadog analysis did not succeed
+      if: steps.datadog-static-analysis.outcome != 'success'
+      run: |
+        echo "::warning::Datadog Static Analyzer failed (often invalid DD_API_KEY/DD_APP_KEY for dd_site). Check secrets; not blocking the PR."

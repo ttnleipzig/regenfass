@@ -1,0 +1,9 @@
+# Netlify site: set Base directory to `web/docs` in the Netlify UI.
+[build]
+  command = "cd ../.. && corepack enable && pnpm install && pnpm --filter @ttnleipzig/regenfass-docs-site build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -17,7 +17,7 @@ permissions:
   checks: write
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
   PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
 
@@ -33,33 +33,32 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          cache-dependency-path: './installer/pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('installer/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
-        run: cd ./installer && pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: cd ./installer && pnpm exec playwright install --with-deps chromium
+        working-directory: web/installer
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Publish Playwright report
         uses: sidharthv96/playwright-report-action@v2.0-rc.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: installer
+          working-directory: web/installer
           package-manager: pnpm
           skip-step: install
           test-script: pnpm exec playwright test --reporter=json,line
