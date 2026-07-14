@@ -12,6 +12,7 @@ This document contains automatically generated documentation for all components 
   - [SpinnerConfetti](#spinnerconfetti)
   - [Status](#status)
 - [Molecules](#molecules)
+  - [SensorGraph](#sensorgraph)
   - [CardTitle](#cardtitle)
   - [CardDescription](#carddescription)
   - [ErrorList](#errorlist)
@@ -25,6 +26,9 @@ This document contains automatically generated documentation for all components 
   - [InputField](#inputfield)
   - [TextFieldHex](#textfieldhex)
   - [TextInput](#textinput)
+- [Uncategorized](#uncategorized)
+  - [Dashboard](#dashboard)
+  - [LeipzigMap](#leipzigmap)
 
 ## Atoms
 
@@ -141,6 +145,25 @@ import { CardTitle } from '@regenfass/brand';
 
 ```typescript
 import { ErrorList } from '@regenfass/brand';
+```
+
+### SensorGraph
+
+**Path**: `molecules/SensorGraph.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `apexcharts`
+- `lucide-solid`
+- `solid-apexcharts`
+- `solid-js`
+
+**Import:**
+
+```typescript
+import { SensorGraph } from '@regenfass/brand';
 ```
 
 ## Organisms
@@ -275,6 +298,52 @@ import { TextFieldHex } from '@regenfass/brand';
 
 ```typescript
 import { TextInput } from '@regenfass/brand';
+```
+
+## Uncategorized
+
+### Dashboard
+
+**Path**: `pages/Dashboard.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `@solidjs/router`
+- `lucide-solid`
+- `solid-js`
+
+*Internal:*
+
+- `molecules/SensorGraph`
+- `pages/LeipzigMap`
+- `ui/select`
+- `ui/text-input`
+
+**Import:**
+
+```typescript
+import { Dashboard } from '@regenfass/brand';
+```
+
+### LeipzigMap
+
+**Path**: `pages/LeipzigMap.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `@protomaps/basemaps`
+- `maplibre-gl`
+- `solid-js`
+- `solid-maplibre`
+
+**Import:**
+
+```typescript
+import { LeipzigMap } from '@regenfass/brand';
 ```
 
 ---
