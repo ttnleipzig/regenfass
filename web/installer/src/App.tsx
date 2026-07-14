@@ -2,9 +2,10 @@ import { Router, Route } from "@solidjs/router";
 import Steps from "./components/molecules/steps/Steps";
 import { Footer, Header, LocaleProvider, Newsletter } from "@regenfass/brand";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
+import Dashboard from "./components/pages/Dashboard";
 
-// Main app layout for the installer
-function MainApp() {
+// Installer flow — the web-serial firmware installation experience.
+function InstallApp() {
 	return (
 		<div class="min-h-screen flex flex-col">
 			<Header />
@@ -24,7 +25,8 @@ function App() {
 			<ColorModeProvider>
 				<LocaleProvider>
 					<Router>
-						<Route path="/" component={MainApp} />
+						<Route path="/" component={Dashboard} />
+						<Route path="/install" component={InstallApp} />
 					</Router>
 				</LocaleProvider>
 			</ColorModeProvider>
