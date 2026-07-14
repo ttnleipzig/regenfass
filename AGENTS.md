@@ -176,16 +176,14 @@ chore(deps): bump vite in installer
 
 ## Cursor Cloud specific instructions
 
-- **Dependency refresh:** run `pnpm install` from the **repository root** (pnpm workspace). Do not assume a standalone `installer/` package at the repo root.
-- **Installer:** package at `web/installer`. Dev server: `pnpm dev:installer` or `pnpm --filter @ttnleipzig/regenfass-installer dev` or `cd web/installer && pnpm dev` (Vite default port **5173**).
-- **Brand showcase:** `pnpm dev:brand` → <http://localhost:5174>.
-- **Marketing:** `pnpm dev:marketing` → <http://localhost:5175>.
-- **Docs site:** `pnpm dev:docs` → <http://localhost:5176>.
-- **Lint / test (installer):** `pnpm lint` and `pnpm test` from root, or the same scripts inside `web/installer`.
-- **Web Serial:** full flash/configure E2E needs a **Chromium** browser and **physical USB hardware**. Unit tests and most Playwright smoke tests run without a board; do not block CI setup on hardware.
-- **Firmware** remains PlatformIO from the repo root (`pio run`); unrelated to the pnpm workspace.
-- Contributor technical docs live in `/docs` (flat files). Standard commands are also summarized in `docs/Local-Development.md` and `web/installer/README.md`.
-- **Netlify:** production deploys are via GitHub Actions (`.github/workflows/web-deploy-netlify.yml`) or CLI. Cursor secrets ≠ GitHub Actions secrets — GHA needs the same names under **Environments → production** (see `docs/Netlify-Deployment.md`). Local/CLI deploys in this monorepo need `CI=true` and `--filter <package>` or the CLI hangs on a project picker. Maton/Netlify MCP may still need separate Cursor auth; the CLI + token works without it.
+- **Node / pnpm:** Node 22+ works; pnpm is pinned via root `packageManager` (`pnpm@10.28.0`). Prefer Corepack (`corepack enable`) so installs match the lockfile.
+- **Dependency refresh:** run `pnpm install` from the **repository root** (pnpm workspace). There is **no** top-level `installer/` package — the app lives under `web/installer`.
+- **What must run for installer web work:** only the installer Vite app (`pnpm dev:installer` → **5173**). `@regenfass/brand` is a workspace library (no separate server). Backend/Postgres, PlatformIO firmware, marketing/docs/brand-showcase are optional for installer UI work.
+- **Other web apps (optional):** `pnpm dev:brand` → 5174, `pnpm dev:marketing` → 5175, `pnpm dev:docs` → 5176.
+- **Lint / test / build:** from root — `pnpm lint`, `pnpm test`, `pnpm build:installer` (or `pnpm build` for all web packages). Details also in `docs/Local-Development.md` and `web/installer/README.md`.
+- **Web Serial:** full flash/configure E2E needs **Chromium** and **physical USB hardware**. Unit tests run without a board; do not block setup on hardware.
+- **Firmware:** PlatformIO from repo root (`pio run`); unrelated to the pnpm workspace. Not required for installer web setup.
+- **Netlify:** GitHub Actions builds + `netlify deploy` (see `docs/Netlify-Deployment.md`). Cursor secrets ≠ GitHub Actions secrets — GHA reads **Environments → production**. CLI deploys in this monorepo need `CI=true` and `--filter <package>` or the CLI hangs on a project picker.
 
 ---
 
