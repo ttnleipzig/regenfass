@@ -12,5 +12,8 @@ INSERT INTO device_channel_mapping (device_id, channel_id, name)
 VALUES ($1, $2, 'Unmapped')
 ON CONFLICT (device_id, channel_id) DO NOTHING;
 
+-- name: UpdateDeviceName :exec
+UPDATE device SET name = $2 WHERE id = $1;
+
 -- name: UpdateDeviceLocation :exec
 UPDATE device SET latitude = $2, longitude = $3 WHERE id = $1;

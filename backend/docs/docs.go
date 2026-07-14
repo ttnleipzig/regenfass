@@ -103,6 +103,69 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Update mutable device fields (currently only the custom name). Requires the read-write token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Update device fields",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device read-write token",
+                        "name": "deviceToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Fields to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.UpdateDevicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token or payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "403": {
+                        "description": "Device token is read-only",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
             }
         },
         "/group": {
@@ -366,11 +429,28 @@ const docTemplate = `{
             }
         },
         "api.DeviceInfoResponse": {
+            "description": "Identity of a device. When authenticated with the read-write token, both tokens are returned; otherwise only the read-only token is returned. ` + "`" + `name` + "`" + ` is the user-set name, or a stable auto-generated nickname if none has been set.",
             "type": "object",
             "properties": {
-                "device_eui": {
+                "device_id": {
                     "type": "string",
-                    "example": "AABBCCDDEEFF0011"
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Happy Barrel"
                 },
                 "read_only_token": {
                     "type": "string",
@@ -379,10 +459,6 @@ const docTemplate = `{
                 "read_write_token": {
                     "type": "string",
                     "example": "rw_token_123"
-                },
-                "token": {
-                    "type": "string",
-                    "example": "dev_token_123"
                 }
             }
         },
@@ -519,6 +595,16 @@ const docTemplate = `{
                 "source": {
                     "type": "string",
                     "example": "SOURCE_REGISTRY"
+                }
+            }
+        },
+        "api.UpdateDevicePayload": {
+            "description": "Fields that can be updated on a device (only present fields are applied)",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Rain barrel by the shed"
                 }
             }
         }

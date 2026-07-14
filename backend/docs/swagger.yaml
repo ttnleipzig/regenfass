@@ -25,18 +25,30 @@ definitions:
         type: string
     type: object
   api.DeviceInfoResponse:
+    description: Identity of a device. When authenticated with the read-write token,
+      both tokens are returned; otherwise only the read-only token is returned. `name`
+      is the user-set name, or a stable auto-generated nickname if none has been set.
     properties:
-      device_eui:
-        example: AABBCCDDEEFF0011
+      device_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_readonly:
+        example: false
+        type: boolean
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      name:
+        example: Happy Barrel
         type: string
       read_only_token:
         example: ro_token_123
         type: string
       read_write_token:
         example: rw_token_123
-        type: string
-      token:
-        example: dev_token_123
         type: string
     type: object
   api.GroupInfoDevice:
@@ -135,6 +147,13 @@ definitions:
         example: SOURCE_REGISTRY
         type: string
     type: object
+  api.UpdateDevicePayload:
+    description: Fields that can be updated on a device (only present fields are applied)
+    properties:
+      name:
+        example: Rain barrel by the shed
+        type: string
+    type: object
 host: localhost:64000
 info:
   contact: {}
@@ -199,6 +218,49 @@ paths:
           schema:
             $ref: '#/definitions/api.HTTPError'
       summary: Get device information by token
+      tags:
+      - devices
+    patch:
+      consumes:
+      - application/json
+      description: Update mutable device fields (currently only the custom name).
+        Requires the read-write token.
+      parameters:
+      - description: Device read-write token
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Fields to update
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateDevicePayload'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid token or payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Device token is read-only
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update device fields
       tags:
       - devices
   /group:

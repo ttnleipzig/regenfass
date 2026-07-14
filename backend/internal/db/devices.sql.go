@@ -108,3 +108,17 @@ func (q *Queries) UpdateDeviceLocation(ctx context.Context, arg UpdateDeviceLoca
 	_, err := q.db.Exec(ctx, updateDeviceLocation, arg.ID, arg.Latitude, arg.Longitude)
 	return err
 }
+
+const updateDeviceName = `-- name: UpdateDeviceName :exec
+UPDATE device SET name = $2 WHERE id = $1
+`
+
+type UpdateDeviceNameParams struct {
+	ID   pgtype.UUID
+	Name string
+}
+
+func (q *Queries) UpdateDeviceName(ctx context.Context, arg UpdateDeviceNameParams) error {
+	_, err := q.db.Exec(ctx, updateDeviceName, arg.ID, arg.Name)
+	return err
+}
