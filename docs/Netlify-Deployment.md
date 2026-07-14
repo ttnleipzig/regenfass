@@ -62,6 +62,8 @@ Each app has `public/_redirects` (`/* → /index.html` 200) so client-side route
 
 ## GitHub secrets checklist
 
+Add these under **Settings → Environments → `production`** (preferred — the deploy workflow uses that environment) or as repository secrets.
+
 | Secret | Purpose |
 |--------|---------|
 | `NETLIFY_AUTH_TOKEN` | Authenticate `netlify deploy` |
@@ -70,7 +72,7 @@ Each app has `public/_redirects` (`/* → /index.html` 200) so client-side route
 | `NETLIFY_SITE_ID_INSTALLER` | Installer site ID |
 | `NETLIFY_SITE_ID_BRAND` | Brand showcase site ID |
 
-Missing secrets log a warning and skip that site; the job still succeeds so you can roll out sites one by one.
+A present auth token with a missing Site ID only skips that site (warning in the Actions log). The job can still be green — check the annotations, not just the check mark.
 
 ## Manual / local deploy
 
