@@ -5,6 +5,7 @@ import (
 
 	swaggo "github.com/gofiber/contrib/v3/swaggo"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -28,6 +29,20 @@ func New(dbPool *pgxpool.Pool) *API {
 	app := fiber.New()
 
 	api := &API{app, db.New(dbPool), dbPool, log}
+
+	api.app.Use(cors.New(cors.Config{
+		AllowOriginsFunc: func(origin string) bool {
+			panic("TODO")
+		},
+		AllowOrigins:          []string{"*"},
+		AllowMethods:          []string{"GET", "POST", "PATCH"},
+		AllowHeaders:          []string{},
+		ExposeHeaders:         []string{},
+		MaxAge:                0,
+		DisableValueRedaction: false,
+		AllowCredentials:      false,
+		AllowPrivateNetwork:   true,
+	}))
 
 	api.app.Get("/healthz", api.handleHealthz)
 	api.app.Post("/ingest", api.handleIngest)
