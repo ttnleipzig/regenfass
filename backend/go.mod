@@ -3,6 +3,7 @@ module github.com/ttn-leipzig/regenfass
 go 1.25.0
 
 require (
+	github.com/Zedran/neng v0.20.0
 	github.com/gofiber/contrib/v3/swaggo v1.0.0
 	github.com/gofiber/fiber/v3 v3.0.0
 	github.com/golang-migrate/migrate/v4 v4.18.2
