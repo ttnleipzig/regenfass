@@ -185,6 +185,7 @@ chore(deps): bump vite in installer
 - **Web Serial:** full flash/configure E2E needs a **Chromium** browser and **physical USB hardware**. Unit tests and most Playwright smoke tests run without a board; do not block CI setup on hardware.
 - **Firmware** remains PlatformIO from the repo root (`pio run`); unrelated to the pnpm workspace.
 - Contributor technical docs live in `/docs` (flat files). Standard commands are also summarized in `docs/Local-Development.md` and `web/installer/README.md`.
+- **Netlify:** production deploys are via GitHub Actions (`.github/workflows/web-deploy-netlify.yml`) or CLI. Cursor secrets ≠ GitHub Actions secrets — GHA needs the same names under **Environments → production** (see `docs/Netlify-Deployment.md`). Local/CLI deploys in this monorepo need `CI=true` and `--filter <package>` or the CLI hangs on a project picker. Maton/Netlify MCP may still need separate Cursor auth; the CLI + token works without it.
 
 ---
 

@@ -70,7 +70,8 @@ jobs:
             echo "::warning::Skipping marketing deploy (missing NETLIFY_SITE_ID_MARKETING — Site ID from Netlify Site configuration)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/marketing/dist --message "gha ${{ github.sha }}"
+          # --filter avoids Netlify CLI monorepo project picker in CI
+          CI=true netlify deploy --prod --dir=web/marketing/dist --filter @ttnleipzig/regenfass-marketing --message "gha ${{ github.sha }}"
 
       - name: Deploy docs → docs.regenfass.eu
         env:
@@ -85,7 +86,7 @@ jobs:
             echo "::warning::Skipping docs deploy (missing NETLIFY_SITE_ID_DOCS — Site ID from Netlify Site configuration)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/docs/dist --message "gha ${{ github.sha }}"
+          CI=true netlify deploy --prod --dir=web/docs/dist --filter @ttnleipzig/regenfass-docs-site --message "gha ${{ github.sha }}"
 
       - name: Deploy installer → install.regenfass.eu
         env:
@@ -100,7 +101,7 @@ jobs:
             echo "::warning::Skipping installer deploy (missing NETLIFY_SITE_ID_INSTALLER — Site ID from Netlify Site configuration)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/installer/dist --message "gha ${{ github.sha }}"
+          CI=true netlify deploy --prod --dir=web/installer/dist --filter @ttnleipzig/regenfass-installer --message "gha ${{ github.sha }}"
 
       - name: Deploy brand showcase → brand.regenfass.eu
         env:
@@ -115,4 +116,4 @@ jobs:
             echo "::warning::Skipping brand deploy (missing NETLIFY_SITE_ID_BRAND — Site ID from Netlify Site configuration)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/brand-showcase/dist --message "gha ${{ github.sha }}"
+          CI=true netlify deploy --prod --dir=web/brand-showcase/dist --filter @ttnleipzig/regenfass-brand-showcase --message "gha ${{ github.sha }}"

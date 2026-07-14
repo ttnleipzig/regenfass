@@ -76,14 +76,31 @@ A present auth token with a missing Site ID only skips that site (warning in the
 
 ## Manual / local deploy
 
+Build first, then deploy the already-built `dist/` (do not let the CLI rebuild). In this monorepo you **must** pass `--filter` so the CLI does not hang on an interactive project picker:
+
 ```bash
 corepack enable && pnpm install
 pnpm build:docs   # or :marketing / :installer / :brand
 
 export NETLIFY_AUTH_TOKEN=…
 export NETLIFY_SITE_ID=…   # that site’s ID
-npx netlify-cli deploy --prod --dir=web/docs/dist
+CI=true npx netlify-cli@23 deploy --prod --dir=web/docs/dist \
+  --filter @ttnleipzig/regenfass-docs-site
 ```
+
+| App | `--dir` | `--filter` |
+|-----|---------|------------|
+| Marketing | `web/marketing/dist` | `@ttnleipzig/regenfass-marketing` |
+| Docs | `web/docs/dist` | `@ttnleipzig/regenfass-docs-site` |
+| Installer | `web/installer/dist` | `@ttnleipzig/regenfass-installer` |
+| Brand | `web/brand-showcase/dist` | `@ttnleipzig/regenfass-brand-showcase` |
+
+Production Netlify hostnames (until custom domains are attached):
+
+- <https://regenfass-marketing.netlify.app>
+- <https://regenfass-docs.netlify.app>
+- <https://regenfass-installer.netlify.app>
+- <https://regenfass-brand.netlify.app>
 
 ## Fallback build command (if you must build on Netlify)
 
