@@ -56,6 +56,8 @@ export type { HeaderNavItem, HeaderProps } from "./components/organisms/Header.t
 export { default as Footer } from "./components/organisms/Footer.tsx";
 export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
 
+export { APP_VERSION } from "./version.ts";
+
 // Forms
 export { AppKeyHexField } from "./components/forms/AppKeyHexField.tsx";
 export type { AppKeyHexFieldProps } from "./components/forms/AppKeyHexField.tsx";

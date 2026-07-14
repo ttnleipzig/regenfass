@@ -62,7 +62,8 @@ jobs:
         id: release
         with:
           token: ${{ secrets.RELEASE_PLEASE_ORGANISATION || github.token }}
-          release-type: simple
+          config-file: .release-please-config.json
+          manifest-file: .release-please-manifest.json
       - name: Print the release URL if present
         if: ${{ steps.release.outputs.release_created == 'true' }}
         run: |

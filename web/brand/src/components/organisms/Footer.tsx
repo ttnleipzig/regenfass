@@ -1,6 +1,7 @@
 import Book from "lucide-solid/icons/book";
 import Github from "lucide-solid/icons/github";
 import MessageSquare from "lucide-solid/icons/message-square";
+import { APP_VERSION } from "../../version.ts";
 
 export default function Footer() {
 	return (
@@ -42,6 +43,18 @@ export default function Footer() {
 						class="hover:text-slate-500 dark:hover:text-white hover:underline"
 					>
 						ESP Web Tools
+					</a>
+				</p>
+				<p class="mt-2">
+					<span class="font-mono">v{APP_VERSION}</span>
+					{" · "}
+					<a
+						href="https://github.com/ttnleipzig/regenfass/releases"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="hover:text-slate-500 dark:hover:text-white hover:underline"
+					>
+						Release notes
 					</a>
 				</p>
 			</div>

@@ -16,6 +16,7 @@
 !/.releaserc.yml
 !/.markdownlintignore
 !/.release-please-config.json
+!/.release-please-manifest.json
 !/.remarkignore
 !/AGENTS.md
 !/platformio.ini

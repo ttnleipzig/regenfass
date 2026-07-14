@@ -107,16 +107,20 @@ parses subjects that start with the conventional type.
 
 ### Release management
 
-We use [release please](https://github.com/googleapis/release-please) for this project.
-It is implemented in our [release workflow](.github/workflows/sketch-release.yml).
-It collects all commits since the last release in a release pull request.
-Use the [conventional commit](#conventional-commits) message format for your commits like it is described above.
-Please write your messages very easy to understand for none developers and a bit more
-verbose as useally because it will be used for the Changelog and Release-Notes.
+We use [Release Please](https://github.com/googleapis/release-please) for this project
+(see [docs/Release-Process.md](docs/Release-Process.md)).
+It is wired in [sketch-release.yml](.github/workflows/sketch-release.yml).
+
+One **shared semver** updates `version.txt`, `CHANGELOG.md`, all workspace
+`package.json` files, and `web/brand/src/version.ts` (`APP_VERSION`). Those notes
+appear on the **GitHub Release** page and on the marketing site (`/#changelog`).
 
 Prefer **squash merging** pull requests into `main` so that each PR becomes a single
 conventional commit. Merge commits (e.g. "Merge pull request #23…") are not parsed by
 Release Please and are skipped for the changelog.
+
+Write commit subjects so they make sense to non-developers — they become the
+Changelog and release notes.
 
 ### Workflow for your new feature
 

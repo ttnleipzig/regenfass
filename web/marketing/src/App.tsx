@@ -15,9 +15,11 @@ import {
   Link,
   Newsletter,
 } from "@regenfass/brand";
+import ChangelogSection from "./ChangelogSection";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/#changelog", label: "Changelog" },
   { href: "https://docs.regenfass.eu/", label: "Docs", external: true },
   {
     href: "https://install.regenfass.eu",
@@ -250,7 +252,10 @@ function Home() {
         </div>
       </section>
 
-      {/* 7. CTA strip */}
+      {/* 7. Changelog / release notes */}
+      <ChangelogSection />
+
+      {/* 8. CTA strip */}
       <section class="border-t border-border bg-gradient-to-br from-sky-600/10 to-cyan-500/5">
         <div class="site-container py-14 sm:py-16 space-y-6">
           <Headline as="h2" align="center">
