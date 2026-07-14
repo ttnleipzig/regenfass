@@ -1,0 +1,4 @@
+:root {
+    --esp-tools-button-color: var(--theme-color);
+    --esp-tools-button-text-color: white;
+}

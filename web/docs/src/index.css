@@ -1,0 +1,76 @@
+@import "@regenfass/brand/styles.css";
+
+@layer components {
+  .docs-prose {
+    @apply max-w-3xl text-foreground leading-relaxed;
+  }
+
+  .docs-prose h1 {
+    @apply text-3xl font-bold tracking-tight mt-2 mb-4;
+  }
+
+  .docs-prose h2 {
+    @apply text-2xl font-bold tracking-tight mt-10 mb-3 border-b border-border pb-2;
+  }
+
+  .docs-prose h3 {
+    @apply text-xl font-semibold mt-8 mb-2;
+  }
+
+  .docs-prose h4 {
+    @apply text-lg font-semibold mt-6 mb-2;
+  }
+
+  .docs-prose p {
+    @apply my-3 text-muted-foreground;
+  }
+
+  .docs-prose a {
+    @apply text-primary underline-offset-4 hover:underline;
+  }
+
+  .docs-prose ul {
+    @apply my-3 list-disc pl-6 text-muted-foreground space-y-1;
+  }
+
+  .docs-prose ol {
+    @apply my-3 list-decimal pl-6 text-muted-foreground space-y-1;
+  }
+
+  .docs-prose blockquote {
+    @apply my-4 border-l-4 border-sky-500/60 bg-sky-500/5 px-4 py-2 text-sm text-foreground/90;
+  }
+
+  .docs-prose table {
+    @apply my-6 w-full text-sm border-collapse;
+  }
+
+  .docs-prose th,
+  .docs-prose td {
+    @apply border border-border px-3 py-2 align-top;
+  }
+
+  .docs-prose th {
+    @apply bg-muted font-semibold text-foreground;
+  }
+
+  .docs-prose img {
+    @apply my-4 max-w-full h-auto rounded-md border border-border bg-card p-2;
+  }
+
+  .docs-prose code {
+    @apply rounded bg-muted px-1.5 py-0.5 text-[0.9em] text-foreground;
+  }
+
+  .docs-prose pre {
+    @apply my-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 text-sm;
+  }
+
+  .docs-prose pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .docs-prose hr {
+    @apply my-8 border-border;
+  }
+}

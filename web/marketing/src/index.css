@@ -1,0 +1,51 @@
+@import "@regenfass/brand/styles.css";
+
+@layer utilities {
+  .hero-glow {
+    background:
+      radial-gradient(
+        ellipse 80% 60% at 70% 20%,
+        hsl(199 89% 48% / 0.18),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 15% 80%,
+        hsl(171 91% 36% / 0.12),
+        transparent 50%
+      ),
+      linear-gradient(
+        165deg,
+        hsl(210 40% 98%) 0%,
+        hsl(199 60% 94%) 45%,
+        hsl(210 30% 96%) 100%
+      );
+  }
+
+  [data-kb-theme="dark"] .hero-glow {
+    background:
+      radial-gradient(
+        ellipse 80% 60% at 70% 20%,
+        hsl(199 89% 48% / 0.22),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 15% 80%,
+        hsl(171 91% 36% / 0.14),
+        transparent 50%
+      ),
+      linear-gradient(
+        165deg,
+        hsl(222 47% 8%) 0%,
+        hsl(210 40% 12%) 50%,
+        hsl(222 47% 10%) 100%
+      );
+  }
+
+  .grid-quiet {
+    background-image:
+      linear-gradient(hsl(199 89% 48% / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(199 89% 48% / 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+  }
+}
