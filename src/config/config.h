@@ -7,7 +7,8 @@
 #define CONFIG_PROPERTIES(X) \
     X(appEUI)                \
     X(appKey)                \
-    X(devEUI)
+    X(devEUI)                \
+    X(publishInterval)
 
 namespace Configuration
 {
