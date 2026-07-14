@@ -25,9 +25,24 @@ definitions:
         type: string
     type: object
   api.DeviceInfoResponse:
+    description: Identity of a device. When authenticated with the read-write token,
+      both tokens are returned; otherwise only the read-only token is returned. `name`
+      is the user-set name, or a stable auto-generated nickname if none has been set.
     properties:
-      device_eui:
-        example: AABBCCDDEEFF0011
+      device_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_readonly:
+        example: false
+        type: boolean
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      name:
+        example: Happy Barrel
         type: string
       read_only_token:
         example: ro_token_123
@@ -35,9 +50,25 @@ definitions:
       read_write_token:
         example: rw_token_123
         type: string
-      token:
-        example: dev_token_123
+    type: object
+  api.DeviceMeasurement:
+    description: A measurement reading from one of a device's channels at a point
+      in time
+    properties:
+      channel_id:
+        example: 1
+        type: integer
+      channel_name:
+        example: Water Level
         type: string
+      measurement_type:
+        example: 4
+        type: integer
+      received_at:
+        example: "2024-01-15T10:30:00Z"
+        type: string
+      value:
+        type: object
     type: object
   api.GroupInfoDevice:
     description: Device information within a group
@@ -87,10 +118,151 @@ definitions:
           frm_payload:
             example: AQIDBA==
             type: string
+          locations:
+            additionalProperties:
+              $ref: '#/definitions/api.TTNLocation'
+            type: object
           received_at:
             example: "2024-01-15T10:30:00Z"
             type: string
+          rx_metadata:
+            items:
+              properties:
+                location:
+                  $ref: '#/definitions/api.TTNLocation'
+              type: object
+            type: array
         type: object
+    type: object
+  api.LatestChannelMeasurement:
+    description: Latest reading for a single channel of a device
+    properties:
+      channel_id:
+        example: 1
+        type: integer
+      channel_name:
+        example: Water Level
+        type: string
+      measurement_type:
+        example: 4
+        type: integer
+      received_at:
+        example: "2024-01-15T10:30:00Z"
+        type: string
+      value:
+        type: object
+    type: object
+  api.LatestDevice:
+    description: Device identity, name, location and its latest reading per channel.
+      `name` is the user-set name, or a stable auto-generated nickname if none has
+      been set. `is_readonly` is only set on endpoints that resolve a device through
+      a specific token (e.g. `/overview`); it is omitted where read/write access is
+      not token-scoped.
+    properties:
+      device_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_readonly:
+        example: false
+        type: boolean
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      measurements:
+        items:
+          $ref: '#/definitions/api.LatestChannelMeasurement'
+        type: array
+      name:
+        example: Happy Barrel
+        type: string
+    type: object
+  api.LatestMeasurementsPayload:
+    description: Tokens identifying the devices of interest. Devices may be referenced
+      directly by their token, or transitively via the token of a group they belong
+      to.
+    properties:
+      devices:
+        example:
+        - dev_token_123
+        - dev_token_456
+        items:
+          type: string
+        type: array
+      groups:
+        example:
+        - gr_token_123
+        - gr_token_456
+        items:
+          type: string
+        type: array
+    type: object
+  api.LatestMeasurementsResponse:
+    description: One entry per requested device. Devices that have not reported yet
+      still appear here, with an empty measurements list and no location.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+    type: object
+  api.OverviewGroup:
+    description: A subscribed group and the devices that belong to it. `token` echoes
+      back the token from the request that resolved to this group so the client can
+      correlate it with its stored subscription.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+      is_readonly:
+        example: false
+        type: boolean
+      name:
+        example: My Rain Barrel Group
+        type: string
+      token:
+        example: gr_token_123
+        type: string
+    type: object
+  api.OverviewResponse:
+    description: Devices grouped under their groups, plus every directly-subscribed
+      device in `devices`. A device that is both a group member and subscribed directly
+      appears in both places.
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/api.LatestDevice'
+        type: array
+      groups:
+        items:
+          $ref: '#/definitions/api.OverviewGroup'
+        type: array
+    type: object
+  api.RangedMeasurementsResponse:
+    description: 'Downsampled measurement series for a device over a time range. The
+      resolution adapts to the span: the wider the range, the coarser the buckets
+      (never finer than one point per minute, never coarser than three points per
+      day). `bucket_seconds` reports the bucket width that was actually used.'
+    properties:
+      bucket_seconds:
+        example: 302.4
+        type: number
+      channel_id:
+        example: 1
+        type: integer
+      end:
+        example: "2024-01-08T00:00:00Z"
+        type: string
+      measurements:
+        items:
+          $ref: '#/definitions/api.DeviceMeasurement'
+        type: array
+      start:
+        example: "2024-01-01T00:00:00Z"
+        type: string
     type: object
   api.RegisterDevicePayload:
     properties:
@@ -105,6 +277,30 @@ definitions:
         type: string
       read_write_token:
         example: rw_token_123
+        type: string
+    type: object
+  api.TTNLocation:
+    description: A geo point sent by The Things Network (device locations map or gateway
+      metadata)
+    properties:
+      altitude:
+        example: 113
+        type: number
+      latitude:
+        example: 51.3397
+        type: number
+      longitude:
+        example: 12.3731
+        type: number
+      source:
+        example: SOURCE_REGISTRY
+        type: string
+    type: object
+  api.UpdateDevicePayload:
+    description: Fields that can be updated on a device (only present fields are applied)
+    properties:
+      name:
+        example: Rain barrel by the shed
         type: string
     type: object
 host: localhost:64000
@@ -171,6 +367,102 @@ paths:
           schema:
             $ref: '#/definitions/api.HTTPError'
       summary: Get device information by token
+      tags:
+      - devices
+    patch:
+      consumes:
+      - application/json
+      description: Update mutable device fields (currently only the custom name).
+        Requires the read-write token.
+      parameters:
+      - description: Device read-write token
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Fields to update
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateDevicePayload'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid token or payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Device token is read-only
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update device fields
+      tags:
+      - devices
+  /device/{deviceToken}/measurements:
+    get:
+      consumes:
+      - application/json
+      description: 'Retrieve a device''s measurement history between `start` and `end`,
+        downsampled to a resolution that scales with the span. The endpoint aims for
+        roughly 2000 data points per channel: wider ranges are bucketed more coarsely
+        (never coarser than three points per day) and narrower ranges more finely
+        (never finer than one point per minute). Each bucket is represented by its
+        newest reading. Optionally restrict to a single channel. Authenticated by
+        either the read-write or read-only device token.'
+      parameters:
+      - description: Device token (read-write or read-only)
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Start of the range, inclusive (RFC3339)
+        in: query
+        name: start
+        required: true
+        type: string
+      - description: End of the range, inclusive (RFC3339)
+        in: query
+        name: end
+        required: true
+        type: string
+      - description: Only return measurements for this channel id
+        in: query
+        name: channel
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RangedMeasurementsResponse'
+        "400":
+          description: Invalid token or query parameter
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get downsampled device measurements over a time range
       tags:
       - devices
   /group:
@@ -322,4 +614,72 @@ paths:
       summary: Ingest LoRaWAN uplink data
       tags:
       - ingest
+  /measurements/latest:
+    post:
+      consumes:
+      - application/json
+      description: Returns one entry per device referenced (directly via `devices`
+        or transitively via `groups`), including its name, location, and the most
+        recent measurement per channel. Devices with no measurements yet still appear
+        with an empty `measurements` list.
+      parameters:
+      - description: Tokens selecting devices and/or groups
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.LatestMeasurementsPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LatestMeasurementsResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get latest measurements grouped per device
+      tags:
+      - measurements
+  /overview:
+    post:
+      consumes:
+      - application/json
+      description: 'Returns the dashboard view for a set of subscription tokens: every
+        referenced group with its member devices nested inside, plus every directly-referenced
+        device in `devices`. A device that is both a group member and subscribed directly
+        appears in both places. Each device carries its latest reading per channel,
+        exactly as in `/measurements/latest`. Unlike that endpoint, group membership
+        is preserved so the UI can render devices under their groups.'
+      parameters:
+      - description: Tokens selecting groups and/or devices
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.LatestMeasurementsPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.OverviewResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get subscriptions organized by group
+      tags:
+      - measurements
 swagger: "2.0"

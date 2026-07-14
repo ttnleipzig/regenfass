@@ -97,6 +97,139 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Update mutable device fields (currently only the custom name). Requires the read-write token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Update device fields",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device read-write token",
+                        "name": "deviceToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Fields to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.UpdateDevicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token or payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "403": {
+                        "description": "Device token is read-only",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/{deviceToken}/measurements": {
+            "get": {
+                "description": "Retrieve a device's measurement history between `start` and `end`, downsampled to a resolution that scales with the span. The endpoint aims for roughly 2000 data points per channel: wider ranges are bucketed more coarsely (never coarser than three points per day) and narrower ranges more finely (never finer than one point per minute). Each bucket is represented by its newest reading. Optionally restrict to a single channel. Authenticated by either the read-write or read-only device token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Get downsampled device measurements over a time range",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device token (read-write or read-only)",
+                        "name": "deviceToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start of the range, inclusive (RFC3339)",
+                        "name": "start",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of the range, inclusive (RFC3339)",
+                        "name": "end",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Only return measurements for this channel id",
+                        "name": "channel",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.RangedMeasurementsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token or query parameter",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
             }
         },
         "/group": {
@@ -322,6 +455,98 @@
                     }
                 }
             }
+        },
+        "/measurements/latest": {
+            "post": {
+                "description": "Returns one entry per device referenced (directly via `devices` or transitively via `groups`), including its name, location, and the most recent measurement per channel. Devices with no measurements yet still appear with an empty `measurements` list.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "measurements"
+                ],
+                "summary": "Get latest measurements grouped per device",
+                "parameters": [
+                    {
+                        "description": "Tokens selecting devices and/or groups",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/overview": {
+            "post": {
+                "description": "Returns the dashboard view for a set of subscription tokens: every referenced group with its member devices nested inside, plus every directly-referenced device in `devices`. A device that is both a group member and subscribed directly appears in both places. Each device carries its latest reading per channel, exactly as in `/measurements/latest`. Unlike that endpoint, group membership is preserved so the UI can render devices under their groups.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "measurements"
+                ],
+                "summary": "Get subscriptions organized by group",
+                "parameters": [
+                    {
+                        "description": "Tokens selecting groups and/or devices",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.LatestMeasurementsPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.OverviewResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -360,11 +585,28 @@
             }
         },
         "api.DeviceInfoResponse": {
+            "description": "Identity of a device. When authenticated with the read-write token, both tokens are returned; otherwise only the read-only token is returned. `name` is the user-set name, or a stable auto-generated nickname if none has been set.",
             "type": "object",
             "properties": {
-                "device_eui": {
+                "device_id": {
                     "type": "string",
-                    "example": "AABBCCDDEEFF0011"
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Happy Barrel"
                 },
                 "read_only_token": {
                     "type": "string",
@@ -373,10 +615,31 @@
                 "read_write_token": {
                     "type": "string",
                     "example": "rw_token_123"
+                }
+            }
+        },
+        "api.DeviceMeasurement": {
+            "description": "A measurement reading from one of a device's channels at a point in time",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
                 },
-                "token": {
+                "channel_name": {
                     "type": "string",
-                    "example": "dev_token_123"
+                    "example": "Water Level"
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "received_at": {
+                    "type": "string",
+                    "example": "2024-01-15T10:30:00Z"
+                },
+                "value": {
+                    "type": "object"
                 }
             }
         },
@@ -447,11 +710,193 @@
                             "type": "string",
                             "example": "AQIDBA=="
                         },
+                        "locations": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/api.TTNLocation"
+                            }
+                        },
                         "received_at": {
                             "type": "string",
                             "example": "2024-01-15T10:30:00Z"
+                        },
+                        "rx_metadata": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "location": {
+                                        "$ref": "#/definitions/api.TTNLocation"
+                                    }
+                                }
+                            }
                         }
                     }
+                }
+            }
+        },
+        "api.LatestChannelMeasurement": {
+            "description": "Latest reading for a single channel of a device",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "channel_name": {
+                    "type": "string",
+                    "example": "Water Level"
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "received_at": {
+                    "type": "string",
+                    "example": "2024-01-15T10:30:00Z"
+                },
+                "value": {
+                    "type": "object"
+                }
+            }
+        },
+        "api.LatestDevice": {
+            "description": "Device identity, name, location and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.",
+            "type": "object",
+            "properties": {
+                "device_id": {
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestChannelMeasurement"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Happy Barrel"
+                }
+            }
+        },
+        "api.LatestMeasurementsPayload": {
+            "description": "Tokens identifying the devices of interest. Devices may be referenced directly by their token, or transitively via the token of a group they belong to.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "dev_token_123",
+                        "dev_token_456"
+                    ]
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "gr_token_123",
+                        "gr_token_456"
+                    ]
+                }
+            }
+        },
+        "api.LatestMeasurementsResponse": {
+            "description": "One entry per requested device. Devices that have not reported yet still appear here, with an empty measurements list and no location.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                }
+            }
+        },
+        "api.OverviewGroup": {
+            "description": "A subscribed group and the devices that belong to it. `token` echoes back the token from the request that resolved to this group so the client can correlate it with its stored subscription.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                },
+                "is_readonly": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Rain Barrel Group"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "gr_token_123"
+                }
+            }
+        },
+        "api.OverviewResponse": {
+            "description": "Devices grouped under their groups, plus every directly-subscribed device in `devices`. A device that is both a group member and subscribed directly appears in both places.",
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.LatestDevice"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.OverviewGroup"
+                    }
+                }
+            }
+        },
+        "api.RangedMeasurementsResponse": {
+            "description": "Downsampled measurement series for a device over a time range. The resolution adapts to the span: the wider the range, the coarser the buckets (never finer than one point per minute, never coarser than three points per day). `bucket_seconds` reports the bucket width that was actually used.",
+            "type": "object",
+            "properties": {
+                "bucket_seconds": {
+                    "type": "number",
+                    "example": 302.4
+                },
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "end": {
+                    "type": "string",
+                    "example": "2024-01-08T00:00:00Z"
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.DeviceMeasurement"
+                    }
+                },
+                "start": {
+                    "type": "string",
+                    "example": "2024-01-01T00:00:00Z"
                 }
             }
         },
@@ -474,6 +919,38 @@
                 "read_write_token": {
                     "type": "string",
                     "example": "rw_token_123"
+                }
+            }
+        },
+        "api.TTNLocation": {
+            "description": "A geo point sent by The Things Network (device locations map or gateway metadata)",
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "type": "number",
+                    "example": 113
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 51.3397
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 12.3731
+                },
+                "source": {
+                    "type": "string",
+                    "example": "SOURCE_REGISTRY"
+                }
+            }
+        },
+        "api.UpdateDevicePayload": {
+            "description": "Fields that can be updated on a device (only present fields are applied)",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Rain barrel by the shed"
                 }
             }
         }
