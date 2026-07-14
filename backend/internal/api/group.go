@@ -1,10 +1,12 @@
 package api
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/ttn-leipzig/regenfass/internal/db"
 )
 
@@ -46,6 +48,9 @@ func (a *API) handleGroupInfoByToken(c fiber.Ctx) error {
 
 	groupInfo, err := a.db.GetGroupByEitherToken(c.Context(), groupToken)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return fiber.NewError(fiber.StatusNotFound, "group not found")
+		}
 		log.Error().Err(err).Msg("could not find group in database")
 		return fiber.NewError(fiber.StatusInternalServerError, "could not find group in database")
 	}

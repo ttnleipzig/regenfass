@@ -13,6 +13,9 @@ type Device struct {
 	DeviceEui string
 	RwToken   string
 	RoToken   string
+	Name      string
+	Latitude  pgtype.Float8
+	Longitude pgtype.Float8
 }
 
 type DeviceChannelMapping struct {

@@ -48,9 +48,13 @@ func New(dbPool *pgxpool.Pool) *API {
 	api.app.Post("/ingest", api.handleIngest)
 	api.app.Post("/device", api.handleRegisterDevice)
 	api.app.Get("/device/:deviceToken", api.handleDeviceInfoByToken)
+	api.app.Patch("/device/:deviceToken", api.handleUpdateDevice)
+	api.app.Get("/device/:deviceToken/measurements", api.handleDeviceMeasurements)
 	api.app.Post("/group", api.handleCreateGroup)
 	api.app.Get("/group/:groupToken", api.handleGroupInfoByToken)
 	api.app.Post("/group/:groupToken/devices", api.handleAddDeviceToGroup)
+	api.app.Post("/measurements/latest", api.handleLatestMeasurements)
+	api.app.Post("/overview", api.handleOverview)
 	app.Get("/swagger/*", swaggo.HandlerDefault)
 
 	return api

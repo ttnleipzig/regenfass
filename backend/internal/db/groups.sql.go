@@ -116,3 +116,101 @@ func (q *Queries) GetGroupByEitherToken(ctx context.Context, roToken string) (Ge
 	)
 	return i, err
 }
+
+const getGroupMembersForGroupIDs = `-- name: GetGroupMembersForGroupIDs :many
+SELECT
+	dg.group_id,
+	dg.is_readonly,
+	d.id,
+	d.name,
+	d.latitude,
+	d.longitude
+FROM device_group dg
+JOIN device d ON d.id = dg.device_id
+WHERE dg.group_id = ANY($1::UUID[])
+ORDER BY d.name
+`
+
+type GetGroupMembersForGroupIDsRow struct {
+	GroupID    pgtype.UUID
+	IsReadonly bool
+	ID         pgtype.UUID
+	Name       string
+	Latitude   pgtype.Float8
+	Longitude  pgtype.Float8
+}
+
+// All member devices of the given groups, with the identity and location fields
+// needed to render them, plus whether the membership itself is read-only. One
+// row per (group, device) pair.
+func (q *Queries) GetGroupMembersForGroupIDs(ctx context.Context, groupIds []pgtype.UUID) ([]GetGroupMembersForGroupIDsRow, error) {
+	rows, err := q.db.Query(ctx, getGroupMembersForGroupIDs, groupIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetGroupMembersForGroupIDsRow
+	for rows.Next() {
+		var i GetGroupMembersForGroupIDsRow
+		if err := rows.Scan(
+			&i.GroupID,
+			&i.IsReadonly,
+			&i.ID,
+			&i.Name,
+			&i.Latitude,
+			&i.Longitude,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getGroupsForTokens = `-- name: GetGroupsForTokens :many
+SELECT
+	t.token::TEXT AS token,
+	g.id,
+	g.name,
+	(g.ro_token = t.token) AS is_readonly
+FROM unnest($1::TEXT[]) AS t(token)
+JOIN "group" g ON g.ro_token = t.token OR g.rw_token = t.token
+ORDER BY g.name
+`
+
+type GetGroupsForTokensRow struct {
+	Token      string
+	ID         pgtype.UUID
+	Name       string
+	IsReadonly bool
+}
+
+// Resolve each provided group token (read-write or read-only) to its group.
+// `is_readonly` reflects whether the provided token was the read-only token.
+func (q *Queries) GetGroupsForTokens(ctx context.Context, groupTokens []string) ([]GetGroupsForTokensRow, error) {
+	rows, err := q.db.Query(ctx, getGroupsForTokens, groupTokens)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetGroupsForTokensRow
+	for rows.Next() {
+		var i GetGroupsForTokensRow
+		if err := rows.Scan(
+			&i.Token,
+			&i.ID,
+			&i.Name,
+			&i.IsReadonly,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
