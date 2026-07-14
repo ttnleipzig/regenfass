@@ -356,6 +356,84 @@ describe("StepConfigEditing", () => {
     expect(writeText).toHaveBeenCalledWith(MOCK_APP_KEY_32);
   });
 
+  it("renders clear buttons when field values are set", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    expect(
+      screen.getByRole("button", { name: "Clear appEUI" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Clear devEUI" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Clear appKey" })
+    ).toBeInTheDocument();
+  });
+
+  it("hides clear buttons when field values are empty", () => {
+    const emptyState = {
+      context: {
+        deviceInfo: {
+          config: {
+            appEUI: "",
+            appKey: "",
+            devEUI: "",
+          },
+        },
+      },
+    };
+
+    render(() => (
+      <StepConfigEditing state={emptyState} emitEvent={mockEmitEvent} />
+    ));
+    expect(
+      screen.queryByRole("button", { name: "Clear appEUI" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Clear devEUI" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Clear appKey" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("clears appEUI when clear button is clicked", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    fireEvent.click(screen.getByRole("button", { name: "Clear appEUI" }));
+    expect(mockEmitEvent).toHaveBeenCalledWith({
+      type: "config.changeField",
+      field: "appEUI",
+      value: "",
+    });
+  });
+
+  it("clears devEUI when clear button is clicked", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    fireEvent.click(screen.getByRole("button", { name: "Clear devEUI" }));
+    expect(mockEmitEvent).toHaveBeenCalledWith({
+      type: "config.changeField",
+      field: "devEUI",
+      value: "",
+    });
+  });
+
+  it("clears appKey when clear button is clicked", () => {
+    render(() => (
+      <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />
+    ));
+    fireEvent.click(screen.getByRole("button", { name: "Clear appKey" }));
+    expect(mockEmitEvent).toHaveBeenCalledWith({
+      type: "config.changeField",
+      field: "appKey",
+      value: "",
+    });
+  });
+
   it("calls emitEvent when save to device button is clicked", () => {
     render(() => (
       <StepConfigEditing state={mockState} emitEvent={mockEmitEvent} />

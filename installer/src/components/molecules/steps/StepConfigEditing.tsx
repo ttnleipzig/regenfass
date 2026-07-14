@@ -11,7 +11,7 @@ import {
 	readConfigFromFile,
 } from "@/libs/downloadConfig.ts";
 import { playErrorSound } from "@/libs/errorSound.ts";
-import { BiRegularClipboard } from "solid-icons/bi";
+import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import { Button } from "@/components/atoms/Button.tsx";
 import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
@@ -110,6 +110,18 @@ function HexOtp16(props: {
 						onClick={copyToClipboard}
 					>
 						<BiRegularClipboard aria-hidden={true} size={16} />
+					</Button>
+				</Show>
+				<Show when={props.value}>
+					<Button
+						type="button"
+						variant="ghost"
+						size="icon"
+						class="h-9 w-9 shrink-0 text-muted-foreground"
+						aria-label={`Clear ${props.labelText}`}
+						onClick={() => props.onValueChange("")}
+					>
+						<BiRegularX aria-hidden={true} size={16} />
 					</Button>
 				</Show>
 			</div>
@@ -211,6 +223,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 							name="appKey"
 							value={state.context.deviceInfo.config.appKey ?? ""}
 							showCopyButton
+							showResetButton
 							onCanonicalChange={(next) => {
 								if (next !== (state.context.deviceInfo.config.appKey ?? "")) {
 									emitEvent({

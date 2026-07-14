@@ -154,6 +154,10 @@ export const setupStateMachine = setup({
 		playErrorSound: () => {
 			playErrorSound();
 		},
+		closeConnection: ({ context }) => {
+			context.connection?.[1].stop();
+			context.connection?.[0].close();
+		},
 	},
 	actors: {
 		checkIfWebSerialIsSupported: fromPromise(
@@ -673,7 +677,23 @@ export const setupStateMachine = setup({
 
 		Finish_ShowingNextSteps: {
 			// TODO: When we're done with the cloud, we need the onboarding to continue here
-			type: "final",
+			on: {
+				restart: {
+					target: "Start_CheckingWebSerialSupport",
+					actions: [
+						"closeConnection",
+						assign({
+							upstreamVersions: () => [],
+							error: () => null,
+							connection: () => null,
+							deviceInfo: () => ({}),
+							targetFirmwareVersion: () => null,
+							configWriteProgress: () => null,
+							installFlashProgress: () => null,
+						}),
+					],
+				},
+			},
 		},
 		Finish_ShowingError: {
 			entry: "playErrorSound",

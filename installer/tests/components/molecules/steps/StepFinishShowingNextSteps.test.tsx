@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { render, screen, cleanup } from "@solidjs/testing-library";
+import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepFinishShowingNextSteps from "@/components/molecules/steps/StepFinishShowingNextSteps.tsx";
 
 describe("StepFinishShowingNextSteps", () => {
@@ -53,5 +53,29 @@ describe("StepFinishShowingNextSteps", () => {
     ));
     const icon = container.querySelector('svg[aria-hidden="true"]');
     expect(icon).toBeInTheDocument();
+  });
+
+  it("renders flash another device button", () => {
+    render(() => (
+      <StepFinishShowingNextSteps
+        state={mockState}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+    expect(
+      screen.getByRole("button", { name: "Flash another device" }),
+    ).toBeInTheDocument();
+  });
+
+  it("calls emitEvent when flash another device button is clicked", () => {
+    render(() => (
+      <StepFinishShowingNextSteps
+        state={mockState}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+    const button = screen.getByRole("button", { name: "Flash another device" });
+    fireEvent.click(button);
+    expect(mockEmitEvent).toHaveBeenCalledWith({ type: "restart" });
   });
 });

@@ -9,6 +9,7 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 - While hidden, hex digits are shown as **bullet dots** (`•`) **per column** (same bordered cells as after reveal), not one long line.
 - An **eye** button reveals the key with **vertical reels**—one column per hex pair—like a **spinning wheel**: random values **move fast at first, then ease off**, each column **rolls slightly past** the final pair and **springs back** so the real digits align exactly. Near the end of the spin, **five high-pitched boxing-bell bings** with a little **reverb** play (slightly before the last column stops; Web Audio API; silent if audio is unavailable or sounds are muted in the header).
 - Optional **copy** button (`showCopyButton`) copies the canonical AppKey as **uppercase hex** (32 characters, no spaces) to the clipboard and plays a short **camera shutter** sample (unless sounds are muted).
+- Optional **reset** button (`showResetButton`) clears the field when it has a value; it also hides the key again if it was revealed.
 - After the animation, the key **stays in the same bordered columns** as the reels (one cell per pair). The real `<input>` stays on top with **transparent text** so focus, caret, and typing still work.
 
 ## Props
@@ -21,6 +22,7 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 | `onCanonicalChange` | `(canonical: string) => void` | Called when the normalized hex value changes. |
 | `class` | `string` | Optional extra classes on the outer wrapper. |
 | `showCopyButton` | `boolean` | When true, shows a clipboard button beside the input (before the eye control). Copies uppercase hex. Disabled while empty or during the reveal animation. |
+| `showResetButton` | `boolean` | When true, shows a clear button beside the copy control when the field has a value. Clears the canonical hex and resets reveal state. Disabled during the reveal animation. |
 
 ## Import
 

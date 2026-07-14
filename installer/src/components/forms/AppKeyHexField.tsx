@@ -13,7 +13,7 @@ import {
 import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
-import { BiRegularClipboard } from "solid-icons/bi";
+import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 
@@ -24,6 +24,7 @@ export interface AppKeyHexFieldProps {
 	onCanonicalChange: (canonical: string) => void;
 	class?: string;
 	showCopyButton?: boolean;
+	showResetButton?: boolean;
 }
 
 /** Row height must match `h-10` (40px) for translate distance. */
@@ -207,6 +208,12 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 		copiedTimeout = setTimeout(() => setCopied(false), 2000);
 	};
 
+	const handleReset = () => {
+		resetSpinState();
+		setRevealed(false);
+		props.onCanonicalChange("");
+	};
+
 	return (
 		<div
 			class={cn(
@@ -285,6 +292,17 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					onClick={copyToClipboard}
 				>
 					<BiRegularClipboard aria-hidden={true} size={16} />
+				</button>
+			</Show>
+			<Show when={props.showResetButton && (props.value ?? "")}>
+				<button
+					type="button"
+					disabled={spinInProgress()}
+					class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
+					aria-label="Clear appKey"
+					onClick={handleReset}
+				>
+					<BiRegularX aria-hidden={true} size={16} />
 				</button>
 			</Show>
 			<button

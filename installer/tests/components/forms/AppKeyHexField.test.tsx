@@ -137,4 +137,73 @@ describe("AppKeyHexField", () => {
 			screen.getByRole("button", { name: /copy appKey to clipboard/i }),
 		).toBeDisabled();
 	});
+
+	it("renders reset button when showResetButton is set and value is non-empty", () => {
+		render(() => (
+			<AppKeyHexField
+				id="ak"
+				name="appKey"
+				value={key32}
+				showResetButton
+				onCanonicalChange={onChange}
+			/>
+		));
+		expect(
+			screen.getByRole("button", { name: "Clear appKey" }),
+		).toBeInTheDocument();
+	});
+
+	it("hides reset button when value is empty", () => {
+		render(() => (
+			<AppKeyHexField
+				id="ak"
+				name="appKey"
+				value=""
+				showResetButton
+				onCanonicalChange={onChange}
+			/>
+		));
+		expect(
+			screen.queryByRole("button", { name: "Clear appKey" }),
+		).not.toBeInTheDocument();
+	});
+
+	it("clears value when reset button is clicked", () => {
+		render(() => (
+			<AppKeyHexField
+				id="ak"
+				name="appKey"
+				value={key32}
+				showResetButton
+				onCanonicalChange={onChange}
+			/>
+		));
+		fireEvent.click(screen.getByRole("button", { name: "Clear appKey" }));
+		expect(onChange).toHaveBeenCalledWith("");
+	});
+
+	it("resets reveal state when reset button is clicked after reveal", async () => {
+		render(() => (
+			<>
+				<label for="ak">appKey</label>
+				<AppKeyHexField
+					id="ak"
+					name="appKey"
+					value={key32}
+					showResetButton
+					onCanonicalChange={onChange}
+				/>
+			</>
+		));
+		fireEvent.click(screen.getByRole("button", { name: "Show app key" }));
+		await waitFor(
+			() => {
+				expect(screen.getByRole("button", { name: "Hide app key" })).toBeInTheDocument();
+			},
+			{ timeout: 3000 },
+		);
+		fireEvent.click(screen.getByRole("button", { name: "Clear appKey" }));
+		expect(onChange).toHaveBeenCalledWith("");
+		expect(screen.getByRole("button", { name: "Show app key" })).toBeInTheDocument();
+	});
 });
