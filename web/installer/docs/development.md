@@ -524,15 +524,15 @@ npx vite-bundle-analyzer dist
 
 ## Deployment
 
-Production URL: **https://install.regenfass.eu/**
+Production URL: **<https://install.regenfass.eu/>**
 
-The installer is published automatically via GitHub Pages when changes land on `main`, when a release is published, or when you run the **Installer - Deploy** workflow manually (Actions tab in the `regenfass` repository).
+The installer is published automatically via GitHub Pages when changes land on `main`, when a release is published, or when you run the **Installer - Deploy** workflow manually (Actions tab in the `regenfass` repository). Prefer Netlify for multi-site hosting (see repo `docs/Netlify-Deployment.md`).
 
 ### GitHub Pages
 
-- **Workflow:** `.github/workflows/installer-deploy.yml` builds `installer/dist` and deploys it with GitHub Actions.
-- **Custom domain:** `install.regenfass.eu` (DNS: CNAME to `ttnleipzig.github.io`). The domain is also recorded in `installer/public/CNAME` so it stays attached across deployments.
-- **Fallback URL:** https://ttnleipzig.github.io/regenfass/
+- **Workflow:** `.github/workflows/installer-deploy.yml` builds `web/installer/dist` and deploys it with GitHub Actions.
+- **Custom domain:** `install.regenfass.eu` (DNS: CNAME to `ttnleipzig.github.io`). The domain is also recorded in `web/installer/public/CNAME` so it stays attached across deployments.
+- **Fallback URL:** <https://ttnleipzig.github.io/regenfass/>
 - **HTTPS** is required for the Web Serial API; it is enforced on GitHub Pages.
 
 ### Build Process
