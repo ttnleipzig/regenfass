@@ -20,13 +20,13 @@ permissions:
   checks: write
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 jobs:
   test:
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    
+
     steps:
       ##############################################################################################
       # Setup
@@ -43,8 +43,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          cache-dependency-path: './installer/pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - name: Cache - Playwright browsers
         uses: actions/cache@v4
@@ -52,31 +52,33 @@ jobs:
         with:
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('installer/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
-        run: cd ./installer && pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       ##############################################################################################
       # Lint and Build
       ##############################################################################################
       - name: Build application
-        run: cd ./installer && pnpm run build
+        run: pnpm --filter @ttnleipzig/regenfass-installer build
 
       ##############################################################################################
       # Run tests
       ##############################################################################################
       - name: Run unit and integration tests
-        run: cd ./installer && pnpm run test:run
+        run: pnpm --filter @ttnleipzig/regenfass-installer test:run
 
       - name: Run tests with coverage
-        run: cd ./installer && pnpm run test:coverage
+        run: pnpm --filter @ttnleipzig/regenfass-installer test:coverage
 
       - name: Install Playwright browsers
-        run: cd ./installer && pnpm exec playwright install --with-deps chromium
+        working-directory: web/installer
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run Playwright E2E tests
-        run: cd ./installer && pnpm exec playwright test --reporter=line
+        working-directory: web/installer
+        run: pnpm exec playwright test --reporter=line
 
       ##############################################################################################
       # Publish test results
@@ -85,7 +87,7 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./installer/coverage/lcov.info
+          file: ./web/installer/coverage/lcov.info
           flags: installer
           name: installer-coverage
           fail_ci_if_error: false
@@ -95,7 +97,7 @@ jobs:
         if: always()
         with:
           name: coverage-report
-          path: ./installer/coverage/
+          path: ./web/installer/coverage/
           retention-days: 30
 
       - name: Upload test results
@@ -103,5 +105,5 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ./installer/test-results/
+          path: ./web/installer/test-results/
           retention-days: 30

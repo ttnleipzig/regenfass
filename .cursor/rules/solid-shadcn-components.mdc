@@ -1,6 +1,6 @@
 ---
 description: Verwende shadcn-solidjs Komponenten
-globs: "installer/**/*"
+globs: "web/installer/**/*"
 alwaysApply: true
 ---
 

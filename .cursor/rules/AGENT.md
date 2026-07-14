@@ -1,6 +1,6 @@
 ---
 description: Project-specific rules for the Regenfass Installer project
-globs: installer/**/*
+globs: web/installer/**/*
 alwaysApply: true
 ---
 

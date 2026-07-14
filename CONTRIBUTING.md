@@ -27,6 +27,7 @@
 
 * [PlatformIO](https://platformio.org/)
 * [PlatformIO IDE](https://platformio.org/platformio-ide) for your favorite IDE
+* **Web apps:** Node.js 20+, Corepack/pnpm 10 — install from the repo root (`pnpm install`). The installer lives at `web/installer` (not a top-level `installer/` folder). See [`docs/Local-Development.md`](docs/Local-Development.md).
 
 ### Configuration
 

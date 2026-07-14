@@ -1,0 +1,15 @@
+# Wiki navigation
+
+- [Home](Home)
+- [Project Structure](Project-Structure)
+- [Architecture](Architecture)
+- [Development Environment](Development-Environment)
+- [Local Development](Local-Development)
+- [Build Process](Build-Process)
+- [Testing](Testing)
+- [Coding Guidelines](Coding-Guidelines)
+- [Component Structure](Component-Structure)
+- [Deployment](Deployment)
+- [Netlify Deployment](Netlify-Deployment)
+- [Release Process](Release-Process)
+- [GitHub Actions](GitHub-Actions)

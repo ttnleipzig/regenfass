@@ -1,6 +1,6 @@
 ---
 description: Verwende  solidjs
-globs: installer/**/*
+globs: web/installer/**/*
 alwaysApply: true
 ---
 
