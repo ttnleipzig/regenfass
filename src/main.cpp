@@ -37,7 +37,26 @@
 #include "lora/lora-wan.h"
 #endif
 
+// Default publish interval (seconds) used when `publishInterval` is not set in
+// the runtime configuration. Configurable at runtime via the SCP config key.
+#define PUBLISH_INTERVAL_DEFAULT_S 30
 unsigned long last_print_time = 0;
+
+// Returns the configured publish interval in milliseconds, falling back to the
+// default when the `publishInterval` config key is unset or invalid.
+unsigned long publishIntervalMs()
+{
+    const auto &interval = Configuration::Configurator::getConfig().publishInterval;
+    unsigned long seconds = PUBLISH_INTERVAL_DEFAULT_S;
+    if (!interval.empty())
+    {
+        char *end = nullptr;
+        unsigned long parsed = strtoul(interval.c_str(), &end, 10);
+        if (end != interval.c_str() && parsed > 0)
+            seconds = parsed;
+    }
+    return seconds * 1000UL;
+}
 
 // Main functions
 void setup()
@@ -94,7 +113,7 @@ void loop()
 
     // Publish Something, or Lora Does Noting
     unsigned long current_time = millis();
-    if (current_time - last_print_time >= 20000)
+    if (current_time - last_print_time >= publishIntervalMs())
     {
         Lora::Wan::publish2TTN();
         last_print_time = current_time;
