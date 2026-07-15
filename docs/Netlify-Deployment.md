@@ -72,6 +72,28 @@ Add these under **Settings → Environments → `production`** (preferred — th
 | `NETLIFY_SITE_ID_INSTALLER` | Installer site ID |
 | `NETLIFY_SITE_ID_BRAND` | Brand showcase site ID |
 
+### Swetrix analytics (build-time env)
+
+Each site needs its **own** Swetrix project ID at build time (Vite inlines `import.meta.env.VITE_*`). Set these as Netlify site environment variables (Site configuration → Environment variables), not GitHub secrets:
+
+| Netlify site | Variable | Value |
+|--------------|----------|-------|
+| Marketing | `VITE_SWETRIX_PROJECT_ID` | Swetrix project ID for `regenfass.eu` |
+| Docs | `VITE_SWETRIX_PROJECT_ID` | Swetrix project ID for `docs.regenfass.eu` |
+| Installer | `VITE_SWETRIX_PROJECT_ID` | Swetrix project ID for `install.regenfass.eu` |
+| Brand | `VITE_SWETRIX_PROJECT_ID` | Swetrix project ID for `brand.regenfass.eu` |
+
+Because production builds run in **GitHub Actions**, set these repository or `production` environment secrets (injected before `pnpm build`):
+
+| Secret | App |
+|--------|-----|
+| `VITE_SWETRIX_PROJECT_ID_MARKETING` | Marketing |
+| `VITE_SWETRIX_PROJECT_ID_DOCS` | Docs |
+| `VITE_SWETRIX_PROJECT_ID_INSTALLER` | Installer |
+| `VITE_SWETRIX_PROJECT_ID_BRAND` | Brand showcase |
+
+Locally, copy each `web/<app>/.env.example` to `.env` and fill in the ID, or run `node scripts/provision-swetrix.mjs` with a valid `SWETRIX_API_KEY`.
+
 A present auth token with a missing Site ID only skips that site (warning in the Actions log). The job can still be green — check the annotations, not just the check mark.
 
 ## Manual / local deploy

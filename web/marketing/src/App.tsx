@@ -14,17 +14,36 @@ import {
   Headline,
   Link,
   Newsletter,
+  trackEvent,
+  type HeaderNavItem,
 } from "@regenfass/brand";
 import ChangelogSection from "./ChangelogSection";
 
-const NAV = [
+const DOCS_URL = "https://docs.regenfass.eu/";
+const INSTALLER_URL = "https://install.regenfass.eu";
+
+function trackNavigateToDocs() {
+  trackEvent("navigate_to_docs");
+}
+
+function trackNavigateToInstaller() {
+  trackEvent("navigate_to_installer");
+}
+
+const NAV: HeaderNavItem[] = [
   { href: "/", label: "Home" },
   { href: "/#changelog", label: "Changelog" },
-  { href: "https://docs.regenfass.eu/", label: "Docs", external: true },
   {
-    href: "https://install.regenfass.eu",
+    href: DOCS_URL,
+    label: "Docs",
+    external: true,
+    onClick: trackNavigateToDocs,
+  },
+  {
+    href: INSTALLER_URL,
     label: "Installer",
     external: true,
+    onClick: trackNavigateToInstaller,
   },
   { href: "https://brand.regenfass.eu", label: "Brand", external: true },
   {
@@ -118,12 +137,12 @@ function Home() {
             and The Things Network—built by TTN Leipzig.
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-3">
-            <a href="https://install.regenfass.eu">
+            <a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
               <ButtonPrimary class="px-5 py-2.5 text-base">
                 Get started
               </ButtonPrimary>
             </a>
-            <a href="https://docs.regenfass.eu/">
+            <a href={DOCS_URL} onClick={trackNavigateToDocs}>
               <ButtonSecondary class="px-5 py-2.5 text-base">
                 Read docs
               </ButtonSecondary>
@@ -199,7 +218,10 @@ function Home() {
         </div>
         <p class="text-sm text-muted-foreground">
           Full bill of materials and wiring diagrams live in the{" "}
-          <Link href="https://docs.regenfass.eu/">documentation</Link>.
+          <Link href={DOCS_URL} onClick={trackNavigateToDocs}>
+            documentation
+          </Link>
+          .
         </p>
       </section>
 
@@ -214,7 +236,7 @@ function Home() {
               project’s license on GitHub.
             </p>
             <div class="flex flex-wrap gap-3 pt-2">
-              <a href="https://install.regenfass.eu">
+              <a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
                 <ButtonPrimary>Open installer</ButtonPrimary>
               </a>
               <Link href="https://github.com/ttnleipzig/regenfass">
@@ -266,10 +288,10 @@ function Home() {
             reading your rain barrel from anywhere with coverage.
           </p>
           <div class="flex flex-wrap justify-center gap-3">
-            <a href="https://install.regenfass.eu">
+            <a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
               <ButtonPrimary class="px-5 py-2.5">Get started</ButtonPrimary>
             </a>
-            <a href="https://docs.regenfass.eu/">
+            <a href={DOCS_URL} onClick={trackNavigateToDocs}>
               <ButtonSecondary class="px-5 py-2.5">Read the docs</ButtonSecondary>
             </a>
           </div>

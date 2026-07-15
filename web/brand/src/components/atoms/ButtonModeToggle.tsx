@@ -2,6 +2,7 @@ import { Button } from "./Button.tsx";
 import Moon from "lucide-solid/icons/moon";
 import Sun from "lucide-solid/icons/sun";
 import { useColorMode } from "@kobalte/core/color-mode";
+import { trackEvent } from "../../libs/analytics.ts";
 
 export function ButtonModeToggle() {
 	const { colorMode, setColorMode } = useColorMode();
@@ -16,6 +17,7 @@ export function ButtonModeToggle() {
 		try {
 			localStorage.setItem("theme", isDark ? "dark" : "light");
 		} catch {}
+		trackEvent("theme_toggled", { theme: next });
 	};
 
 	return (

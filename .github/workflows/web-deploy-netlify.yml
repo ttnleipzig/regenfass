@@ -51,6 +51,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Write Swetrix project IDs for Vite builds
+        env:
+          VITE_SWETRIX_PROJECT_ID_INSTALLER: ${{ secrets.VITE_SWETRIX_PROJECT_ID_INSTALLER }}
+          VITE_SWETRIX_PROJECT_ID_MARKETING: ${{ secrets.VITE_SWETRIX_PROJECT_ID_MARKETING }}
+          VITE_SWETRIX_PROJECT_ID_DOCS: ${{ secrets.VITE_SWETRIX_PROJECT_ID_DOCS }}
+          VITE_SWETRIX_PROJECT_ID_BRAND: ${{ secrets.VITE_SWETRIX_PROJECT_ID_BRAND }}
+        run: |
+          write_env() {
+            local dir="$1"
+            local value="$2"
+            if [ -n "$value" ]; then
+              printf 'VITE_SWETRIX_PROJECT_ID=%s\n' "$value" > "$dir/.env"
+              echo "Wrote $dir/.env"
+            else
+              echo "::notice::Skipping $dir/.env (secret empty — analytics disabled for that app build)"
+            fi
+          }
+          write_env web/installer "$VITE_SWETRIX_PROJECT_ID_INSTALLER"
+          write_env web/marketing "$VITE_SWETRIX_PROJECT_ID_MARKETING"
+          write_env web/docs "$VITE_SWETRIX_PROJECT_ID_DOCS"
+          write_env web/brand-showcase "$VITE_SWETRIX_PROJECT_ID_BRAND"
+
       - name: Build web packages
         run: pnpm -r --filter "./web/**" --if-present run build
 

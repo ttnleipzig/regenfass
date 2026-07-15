@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import { ButtonModeToggle } from "@regenfass/brand";
 
+vi.mock("swetrix", () => ({
+  init: vi.fn(),
+  track: vi.fn(),
+  trackViews: vi.fn(async () => ({ stop: vi.fn() })),
+  trackErrors: vi.fn(() => ({ stop: vi.fn() })),
+}));
+
 // Mock useColorMode hook
 // Note: We need to import createSignal inside the mock factory due to hoisting
 vi.mock("@kobalte/core/color-mode", async () => {

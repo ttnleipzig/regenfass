@@ -72,6 +72,19 @@ Flashing and live device configuration require:
 
 Unit tests and most Playwright smoke tests run without hardware. Full “hello world” flash flows are hardware-bound.
 
+## Analytics (Swetrix)
+
+Each Vite app under `web/` uses its own Swetrix project. Copy `web/<app>/.env.example` to `web/<app>/.env` and set `VITE_SWETRIX_PROJECT_ID`. If the variable is empty or missing, tracking stays disabled (safe for local work).
+
+Shared helpers live in `@regenfass/brand` (`initAnalytics`, `trackEvent`). Theme toggles emit `theme_toggled`; the installer emits `installer_state_<StateName>` on XState transitions; marketing CTAs emit `navigate_to_docs` / `navigate_to_installer`.
+
+To create projects and funnels with a personal Admin API key (same endpoints as the Swetrix MCP):
+
+```bash
+# set SWETRIX_API_KEY in the environment or root .env
+node scripts/provision-swetrix.mjs
+```
+
 ## SolidJS reminder
 
 Installer and brand UIs use **SolidJS only** — do not introduce React.

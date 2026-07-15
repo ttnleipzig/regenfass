@@ -32,6 +32,8 @@
 !/pnpm-workspace.yaml
 !/pnpm-lock.yaml
 !/netlify.toml
+!/scripts
+!/scripts/**
 
 !/web
 /web/**/node_modules
@@ -42,6 +44,7 @@
 /web/**/blob-report
 /web/**/.vite
 /web/**/.netlify
+/web/**/.env
 /web/**/tsconfig*.tsbuildinfo
 
 !/backend

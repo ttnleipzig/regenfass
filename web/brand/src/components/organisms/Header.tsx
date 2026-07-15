@@ -9,6 +9,8 @@ export type HeaderNavItem = {
   label: string;
   /** Use Solid router `<A>` for in-app paths; external http(s) always use `<a>`/`Link`. */
   external?: boolean;
+  /** Optional click handler (e.g. analytics before navigate). */
+  onClick?: JSX.EventHandlerUnion<HTMLAnchorElement, MouseEvent>;
 };
 
 export type HeaderProps = {
@@ -60,12 +62,13 @@ const Header: Component<HeaderProps> = (rawProps) => {
                           "p-2 hover:text-foreground hover:underline",
                           "transition-colors",
                         )}
+                        onClick={item.onClick}
                       >
                         {item.label}
                       </A>
                     }
                   >
-                    <Link href={item.href} class="p-2">
+                    <Link href={item.href} class="p-2" onClick={item.onClick}>
                       {item.label}
                     </Link>
                   </Show>

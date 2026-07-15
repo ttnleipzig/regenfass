@@ -92,6 +92,16 @@ export { TextInput } from "./components/forms/TextInput.tsx";
 // Utils
 export { cn } from "./libs/cn.ts";
 export {
+  initAnalytics,
+  isAnalyticsInitialized,
+  trackEvent,
+  resetAnalyticsForTests,
+} from "./libs/analytics.ts";
+export type {
+  AnalyticsMeta,
+  InitAnalyticsOptions,
+} from "./libs/analytics.ts";
+export {
   soundEnabled,
   isSoundEnabled,
   setSoundEnabled,
