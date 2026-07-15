@@ -41,6 +41,7 @@
 /web/**/playwright-report
 /web/**/blob-report
 /web/**/.vite
+/web/**/.netlify
 /web/**/tsconfig*.tsbuildinfo
 
 !/backend

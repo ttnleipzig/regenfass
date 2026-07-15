@@ -31,6 +31,9 @@ jobs:
   build-and-deploy:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    # Prefer GitHub Environment secrets (Settings → Environments → production).
+    # Repository secrets still work as a fallback for the same names.
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,41 +62,58 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_MARKETING }}
         run: |
-          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
-            echo "::warning::Skipping marketing deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_MARKETING)"
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "::warning::Skipping marketing deploy (missing NETLIFY_AUTH_TOKEN)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/marketing/dist --message "gha ${{ github.sha }}"
+          if [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping marketing deploy (missing NETLIFY_SITE_ID_MARKETING — Site ID from Netlify Site configuration)"
+            exit 0
+          fi
+          # --filter avoids Netlify CLI monorepo project picker in CI
+          CI=true netlify deploy --prod --dir=web/marketing/dist --filter @ttnleipzig/regenfass-marketing --message "gha ${{ github.sha }}"
 
       - name: Deploy docs → docs.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DOCS }}
         run: |
-          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
-            echo "::warning::Skipping docs deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_DOCS)"
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "::warning::Skipping docs deploy (missing NETLIFY_AUTH_TOKEN)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/docs/dist --message "gha ${{ github.sha }}"
+          if [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping docs deploy (missing NETLIFY_SITE_ID_DOCS — Site ID from Netlify Site configuration)"
+            exit 0
+          fi
+          CI=true netlify deploy --prod --dir=web/docs/dist --filter @ttnleipzig/regenfass-docs-site --message "gha ${{ github.sha }}"
 
       - name: Deploy installer → install.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_INSTALLER }}
         run: |
-          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
-            echo "::warning::Skipping installer deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_INSTALLER)"
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "::warning::Skipping installer deploy (missing NETLIFY_AUTH_TOKEN)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/installer/dist --message "gha ${{ github.sha }}"
+          if [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping installer deploy (missing NETLIFY_SITE_ID_INSTALLER — Site ID from Netlify Site configuration)"
+            exit 0
+          fi
+          CI=true netlify deploy --prod --dir=web/installer/dist --filter @ttnleipzig/regenfass-installer --message "gha ${{ github.sha }}"
 
       - name: Deploy brand showcase → brand.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_BRAND }}
         run: |
-          if [ -z "${NETLIFY_AUTH_TOKEN}" ] || [ -z "${NETLIFY_SITE_ID}" ]; then
-            echo "::warning::Skipping brand deploy (missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID_BRAND)"
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "::warning::Skipping brand deploy (missing NETLIFY_AUTH_TOKEN)"
             exit 0
           fi
-          netlify deploy --prod --dir=web/brand-showcase/dist --message "gha ${{ github.sha }}"
+          if [ -z "${NETLIFY_SITE_ID}" ]; then
+            echo "::warning::Skipping brand deploy (missing NETLIFY_SITE_ID_BRAND — Site ID from Netlify Site configuration)"
+            exit 0
+          fi
+          CI=true netlify deploy --prod --dir=web/brand-showcase/dist --filter @ttnleipzig/regenfass-brand-showcase --message "gha ${{ github.sha }}"

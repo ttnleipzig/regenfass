@@ -62,6 +62,8 @@ Each app has `public/_redirects` (`/* → /index.html` 200) so client-side route
 
 ## GitHub secrets checklist
 
+Add these under **Settings → Environments → `production`** (preferred — the deploy workflow uses that environment) or as repository secrets.
+
 | Secret | Purpose |
 |--------|---------|
 | `NETLIFY_AUTH_TOKEN` | Authenticate `netlify deploy` |
@@ -70,9 +72,11 @@ Each app has `public/_redirects` (`/* → /index.html` 200) so client-side route
 | `NETLIFY_SITE_ID_INSTALLER` | Installer site ID |
 | `NETLIFY_SITE_ID_BRAND` | Brand showcase site ID |
 
-Missing secrets log a warning and skip that site; the job still succeeds so you can roll out sites one by one.
+A present auth token with a missing Site ID only skips that site (warning in the Actions log). The job can still be green — check the annotations, not just the check mark.
 
 ## Manual / local deploy
+
+Build first, then deploy the already-built `dist/` (do not let the CLI rebuild). In this monorepo you **must** pass `--filter` so the CLI does not hang on an interactive project picker:
 
 ```bash
 corepack enable && pnpm install
@@ -80,8 +84,23 @@ pnpm build:docs   # or :marketing / :installer / :brand
 
 export NETLIFY_AUTH_TOKEN=…
 export NETLIFY_SITE_ID=…   # that site’s ID
-npx netlify-cli deploy --prod --dir=web/docs/dist
+CI=true npx netlify-cli@23 deploy --prod --dir=web/docs/dist \
+  --filter @ttnleipzig/regenfass-docs-site
 ```
+
+| App | `--dir` | `--filter` |
+|-----|---------|------------|
+| Marketing | `web/marketing/dist` | `@ttnleipzig/regenfass-marketing` |
+| Docs | `web/docs/dist` | `@ttnleipzig/regenfass-docs-site` |
+| Installer | `web/installer/dist` | `@ttnleipzig/regenfass-installer` |
+| Brand | `web/brand-showcase/dist` | `@ttnleipzig/regenfass-brand-showcase` |
+
+Production Netlify hostnames (until custom domains are attached):
+
+- <https://regenfass-marketing.netlify.app>
+- <https://regenfass-docs.netlify.app>
+- <https://regenfass-installer.netlify.app>
+- <https://regenfass-brand.netlify.app>
 
 ## Fallback build command (if you must build on Netlify)
 
