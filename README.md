@@ -1,146 +1,43 @@
-# 🌈 regenfass
+# regenfass
 
 [![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/pulls)
-[![GitHub last commit](https://img.shields.io/github/last-commit/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/commits/main)
-![GitHub repo size](https://img.shields.io/github/repo-size/ttnleipzig/regenfass)
 [![codecov](https://codecov.io/gh/ttnleipzig/regenfass/graph/badge.svg?token=Q0DB4PG8UB)](https://codecov.io/gh/ttnleipzig/regenfass)
 
-Regenfass is a demonstration for advanced programming techniques in **C++** with the **Arduino Framework** and **LoRaWAN** on the **The Things Network** (TTN), plus SolidJS web apps for flashing, brand, marketing, and docs.
+**regenfass** (“rain barrel”) is an open IoT project for measuring water levels and sending the data over **LoRaWAN** via **The Things Network** (TTN). It combines ESP32 firmware with browser-based tools so you can flash a board, configure credentials, and follow the sensor readings without a custom desktop app.
 
-Our documentation is the best place for
-[getting started](https://regenfass.ttn-leipzig.de). Contributor technical docs live in [`docs/`](docs/Home.md) (GitHub Wiki sync).
+## Where to go
 
-### Web apps (`web/`)
+| Site           | URL                                                  | What you get                                   |
+| -------------- | ---------------------------------------------------- | ---------------------------------------------- |
+| Project site   | [regenfass.eu](https://regenfass.eu)                 | Overview and project story                     |
+| Documentation  | [docs.regenfass.eu](https://docs.regenfass.eu)       | Guides for setup and everyday use              |
+| Installer      | [install.regenfass.eu](https://install.regenfass.eu) | Flash and configure your device in the browser |
+| Brand showcase | [brand.regenfass.eu](https://brand.regenfass.eu)     | Shared UI components and design playground     |
 
-| Package        | Path                 | Role                                   |
-| -------------- | -------------------- | -------------------------------------- |
-| Installer      | `web/installer`      | Flash & configure devices (Web Serial) |
-| Brand          | `web/brand`          | Shared `@regenfass/brand` UI kit       |
-| Brand showcase | `web/brand-showcase` | Design playground                      |
-| Marketing      | `web/marketing`      | Marketing site                         |
-| Docs site      | `web/docs`           | User-facing documentation site         |
+Start with the [documentation site](https://docs.regenfass.eu) if you are new, or open the [installer](https://install.regenfass.eu) when your hardware is ready (Chromium-based browser and USB connection required).
 
-From the repo root: `corepack enable && pnpm install`, then `pnpm dev:installer` (or other `dev:*` scripts in root `package.json`).
+## What it does
 
-## 🚀 Features
+* Measure water level in a rain barrel (or similar tank) with supported sensors
+* Send readings over LoRaWAN / TTN with low power in mind
+* Flash firmware and set device configuration from the web installer
+* Show status on supported OLED displays (when the board has one)
 
-* [ ] LoRaWAN 1.0.2, OTAA
-* [ ] Support for different microcontrollers
-* [ ] Support for different LoRaWAN modules
+Supported boards, sensors, and the current roadmap live in the [contributor wiki](https://github.com/ttnleipzig/regenfass/wiki/Hardware-Support).
 
-### 📟 Display content
+## Contributing
 
-* [ ] Show the water level
-* [ ] Show the battery level
-* [ ] Show the signal strength
+Technical docs for building firmware, web apps, CI, and the backend are in the [GitHub Wiki](https://github.com/ttnleipzig/regenfass/wiki) (source under [`docs/`](docs/Home.md)). For how to send pull requests and report issues, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### 🌡️  Sensors
+## License
 
-* [x] Messure the water level with different sensors
-* [ ] Support for different sensors
+This project is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-### 🔴 Button
-
-* [ ] Short press: Send a message instantly
-* [ ] Long press: Turn on/off the display
-* [ ] Double press: Turn on/off the sleep mode
-* [ ] Triple press: Reset the device
-
-### 🔋 Battery
-
-* [ ] Support for different battery types
-* [ ] Battery level indicator
-* [ ] Low battery warning
-* [ ] Sleep mode with wake up on button press
-* [ ] Solar panel support
-
-## 📦 Hardware
-
-We build binary releases for different hardware. The following table shows the current status. There are many of them, because you can combine different microcontrollers, LoRaWAN modules, displays and sensors.
-
-### 🗳️ Microcontrollers
-
- We support different microcontrollers. The following table shows the current status.
-
-| Microcontroller        | Status |
-| ---------------------- | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅      |
-| Heltec WiFi LoRa 32 V3 | ✅      |
-| STM32                  | ⏳      |
-| ESP32                  | ⏳      |
-
-### 📡 LoRaWAN Modules
-
-We support different LoRaWAN modules. The following table shows the current status.
-
-| Module                 | Status |
-| ---------------------- | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅      |
-| Heltec WiFi LoRa 32 V3 | ✅      |
-| Dragino LoRa Shield    | ⏳      |
-| Dragino LoRa/GPS HAT   | ⏳      |
-
-### 📟 Display modules
-
-We support different displays. The following table shows the current status.
-
-| Display | Status |
-| ------- | ------ |
-| SSD1306 | ✅      |
-| SH1106  | ⏳      |
-
-### 🌡️ Sensors
-
-We support different sensors. The following table shows the current status.
-
-| Sensor  | Status |
-| ------- | ------ |
-| HC-SR04 | ✅      |
-| VL53L1X | ⏳      |
-| DS18B20 | ⏳      |
-
-## 🛠️ Configurations
-
-Some settings we can not put into the binary releases, because this data belongs to you and in some case there are sensitive data.
-The following table shows the current status.
-
-| Configuration | Status |
-| ------------- | ------ |
-| LoRa App Key  | ⏳      |
-| LoRa App Eui  | ⏳      |
-| LoRa Dev Eui  | ⏳      |
-| LoRa Region   | ⏳      |
-
-## 👩‍💻 Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
-
-### 👷‍♀️ Building
-
-The project is build with [PlatformIO](https://platformio.org/). Please install the [PlatformIO IDE](https://platformio.org/platformio-ide) for your favorite IDE.
-
-## 📝 Documentation
-
-You can find the documentation on [regenfass.ttn-leipzig.de](https://regenfass.ttn-leipzig.de).
-
-## 📜 License
-
-This project is licensed under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) License.
-
-## 🙏 Contribute
-
-You are very welcome to contribute. Start by reading the [](CONTRIBUTING.md).
-
-## Stats
-
-![Alt](https://repobeats.axiom.co/api/embed/bd10769e15da93a3e5b1d06a6a005d248df1c61c.svg "Repobeats analytics image")
-
-## ❤️ Thanks
+## Thanks
 
 * [The Things Network Leipzig](https://ttn-leipzig.de)
-* [SlimeVR Projekt](https://github.com/SlimeVR/SlimeVR-Firmware-WebBuilder)
+* [SlimeVR Project](https://github.com/SlimeVR/SlimeVR-Firmware-WebBuilder)
 * [PlatformIO](https://platformio.org/)
 * [LoRaWAN](https://lora-alliance.org/)
