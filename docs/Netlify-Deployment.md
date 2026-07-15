@@ -14,14 +14,14 @@ flowchart LR
 
 ## Target sites and subdomains
 
-| Public URL | Netlify site (suggested name) | Publish dir (from repo root) | Site ID secret |
-|------------|-------------------------------|------------------------------|----------------|
+| Public URL | Netlify site (suggested name) | Publish dir (from repo root) | Site ID variable |
+|------------|-------------------------------|------------------------------|------------------|
 | <https://regenfass.eu> | `regenfass-marketing` | `web/marketing/dist` | `NETLIFY_SITE_ID_MARKETING` |
 | <https://docs.regenfass.eu> | `regenfass-docs` | `web/docs/dist` | `NETLIFY_SITE_ID_DOCS` |
 | <https://install.regenfass.eu> | `regenfass-installer` | `web/installer/dist` | `NETLIFY_SITE_ID_INSTALLER` |
 | <https://brand.regenfass.eu> | `regenfass-brand` | `web/brand-showcase/dist` | `NETLIFY_SITE_ID_BRAND` |
 
-Auth for all deploys: `NETLIFY_AUTH_TOKEN` (personal access token or Netlify deploy token with site deploy rights).
+Auth for all deploys: repository secret `NETLIFY_AUTH_TOKEN` (personal access token or Netlify deploy token with site deploy rights). Site IDs are **repository variables** (not secrets) — the deploy workflow reads them via `vars.*`.
 
 Workflow: `.github/workflows/web-deploy-netlify.yml`.
 
@@ -37,7 +37,7 @@ For each of the four sites:
 
 1. **Add site** in Netlify (empty site or “Import from Git”, then disable auto-build — see below).
 2. Attach the custom domain (table above) and wait for DNS + HTTPS.
-3. Copy the **Site ID** (Site configuration → Site details → Site ID) into the matching GitHub secret.
+3. Copy the **Site ID** (Site configuration → Site details → Site ID) into the matching GitHub **variable** (`NETLIFY_SITE_ID_*`).
 4. Create a Netlify **personal access token** (User settings → Applications → Personal access tokens) and store it as GitHub secret `NETLIFY_AUTH_TOKEN`.
 
 ### Stop Netlify from building on every git push
@@ -60,17 +60,19 @@ Also set in the Netlify UI (recommended):
 
 Each app has `public/_redirects` (`/* → /index.html` 200) so client-side routes survive refresh after CLI deploys. The same rule remains in `netlify.toml` for reference.
 
-## GitHub secrets checklist
+## GitHub configuration checklist
 
-Add these under **Settings → Environments → `production`** (preferred — the deploy workflow uses that environment) or as repository secrets.
+The deploy workflow uses the **`production`** environment (repository secrets and variables still apply).
 
-| Secret | Purpose |
-|--------|---------|
-| `NETLIFY_AUTH_TOKEN` | Authenticate `netlify deploy` |
-| `NETLIFY_SITE_ID_MARKETING` | Marketing site ID |
-| `NETLIFY_SITE_ID_DOCS` | Docs site ID |
-| `NETLIFY_SITE_ID_INSTALLER` | Installer site ID |
-| `NETLIFY_SITE_ID_BRAND` | Brand showcase site ID |
+| Name | Type | Purpose |
+|------|------|---------|
+| `NETLIFY_AUTH_TOKEN` | Secret | Authenticate `netlify deploy` |
+| `NETLIFY_SITE_ID_MARKETING` | Variable | Marketing site ID |
+| `NETLIFY_SITE_ID_DOCS` | Variable | Docs site ID |
+| `NETLIFY_SITE_ID_INSTALLER` | Variable | Installer site ID |
+| `NETLIFY_SITE_ID_BRAND` | Variable | Brand showcase site ID |
+
+Site IDs are public identifiers — store them as **Settings → Secrets and variables → Actions → Variables**. If the workflow reads `secrets.*` for a site ID that was only added as a variable, deploy steps are skipped with a warning while the job stays green.
 
 ### Swetrix analytics (build-time env)
 
@@ -85,8 +87,6 @@ Each site needs its **own** Swetrix project ID at build time (Vite inlines `impo
 | `SWETRIX_API_URL` | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
 
 Locally, put the same names in the repository root `.env`, then run `node scripts/sync-swetrix-env.mjs`.
-
-A present auth token with a missing Site ID only skips that site (warning in the Actions log). The job can still be green — check the annotations, not just the check mark.
 
 ## Manual / local deploy
 

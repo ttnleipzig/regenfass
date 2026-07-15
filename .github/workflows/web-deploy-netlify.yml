@@ -88,7 +88,7 @@ jobs:
       - name: Deploy marketing → regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_MARKETING }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_MARKETING }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
             echo "::warning::Skipping marketing deploy (missing NETLIFY_AUTH_TOKEN)"
@@ -104,7 +104,7 @@ jobs:
       - name: Deploy docs → docs.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DOCS }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_DOCS }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
             echo "::warning::Skipping docs deploy (missing NETLIFY_AUTH_TOKEN)"
@@ -119,7 +119,7 @@ jobs:
       - name: Deploy installer → install.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_INSTALLER }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_INSTALLER }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
             echo "::warning::Skipping installer deploy (missing NETLIFY_AUTH_TOKEN)"
@@ -134,7 +134,7 @@ jobs:
       - name: Deploy brand showcase → brand.regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_BRAND }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_BRAND }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
             echo "::warning::Skipping brand deploy (missing NETLIFY_AUTH_TOKEN)"
