@@ -47,11 +47,11 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 ## Cursor / project rules (quick map)
 
-Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `pnpm-installer.mdc` (pnpm from workspace / `web/installer`), `documentation.mdc`, `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
+Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), `atomic-design-installer.mdc` (installer UI hierarchy), `pnpm-installer.mdc` (pnpm from workspace / `web/installer`), `documentation.mdc`, `markdown-tables.mdc` (aligned Markdown tables), `solid-shadcn-components.mdc`, `icons.mdc`, `architekturdiagramme.mdc` (Mermaid), `test-structure.mdc`, `conventional-commits.mdc`, and `filetree.mdc`.
 
 ## Coding conventions
 
-- **Documentation**: Friendly English for end-user and contributor-facing text; contributor wiki under `docs/` may be more technical.
+- **Documentation**: Friendly English for end-user and contributor-facing text; contributor wiki under `docs/` may be more technical. Prettify Markdown tables (aligned columns) per `.agents/rules/markdown-tables.mdc`.
 - **Code and collaboration**: Gender-neutral wording where it applies; **Conventional Commits** in English for commit subjects (full detail below).
 - **Firmware**: Use feature flags (`FEATURE_*`) for optional parts; keep sensor, display, and button code modular; follow usual Arduino naming habits.
 - **Installer**: TypeScript for new code; shadcn-solid and solid-icons as above; hand-written component docs under `web/installer/docs` following existing layout.
