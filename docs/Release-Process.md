@@ -61,8 +61,23 @@ flowchart LR
 
 - `config-file: .release-please-config.json`
 - `manifest-file: .release-please-manifest.json`
+- `token: ${{ github.token }}` (job permissions: `contents: write`, `pull-requests: write`)
 
 Do not pass a conflicting `release-type` in the action inputs; the config file is authoritative.
+
+### Token notes
+
+The default `GITHUB_TOKEN` is enough to open/update the release PR and to upload
+firmware artifacts in the **same** workflow run after a release is created.
+
+An organisation PAT (for example a former `RELEASE_PLEASE_ORGANISATION` secret) is
+only useful if you need cascading workflows that the default token cannot trigger
+(for example a separate workflow on the release tag). If you reintroduce such a
+token, it must have push access to this repository (and Org SSO authorised when
+required). GitHub often returns **404** (not 403) when creating refs with a token
+that cannot write — Release Please then fails with “Error creating Pull Request:
+Not Found” and never opens a PR. Prefer removing a broken Org secret over leaving
+it set with a `|| github.token` fallback, because a set secret skips the fallback.
 
 ## Installer commit lint
 

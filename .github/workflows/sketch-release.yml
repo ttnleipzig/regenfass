@@ -61,7 +61,10 @@ jobs:
       - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.RELEASE_PLEASE_ORGANISATION || github.token }}
+          # Use GITHUB_TOKEN — job already has contents:write + pull-requests:write.
+          # Do not prefer secrets.RELEASE_PLEASE_ORGANISATION: if that PAT is set but
+          # lacks push access, GitHub returns 404 on git/refs and no release PR opens.
+          token: ${{ github.token }}
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
       - name: Print the release URL if present
