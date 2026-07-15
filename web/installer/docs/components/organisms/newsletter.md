@@ -12,8 +12,8 @@ import Newsletter from '@/components/organisms/Newsletter';
 
 This component accepts no props - it provides a static newsletter subscription interface.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

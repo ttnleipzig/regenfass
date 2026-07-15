@@ -122,7 +122,7 @@ Commit **subjects** follow [Conventional Commits](https://www.conventionalcommit
 ### Common types
 
 | Type       | When to use                               |
-|------------|-------------------------------------------|
+| ---------- | ----------------------------------------- |
 | `feat`     | New user-facing behavior or capability    |
 | `fix`      | Bug fix                                   |
 | `docs`     | Documentation only                        |

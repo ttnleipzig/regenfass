@@ -22,20 +22,20 @@ const navItems: HeaderNavItem[] = [
 
 ## Props
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | `"Regenfass"` | Optional brand title shown in the header. |
-| `navItems` | `HeaderNavItem[]` | Docs / installer / GitHub / Matrix defaults | Navigation items. |
-| `trailing` | `JSX.Element` | — | Extra controls rendered next to the color-mode toggle. |
+| Name       | Type              | Default                                     | Description                                            |
+| ---------- | ----------------- | ------------------------------------------- | ------------------------------------------------------ |
+| `title`    | `string`          | `"Regenfass"`                               | Optional brand title shown in the header.              |
+| `navItems` | `HeaderNavItem[]` | Docs / installer / GitHub / Matrix defaults | Navigation items.                                      |
+| `trailing` | `JSX.Element`     | —                                           | Extra controls rendered next to the color-mode toggle. |
 
 ### `HeaderNavItem`
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `href` | `string` | required | Link target. |
-| `label` | `string` | required | Visible label. |
-| `external` | `boolean` | inferred from `http(s)` | Force external `<a>`/`Link` instead of router `<A>`. |
-| `onClick` | `(e) => void` | — | Optional click handler (for example analytics before navigate). |
+| Name       | Type          | Default                 | Description                                                     |
+| ---------- | ------------- | ----------------------- | --------------------------------------------------------------- |
+| `href`     | `string`      | required                | Link target.                                                    |
+| `label`    | `string`      | required                | Visible label.                                                  |
+| `external` | `boolean`     | inferred from `http(s)` | Force external `<a>`/`Link` instead of router `<A>`.            |
+| `onClick`  | `(e) => void` | —                       | Optional click handler (for example analytics before navigate). |
 
 ## Design notes
 

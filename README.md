@@ -15,13 +15,13 @@ Our documentation is the best place for
 
 ### Web apps (`web/`)
 
-| Package | Path | Role |
-| ------- | ---- | ---- |
-| Installer | `web/installer` | Flash & configure devices (Web Serial) |
-| Brand | `web/brand` | Shared `@regenfass/brand` UI kit |
-| Brand showcase | `web/brand-showcase` | Design playground |
-| Marketing | `web/marketing` | Marketing site |
-| Docs site | `web/docs` | User-facing documentation site |
+| Package        | Path                 | Role                                   |
+| -------------- | -------------------- | -------------------------------------- |
+| Installer      | `web/installer`      | Flash & configure devices (Web Serial) |
+| Brand          | `web/brand`          | Shared `@regenfass/brand` UI kit       |
+| Brand showcase | `web/brand-showcase` | Design playground                      |
+| Marketing      | `web/marketing`      | Marketing site                         |
+| Docs site      | `web/docs`           | User-facing documentation site         |
 
 From the repo root: `corepack enable && pnpm install`, then `pnpm dev:installer` (or other `dev:*` scripts in root `package.json`).
 
@@ -65,23 +65,23 @@ We build binary releases for different hardware. The following table shows the c
 
  We support different microcontrollers. The following table shows the current status.
 
-| Microcontroller | Status |
-| --------------- | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅ |
-| Heltec WiFi LoRa 32 V3 | ✅ |
-| STM32 | ⏳ |
-| ESP32 | ⏳ |
+| Microcontroller        | Status |
+| ---------------------- | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅      |
+| Heltec WiFi LoRa 32 V3 | ✅      |
+| STM32                  | ⏳      |
+| ESP32                  | ⏳      |
 
 ### 📡 LoRaWAN Modules
 
 We support different LoRaWAN modules. The following table shows the current status.
 
-| Module | Status |
-| ------ | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅ |
-| Heltec WiFi LoRa 32 V3 | ✅ |
-| Dragino LoRa Shield | ⏳ |
-| Dragino LoRa/GPS HAT | ⏳ |
+| Module                 | Status |
+| ---------------------- | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅      |
+| Heltec WiFi LoRa 32 V3 | ✅      |
+| Dragino LoRa Shield    | ⏳      |
+| Dragino LoRa/GPS HAT   | ⏳      |
 
 ### 📟 Display modules
 
@@ -89,18 +89,18 @@ We support different displays. The following table shows the current status.
 
 | Display | Status |
 | ------- | ------ |
-| SSD1306 | ✅ |
-| SH1106 | ⏳ |
+| SSD1306 | ✅      |
+| SH1106  | ⏳      |
 
 ### 🌡️ Sensors
 
 We support different sensors. The following table shows the current status.
 
-| Sensor | Status |
-| ------ | ------ |
-| HC-SR04 | ✅ |
-| VL53L1X | ⏳ |
-| DS18B20 | ⏳ |
+| Sensor  | Status |
+| ------- | ------ |
+| HC-SR04 | ✅      |
+| VL53L1X | ⏳      |
+| DS18B20 | ⏳      |
 
 ## 🛠️ Configurations
 
@@ -109,10 +109,10 @@ The following table shows the current status.
 
 | Configuration | Status |
 | ------------- | ------ |
-| LoRa App Key | ⏳ |
-| LoRa App Eui | ⏳ |
-| LoRa Dev Eui | ⏳ |
-| LoRa Region | ⏳ |
+| LoRa App Key  | ⏳      |
+| LoRa App Eui  | ⏳      |
+| LoRa Dev Eui  | ⏳      |
+| LoRa Region   | ⏳      |
 
 ## 👩‍💻 Contributing
 

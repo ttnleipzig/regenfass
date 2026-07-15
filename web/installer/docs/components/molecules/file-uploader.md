@@ -20,17 +20,17 @@ import { FileUploader } from '@/components/forms/FileUploader';
 
 ## Props
 
-| Name         | Type                              | Default | Description                               |
-|--------------|-----------------------------------|---------|-------------------------------------------|
-| label        | string                            | -       | Field label displayed above input         |
-| required     | boolean                           | false   | Marks field as required with asterisk     |
-| error        | string                            | -       | Error text (overrides helper text)       |
-| helperText   | string                            | -       | Helper text shown below input             |
-| accept       | string                            | -       | File type filter (e.g., '.json', 'image/*')|
-| multiple     | boolean                           | false   | Allow selecting multiple files            |
-| onFileSelect | (files: FileList \| null) => void | -       | Callback when file selection changes      |
-| class        | string                            | -       | Additional CSS classes for wrapper        |
-| ...          | JSX.InputHTMLAttributes           | -       | All standard file input attributes        |
+| Name           | Type                                | Default       | Description                                 |                                      |
+| -------------- | ----------------------------------- | ---------     | ------------------------------------------- |                                      |
+| label          | string                              | -             | Field label displayed above input           |                                      |
+| required       | boolean                             | false         | Marks field as required with asterisk       |                                      |
+| error          | string                              | -             | Error text (overrides helper text)          |                                      |
+| helperText     | string                              | -             | Helper text shown below input               |                                      |
+| accept         | string                              | -             | File type filter (e.g., '.json', 'image/*') |                                      |
+| multiple       | boolean                             | false         | Allow selecting multiple files              |                                      |
+| onFileSelect   | (files: FileList \                  | null) => void | -                                           | Callback when file selection changes |
+| class          | string                              | -             | Additional CSS classes for wrapper          |                                      |
+| ...            | JSX.InputHTMLAttributes             | -             | All standard file input attributes          |                                      |
 
 ## Design notes
 

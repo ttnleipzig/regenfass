@@ -2,13 +2,13 @@
 
 ## Overview
 
-| Target | What | How |
-|--------|------|-----|
+| Target                          | What                                                                                                                     | How                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | **Netlify** (preferred for web) | marketing → `regenfass.eu`, docs → `docs.regenfass.eu`, installer → `install.regenfass.eu`, brand → `brand.regenfass.eu` | **Built on GitHub Actions**, deployed with Netlify CLI — [Netlify Deployment](Netlify-Deployment) |
-| **GitHub Pages** (fallback) | installer static `dist` | `.github/workflows/installer-deploy.yml` |
-| **GitHub Releases** | Firmware `.bin` artifacts | `.github/workflows/sketch-release.yml` + Release Please |
-| **GitHub Wiki** | Contributor docs from `/docs` | `.github/workflows/wiki-sync.yml` |
-| **Backend** | Go API | Deploy from `backend/` (Docker/host) — project-specific |
+| **GitHub Pages** (fallback)     | installer static `dist`                                                                                                  | `.github/workflows/installer-deploy.yml`                                                          |
+| **GitHub Releases**             | Firmware `.bin` artifacts                                                                                                | `.github/workflows/sketch-release.yml` + Release Please                                           |
+| **GitHub Wiki**                 | Contributor docs from `/docs`                                                                                            | `.github/workflows/wiki-sync.yml`                                                                 |
+| **Backend**                     | Go API                                                                                                                   | Deploy from `backend/` (Docker/host) — project-specific                                           |
 
 ## Enable GitHub Wiki (required for wiki sync)
 

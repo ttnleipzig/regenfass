@@ -6,12 +6,12 @@ End-user product docs live on the public site ([regenfass.ttn-leipzig.de](https:
 
 ## What lives where
 
-| Area | Path | Role |
-|------|------|------|
-| Firmware | `src/`, `lib/`, `platformio.ini` | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17) |
-| Web apps | `web/*` | pnpm workspace: installer, brand, marketing, docs site, brand showcase |
-| Backend | `backend/` | Go API for devices and sensor data |
-| Contributor docs | `docs/` | This wiki source (synced to GitHub Wiki) |
+| Area             | Path                             | Role                                                                   |
+| ---------------- | -------------------------------- | ---------------------------------------------------------------------- |
+| Firmware         | `src/`, `lib/`, `platformio.ini` | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17)             |
+| Web apps         | `web/*`                          | pnpm workspace: installer, brand, marketing, docs site, brand showcase |
+| Backend          | `backend/`                       | Go API for devices and sensor data                                     |
+| Contributor docs | `docs/`                          | This wiki source (synced to GitHub Wiki)                               |
 
 ## Web packages (`web/`)
 

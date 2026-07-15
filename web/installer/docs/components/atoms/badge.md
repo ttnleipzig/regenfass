@@ -13,11 +13,11 @@ import { Badge } from '@/components/ui/badge';
 
 ## Props
 
-| Name     | Type                                                    | Default   | Description                    |
-|----------|---------------------------------------------------------|-----------|--------------------------------|
-| variant  | 'default' \| 'secondary' \| 'destructive' \| 'outline' | 'default' | Visual style variant           |
-| class    | string                                                  | -         | Additional CSS classes         |
-| ...      | ComponentProps<"div">                                   | -         | All native div attributes      |
+| Name       | Type                                                      | Default       | Description                      |           |           |                      |
+| ---------- | --------------------------------------------------------- | -----------   | -------------------------------- |           |           |                      |
+| variant    | 'default' \                                               | 'secondary' \ | 'destructive' \                  | 'outline' | 'default' | Visual style variant |
+| class      | string                                                    | -             | Additional CSS classes           |           |           |                      |
+| ...        | ComponentProps<"div">                                     | -             | All native div attributes        |           |           |                      |
 
 ## Design notes
 

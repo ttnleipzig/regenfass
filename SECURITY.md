@@ -13,10 +13,10 @@ We support the following versions with security updates.
 
 You can report a vulnerability by contacting us via email, Twitter or GitHub.
 
-| Contact | Method |
-| ------- | ------ |
-| Email   | :email: |
-| Twitter | :bird: |
+| Contact | Method    |
+| ------- | --------- |
+| Email   | :email:   |
+| Twitter | :bird:    |
 | GitHub  | :octocat: |
 
 ## Vulnerability Response Times

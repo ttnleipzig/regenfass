@@ -84,16 +84,16 @@ Please use the following commit message format:
 
 The `<type>` must be one of the following:
 
-| Type | Description | Bump |
-| --- | --- | --- |
-| `feat` | A new feature | minor |
-| `fix` | A bug fix | patch |
-| `docs` | Documentation only changes | patch |
-| `style` | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-| `refactor` | A code change that neither fixes a bug nor adds a feature | patch |
-| `perf` | A code change that improves performance | patch |
-| `test` | Adding missing tests or correcting existing tests | patch |
-| `chore` | Changes to the build process or auxiliary tools and libraries such as documentation generation | patch |
+| Type       | Description                                                                                            | Bump  |
+| ---------- | ------------------------------------------------------------------------------------------------------ | ----- |
+| `feat`     | A new feature                                                                                          | minor |
+| `fix`      | A bug fix                                                                                              | patch |
+| `docs`     | Documentation only changes                                                                             | patch |
+| `style`    | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) |       |
+| `refactor` | A code change that neither fixes a bug nor adds a feature                                              | patch |
+| `perf`     | A code change that improves performance                                                                | patch |
+| `test`     | Adding missing tests or correcting existing tests                                                      | patch |
+| `chore`    | Changes to the build process or auxiliary tools and libraries such as documentation generation         | patch |
 
 **Example:**
 

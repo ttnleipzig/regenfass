@@ -12,8 +12,8 @@ import Welcome from '@/components/organisms/Welcome';
 
 This component accepts no props - it displays static project information.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

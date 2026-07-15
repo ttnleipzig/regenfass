@@ -11,10 +11,10 @@ import Link from '@/components/atoms/Link';
 
 ## Props
 
-| Name     | Type        | Default | Description                           |
-|----------|-------------|---------|---------------------------------------|
-| href     | string      | -       | Link destination URL                  |
-| children | JSX.Element | -       | Link content                          |
+| Name     | Type        | Default | Description          |
+| -------- | ----------- | ------- | -------------------- |
+| href     | string      | -       | Link destination URL |
+| children | JSX.Element | -       | Link content         |
 
 ## Design notes
 

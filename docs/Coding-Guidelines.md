@@ -2,12 +2,12 @@
 
 ## Languages and frameworks
 
-| Area | Rule |
-|------|------|
-| Installer / brand / web UIs | **SolidJS only** — never React |
-| New installer code | TypeScript, strict typing; avoid `any` unless localized |
-| Firmware | C++17 Arduino style; feature flags `FEATURE_*`; modular sensors/display/buttons |
-| Commits | [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) in **English**, imperative mood |
+| Area                        | Rule                                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Installer / brand / web UIs | **SolidJS only** — never React                                                                         |
+| New installer code          | TypeScript, strict typing; avoid `any` unless localized                                                |
+| Firmware                    | C++17 Arduino style; feature flags `FEATURE_*`; modular sensors/display/buttons                        |
+| Commits                     | [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) in **English**, imperative mood |
 
 ## pnpm and working directories
 

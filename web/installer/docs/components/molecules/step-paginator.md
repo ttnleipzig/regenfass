@@ -33,14 +33,14 @@ import { StepPaginator } from '@/components/molecules/StepPaginator';
 
 ## Props
 
-| Name           | Type                         | Default   | Description |
-|----------------|------------------------------|-----------|-------------|
-| steps          | `readonly string[]`          | (required) | Labels in order; they appear as steps 1, 2, … |
-| title          | `string`                     | —         | Optional line above the list |
-| variant        | `"default" \| "compact"`     | `"default"` | Vertical list or compact horizontal layout |
-| listAriaLabel  | `string`                     | `"Steps"` | Short name for screen readers on the list |
-| class          | `string`                     | —         | Extra classes on the card wrapper |
-| activeStep     | `number`                     | —         | Optional **1-based** index of the current step; styles that step more prominently |
+| Name             | Type                           | Default     | Description                                                                       |                                            |
+| ---------------- | ------------------------------ | ----------- | -------------                                                                     |                                            |
+| steps            | `readonly string[]`            | (required)  | Labels in order; they appear as steps 1, 2, …                                     |                                            |
+| title            | `string`                       | —           | Optional line above the list                                                      |                                            |
+| variant          | `"default" \                   | "compact"`  | `"default"`                                                                       | Vertical list or compact horizontal layout |
+| listAriaLabel    | `string`                       | `"Steps"`   | Short name for screen readers on the list                                         |                                            |
+| class            | `string`                       | —           | Extra classes on the card wrapper                                                 |                                            |
+| activeStep       | `number`                       | —           | Optional **1-based** index of the current step; styles that step more prominently |                                            |
 
 ## Design notes
 

@@ -10,13 +10,13 @@ Follow [Atomic Design methodology, chapter 2](https://atomicdesign.bradfrost.com
 
 ## Mapping in this repository
 
-| Stage | Where it lives |
-| ----- | -------------- |
-| **Atoms** | `web/brand/src/components/atoms/` (shared via `@regenfass/brand`; installer may keep empty `atoms/` for local-only pieces) — smallest meaningful UI pieces (buttons, links, badges, headlines, status, …). |
-| **Molecules** | Shared: `web/brand/src/components/molecules/`. Installer-specific (e.g. steps, Flasher): `web/installer/src/components/molecules/` — simple groups of elements that work as one unit (e.g. Card, step views, Flasher). |
+| Stage         | Where it lives                                                                                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Atoms**     | `web/brand/src/components/atoms/` (shared via `@regenfass/brand`; installer may keep empty `atoms/` for local-only pieces) — smallest meaningful UI pieces (buttons, links, badges, headlines, status, …).               |
+| **Molecules** | Shared: `web/brand/src/components/molecules/`. Installer-specific (e.g. steps, Flasher): `web/installer/src/components/molecules/` — simple groups of elements that work as one unit (e.g. Card, step views, Flasher).   |
 | **Organisms** | Shared Header/Footer/Newsletter: `web/brand/src/components/organisms/`. Installer-only organisms stay under `web/installer/src/components/organisms/` — distinct sections of the interface (Header, Footer, Welcome, …). |
-| **Templates** | Page-level layouts focused on **structure and placeholders**, e.g. `MainApp` in `web/installer/src/App.tsx`, brand showcase under `web/brand-showcase/`. |
-| **Pages** | Concrete route or screen **instances** with realistic content and states (`/`, playground routes, future routes). Use this level to test variations and resilience of the system. |
+| **Templates** | Page-level layouts focused on **structure and placeholders**, e.g. `MainApp` in `web/installer/src/App.tsx`, brand showcase under `web/brand-showcase/`.                                                                 |
+| **Pages**     | Concrete route or screen **instances** with realistic content and states (`/`, playground routes, future routes). Use this level to test variations and resilience of the system.                                        |
 
 ## Special folders
 

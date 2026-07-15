@@ -13,7 +13,7 @@ import { FormField } from "@/components/forms/FormField";
 ## Props
 
 | Name       | Type        | Default | Description                               |
-|------------|-------------|---------|-------------------------------------------|
+| ---------- | ----------- | ------- | ----------------------------------------- |
 | label      | string      | -       | Field label                               |
 | required   | boolean     | false   | Shows * marker next to the label          |
 | error      | string      | -       | Error text (role=alert), hides helperText |

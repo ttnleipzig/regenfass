@@ -14,12 +14,12 @@ flowchart LR
 
 ## Target sites and subdomains
 
-| Public URL | Netlify site (suggested name) | Publish dir (from repo root) | Site ID variable |
-|------------|-------------------------------|------------------------------|------------------|
-| <https://regenfass.eu> | `regenfass-marketing` | `web/marketing/dist` | `NETLIFY_SITE_ID_MARKETING` |
-| <https://docs.regenfass.eu> | `regenfass-docs` | `web/docs/dist` | `NETLIFY_SITE_ID_DOCS` |
-| <https://install.regenfass.eu> | `regenfass-installer` | `web/installer/dist` | `NETLIFY_SITE_ID_INSTALLER` |
-| <https://brand.regenfass.eu> | `regenfass-brand` | `web/brand-showcase/dist` | `NETLIFY_SITE_ID_BRAND` |
+| Public URL                     | Netlify site (suggested name) | Publish dir (from repo root) | Site ID variable            |
+| ------------------------------ | ----------------------------- | ---------------------------- | --------------------------- |
+| <https://regenfass.eu>         | `regenfass-marketing`         | `web/marketing/dist`         | `NETLIFY_SITE_ID_MARKETING` |
+| <https://docs.regenfass.eu>    | `regenfass-docs`              | `web/docs/dist`              | `NETLIFY_SITE_ID_DOCS`      |
+| <https://install.regenfass.eu> | `regenfass-installer`         | `web/installer/dist`         | `NETLIFY_SITE_ID_INSTALLER` |
+| <https://brand.regenfass.eu>   | `regenfass-brand`             | `web/brand-showcase/dist`    | `NETLIFY_SITE_ID_BRAND`     |
 
 Auth for all deploys: repository secret `NETLIFY_AUTH_TOKEN` (personal access token or Netlify deploy token with site deploy rights). Site IDs are **repository variables** (not secrets) — the deploy workflow reads them via `vars.*`.
 
@@ -64,13 +64,13 @@ Each app has `public/_redirects` (`/* → /index.html` 200) so client-side route
 
 The deploy workflow uses the **`production`** environment (repository secrets and variables still apply).
 
-| Name | Type | Purpose |
-|------|------|---------|
-| `NETLIFY_AUTH_TOKEN` | Secret | Authenticate `netlify deploy` |
-| `NETLIFY_SITE_ID_MARKETING` | Variable | Marketing site ID |
-| `NETLIFY_SITE_ID_DOCS` | Variable | Docs site ID |
-| `NETLIFY_SITE_ID_INSTALLER` | Variable | Installer site ID |
-| `NETLIFY_SITE_ID_BRAND` | Variable | Brand showcase site ID |
+| Name                        | Type     | Purpose                       |
+| --------------------------- | -------- | ----------------------------- |
+| `NETLIFY_AUTH_TOKEN`        | Secret   | Authenticate `netlify deploy` |
+| `NETLIFY_SITE_ID_MARKETING` | Variable | Marketing site ID             |
+| `NETLIFY_SITE_ID_DOCS`      | Variable | Docs site ID                  |
+| `NETLIFY_SITE_ID_INSTALLER` | Variable | Installer site ID             |
+| `NETLIFY_SITE_ID_BRAND`     | Variable | Brand showcase site ID        |
 
 Site IDs are public identifiers — store them as **Settings → Secrets and variables → Actions → Variables**. If the workflow reads `secrets.*` for a site ID that was only added as a variable, deploy steps are skipped with a warning while the job stays green.
 
@@ -78,13 +78,13 @@ Site IDs are public identifiers — store them as **Settings → Secrets and var
 
 Each site needs its **own** Swetrix project ID at build time (Vite inlines `import.meta.env.VITE_*`). Because production builds run in **GitHub Actions**, set these repository or `production` environment secrets (written into each app’s `.env` as `VITE_SWETRIX_PROJECT_ID` before `pnpm build`):
 
-| Secret | App |
-|--------|-----|
-| `SWETRIX_PROJECT_ID_MARKETING` | Marketing |
-| `SWETRIX_PROJECT_ID_DOCS` | Docs |
-| `SWETRIX_PROJECT_ID_INSTALLER` | Installer |
-| `SWETRIX_PROJECT_ID_BRAND` | Brand showcase |
-| `SWETRIX_API_URL` | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
+| Secret                         | App                                                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `SWETRIX_PROJECT_ID_MARKETING` | Marketing                                                                                                        |
+| `SWETRIX_PROJECT_ID_DOCS`      | Docs                                                                                                             |
+| `SWETRIX_PROJECT_ID_INSTALLER` | Installer                                                                                                        |
+| `SWETRIX_PROJECT_ID_BRAND`     | Brand showcase                                                                                                   |
+| `SWETRIX_API_URL`              | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
 
 Locally, put the same names in the repository root `.env`, then run `node scripts/sync-swetrix-env.mjs`.
 
@@ -102,12 +102,12 @@ CI=true npx netlify-cli@23 deploy --prod --dir=web/docs/dist \
   --filter @ttnleipzig/regenfass-docs-site
 ```
 
-| App | `--dir` | `--filter` |
-|-----|---------|------------|
-| Marketing | `web/marketing/dist` | `@ttnleipzig/regenfass-marketing` |
-| Docs | `web/docs/dist` | `@ttnleipzig/regenfass-docs-site` |
-| Installer | `web/installer/dist` | `@ttnleipzig/regenfass-installer` |
-| Brand | `web/brand-showcase/dist` | `@ttnleipzig/regenfass-brand-showcase` |
+| App       | `--dir`                   | `--filter`                             |
+| --------- | ------------------------- | -------------------------------------- |
+| Marketing | `web/marketing/dist`      | `@ttnleipzig/regenfass-marketing`      |
+| Docs      | `web/docs/dist`           | `@ttnleipzig/regenfass-docs-site`      |
+| Installer | `web/installer/dist`      | `@ttnleipzig/regenfass-installer`      |
+| Brand     | `web/brand-showcase/dist` | `@ttnleipzig/regenfass-brand-showcase` |
 
 Production Netlify hostnames (until custom domains are attached):
 

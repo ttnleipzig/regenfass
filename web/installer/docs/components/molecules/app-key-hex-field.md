@@ -14,15 +14,15 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `id` | `string` | Passed to the real `<input>` (link with a `<label for=…>`). |
-| `name` | `string` | `name` on the `<input>`. |
-| `value` | `string` | Canonical hex only (no spaces), up to 32 chars. |
-| `onCanonicalChange` | `(canonical: string) => void` | Called when the normalized hex value changes. |
-| `class` | `string` | Optional extra classes on the outer wrapper. |
-| `showCopyButton` | `boolean` | When true, shows a clipboard button beside the input (before the eye control). Copies uppercase hex. Disabled while empty or during the reveal animation. |
-| `showResetButton` | `boolean` | When true, shows a clear button beside the copy control when the field has a value. Clears the canonical hex and resets reveal state. Disabled during the reveal animation. |
+| Name                | Type                          | Description                                                                                                                                                                 |
+| ------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                | `string`                      | Passed to the real `<input>` (link with a `<label for=…>`).                                                                                                                 |
+| `name`              | `string`                      | `name` on the `<input>`.                                                                                                                                                    |
+| `value`             | `string`                      | Canonical hex only (no spaces), up to 32 chars.                                                                                                                             |
+| `onCanonicalChange` | `(canonical: string) => void` | Called when the normalized hex value changes.                                                                                                                               |
+| `class`             | `string`                      | Optional extra classes on the outer wrapper.                                                                                                                                |
+| `showCopyButton`    | `boolean`                     | When true, shows a clipboard button beside the input (before the eye control). Copies uppercase hex. Disabled while empty or during the reveal animation.                   |
+| `showResetButton`   | `boolean`                     | When true, shows a clear button beside the copy control when the field has a value. Clears the canonical hex and resets reveal state. Disabled during the reveal animation. |
 
 ## Import
 
