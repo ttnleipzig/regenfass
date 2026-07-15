@@ -2,6 +2,7 @@
 
 - [Home](Home)
 - [Project Structure](Project-Structure)
+- [Hardware Support](Hardware-Support)
 - [Architecture](Architecture)
 - [Development Environment](Development-Environment)
 - [Local Development](Local-Development)

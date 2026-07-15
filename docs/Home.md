@@ -2,33 +2,33 @@
 
 Welcome — this is the **technical contributor documentation** for [regenfass](https://github.com/ttnleipzig/regenfass) (“rain barrel”): an IoT water-level sensor that talks to The Things Network (TTN) over LoRaWAN, plus the web tools that flash and configure devices.
 
-End-user product docs live on the public site ([regenfass.ttn-leipzig.de](https://regenfass.ttn-leipzig.de)). This wiki is for people who build firmware, web apps, CI, or the backend.
+End-user product docs live on [docs.regenfass.eu](https://docs.regenfass.eu). Public sites: [regenfass.eu](https://regenfass.eu) (marketing), [install.regenfass.eu](https://install.regenfass.eu) (installer), [brand.regenfass.eu](https://brand.regenfass.eu) (design playground). This wiki is for people who build firmware, web apps, CI, or the backend.
 
 ## What lives where
 
-| Area | Path | Role |
-|------|------|------|
-| Firmware | `src/`, `lib/`, `platformio.ini` | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17) |
-| Web apps | `web/*` | pnpm workspace: installer, brand, marketing, docs site, brand showcase |
-| Backend | `backend/` | Go API for devices and sensor data |
-| Contributor docs | `docs/` | This wiki source (synced to GitHub Wiki) |
+| Area             | Path                             | Role                                                                   |
+| ---------------- | -------------------------------- | ---------------------------------------------------------------------- |
+| Firmware         | `src/`, `lib/`, `platformio.ini` | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17)             |
+| Web apps         | `web/*`                          | pnpm workspace: installer, brand, marketing, docs site, brand showcase |
+| Backend          | `backend/`                       | Go API for devices and sensor data                                     |
+| Contributor docs | `docs/`                          | This wiki source (synced to GitHub Wiki)                               |
 
 ## Web packages (`web/`)
 
-```text
-web/
-├── brand              # @regenfass/brand — shared SolidJS UI / Tailwind preset
-├── brand-showcase     # @ttnleipzig/regenfass-brand-showcase — design playground
-├── marketing          # @ttnleipzig/regenfass-marketing — marketing site
-├── docs               # @ttnleipzig/regenfass-docs-site — user-facing docs site
-└── installer          # @ttnleipzig/regenfass-installer — flash & configure devices
-```
+| Package        | Path                 | Production URL                                       |
+| -------------- | -------------------- | ---------------------------------------------------- |
+| Marketing      | `web/marketing`      | [regenfass.eu](https://regenfass.eu)                 |
+| Docs site      | `web/docs`           | [docs.regenfass.eu](https://docs.regenfass.eu)       |
+| Installer      | `web/installer`      | [install.regenfass.eu](https://install.regenfass.eu) |
+| Brand showcase | `web/brand-showcase` | [brand.regenfass.eu](https://brand.regenfass.eu)     |
+| Brand library  | `web/brand`          | shared `@regenfass/brand` (no public site)           |
 
-The installer is a **SolidJS** app (not React). It uses Web Serial and `esptool-js` to flash ESP32 hardware from Chromium-based browsers.
+The installer is a **SolidJS** app (not React). It uses Web Serial and `esptool-js` to flash ESP32 hardware from Chromium-based browsers. Deploy details: [Netlify Deployment](Netlify-Deployment).
 
 ## Quick links
 
 - [Project Structure](Project-Structure)
+- [Hardware Support](Hardware-Support)
 - [Architecture](Architecture)
 - [Local Development](Local-Development)
 - [Development Environment](Development-Environment)
