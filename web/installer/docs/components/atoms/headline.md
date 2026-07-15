@@ -14,7 +14,7 @@ import { Headline } from '@/components/ui/headline';
 ## Props
 
 | Name     | Type                            | Default  | Description            |
-|----------|---------------------------------|----------|------------------------|
+| -------- | ------------------------------- | -------- | ---------------------- |
 | as       | `'h1'`, `'h2'`, `'h3'`, `'h4'`  | `'h2'`   | Heading level          |
 | align    | `'left'`, `'center'`, `'right'` | `'left'` | Text alignment         |
 | subtitle | string                          | -        | Optional subtitle line |

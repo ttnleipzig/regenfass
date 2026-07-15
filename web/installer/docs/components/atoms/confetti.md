@@ -12,8 +12,8 @@ Toggle `active` from parent state when you want the burst to appear. The overlay
 
 ## Props
 
-| Name   | Type    | Default | Description |
-|--------|---------|---------|--------------------------------------------------|
+| Name   | Type    | Default | Description                                       |
+| ------ | ------- | ------- | ------------------------------------------------- |
 | active | boolean | false   | When true, shows the burst (fixed, full viewport) |
 
 ## Design notes

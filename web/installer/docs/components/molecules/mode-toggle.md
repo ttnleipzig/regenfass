@@ -12,8 +12,8 @@ import { ButtonModeToggle } from '@/components/ui/mode-toggle';
 
 This component accepts no props - it manages theme state internally.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

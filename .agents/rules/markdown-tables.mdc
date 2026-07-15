@@ -1,0 +1,42 @@
+---
+description: Markdown-Tabellen prettify / spaltenweise ausrichten
+globs: "**/*.{md,mdc,mdx}"
+alwaysApply: true
+---
+
+# Markdown tables
+
+When creating or editing Markdown tables, always **prettify** them so columns are aligned and easy to scan in source.
+
+## Required style
+
+1. Put one space after each opening `|` and one space before each closing `|`.
+2. Pad cell content with spaces so every column has a consistent width (based on the widest cell in that column, including the header).
+3. Make the separator row (`---`) match each column width (at least three dashes).
+4. Prefer left-aligned columns (`---` / `:---`). Use `:---` / `:---:` / `---:` only when alignment is intentional.
+5. Keep one logical row per line; do not wrap cell text across lines.
+6. When you touch an existing table (even for a small edit), re-prettify the whole table.
+
+## Example
+
+Bad:
+
+```markdown
+| Site | URL | What you get |
+| ---- | --- | ------------ |
+| Project site | [regenfass.eu](https://regenfass.eu) | Overview |
+| Docs | [docs.regenfass.eu](https://docs.regenfass.eu) | Guides |
+```
+
+Good:
+
+```markdown
+| Site         | URL                                            | What you get |
+| ------------ | ---------------------------------------------- | ------------ |
+| Project site | [regenfass.eu](https://regenfass.eu)           | Overview     |
+| Docs         | [docs.regenfass.eu](https://docs.regenfass.eu) | Guides       |
+```
+
+## Scope
+
+Applies to all Markdown sources agents write or change (`README.md`, `docs/`, `web/*/docs`, `.agents/`, etc.). Do not leave compact, ragged tables in diffs you introduce.

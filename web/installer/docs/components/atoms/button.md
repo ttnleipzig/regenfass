@@ -13,11 +13,11 @@ import { Button } from '@/components/ui/button';
 
 ## Props
 
-| Name    | Type                    | Default       | Description                  |
+| Name    | Type                    | Default       | Description                  |             |           |              |           |                      |
 | ------- | ----------------------- | ------------- | ---------------------------- | ----------- | --------- | ------------ | --------- | -------------------- |
 | variant | 'default'               | 'destructive' | 'outline'                    | 'secondary' | 'ghost'   | 'link'       | 'default' | Visual style variant |
-| size    | 'default'               | 'sm'          | 'lg'                         | 'icon'      | 'default' | Size variant |
-| ...     | Kobalte ButtonRootProps | -             | All native button attributes |
+| size    | 'default'               | 'sm'          | 'lg'                         | 'icon'      | 'default' | Size variant |           |                      |
+| ...     | Kobalte ButtonRootProps | -             | All native button attributes |             |           |              |           |                      |
 
 ## Design notes
 

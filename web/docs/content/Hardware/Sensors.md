@@ -2,11 +2,11 @@
 
 To make the correct choice of sensors, you have to know what you want to measure.
 
-| Question | Important | Less important | Not important |
-|----------|-----------|----------------|---------------|
-| How important is the price for you? |  |  |  |
-| Is it important that the sensor is waterproof? |  |  |  |
-| How important is the accuracy for you? |  |  |  |
+| Question                                       | Important | Less important | Not important |
+| ---------------------------------------------- | --------- | -------------- | ------------- |
+| How important is the price for you?            |           |                |               |
+| Is it important that the sensor is waterproof? |           |                |               |
+| How important is the accuracy for you?         |           |                |               |
 
 ## Beginner (0-3 times yes)
 

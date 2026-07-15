@@ -13,15 +13,15 @@ import { Checkbox } from '@/components/forms/Checkbox';
 
 ## Props
 
-| Name       | Type                                     | Default | Description                                 |
-|------------|------------------------------------------|---------|---------------------------------------------|
-| label      | string                                   | -       | Label text displayed next to checkbox       |
-| required   | boolean                                  | false   | Adds asterisk (*) to label                  |
-| error      | string                                   | -       | Error state and text                        |
-| helperText | string                                   | -       | Helper text below checkbox                  |
-| class      | string                                   | -       | Additional CSS classes for wrapper          |
-| id         | string                                   | -       | Checkbox ID (auto-generated if not provided)|
-| ...        | JSX.InputHTMLAttributes<HTMLInputElement>| -       | All standard checkbox input attributes      |
+| Name       | Type                                      | Default | Description                                  |
+| ---------- | ----------------------------------------- | ------- | -------------------------------------------- |
+| label      | string                                    | -       | Label text displayed next to checkbox        |
+| required   | boolean                                   | false   | Adds asterisk (*) to label                   |
+| error      | string                                    | -       | Error state and text                         |
+| helperText | string                                    | -       | Helper text below checkbox                   |
+| class      | string                                    | -       | Additional CSS classes for wrapper           |
+| id         | string                                    | -       | Checkbox ID (auto-generated if not provided) |
+| ...        | JSX.InputHTMLAttributes<HTMLInputElement> | -       | All standard checkbox input attributes       |
 
 ## Design notes
 

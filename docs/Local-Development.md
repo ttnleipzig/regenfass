@@ -15,12 +15,12 @@ This installs the pnpm workspace for all packages under `web/*` using the **root
 
 From the **repository root**:
 
-| Script | Package | Typical URL |
-|--------|---------|-------------|
-| `pnpm dev:installer` | `@ttnleipzig/regenfass-installer` | <http://localhost:5173> (Vite default) |
-| `pnpm dev:brand` | `@ttnleipzig/regenfass-brand-showcase` | <http://localhost:5174> |
-| `pnpm dev:marketing` | `@ttnleipzig/regenfass-marketing` | <http://localhost:5175> |
-| `pnpm dev:docs` | `@ttnleipzig/regenfass-docs-site` | <http://localhost:5176> |
+| Script               | Package                                | Typical URL                            |
+| -------------------- | -------------------------------------- | -------------------------------------- |
+| `pnpm dev:installer` | `@ttnleipzig/regenfass-installer`      | <http://localhost:5173> (Vite default) |
+| `pnpm dev:brand`     | `@ttnleipzig/regenfass-brand-showcase` | <http://localhost:5174>                |
+| `pnpm dev:marketing` | `@ttnleipzig/regenfass-marketing`      | <http://localhost:5175>                |
+| `pnpm dev:docs`      | `@ttnleipzig/regenfass-docs-site`      | <http://localhost:5176>                |
 
 Equivalent filter form:
 
@@ -36,14 +36,14 @@ cd web/installer && pnpm dev
 
 ### Installer-only commands (from `web/installer`)
 
-| Command | Purpose |
-|---------|---------|
-| `pnpm lint` | Typecheck + markdownlint |
-| `pnpm test` / `pnpm test:run` | Vitest unit/component tests |
-| `pnpm test:coverage` | Coverage report |
-| `pnpm build` | `tsc -b` + Vite production build (runs `docs:components` via `prebuild`) |
-| `pnpm docs:components` | Regenerate component markdown |
-| `pnpm playground:registry` | Refresh playground registry |
+| Command                       | Purpose                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------ |
+| `pnpm lint`                   | Typecheck + markdownlint                                                 |
+| `pnpm test` / `pnpm test:run` | Vitest unit/component tests                                              |
+| `pnpm test:coverage`          | Coverage report                                                          |
+| `pnpm build`                  | `tsc -b` + Vite production build (runs `docs:components` via `prebuild`) |
+| `pnpm docs:components`        | Regenerate component markdown                                            |
+| `pnpm playground:registry`    | Refresh playground registry                                              |
 
 Root shortcuts: `pnpm lint`, `pnpm test`, `pnpm build:installer` delegate to the installer filter.
 

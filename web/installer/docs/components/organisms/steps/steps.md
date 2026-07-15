@@ -12,8 +12,8 @@ import Steps from '@/components/molecules/steps/Steps';
 
 This component accepts no props - it manages the installer state internally using XState.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

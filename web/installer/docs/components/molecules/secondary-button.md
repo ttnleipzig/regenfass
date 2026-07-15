@@ -12,13 +12,13 @@ import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
 
 ## Props
 
-| Name     | Type                                      | Default | Description                         |
-|----------|-------------------------------------------|---------|-------------------------------------|
-| loading  | boolean                                   | false   | Shows spinner and disables button  |
-| class    | string                                    | -       | Additional CSS classes              |
-| children | JSX.Element                               | -       | Button content                      |
-| disabled | boolean                                   | false   | Disables the button                 |
-| ...      | JSX.ButtonHTMLAttributes<HTMLButtonElement>| -      | All standard button attributes      |
+| Name     | Type                                        | Default | Description                       |
+| -------- | ------------------------------------------- | ------- | --------------------------------- |
+| loading  | boolean                                     | false   | Shows spinner and disables button |
+| class    | string                                      | -       | Additional CSS classes            |
+| children | JSX.Element                                 | -       | Button content                    |
+| disabled | boolean                                     | false   | Disables the button               |
+| ...      | JSX.ButtonHTMLAttributes<HTMLButtonElement> | -       | All standard button attributes    |
 
 ## Design notes
 

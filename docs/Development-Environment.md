@@ -4,23 +4,23 @@ What you need on a machine (or in a Cloud Agent / Dev Container) to work on rege
 
 ## Required tools
 
-| Tool | Used for | Notes |
-|------|----------|--------|
-| **Node.js** 20+ | All `web/*` packages | CI installer tests use Node 20; Pages deploy uses 24 |
-| **pnpm** 10.x | Workspace installs | Repo pins `packageManager: pnpm@10.28.0`; prefer `corepack enable` |
-| **Git** | Source control | Conventional Commits (see [Coding Guidelines](Coding-Guidelines)) |
-| **PlatformIO Core** | Firmware build/upload | `pip install platformio` or PlatformIO IDE |
-| **Python 3** | PlatformIO | CI firmware jobs use Python 3.9 |
+| Tool                | Used for              | Notes                                                              |
+| ------------------- | --------------------- | ------------------------------------------------------------------ |
+| **Node.js** 20+     | All `web/*` packages  | CI installer tests use Node 20; Pages deploy uses 24               |
+| **pnpm** 10.x       | Workspace installs    | Repo pins `packageManager: pnpm@10.28.0`; prefer `corepack enable` |
+| **Git**             | Source control        | Conventional Commits (see [Coding Guidelines](Coding-Guidelines))  |
+| **PlatformIO Core** | Firmware build/upload | `pip install platformio` or PlatformIO IDE                         |
+| **Python 3**        | PlatformIO            | CI firmware jobs use Python 3.9                                    |
 
 ## Optional / situational
 
-| Tool | When |
-|------|------|
-| **Chromium** (Chrome, Edge, …) | Web Serial flashing and full hardware E2E |
-| **USB serial access** | Physical Heltec / ESP32 board |
-| **Go** toolchain | Working in `backend/` |
-| **Docker** | Backend `compose.yml` / local API stack |
-| **Playwright browsers** | Installer E2E: `pnpm exec playwright install chromium` from `web/installer` |
+| Tool                           | When                                                                        |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| **Chromium** (Chrome, Edge, …) | Web Serial flashing and full hardware E2E                                   |
+| **USB serial access**          | Physical Heltec / ESP32 board                                               |
+| **Go** toolchain               | Working in `backend/`                                                       |
+| **Docker**                     | Backend `compose.yml` / local API stack                                     |
+| **Playwright browsers**        | Installer E2E: `pnpm exec playwright install chromium` from `web/installer` |
 
 ## Dev Container
 

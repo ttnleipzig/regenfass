@@ -31,13 +31,13 @@ The configuration step uses the same layout for AppEUI and DevEUI: eight groups 
 
 ## Building blocks
 
-| Export | Role |
-| ------ | ---- |
-| `OTPField` | Root: set `maxLength`, optional `value` / `onValueChange` / `onComplete` |
-| `OTPFieldInput` | The real (visually hidden) input; set `pattern`, `id`, and `name` for labels and forms |
-| `OTPFieldGroup` | Wraps a row of slots |
-| `OTPFieldSeparator` | Visual break between groups |
-| `OTPFieldSlot` | One cell; pass `index` from `0` to `maxLength - 1` |
+| Export              | Role                                                                                   |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `OTPField`          | Root: set `maxLength`, optional `value` / `onValueChange` / `onComplete`               |
+| `OTPFieldInput`     | The real (visually hidden) input; set `pattern`, `id`, and `name` for labels and forms |
+| `OTPFieldGroup`     | Wraps a row of slots                                                                   |
+| `OTPFieldSeparator` | Visual break between groups                                                            |
+| `OTPFieldSlot`      | One cell; pass `index` from `0` to `maxLength - 1`                                     |
 
 ## Accessibility
 

@@ -12,8 +12,8 @@ import Flasher from '@/components/molecules/Flasher';
 
 This component accepts no props - it manages ESP device flashing internally.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

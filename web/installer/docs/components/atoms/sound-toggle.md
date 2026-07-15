@@ -12,8 +12,8 @@ import { ButtonSoundToggle } from "@/components/atoms/ButtonSoundToggle.tsx";
 
 This component accepts no props — it reads and updates the global sound preference.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

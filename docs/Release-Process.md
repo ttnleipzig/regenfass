@@ -4,14 +4,14 @@
 
 Regenfass uses a **single semver** for firmware and all web apps. Source of truth:
 
-| File | Role |
-|------|------|
-| `version.txt` | Release Please version file |
-| `.release-please-manifest.json` | Manifest (`"."` → current version) |
-| `CHANGELOG.md` | Human-readable release notes |
-| `package.json` + `web/*/package.json` | Same `version` field (synced on release) |
-| `web/brand/src/version.ts` | `APP_VERSION` shown in every web app footer |
-| `src/version.h` | `REGENFASS_VERSION` for firmware serial/SCP |
+| File                                  | Role                                        |
+| ------------------------------------- | ------------------------------------------- |
+| `version.txt`                         | Release Please version file                 |
+| `.release-please-manifest.json`       | Manifest (`"."` → current version)          |
+| `CHANGELOG.md`                        | Human-readable release notes                |
+| `package.json` + `web/*/package.json` | Same `version` field (synced on release)    |
+| `web/brand/src/version.ts`            | `APP_VERSION` shown in every web app footer |
+| `src/version.h`                       | `REGENFASS_VERSION` for firmware serial/SCP |
 
 Release Please bumps **all of these together** when the release PR merges (see `extra-files` in `.release-please-config.json`).
 
@@ -21,10 +21,10 @@ Only commit **subjects** that start with a conventional type (`feat:`, `fix:`, �
 
 Bump heuristics (from CONTRIBUTING):
 
-| Type | Typical bump |
-|------|----------------|
-| `feat` | minor |
-| `fix`, `docs`, `refactor`, `perf`, `test`, `chore`, … | patch |
+| Type                                                  | Typical bump |
+| ----------------------------------------------------- | ------------ |
+| `feat`                                                | minor        |
+| `fix`, `docs`, `refactor`, `perf`, `test`, `chore`, … | patch        |
 
 Breaking changes: `BREAKING CHANGE:` footer or `!` after type/scope.
 

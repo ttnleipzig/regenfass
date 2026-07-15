@@ -12,8 +12,8 @@ import Footer from '@/components/organisms/Footer';
 
 This component accepts no props - it displays static footer information.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

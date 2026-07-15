@@ -13,14 +13,14 @@ import { TextInput } from '@/components/forms/TextInput';
 
 ## Props
 
-| Name       | Type                                     | Default | Description                               |
-|------------|------------------------------------------|---------|-------------------------------------------|
-| label      | string                                   | -       | Field label displayed above input         |
-| required   | boolean                                  | false   | Adds asterisk (*) marker to label        |
-| error      | string                                   | -       | Error text (passed to both FormField and InputField)|
-| helperText | string                                   | -       | Helper text shown below input             |
-| class      | string                                   | -       | Additional CSS classes for input element  |
-| ...        | JSX.InputHTMLAttributes<HTMLInputElement>| -       | All native input attributes forwarded     |
+| Name       | Type                                      | Default | Description                                          |
+| ---------- | ----------------------------------------- | ------- | ---------------------------------------------------- |
+| label      | string                                    | -       | Field label displayed above input                    |
+| required   | boolean                                   | false   | Adds asterisk (*) marker to label                    |
+| error      | string                                    | -       | Error text (passed to both FormField and InputField) |
+| helperText | string                                    | -       | Helper text shown below input                        |
+| class      | string                                    | -       | Additional CSS classes for input element             |
+| ...        | JSX.InputHTMLAttributes<HTMLInputElement> | -       | All native input attributes forwarded                |
 
 ## Design notes
 

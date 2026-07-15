@@ -12,8 +12,8 @@ import SpinnerConfetti from '@/components/atoms/SpinnerConfetti';
 
 This component accepts no props — it is a fixed layout with a spinner and decorative confetti.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Name | Type | Default | Description        |
+| ---- | ---- | ------- | ------------------ |
 | -    | -    | -       | No props available |
 
 ## Design notes

@@ -26,12 +26,12 @@ import { AlertInline, AlertTitle, AlertDescription } from '@/components/molecule
 
 ## Props
 
-| Name     | Type                                                               | Default     | Description               |
-|----------|--------------------------------------------------------------------|-------------|---------------------------|
-| variant  | `'default'`, `'info'`, `'warning'`, `'destructive'`, `'success'`   | `'default'` | Color/intent variant      |
-| showIcon | boolean                                                            | true        | Show matching intent icon |
-| class    | string                                                             | -           | Additional classes        |
-| children | JSX.Element (use Title/Description)                                | -           | Content inside the alert  |
+| Name     | Type                                                             | Default     | Description               |
+| -------- | ---------------------------------------------------------------- | ----------- | ------------------------- |
+| variant  | `'default'`, `'info'`, `'warning'`, `'destructive'`, `'success'` | `'default'` | Color/intent variant      |
+| showIcon | boolean                                                          | true        | Show matching intent icon |
+| class    | string                                                           | -           | Additional classes        |
+| children | JSX.Element (use Title/Description)                              | -           | Content inside the alert  |
 
 ## Design notes
 

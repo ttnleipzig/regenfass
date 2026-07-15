@@ -54,9 +54,9 @@ Go HTTP API (`localhost:64000` in swagger metadata) with sqlc SQL and optional D
 
 ## Boundaries
 
-| Concern | Must not |
-|---------|----------|
-| Installer UI | Introduce React |
-| Firmware | Depend on Node / pnpm |
-| Brand package | Own app-only flash/serial logic |
-| Contributor `docs/` | Nested wiki folders |
+| Concern             | Must not                        |
+| ------------------- | ------------------------------- |
+| Installer UI        | Introduce React                 |
+| Firmware            | Depend on Node / pnpm           |
+| Brand package       | Own app-only flash/serial logic |
+| Contributor `docs/` | Nested wiki folders             |

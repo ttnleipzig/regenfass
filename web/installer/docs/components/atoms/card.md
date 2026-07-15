@@ -23,45 +23,45 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 
 ### Card
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"div">   | -       | All native div attributes    |
+| Name  | Type                  | Default | Description               |
+| ----- | --------------------- | ------- | ------------------------- |
+| class | string                | -       | Additional CSS classes    |
+| ...   | ComponentProps<"div"> | -       | All native div attributes |
 
 ### CardHeader
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"div">   | -       | All native div attributes    |
+| Name  | Type                  | Default | Description               |
+| ----- | --------------------- | ------- | ------------------------- |
+| class | string                | -       | Additional CSS classes    |
+| ...   | ComponentProps<"div"> | -       | All native div attributes |
 
 ### CardTitle
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"h1">    | -       | All native h1 attributes     |
+| Name  | Type                 | Default | Description              |
+| ----- | -------------------- | ------- | ------------------------ |
+| class | string               | -       | Additional CSS classes   |
+| ...   | ComponentProps<"h1"> | -       | All native h1 attributes |
 
 ### CardDescription
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"h3">    | -       | All native h3 attributes     |
+| Name  | Type                 | Default | Description              |
+| ----- | -------------------- | ------- | ------------------------ |
+| class | string               | -       | Additional CSS classes   |
+| ...   | ComponentProps<"h3"> | -       | All native h3 attributes |
 
 ### CardContent
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"div">   | -       | All native div attributes    |
+| Name  | Type                  | Default | Description               |
+| ----- | --------------------- | ------- | ------------------------- |
+| class | string                | -       | Additional CSS classes    |
+| ...   | ComponentProps<"div"> | -       | All native div attributes |
 
 ### CardFooter
 
-| Name     | Type                    | Default | Description                  |
-|----------|-------------------------|---------|------------------------------|
-| class    | string                  | -       | Additional CSS classes       |
-| ...      | ComponentProps<"div">   | -       | All native div attributes    |
+| Name  | Type                  | Default | Description               |
+| ----- | --------------------- | ------- | ------------------------- |
+| class | string                | -       | Additional CSS classes    |
+| ...   | ComponentProps<"div"> | -       | All native div attributes |
 
 ## Design notes
 

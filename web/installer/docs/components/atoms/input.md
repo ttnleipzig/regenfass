@@ -10,12 +10,12 @@ import { InputField } from '@/components/ui/input';
 
 ## Props
 
-| Name       | Type       | Default | Description                                 |
-|------------|------------|---------|---------------------------------------------|
-| label      | string     | -       | Optional label above input                   |
-| error      | string     | -       | Shows error text and sets aria-invalid       |
-| helperText | string     | -       | Helper text (hidden when error is present)   |
-| ...        | native input props | - | All standard input attributes               |
+| Name       | Type               | Default | Description                                |
+| ---------- | ------------------ | ------- | ------------------------------------------ |
+| label      | string             | -       | Optional label above input                 |
+| error      | string             | -       | Shows error text and sets aria-invalid     |
+| helperText | string             | -       | Helper text (hidden when error is present) |
+| ...        | native input props | -       | All standard input attributes              |
 
 ## Design notes
 
