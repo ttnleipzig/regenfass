@@ -38,7 +38,8 @@
           "path": "web/docs/package.json",
           "jsonpath": "$.version"
         },
-        "web/brand/src/version.ts"
+        "web/brand/src/version.ts",
+        "src/version.h"
       ]
     }
   }
