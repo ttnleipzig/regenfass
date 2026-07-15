@@ -1,31 +1,43 @@
 #!/usr/bin/env node
 /**
- * Provision Swetrix projects and funnels via the Admin API
+ * Provision Swetrix funnels (and optionally projects) via the Admin API
  * (same endpoints as mcp-swetrix admin tools).
+ *
+ * Prefers existing IDs from root `.env`:
+ *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS / _BRAND
  *
  * Usage (from repo root):
  *   node scripts/provision-swetrix.mjs
  *
- * Requires SWETRIX_API_KEY in the environment or /workspace/.env / .env.
+ * Requires SWETRIX_API_KEY for Admin API calls. Always runs
+ * scripts/sync-swetrix-env.mjs afterwards when IDs are present.
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const BASE = process.env.SWETRIX_BASE_URL || "https://api.swetrix.com";
 
-function loadApiKey() {
-  if (process.env.SWETRIX_API_KEY?.trim()) return process.env.SWETRIX_API_KEY.trim();
-  for (const rel of [".env", "web/.env"]) {
-    const p = resolve(ROOT, rel);
-    if (!existsSync(p)) continue;
-    const text = readFileSync(p, "utf8");
-    const m = text.match(/^SWETRIX_API_KEY=(.+)$/m);
-    if (m) return m[1].trim().replace(/^["']|["']$/g, "");
+function loadRootEnv() {
+  const env = { ...process.env };
+  const p = resolve(ROOT, ".env");
+  if (existsSync(p)) {
+    for (const line of readFileSync(p, "utf8").split(/\r?\n/)) {
+      const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!m) continue;
+      env[m[1]] = m[2].trim().replace(/^["']|["']$/g, "");
+    }
   }
-  throw new Error("SWETRIX_API_KEY not found in env or .env");
+  return env;
+}
+
+function loadApiKey(env) {
+  const key = env.SWETRIX_API_KEY?.trim();
+  if (!key) throw new Error("SWETRIX_API_KEY not found in env or .env");
+  return key;
 }
 
 async function api(method, path, body, apiKey) {
@@ -56,23 +68,23 @@ async function api(method, path, body, apiKey) {
 const PROJECTS = [
   {
     name: "regenfass-installer",
+    envKey: "SWETRIX_PROJECT_ID_INSTALLER",
     origins: ["install.regenfass.eu"],
-    envPath: "web/installer/.env",
   },
   {
     name: "regenfass-marketing",
+    envKey: "SWETRIX_PROJECT_ID_MARKETING",
     origins: ["regenfass.eu"],
-    envPath: "web/marketing/.env",
   },
   {
     name: "regenfass-docs",
+    envKey: "SWETRIX_PROJECT_ID_DOCS",
     origins: ["docs.regenfass.eu"],
-    envPath: "web/docs/.env",
   },
   {
     name: "regenfass-brand",
+    envKey: "SWETRIX_PROJECT_ID_BRAND",
     origins: ["brand.regenfass.eu"],
-    envPath: "web/brand-showcase/.env",
   },
 ];
 
@@ -88,42 +100,36 @@ const INSTALLER_FUNNEL_STEPS = [
   "installer_state_Finish_ShowingNextSteps",
 ];
 
-function writeEnvPid(relPath, pid) {
-  const abs = resolve(ROOT, relPath);
-  const line = `VITE_SWETRIX_PROJECT_ID=${pid}\n`;
-  if (existsSync(abs)) {
-    const prev = readFileSync(abs, "utf8");
-    if (/^VITE_SWETRIX_PROJECT_ID=/m.test(prev)) {
-      writeFileSync(
-        abs,
-        prev.replace(/^VITE_SWETRIX_PROJECT_ID=.*$/m, `VITE_SWETRIX_PROJECT_ID=${pid}`),
-      );
-      return;
+function upsertRootEnv(keys) {
+  const abs = resolve(ROOT, ".env");
+  let text = existsSync(abs) ? readFileSync(abs, "utf8") : "";
+  for (const [k, v] of Object.entries(keys)) {
+    if (!v) continue;
+    const line = `${k}=${v}`;
+    if (new RegExp(`^${k}=`, "m").test(text)) {
+      text = text.replace(new RegExp(`^${k}=.*$`, "m"), line);
+    } else {
+      text = text.endsWith("\n") || text === "" ? `${text}${line}\n` : `${text}\n${line}\n`;
     }
-    writeFileSync(abs, prev.endsWith("\n") ? `${prev}${line}` : `${prev}\n${line}`);
-    return;
   }
-  writeFileSync(abs, line);
+  writeFileSync(abs, text);
 }
 
 function projectIdOf(row) {
   return row?.id ?? row?.pid ?? row?.projectId;
 }
 
-async function ensureProject(apiKey, name, origins) {
+async function ensureProject(apiKey, name, origins, existingId) {
+  if (existingId) {
+    console.log(`use existing project ${name} → ${existingId}`);
+    return existingId;
+  }
   const list = await api("GET", "/v1/project", undefined, apiKey);
   const rows = Array.isArray(list) ? list : list?.results ?? list?.data ?? [];
   const existing = rows.find((p) => p?.name === name);
   if (existing) {
     const id = projectIdOf(existing);
     console.log(`reuse project ${name} → ${id}`);
-    if (origins?.length) {
-      try {
-        await api("PUT", `/v1/project/${id}`, { name, origins }, apiKey);
-      } catch {
-        /* origins update best-effort */
-      }
-    }
     return id;
   }
   const created = await api("POST", "/v1/project", { name }, apiKey);
@@ -158,30 +164,61 @@ async function ensureFunnel(apiKey, pid, name, steps) {
 }
 
 async function main() {
-  const apiKey = loadApiKey();
+  const env = loadRootEnv();
   const ids = {};
-  for (const p of PROJECTS) {
-    const id = await ensureProject(apiKey, p.name, p.origins);
-    if (!id) throw new Error(`No project id returned for ${p.name}`);
-    ids[p.name] = id;
-    writeEnvPid(p.envPath, id);
-    console.log(`wrote ${p.envPath}`);
+  const hasAllIds = PROJECTS.every((p) => env[p.envKey]?.trim());
+
+  if (hasAllIds) {
+    for (const p of PROJECTS) {
+      ids[p.name] = env[p.envKey].trim();
+      console.log(`from .env ${p.envKey}=${ids[p.name]}`);
+    }
+  } else {
+    const apiKey = loadApiKey(env);
+    for (const p of PROJECTS) {
+      const id = await ensureProject(apiKey, p.name, p.origins, env[p.envKey]?.trim());
+      if (!id) throw new Error(`No project id for ${p.name}`);
+      ids[p.name] = id;
+    }
+    upsertRootEnv({
+      SWETRIX_PROJECT_ID_INSTALLER: ids["regenfass-installer"],
+      SWETRIX_PROJECT_ID_MARKETING: ids["regenfass-marketing"],
+      SWETRIX_PROJECT_ID_DOCS: ids["regenfass-docs"],
+      SWETRIX_PROJECT_ID_BRAND: ids["regenfass-brand"],
+    });
   }
 
-  await ensureFunnel(
-    apiKey,
-    ids["regenfass-installer"],
-    "Flash and configure",
-    INSTALLER_FUNNEL_STEPS,
-  );
-  await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to documentation", [
-    "/",
-    "navigate_to_docs",
-  ]);
-  await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to installer", [
-    "/",
-    "navigate_to_installer",
-  ]);
+  try {
+    const apiKey = loadApiKey(env);
+    await ensureFunnel(
+      apiKey,
+      ids["regenfass-installer"],
+      "Flash and configure",
+      INSTALLER_FUNNEL_STEPS,
+    );
+    await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to documentation", [
+      "/",
+      "navigate_to_docs",
+    ]);
+    await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to installer", [
+      "/",
+      "navigate_to_installer",
+    ]);
+  } catch (err) {
+    console.warn(`Funnel/Admin API step skipped: ${err.message || err}`);
+    console.warn(
+      "Create funnels in the Swetrix dashboard (see docs/Local-Development.md), or fix SWETRIX_API_KEY.",
+    );
+  }
+
+  const sync = spawnSync(process.execPath, [resolve(ROOT, "scripts/sync-swetrix-env.mjs")], {
+    cwd: ROOT,
+    stdio: "inherit",
+    env: { ...process.env, ...env, ...Object.fromEntries(
+      PROJECTS.map((p) => [p.envKey, ids[p.name]]),
+    )},
+  });
+  if (sync.status !== 0) process.exit(sync.status || 1);
 
   console.log(JSON.stringify({ projects: ids }, null, 2));
 }

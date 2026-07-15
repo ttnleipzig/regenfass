@@ -13,6 +13,7 @@
 !/CONTRIBUTING.md
 !/.gitignore
 !/.editorconfig
+!/.env.example
 !/.releaserc.yml
 !/.markdownlintignore
 !/.release-please-config.json
