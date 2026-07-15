@@ -11,6 +11,7 @@ Regenfass uses a **single semver** for firmware and all web apps. Source of trut
 | `CHANGELOG.md` | Human-readable release notes |
 | `package.json` + `web/*/package.json` | Same `version` field (synced on release) |
 | `web/brand/src/version.ts` | `APP_VERSION` shown in every web app footer |
+| `src/version.h` | `REGENFASS_VERSION` for firmware serial/SCP |
 
 Release Please bumps **all of these together** when the release PR merges (see `extra-files` in `.release-please-config.json`).
 
@@ -31,7 +32,7 @@ Breaking changes: `BREAKING CHANGE:` footer or `!` after type/scope.
 
 1. Branch from `main` (for example `feature/…`).
 2. Open a PR; address review; merge (squash preferred).
-3. Release Please opens or updates a **release PR** collecting conventional commits. That PR updates `CHANGELOG.md`, `version.txt`, the manifest, package versions, and `APP_VERSION`.
+3. Release Please opens or updates a **release PR** collecting conventional commits. That PR updates `CHANGELOG.md`, `version.txt`, the manifest, package versions, `APP_VERSION`, and `REGENFASS_VERSION`.
 4. Merge the release PR to create the **git tag** and a **GitHub Release** whose body is the new changelog section.
 
 ```mermaid
