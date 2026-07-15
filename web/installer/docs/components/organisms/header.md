@@ -1,25 +1,45 @@
 # Header
 
-Main navigation header used at the top of the installer interface.
+Main navigation header used at the top of installer and other Regenfass web UIs (from `@regenfass/brand`).
 
 ```tsx
-import Header from '@/components/organisms/Header';
+import { Header, type HeaderNavItem } from "@regenfass/brand";
 
-<Header />
+const navItems: HeaderNavItem[] = [
+  { href: "/", label: "Home" },
+  {
+    href: "https://docs.regenfass.eu/",
+    label: "Docs",
+    external: true,
+    onClick: () => {
+      /* optional analytics / side effects */
+    },
+  },
+];
+
+<Header title="Regenfass" navItems={navItems} />
 ```
 
 ## Props
 
-This component accepts no props - it's a static header with fixed navigation links and branding.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | `"Regenfass"` | Optional brand title shown in the header. |
+| `navItems` | `HeaderNavItem[]` | Docs / installer / GitHub / Matrix defaults | Navigation items. |
+| `trailing` | `JSX.Element` | — | Extra controls rendered next to the color-mode toggle. |
+
+### `HeaderNavItem`
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| -    | -    | -       | No props available |
+| `href` | `string` | required | Link target. |
+| `label` | `string` | required | Visible label. |
+| `external` | `boolean` | inferred from `http(s)` | Force external `<a>`/`Link` instead of router `<A>`. |
+| `onClick` | `(e) => void` | — | Optional click handler (for example analytics before navigate). |
 
 ## Design notes
 
 - Features the Regenfass brand name with gradient text styling
-- Includes fixed navigation links to documentation, GitHub, and Matrix
 - Navigation is hidden on mobile devices (`hidden md:block`)
 - Integrates the ButtonModeToggle component for dark/light theme switching
 - Uses responsive layout with max-width container and proper spacing

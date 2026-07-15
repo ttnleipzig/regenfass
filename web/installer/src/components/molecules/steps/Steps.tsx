@@ -1,7 +1,8 @@
 import { setupStateMachine } from "@/libs/install/state.ts";
+import { trackEvent } from "@regenfass/brand";
 import { createBrowserInspector } from "@statelyai/inspect";
 import { fromActorRef, useActorRef } from "@xstate/solid";
-import { Match, Switch } from "solid-js";
+import { createEffect, Match, Switch } from "solid-js";
 import StepStartCheckingWebSerialSupport from "./StepStartCheckingWebSerialSupport.tsx";
 import StepStartFetchUpstreamVersions from "./StepStartFetchUpstreamVersions.tsx";
 import StepStartWaitingForUser from "./StepStartWaitingForUser.tsx";
@@ -19,6 +20,15 @@ const inspect = import.meta.env.DEV
 	? createBrowserInspector().inspect
 	: undefined;
 
+function stateNameFromValue(value: unknown): string | undefined {
+	if (typeof value === "string") return value;
+	if (value && typeof value === "object") {
+		const keys = Object.keys(value as Record<string, unknown>);
+		return keys[0];
+	}
+	return undefined;
+}
+
 export default function Steps() {
 	// useMachine’s first tuple value is a one-shot snapshot in @xstate/solid 2.0.0 (it calls
 	// `fromActorRef(actorRef)()`), so Switch/Match would never see transitions. Use the actor
@@ -28,6 +38,14 @@ export default function Steps() {
 	});
 	const snapshot = fromActorRef(actorRef);
 	const send = actorRef.send;
+
+	let lastTrackedState: string | undefined;
+	createEffect(() => {
+		const name = stateNameFromValue(snapshot().value);
+		if (!name || name === lastTrackedState) return;
+		lastTrackedState = name;
+		trackEvent(`installer_state_${name}`);
+	});
 
 	return (
 		<div class="site-container py-6 space-y-6">

@@ -5,6 +5,7 @@ import Steps from "@/components/molecules/steps/Steps.tsx";
 // Mock XState Solid — Steps uses useActorRef + fromActorRef for reactive snapshots
 vi.mock("@xstate/solid", () => {
   const mockSnapshot = {
+    value: "Start_WaitingForUser",
     matches: (value: string) => value === "Start_WaitingForUser",
     toJSON: () => ({ value: "Start_WaitingForUser" }),
   };

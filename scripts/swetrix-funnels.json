@@ -1,0 +1,47 @@
+{
+  "funnels": [
+    {
+      "projectEnv": "SWETRIX_PROJECT_ID_INSTALLER",
+      "projectName": "regenfass.eu.installer",
+      "name": "Flash and configure",
+      "steps": [
+        { "type": "event", "value": "installer_state_Start_WaitingForUser" },
+        { "type": "event", "value": "installer_state_Connect_Connecting" },
+        { "type": "event", "value": "installer_state_Connect_ReadingVersion" },
+        {
+          "type": "event",
+          "value": "installer_state_Install_WaitingForInstallationMethodChoice"
+        },
+        { "type": "event", "value": "installer_state_Install_Installing" },
+        {
+          "type": "event",
+          "value": "installer_state_Install_MigratingConfiguration"
+        },
+        { "type": "event", "value": "installer_state_Config_Editing" },
+        {
+          "type": "event",
+          "value": "installer_state_Config_WritingConfiguration"
+        },
+        { "type": "event", "value": "installer_state_Finish_ShowingNextSteps" }
+      ]
+    },
+    {
+      "projectEnv": "SWETRIX_PROJECT_ID_MARKETING",
+      "projectName": "regenfass.eu",
+      "name": "Path to documentation",
+      "steps": [
+        { "type": "page", "value": "/" },
+        { "type": "event", "value": "navigate_to_docs" }
+      ]
+    },
+    {
+      "projectEnv": "SWETRIX_PROJECT_ID_MARKETING",
+      "projectName": "regenfass.eu",
+      "name": "Path to installer",
+      "steps": [
+        { "type": "page", "value": "/" },
+        { "type": "event", "value": "navigate_to_installer" }
+      ]
+    }
+  ]
+}

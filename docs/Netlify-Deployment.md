@@ -72,6 +72,20 @@ Add these under **Settings → Environments → `production`** (preferred — th
 | `NETLIFY_SITE_ID_INSTALLER` | Installer site ID |
 | `NETLIFY_SITE_ID_BRAND` | Brand showcase site ID |
 
+### Swetrix analytics (build-time env)
+
+Each site needs its **own** Swetrix project ID at build time (Vite inlines `import.meta.env.VITE_*`). Because production builds run in **GitHub Actions**, set these repository or `production` environment secrets (written into each app’s `.env` as `VITE_SWETRIX_PROJECT_ID` before `pnpm build`):
+
+| Secret | App |
+|--------|-----|
+| `SWETRIX_PROJECT_ID_MARKETING` | Marketing |
+| `SWETRIX_PROJECT_ID_DOCS` | Docs |
+| `SWETRIX_PROJECT_ID_INSTALLER` | Installer |
+| `SWETRIX_PROJECT_ID_BRAND` | Brand showcase |
+| `SWETRIX_API_URL` | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
+
+Locally, put the same names in the repository root `.env`, then run `node scripts/sync-swetrix-env.mjs`.
+
 A present auth token with a missing Site ID only skips that site (warning in the Actions log). The job can still be green — check the annotations, not just the check mark.
 
 ## Manual / local deploy
