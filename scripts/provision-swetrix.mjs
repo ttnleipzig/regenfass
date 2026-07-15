@@ -19,7 +19,6 @@ import { spawnSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const BASE = process.env.SWETRIX_BASE_URL || "https://api.swetrix.com";
 
 function loadRootEnv() {
   const env = { ...process.env };
@@ -33,6 +32,12 @@ function loadRootEnv() {
   }
   return env;
 }
+
+const rootEnvEarly = loadRootEnv();
+const BASE =
+  rootEnvEarly.SWETRIX_BASE_URL?.trim() ||
+  process.env.SWETRIX_BASE_URL?.trim() ||
+  "https://api.swetrix.com";
 
 function loadApiKey(env) {
   const key = env.SWETRIX_API_KEY?.trim();

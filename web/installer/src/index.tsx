@@ -5,7 +5,9 @@ import { initAnalytics } from '@regenfass/brand'
 import './index.css'
 import App from './App'
 
-initAnalytics(import.meta.env.VITE_SWETRIX_PROJECT_ID)
+initAnalytics(import.meta.env.VITE_SWETRIX_PROJECT_ID, {
+  apiURL: import.meta.env.VITE_SWETRIX_API_URL,
+})
 
 // Initialize theme from localStorage or system preference
 (() => {

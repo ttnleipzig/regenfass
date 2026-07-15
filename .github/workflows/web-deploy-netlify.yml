@@ -57,12 +57,18 @@ jobs:
           SWETRIX_PROJECT_ID_MARKETING: ${{ secrets.SWETRIX_PROJECT_ID_MARKETING }}
           SWETRIX_PROJECT_ID_DOCS: ${{ secrets.SWETRIX_PROJECT_ID_DOCS }}
           SWETRIX_PROJECT_ID_BRAND: ${{ secrets.SWETRIX_PROJECT_ID_BRAND }}
+          SWETRIX_API_URL: ${{ secrets.SWETRIX_API_URL }}
         run: |
           write_env() {
             local dir="$1"
             local value="$2"
             if [ -n "$value" ]; then
-              printf 'VITE_SWETRIX_PROJECT_ID=%s\n' "$value" > "$dir/.env"
+              {
+                printf 'VITE_SWETRIX_PROJECT_ID=%s\n' "$value"
+                if [ -n "${SWETRIX_API_URL}" ]; then
+                  printf 'VITE_SWETRIX_API_URL=%s\n' "$SWETRIX_API_URL"
+                fi
+              } > "$dir/.env"
               echo "Wrote $dir/.env"
             else
               echo "::notice::Skipping $dir/.env (secret empty — analytics disabled for that app build)"

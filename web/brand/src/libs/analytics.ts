@@ -10,9 +10,21 @@ export type InitAnalyticsOptions = {
 	devMode?: boolean;
 	/** Force-disable tracking even when a project ID is present. */
 	disabled?: boolean;
+	/**
+	 * Events API base URL including the `/log` path.
+	 * Cloud default: `https://api.swetrix.com/log`
+	 * Self-hosted CE example: `https://analytics.example.com/backend/log`
+	 */
+	apiURL?: string;
 };
 
 let initialized = false;
+
+function resolveApiURL(explicit?: string): string | undefined {
+	const fromOpt = explicit?.trim();
+	if (fromOpt) return fromOpt;
+	return undefined;
+}
 
 /**
  * Initialise Swetrix page views and error tracking for this app.
@@ -29,9 +41,11 @@ export function initAnalytics(
 	}
 	if (initialized) return;
 
+	const apiURL = resolveApiURL(options.apiURL);
 	init(pid, {
 		devMode: options.devMode === true,
 		disabled: false,
+		...(apiURL ? { apiURL } : {}),
 	});
 	void trackViews();
 	trackErrors();

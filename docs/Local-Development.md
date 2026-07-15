@@ -83,7 +83,17 @@ SWETRIX_PROJECT_ID_DOCS=…
 SWETRIX_PROJECT_ID_BRAND=…
 ```
 
-Then sync them into each app as `VITE_SWETRIX_PROJECT_ID` (Vite only exposes `VITE_*` to the browser):
+Optional (self-hosted Community Edition):
+
+```env
+# Admin API host for scripts/provision-swetrix.mjs
+SWETRIX_BASE_URL=https://your-host/backend
+# Browser Events API (passed through as VITE_SWETRIX_API_URL)
+SWETRIX_API_URL=https://your-host/backend/log
+SWETRIX_API_KEY=…
+```
+
+Then sync them into each app as `VITE_SWETRIX_PROJECT_ID` (and optional `VITE_SWETRIX_API_URL`):
 
 ```bash
 node scripts/sync-swetrix-env.mjs
@@ -93,7 +103,13 @@ If `VITE_SWETRIX_PROJECT_ID` is empty or missing in an app, tracking for that ap
 
 Shared helpers live in `@regenfass/brand` (`initAnalytics`, `trackEvent`). Theme toggles emit `theme_toggled`; the installer emits `installer_state_<StateName>` on XState transitions; marketing CTAs emit `navigate_to_docs` / `navigate_to_installer`.
 
-### Funnels (create in the Swetrix dashboard)
+### Funnels
+
+Step definitions live in [`scripts/swetrix-funnels.json`](../scripts/swetrix-funnels.json). Create them in the Swetrix dashboard (**Funnels**) or via Admin API:
+
+```bash
+node scripts/provision-swetrix.mjs
+```
 
 **Installer** project — funnel name `Flash and configure` (event steps, in order):
 
@@ -111,12 +127,6 @@ Shared helpers live in `@regenfass/brand` (`initAnalytics`, `trackEvent`). Theme
 
 - `Path to documentation`: page `/` → event `navigate_to_docs`
 - `Path to installer`: page `/` → event `navigate_to_installer`
-
-With a valid Admin API key (`SWETRIX_API_KEY`), you can also run:
-
-```bash
-node scripts/provision-swetrix.mjs
-```
 
 ## SolidJS reminder
 

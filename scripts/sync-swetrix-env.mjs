@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 /**
- * Sync root `.env` Swetrix project IDs into each Vite app's `.env`
- * as `VITE_SWETRIX_PROJECT_ID` (required for client-side Vite exposure).
+ * Sync root `.env` Swetrix settings into each Vite app's `.env`.
  *
  * Expected root vars (no VITE_ prefix):
- *   SWETRIX_PROJECT_ID_INSTALLER
- *   SWETRIX_PROJECT_ID_MARKETING
- *   SWETRIX_PROJECT_ID_DOCS
- *   SWETRIX_PROJECT_ID_BRAND
+ *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS / _BRAND
+ *   SWETRIX_API_URL (optional) — Events API log endpoint for the JS SDK
+ *     Cloud: omit (defaults to https://api.swetrix.com/log)
+ *     Self-hosted CE: https://your-host/backend/log
  *
  * Usage (from repo root):
  *   node scripts/sync-swetrix-env.mjs
@@ -40,25 +39,28 @@ function loadRootEnv() {
   return env;
 }
 
-function writeAppEnv(relDir, pid) {
-  const abs = resolve(ROOT, relDir, ".env");
-  const line = `VITE_SWETRIX_PROJECT_ID=${pid}\n`;
-  if (existsSync(abs)) {
-    const prev = readFileSync(abs, "utf8");
-    if (/^VITE_SWETRIX_PROJECT_ID=/m.test(prev)) {
-      writeFileSync(
-        abs,
-        prev.replace(/^VITE_SWETRIX_PROJECT_ID=.*$/m, `VITE_SWETRIX_PROJECT_ID=${pid}`),
-      );
-      return;
+function upsertEnvFile(abs, entries) {
+  let text = existsSync(abs) ? readFileSync(abs, "utf8") : "";
+  for (const [k, v] of Object.entries(entries)) {
+    if (v === undefined || v === null || v === "") {
+      // Drop empty optional keys
+      if (new RegExp(`^${k}=`, "m").test(text)) {
+        text = text.replace(new RegExp(`^${k}=.*\\n?`, "m"), "");
+      }
+      continue;
     }
-    writeFileSync(abs, prev.endsWith("\n") ? `${prev}${line}` : `${prev}\n${line}`);
-    return;
+    const line = `${k}=${v}`;
+    if (new RegExp(`^${k}=`, "m").test(text)) {
+      text = text.replace(new RegExp(`^${k}=.*$`, "m"), line);
+    } else {
+      text = text.endsWith("\n") || text === "" ? `${text}${line}\n` : `${text}\n${line}\n`;
+    }
   }
-  writeFileSync(abs, line);
+  writeFileSync(abs, text.endsWith("\n") || text === "" ? text : `${text}\n`);
 }
 
 const env = loadRootEnv();
+const apiURL = env.SWETRIX_API_URL?.trim() || env.VITE_SWETRIX_API_URL?.trim() || "";
 let wrote = 0;
 for (const app of APPS) {
   const pid = env[app.envKey]?.trim();
@@ -66,8 +68,12 @@ for (const app of APPS) {
     console.warn(`skip ${app.dir}: ${app.envKey} not set`);
     continue;
   }
-  writeAppEnv(app.dir, pid);
-  console.log(`${app.dir}/.env ← ${pid}`);
+  const abs = resolve(ROOT, app.dir, ".env");
+  upsertEnvFile(abs, {
+    VITE_SWETRIX_PROJECT_ID: pid,
+    VITE_SWETRIX_API_URL: apiURL,
+  });
+  console.log(`${app.dir}/.env ← pid=${pid}${apiURL ? ` api=${apiURL}` : ""}`);
   wrote += 1;
 }
 if (wrote === 0) {
