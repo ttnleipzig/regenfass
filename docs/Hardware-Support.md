@@ -40,36 +40,36 @@ Binary releases exist for many combinations of microcontroller, LoRaWAN module, 
 
 ## Microcontrollers
 
-| Microcontroller | Status |
-| --------------- | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅ |
-| Heltec WiFi LoRa 32 V3 | ✅ |
-| STM32 | ⏳ |
-| ESP32 | ⏳ |
+| Microcontroller        | Status |
+| ---------------------- | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅      |
+| Heltec WiFi LoRa 32 V3 | ✅      |
+| STM32                  | ⏳      |
+| ESP32                  | ⏳      |
 
 ## LoRaWAN modules
 
-| Module | Status |
-| ------ | ------ |
-| Heltec WiFi LoRa 32 V2 | ✅ |
-| Heltec WiFi LoRa 32 V3 | ✅ |
-| Dragino LoRa Shield | ⏳ |
-| Dragino LoRa/GPS HAT | ⏳ |
+| Module                 | Status |
+| ---------------------- | ------ |
+| Heltec WiFi LoRa 32 V2 | ✅      |
+| Heltec WiFi LoRa 32 V3 | ✅      |
+| Dragino LoRa Shield    | ⏳      |
+| Dragino LoRa/GPS HAT   | ⏳      |
 
 ## Display modules
 
 | Display | Status |
 | ------- | ------ |
-| SSD1306 | ✅ |
-| SH1106 | ⏳ |
+| SSD1306 | ✅      |
+| SH1106  | ⏳      |
 
 ## Sensors
 
-| Sensor | Status |
-| ------ | ------ |
-| HC-SR04 | ✅ |
-| VL53L1X | ⏳ |
-| DS18B20 | ⏳ |
+| Sensor  | Status |
+| ------- | ------ |
+| HC-SR04 | ✅      |
+| VL53L1X | ⏳      |
+| DS18B20 | ⏳      |
 
 ## Device configuration
 
@@ -77,10 +77,10 @@ Some settings cannot ship inside the binary releases because they belong to the 
 
 | Configuration | Status |
 | ------------- | ------ |
-| LoRa App Key | ⏳ |
-| LoRa App Eui | ⏳ |
-| LoRa Region | ⏳ |
-| LoRa Dev Eui | ⏳ |
+| LoRa App Key  | ⏳      |
+| LoRa App Eui  | ⏳      |
+| LoRa Region   | ⏳      |
+| LoRa Dev Eui  | ⏳      |
 
 The web [installer](https://install.regenfass.eu) is the intended path for writing these values via Serial Configuration Protocol (SCP).
 

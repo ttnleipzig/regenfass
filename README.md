@@ -9,12 +9,12 @@
 
 ## Where to go
 
-| Site | URL | What you get |
-| ---- | --- | ------------ |
-| Project site | [regenfass.eu](https://regenfass.eu) | Overview and project story |
-| Documentation | [docs.regenfass.eu](https://docs.regenfass.eu) | Guides for setup and everyday use |
-| Installer | [install.regenfass.eu](https://install.regenfass.eu) | Flash and configure your device in the browser |
-| Brand showcase | [brand.regenfass.eu](https://brand.regenfass.eu) | Shared UI components and design playground |
+| Site           | URL                                                  | What you get                                   |
+| -------------- | ---------------------------------------------------- | ---------------------------------------------- |
+| Project site   | [regenfass.eu](https://regenfass.eu)                 | Overview and project story                     |
+| Documentation  | [docs.regenfass.eu](https://docs.regenfass.eu)       | Guides for setup and everyday use              |
+| Installer      | [install.regenfass.eu](https://install.regenfass.eu) | Flash and configure your device in the browser |
+| Brand showcase | [brand.regenfass.eu](https://brand.regenfass.eu)     | Shared UI components and design playground     |
 
 Start with the [documentation site](https://docs.regenfass.eu) if you are new, or open the [installer](https://install.regenfass.eu) when your hardware is ready (Chromium-based browser and USB connection required).
 
