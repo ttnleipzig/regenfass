@@ -1,4 +1,67 @@
-export const marketingDictEn = {
+export type MarketingDictionary = {
+	meta: {
+		title: string;
+		description: string;
+	};
+	nav: {
+		home: string;
+		changelog: string;
+		docs: string;
+		installer: string;
+		brand: string;
+		github: string;
+	};
+	hero: {
+		headline: string;
+		body: string;
+		ctaStart: string;
+		ctaDocs: string;
+	};
+	why: {
+		title: string;
+		subtitle: string;
+		items: { title: string; body: string }[];
+	};
+	how: {
+		title: string;
+		subtitle: string;
+		steps: { step: string; title: string; body: string }[];
+	};
+	hardware: {
+		title: string;
+		subtitle: string;
+		items: { title: string; body: string; src: string }[];
+		docsBefore: string;
+		docsLink: string;
+		docsAfter: string;
+	};
+	software: {
+		title: string;
+		body: string;
+		openInstaller: string;
+		viewSource: string;
+		whatYouGet: string;
+		bullets: string[];
+	};
+	cases: {
+		title: string;
+		items: { title: string; body: string }[];
+	};
+	changelog: {
+		title: string;
+		subtitle: string;
+		currentRelease: string;
+		openOnGitHub: string;
+	};
+	cta: {
+		title: string;
+		body: string;
+		ctaStart: string;
+		ctaDocs: string;
+	};
+};
+
+export const marketingDictEn: MarketingDictionary = {
 	meta: {
 		title: "Regenfass – smart rain barrel monitoring",
 		description:
@@ -133,6 +196,4 @@ export const marketingDictEn = {
 		ctaStart: "Get started",
 		ctaDocs: "Read the docs",
 	},
-} as const;
-
-export type MarketingDictionary = typeof marketingDictEn;
+};

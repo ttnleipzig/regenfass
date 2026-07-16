@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
 	localeRedirectPath,
 	parseLocaleParam,
-} from "../../../../marketing/src/i18n/localeRouting.ts";
+} from "../../../marketing/src/i18n/localeRouting.ts";
 import { LOCALE_COOKIE_NAME } from "@regenfass/brand";
 
 describe("marketing locale routing helpers", () => {

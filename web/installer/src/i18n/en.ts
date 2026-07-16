@@ -1,4 +1,85 @@
-export const installerDictEn = {
+export type InstallerDictionary = {
+	installationSteps: { connect: string; chooseMethod: string; flash: string };
+	shared: {
+		paginatorTitle: string;
+		paginatorListAriaLabel: string;
+		uploadProgress: string;
+		progressPercent: string;
+	};
+	startCheckingWebSerialSupport: { title: string; description: string };
+	startFetchUpstreamVersions: { title: string; description: string };
+	startWaitingForUser: {
+		heading: string;
+		introBeforeTtn: string;
+		brandTheThingsNetwork: string;
+		introVia: string;
+		brandLoRaWAN: string;
+		introAfterLorawan: string;
+		alertTitle: string;
+		alertDescription: string;
+		next: string;
+	};
+	connectConnecting: { title: string; description: string };
+	connectReadingVersion: { title: string; description: string };
+	installWaitingForInstallationMethodChoice: {
+		alertTitle: string;
+		alertDescription: string;
+		install: string;
+		configure: string;
+		versionSelectPlaceholder: string;
+	};
+	installInstalling: {
+		titleInProgress: string;
+		titleComplete: string;
+		descriptionInProgress: string;
+		progressAriaLabel: string;
+		successTitle: string;
+		successBody: string;
+		successNext: string;
+	};
+	installMigratingConfiguration: { title: string; description: string };
+	configEditing: {
+		heading: string;
+		description: string;
+		fieldAppEui: string;
+		fieldDevEui: string;
+		fieldAppKey: string;
+		copyToClipboard: string;
+		copied: string;
+		clearField: string;
+		importErrorTitle: string;
+		couldNotReadFile: string;
+		loadFromFileAriaLabel: string;
+		clear: string;
+		loadFromFile: string;
+		saveToFile: string;
+		saveToDevice: string;
+	};
+	configWritingConfiguration: { title: string; description: string };
+	finishShowingNextSteps: {
+		title: string;
+		body: string;
+		anotherDevice: string;
+		flashAnotherDevice: string;
+	};
+	finishShowingError: { title: string; restart: string };
+	stateErrors: {
+		unsupportedBrowser: string;
+		unknownConfigVersion: string;
+		migrateFailed: string;
+	};
+	configFileErrors: {
+		invalidJson: string;
+		missingOrInvalidField: string;
+		appEuiLength: string;
+		devEuiLength: string;
+		appKeyLength: string;
+		configVersionMustBeNumber: string;
+		unsupportedConfigVersion: string;
+	};
+};
+
+export const installerDictEn: InstallerDictionary = {
 	installationSteps: {
 		connect:
 			"Confirm to start, connect your board over USB, choose the device type, then read the firmware version from the device.",
@@ -113,6 +194,4 @@ export const installerDictEn = {
 		configVersionMustBeNumber: "configVersion must be a number",
 		unsupportedConfigVersion: "Unsupported config version: {{version}}",
 	},
-} as const;
-
-export type InstallerDictionary = typeof installerDictEn;
+};
