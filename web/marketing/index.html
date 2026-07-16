@@ -12,6 +12,25 @@
     <link rel="alternate" hreflang="en" href="https://regenfass.eu/en" />
     <link rel="alternate" hreflang="de" href="https://regenfass.eu/de" />
     <link rel="alternate" hreflang="x-default" href="https://regenfass.eu/en" />
+    <!-- Sync Tailwind .dark + Kobalte data-kb-theme before first paint -->
+    <script>
+      (() => {
+        try {
+          const saved =
+            localStorage.getItem("kb-color-mode") ||
+            localStorage.getItem("theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          const isDark =
+            saved === "dark" || (saved !== "light" && prefersDark);
+          const root = document.documentElement;
+          root.classList.toggle("dark", isDark);
+          root.setAttribute("data-kb-theme", isDark ? "dark" : "light");
+          root.style.colorScheme = isDark ? "dark" : "light";
+        } catch {}
+      })();
+    </script>
   </head>
   <body
     class="min-h-screen min-h-dvh bg-fixed text-slate-700 dark:text-slate-100 bg-slate-100 dark:bg-slate-900"

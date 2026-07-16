@@ -31,6 +31,7 @@ describe("ButtonModeToggle", () => {
     // Clear localStorage before each test (using removeItem for jsdom compatibility)
     try {
       localStorage.removeItem("theme");
+      localStorage.removeItem("kb-color-mode");
     } catch {}
     // Reset document classes
     document.documentElement.classList.remove("dark");
@@ -41,6 +42,7 @@ describe("ButtonModeToggle", () => {
     cleanup();
     try {
       localStorage.removeItem("theme");
+      localStorage.removeItem("kb-color-mode");
     } catch {}
   });
 
