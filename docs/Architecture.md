@@ -27,10 +27,10 @@ flowchart LR
 
 ## Firmware
 
-- **Stack:** PlatformIO, Arduino framework, C++17, LoRaWAN 1.0.2 OTAA (LMIC family — see `platformio.ini` / `lib_deps`).
+- **Stack:** PlatformIO, Arduino framework, C++17, LoRaWAN 1.0.2 OTAA (LMIC family — see `firmware/platformio.ini` / `lib_deps`).
 - **Role:** Read sensors, drive display/buttons, join TTN, uplink telemetry.
-- **Config:** Sensitive keys and feature flags live in PlatformIO config / `src/config/` — not in public web bundles.
-- **SCP:** Serial Configuration Protocol under `lib/scp/` lets tools (including the installer) talk to the device over serial once flashed.
+- **Config:** Sensitive keys and feature flags live in PlatformIO config / `firmware/src/config/` — not in public web bundles.
+- **SCP:** Serial Configuration Protocol under `firmware/lib/scp/` lets tools (including the installer) talk to the device over serial once flashed.
 
 ## Web installer (`web/installer`)
 

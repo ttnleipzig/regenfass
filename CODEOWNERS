@@ -6,8 +6,7 @@
 /installer                                @ttnleipzig/regenfass-installer
 
 # Sketch
-/lib                                      @ttnleipzig/regenfass-sketch
-/src                                      @ttnleipzig/regenfass-sketch
+/firmware                                 @ttnleipzig/regenfass-sketch
 
 # github actions
 /.github                                  @ttnleipzig/regenfass-ci

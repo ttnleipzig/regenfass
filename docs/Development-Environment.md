@@ -32,7 +32,7 @@ Root `AGENTS.md` (including **Cursor Cloud specific instructions**) is the sourc
 
 ## Secrets
 
-Do not commit `.env` files. Firmware keys in `platformio.ini` `[user_configuration]` are local secrets — treat them carefully and avoid pasting them into public issues or wiki pages.
+Do not commit `.env` files. Firmware keys in `firmware/platformio.ini` `[user_configuration]` are local secrets — treat them carefully and avoid pasting them into public issues or wiki pages.
 
 ## Wiki prerequisite
 

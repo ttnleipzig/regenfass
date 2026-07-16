@@ -3,11 +3,9 @@
 !/.agents
 !/.devcontainer
 !/.github
-!/board_partitions
-!/include
-!/lib
-!/src
-!/test
+!/firmware
+!/firmware/**
+/firmware/.pio
 
 !/docs
 !/CONTRIBUTING.md
@@ -20,14 +18,12 @@
 !/.release-please-manifest.json
 !/.remarkignore
 !/AGENTS.md
-!/platformio.ini
 !/CHANGELOG.md
 !/CODEOWNERS
 !/README.md
 !/LICENSE.md
 !/SECURITY.md
 !/STATES.md
-!/version.txt
 !/codecov.yml
 !/package.json
 !/pnpm-workspace.yaml
