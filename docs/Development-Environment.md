@@ -18,8 +18,8 @@ What you need on a machine (or in a Cloud Agent / Dev Container) to work on rege
 | ------------------------------ | --------------------------------------------------------------------------- |
 | **Chromium** (Chrome, Edge, …) | Web Serial flashing and full hardware E2E                                   |
 | **USB serial access**          | Physical Heltec / ESP32 board                                               |
-| **Go** toolchain               | Working in `backend/`                                                       |
-| **Docker**                     | Backend `compose.yml` / local API stack                                     |
+| **Go** toolchain               | Working in `web/dashboard/`                                                 |
+| **Docker**                     | Dashboard `compose.yml` / local API stack                                   |
 | **Playwright browsers**        | Installer E2E: `pnpm exec playwright install chromium` from `web/installer` |
 
 ## Dev Container

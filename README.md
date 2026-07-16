@@ -29,7 +29,7 @@ Supported boards, sensors, and the current roadmap live in the [contributor wiki
 
 ## Contributing
 
-Technical docs for building firmware, web apps, CI, and the backend are in the [GitHub Wiki](https://github.com/ttnleipzig/regenfass/wiki) (source under [`docs/`](docs/Home.md)). For how to send pull requests and report issues, see [CONTRIBUTING.md](CONTRIBUTING.md).
+Technical docs for building firmware, web apps, CI, and the dashboard are in the [GitHub Wiki](https://github.com/ttnleipzig/regenfass/wiki) (source under [`docs/`](docs/Home.md)). For how to send pull requests and report issues, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

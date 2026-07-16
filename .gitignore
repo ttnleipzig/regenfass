@@ -48,8 +48,7 @@
 /web/**/.env
 /web/**/tsconfig*.tsbuildinfo
 
-!/backend
-/backend/tmp
+/web/dashboard/tmp
 
 /test-results/
 /playwright-report/

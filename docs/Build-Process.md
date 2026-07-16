@@ -37,9 +37,9 @@ pio run -e <environment>
 
 CI (`sketch-pr.yml` / `sketch-release.yml`) builds environments such as `heltec_wifi_lora_32_V3_HCSR04` and uploads `.bin` artifacts. Release tagging is driven by Release Please (see [Release Process](Release-Process)).
 
-## Backend
+## Dashboard
 
-Build with the Go toolchain from `backend/` (for example `go build`). Container builds use the Docker files under `backend/`.
+Build with the Go toolchain from `web/dashboard/` (for example `go build`). Container builds use the Docker files under `web/dashboard/`.
 
 ## GitHub Pages (legacy / fallback)
 
