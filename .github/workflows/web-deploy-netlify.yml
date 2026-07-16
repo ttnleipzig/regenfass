@@ -14,7 +14,6 @@ on:
       - "pnpm-workspace.yaml"
       - ".github/workflows/web-deploy-netlify.yml"
       - "CHANGELOG.md"
-      - "version.txt"
 
 permissions:
   contents: read

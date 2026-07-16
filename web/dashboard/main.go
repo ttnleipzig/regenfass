@@ -22,6 +22,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ttn-leipzig/regenfass/docs"
 	"github.com/ttn-leipzig/regenfass/internal/api"
+	"github.com/ttn-leipzig/regenfass/internal/version"
 	"github.com/ttn-leipzig/regenfass/sql"
 )
 
@@ -53,9 +54,12 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not parse base URL")
 	}
+	docs.SwaggerInfo.Version = version.Version
 	docs.SwaggerInfo.Host = baseUrl.Host
 	docs.SwaggerInfo.BasePath = baseUrl.Path
 	docs.SwaggerInfo.Schemes = []string{baseUrl.Scheme}
+
+	log.Info().Str("version", version.Version).Msg("starting regenfass dashboard")
 
 	if *databaseUriFlag == "" {
 		flag.PrintDefaults()

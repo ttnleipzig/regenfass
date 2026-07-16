@@ -2,18 +2,34 @@
 
 ## One version everywhere
 
-Regenfass uses a **single semver** for firmware and all web apps. Source of truth:
+Regenfass uses a **single semver** for firmware, installer, dashboard, docs, and
+marketing. Release Please owns that number.
 
-| File                                  | Role                                        |
-| ------------------------------------- | ------------------------------------------- |
-| `version.txt`                         | Release Please version file                 |
-| `.release-please-manifest.json`       | Manifest (`"."` → current version)          |
-| `CHANGELOG.md`                        | Human-readable release notes                |
-| `package.json` + `web/*/package.json` | Same `version` field (synced on release)    |
-| `web/brand/src/version.ts`            | `APP_VERSION` shown in every web app footer |
-| `firmware/src/version.h`              | `REGENFASS_VERSION` for firmware serial/SCP |
+| File                                        | Role                                                                              |
+| ------------------------------------------- | --------------------------------------------------------------------------------- |
+| `.release-please-manifest.json`             | **Source of truth** (`"."` → current version). Do not hand-edit except bootstrap. |
+| `package.json` + `web/*/package.json`       | Same `version` field (synced on release)                                          |
+| `web/brand/src/version.ts`                  | `APP_VERSION` for installer, docs, and marketing UI                               |
+| `firmware/src/version.h`                    | `REGENFASS_VERSION` for firmware serial/SCP                                       |
+| `web/dashboard/internal/version/version.go` | Dashboard API / Swagger runtime version                                           |
+| `CHANGELOG.md`                              | Human-readable release notes                                                      |
 
-Release Please bumps **all of these together** when the release PR merges (see `extra-files` in `.release-please-config.json`).
+Release Please bumps **all synced artifacts together** when the release PR merges
+(see `extra-files` in `.release-please-config.json`). Never hand-bump versions;
+merge the release PR only.
+
+### Where each surface reads the version
+
+| Surface   | How the version appears                               |
+| --------- | ----------------------------------------------------- |
+| Firmware  | `REGENFASS_VERSION` (serial boot log + SCP `version`) |
+| Installer | Brand footer `v{APP_VERSION}`                         |
+| Docs site | Brand footer `v{APP_VERSION}`                         |
+| Marketing | Brand footer + changelog label `v{APP_VERSION}`       |
+| Dashboard | `internal/version.Version` (startup log + Swagger UI) |
+
+CI runs `node scripts/check-version-sync.mjs` so these cannot drift from the
+manifest.
 
 ## Conventional Commits drive the changelog
 
@@ -32,7 +48,7 @@ Breaking changes: `BREAKING CHANGE:` footer or `!` after type/scope.
 
 1. Branch from `main` (for example `feature/…`).
 2. Open a PR; address review; merge (squash preferred).
-3. Release Please opens or updates a **release PR** collecting conventional commits. That PR updates `CHANGELOG.md`, `version.txt`, the manifest, package versions, `APP_VERSION`, and `REGENFASS_VERSION`.
+3. Release Please opens or updates a **release PR** collecting conventional commits. That PR updates `CHANGELOG.md`, the manifest, package versions, `APP_VERSION`, `REGENFASS_VERSION`, and the dashboard `Version` const.
 4. Merge the release PR to create the **git tag** and a **GitHub Release** whose body is the new changelog section.
 
 ```mermaid
@@ -42,6 +58,7 @@ flowchart LR
   C --> D[Tag + GitHub Release notes]
   D --> E[Firmware binaries uploaded]
   D --> F[Web apps show new APP_VERSION + CHANGELOG]
+  D --> G[Dashboard serves new Version]
 ```
 
 ## Where release notes appear
@@ -54,6 +71,7 @@ flowchart LR
 
 - **Firmware:** `sketch-release.yml` builds PlatformIO environments and attaches `.bin` files to the GitHub Release (same tag / version).
 - **Web apps:** deploy continuously (Netlify / Pages) from `main`. After a version bump merges, the next deploy shows the new `APP_VERSION` and changelog.
+- **Dashboard:** the Go API exposes the same semver via Swagger and startup logs after the release PR merges.
 
 ## Workflow configuration
 
@@ -63,7 +81,7 @@ flowchart LR
 - `manifest-file: .release-please-manifest.json`
 - `token: ${{ github.token }}` (job permissions: `contents: write`, `pull-requests: write`)
 
-Do not pass a conflicting `release-type` in the action inputs; the config file is authoritative.
+Do not pass a conflicting `release-type` in the action inputs; the config file is authoritative (`node` at the repo root).
 
 ### Token notes
 
@@ -82,3 +100,4 @@ it set with a `|| github.token` fallback, because a set secret skips the fallbac
 ## Installer commit lint
 
 When committing in a tree with installer Husky hooks active, subjects must satisfy `@commitlint/config-conventional` (`web/installer/commitlint.config.cjs`).
+
