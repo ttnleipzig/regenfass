@@ -3,6 +3,7 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@regenfass/brand";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -10,13 +11,17 @@ interface StepProps {
 }
 
 export default function StepInstallMigratingConfiguration({
-	state,
-	emitEvent,
+	state: _state,
+	emitEvent: _emitEvent,
 }: StepProps) {
+	const t = useInstallerT();
+
 	return (
 		<AlertInline>
-			<AlertTitle>Migrating configuration</AlertTitle>
-			<AlertDescription>Keeping your settings safe.</AlertDescription>
+			<AlertTitle>{t("installMigratingConfiguration.title")}</AlertTitle>
+			<AlertDescription>
+				{t("installMigratingConfiguration.description")}
+			</AlertDescription>
 		</AlertInline>
 	);
 }

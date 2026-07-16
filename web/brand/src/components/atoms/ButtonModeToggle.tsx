@@ -3,9 +3,11 @@ import Moon from "lucide-solid/icons/moon";
 import Sun from "lucide-solid/icons/sun";
 import { useColorMode } from "@kobalte/core/color-mode";
 import { trackEvent } from "../../libs/analytics.ts";
+import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export function ButtonModeToggle() {
 	const { colorMode, setColorMode } = useColorMode();
+	const t = useBrandT();
 
 	const toggle = () => {
 		const next = colorMode() === "light" ? "dark" : "light";
@@ -24,7 +26,7 @@ export function ButtonModeToggle() {
 		<Button
 			variant="ghost"
 			size="icon"
-			aria-label="Toggle color mode"
+			aria-label={t("a11y.toggleColorMode")}
 			onClick={toggle}
 			class="transition-transform duration-200 active:scale-95 text-foreground/80 hover:text-foreground"
 		>

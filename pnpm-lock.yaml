@@ -13,6 +13,9 @@ importers:
       '@corvu/otp-field':
         specifier: ^0.1.4
         version: 0.1.4(solid-js@1.9.14)
+      '@solid-primitives/i18n':
+        specifier: ^2.2.1
+        version: 2.2.1(solid-js@1.9.14)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -77,10 +80,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.1.5
-        version: 7.3.6(@types/node@24.13.3)(jiti@1.21.7)(tsx@4.23.1)(yaml@2.9.0)
+        version: 7.3.6(@types/node@24.13.3)(jiti@2.6.1)(tsx@4.23.1)(yaml@2.9.0)
       vite-plugin-solid:
         specifier: ^2.11.8
-        version: 2.11.12(@testing-library/jest-dom@6.9.1)(solid-js@1.9.14)(vite@7.3.6(@types/node@24.13.3)(jiti@1.21.7)(tsx@4.23.1)(yaml@2.9.0))
+        version: 2.11.12(@testing-library/jest-dom@6.9.1)(solid-js@1.9.14)(vite@7.3.6(@types/node@24.13.3)(jiti@2.6.1)(tsx@4.23.1)(yaml@2.9.0))
 
   web/docs:
     dependencies:
@@ -133,6 +136,9 @@ importers:
       '@regenfass/brand':
         specifier: workspace:*
         version: link:../brand
+      '@solid-primitives/i18n':
+        specifier: ^2.2.1
+        version: 2.2.1(solid-js@1.9.14)
       '@solidjs/router':
         specifier: ^0.15.3
         version: 0.15.4(solid-js@1.9.14)
@@ -281,6 +287,9 @@ importers:
       '@regenfass/brand':
         specifier: workspace:*
         version: link:../brand
+      '@solid-primitives/i18n':
+        specifier: ^2.2.1
+        version: 2.2.1(solid-js@1.9.14)
       '@solidjs/router':
         specifier: ^0.15.3
         version: 0.15.4(solid-js@1.9.14)
@@ -308,10 +317,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.1.5
-        version: 7.3.6(@types/node@24.13.3)(jiti@2.6.1)(tsx@4.23.1)(yaml@2.9.0)
+        version: 7.3.6(@types/node@24.13.3)(jiti@1.21.7)(tsx@4.23.1)(yaml@2.9.0)
       vite-plugin-solid:
         specifier: ^2.11.8
-        version: 2.11.12(@testing-library/jest-dom@6.9.1)(solid-js@1.9.14)(vite@7.3.6(@types/node@24.13.3)(jiti@2.6.1)(tsx@4.23.1)(yaml@2.9.0))
+        version: 2.11.12(@testing-library/jest-dom@6.9.1)(solid-js@1.9.14)(vite@7.3.6(@types/node@24.13.3)(jiti@1.21.7)(tsx@4.23.1)(yaml@2.9.0))
 
 packages:
 
@@ -908,6 +917,11 @@ packages:
 
   '@solid-primitives/event-listener@2.4.6':
     resolution: {integrity: sha512-5I0YJcTVYIWoMmgBSROBZGcz+ymhew/pGTg2dHW74BUjFKsV8Li4bOZYl0YAGP4mHw5o4UBd9/BEesqBci3wxw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/i18n@2.2.1':
+    resolution: {integrity: sha512-TnTnE2Ku11MGYZ1JzhJ8pYscwg1fr9MteoYxPwsfxWfh9Jp5K7RRJncJn9BhOHvNLwROjqOHZ46PT7sPHqbcXw==}
     peerDependencies:
       solid-js: ^1.6.12
 
@@ -3273,6 +3287,10 @@ snapshots:
   '@solid-primitives/event-listener@2.4.6(solid-js@1.9.14)':
     dependencies:
       '@solid-primitives/utils': 6.4.1(solid-js@1.9.14)
+      solid-js: 1.9.14
+
+  '@solid-primitives/i18n@2.2.1(solid-js@1.9.14)':
+    dependencies:
       solid-js: 1.9.14
 
   '@solid-primitives/keyed@1.5.3(solid-js@1.9.14)':

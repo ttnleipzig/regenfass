@@ -1,6 +1,6 @@
 import { Router, Route } from "@solidjs/router";
 import Steps from "./components/molecules/steps/Steps";
-import { Footer, Header, Newsletter } from "@regenfass/brand";
+import { Footer, Header, LocaleProvider, Newsletter } from "@regenfass/brand";
 import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 
 // Main app layout for the installer
@@ -22,9 +22,11 @@ function App() {
 		<>
 			<ColorModeScript />
 			<ColorModeProvider>
-				<Router>
-					<Route path="/" component={MainApp} />
-				</Router>
+				<LocaleProvider>
+					<Router>
+						<Route path="/" component={MainApp} />
+					</Router>
+				</LocaleProvider>
 			</ColorModeProvider>
 		</>
 	);

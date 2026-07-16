@@ -1,7 +1,7 @@
 /**
  * Maps the setup wizard’s XState node to the 1-based `activeStep` used by
- * `StepPaginator`, aligned with `INSTALLATION_STEPS` in
- * `StepStartWaitingForUser.tsx`:
+ * `StepPaginator`, aligned with `installationSteps` / `INSTALLATION_STEPS`
+ * in `src/i18n/installationSteps.ts`:
  *
  * - **1** — Connect & identify: `Start_WaitingForUser`, `Connect_Connecting`, `Connect_ReadingVersion`
  * - **2** — Version + method: `Install_WaitingForInstallationMethodChoice`

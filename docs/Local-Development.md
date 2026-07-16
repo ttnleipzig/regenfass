@@ -129,6 +129,19 @@ node scripts/provision-swetrix.mjs
 - `Path to documentation`: page `/` → event `navigate_to_docs`
 - `Path to installer`: page `/` → event `navigate_to_installer`
 
+## Locales (marketing + installer)
+
+Marketing and the installer support **German** and **English**.
+
+| Concern        | Behavior                                                                                                                                                                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Detection      | Cookie override → browser languages (`de*` → `de`, else `en`) → fallback `en`                                                                                                                            |
+| Cookie         | Name `regenfass-locale`, values `de` \| `en`. On `*.regenfass.eu` the cookie uses `Domain=.regenfass.eu` so marketing and installer share the choice. On localhost / Netlify previews the cookie is host-only. |
+| Marketing URLs | SEO paths `/de` and `/en`. `/` redirects to the resolved locale (hash preserved, e.g. `#changelog`). Language switcher updates the cookie and navigates.                                                  |
+| Installer      | Locale is **not** in the URL (stays `/`). The header switcher only updates the cookie and re-renders copy.                                                                                               |
+
+Shared helpers live in `@regenfass/brand` (`LocaleProvider`, `resolveLocale`, `LanguageSwitcher`).
+
 ## SolidJS reminder
 
 Installer and brand UIs use **SolidJS only** — do not introduce React.
