@@ -3,10 +3,11 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
+	Progress,
 } from "@regenfass/brand";
-import { Progress } from "@regenfass/brand";
 import { BiSolidMicrochip } from "solid-icons/bi";
 import { createMemo } from "solid-js";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -15,8 +16,10 @@ interface StepProps {
 
 export default function StepConfigWritingConfiguration({
 	state,
-	emitEvent,
+	emitEvent: _emitEvent,
 }: StepProps) {
+	const t = useInstallerT();
+
 	const progressRatio = createMemo(() => {
 		const p = state.context?.configWriteProgress;
 		if (typeof p !== "number" || Number.isNaN(p)) {
@@ -31,19 +34,21 @@ export default function StepConfigWritingConfiguration({
 		<AlertInline>
 			<AlertTitle class="flex items-center gap-2">
 				<Spinner size="lg" />
-				Writing configuration
+				{t("configWritingConfiguration.title")}
 			</AlertTitle>
 			<AlertDescription class="flex flex-col gap-3">
-				<p>
-					Your settings are being sent to the microcontroller over USB—please keep
-					the cable connected until this finishes.
-				</p>
+				<p>{t("configWritingConfiguration.description")}</p>
 				<div class="flex flex-col gap-2">
 					<div class="flex items-center justify-between gap-2 text-sm text-muted-foreground">
-						<span>Upload progress</span>
+						<span>{t("shared.uploadProgress")}</span>
 						<span aria-hidden={true}>{progressPercent()}%</span>
 					</div>
-					<Progress value={progressPercent()} getValueLabel={() => `${progressPercent()} percent`} />
+					<Progress
+						value={progressPercent()}
+						getValueLabel={() =>
+							t("shared.progressPercent", { percent: progressPercent() })
+						}
+					/>
 				</div>
 				<div
 					class="flex items-center gap-2 text-muted-foreground"

@@ -5,9 +5,11 @@ import Sun from "lucide-solid/icons/sun";
 import { useColorMode } from "@kobalte/core/color-mode";
 import { trackEvent } from "../../libs/analytics.ts";
 import { applyColorMode, persistColorMode } from "../../libs/colorMode.ts";
+import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export function ButtonModeToggle() {
 	const { colorMode, setColorMode } = useColorMode();
+	const t = useBrandT();
 
 	// Keep Tailwind `.dark` aligned with Kobalte after hydrate / system changes.
 	createEffect(() => {
@@ -26,7 +28,7 @@ export function ButtonModeToggle() {
 		<Button
 			variant="ghost"
 			size="icon"
-			aria-label="Toggle color mode"
+			aria-label={t("a11y.toggleColorMode")}
 			onClick={toggle}
 			class="transition-transform duration-200 active:scale-95 text-foreground/80 hover:text-foreground"
 		>

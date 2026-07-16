@@ -2,17 +2,18 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
+	Button,
+	StepPaginator,
 } from "@regenfass/brand";
-import { StepPaginator } from "@regenfass/brand";
 import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
-import { Button } from "@regenfass/brand";
+import { useInstallerT } from "@/i18n/index.ts";
+import {
+	INSTALLATION_STEPS,
+	installationSteps,
+} from "@/i18n/installationSteps.ts";
 
-/** Labels align with `getInstallationActiveStep`: connect phase → method choice → `Install_Installing`. */
-export const INSTALLATION_STEPS = [
-	"Confirm to start, connect your board over USB, choose the device type, then read the firmware version from the device.",
-	"Pick a firmware version from the list, then choose Install or Configure.",
-	"Wait while the installer flashes firmware to your device.",
-] as const;
+/** @deprecated Prefer `installationSteps(t)` — kept for tests. */
+export { INSTALLATION_STEPS };
 
 interface StepProps {
 	state: any;
@@ -20,40 +21,39 @@ interface StepProps {
 }
 
 export default function StepStartWaitingForUser({ state, emitEvent }: StepProps) {
+	const t = useInstallerT();
+
 	return (
 		<div class="flex w-full min-w-0 flex-col gap-8">
 			<section class="space-y-4">
 				<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-					Hi there! 👋
+					{t("startWaitingForUser.heading")}
 				</h1>
 				<p class="text-lg leading-relaxed text-muted-foreground">
-					This project is about a smart water tank. It measures the
-					water level and sends the data to a server. The server can be
-					used to control the water pump. The pump can be controlled
-					via a web interface or via a telegram bot. It uses an HC-SR04
-					ultrasonic sensor to measure the water level. The data is
-					sent to{" "}
+					{t("startWaitingForUser.introBeforeTtn")}{" "}
 					<span class="bg-gradient-to-br from-primary to-sky-500 bg-clip-text font-medium text-transparent">
-						The Things Network
+						{t("startWaitingForUser.brandTheThingsNetwork")}
 					</span>{" "}
-					via a{" "}
+					{t("startWaitingForUser.introVia")}{" "}
 					<span class="bg-gradient-to-br from-primary to-sky-500 bg-clip-text font-medium text-transparent">
-						LoRaWAN
+						{t("startWaitingForUser.brandLoRaWAN")}
 					</span>{" "}
-					gateway.
+					{t("startWaitingForUser.introAfterLorawan")}
 				</p>
 			</section>
 
 			<AlertInline variant="info">
-				<AlertTitle>Waiting for your confirmation</AlertTitle>
-				<AlertDescription>Please confirm to continue.</AlertDescription>
+				<AlertTitle>{t("startWaitingForUser.alertTitle")}</AlertTitle>
+				<AlertDescription>
+					{t("startWaitingForUser.alertDescription")}
+				</AlertDescription>
 			</AlertInline>
 
 			<div class="space-y-6">
 				<StepPaginator
-					title="Installation"
-					steps={INSTALLATION_STEPS}
-					listAriaLabel="Installation steps"
+					title={t("shared.paginatorTitle")}
+					steps={installationSteps(t)}
+					listAriaLabel={t("shared.paginatorListAriaLabel")}
 					activeStep={getInstallationActiveStep(state)}
 				/>
 
@@ -63,7 +63,7 @@ export default function StepStartWaitingForUser({ state, emitEvent }: StepProps)
 						size="lg"
 						onClick={() => emitEvent({ type: "start.next" })}
 					>
-						Next
+						{t("startWaitingForUser.next")}
 					</Button>
 				</div>
 			</div>

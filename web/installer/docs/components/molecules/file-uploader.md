@@ -36,11 +36,11 @@ import { FileUploader } from '@/components/forms/FileUploader';
 
 - Built on FormField component for consistent form styling
 - Uses hidden native file input with custom button interface
-- "Datei auswählen" (SelectField File) button with outline variant styling
+- Select-file button label follows brand i18n (`Select file` / `Datei auswählen`)
 - Shows selected files with names and sizes in KB
-- Includes "Löschen" (Clear) button when files are selected
+- Includes a Clear button when files are selected (localized)
 - File size automatically calculated and displayed with 1 decimal precision
 - Supports both single and multiple file selection
 - Uses unique IDs for accessibility compliance
-- German language interface elements but customizable via props
+- Chrome strings come from `@regenfass/brand` locale dictionaries
 - FormField integration provides unified error and helper text handling
