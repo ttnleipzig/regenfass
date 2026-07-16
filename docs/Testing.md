@@ -45,7 +45,7 @@ Root: `pnpm lint`.
 
 ## Firmware
 
-PlatformIO native / embedded tests live under `test/` as configured by the project. Prefer `pio test` when environments define them. PR firmware builds are covered by `sketch-pr.yml`.
+PlatformIO native / embedded tests live under `firmware/test/` as configured by the project. Prefer `pio test` from `firmware/` when environments define them. PR firmware builds are covered by `sketch-pr.yml`.
 
 ## Dashboard
 

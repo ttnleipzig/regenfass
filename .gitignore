@@ -3,11 +3,9 @@
 !/.agents
 !/.devcontainer
 !/.github
-!/board_partitions
-!/include
-!/lib
-!/src
-!/test
+!/firmware
+!/firmware/**
+/firmware/.pio
 
 !/docs
 !/CONTRIBUTING.md
@@ -20,7 +18,6 @@
 !/.release-please-manifest.json
 !/.remarkignore
 !/AGENTS.md
-!/platformio.ini
 !/CHANGELOG.md
 !/CODEOWNERS
 !/README.md

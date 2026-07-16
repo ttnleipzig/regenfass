@@ -30,6 +30,7 @@ Netlify sites should install from the **monorepo root** and filter-build the tar
 ## Firmware (PlatformIO)
 
 ```bash
+cd firmware
 pio run
 # or
 pio run -e <environment>

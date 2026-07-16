@@ -4,17 +4,13 @@ High-level layout of the monorepo. Prefer describing areas by name rather than d
 
 ## Top level
 
-| Path                            | Purpose                                                                   |
-| ------------------------------- | ------------------------------------------------------------------------- |
-| `src/`                          | Firmware application code (sensors, display, LoRaWAN, buttons, config)    |
-| `lib/`                          | Shared firmware libraries (including SCP — Serial Configuration Protocol) |
-| `include/`, `board_partitions/` | Headers and flash partition tables                                        |
-| `test/`                         | Firmware / PlatformIO-related tests                                       |
-| `platformio.ini`                | PlatformIO environments and feature flags                                 |
-| `web/`                          | pnpm workspace of SolidJS / Vite apps, shared brand, and dashboard API    |
-| `docs/`                         | Contributor technical docs (this wiki source — **flat files only**)       |
-| `.github/workflows/`            | CI: firmware, installer, web build checks, wiki sync, releases            |
-| `AGENTS.md`                     | Guidance for coding agents and humans on stack and conventions            |
+| Path                 | Purpose                                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `firmware/`          | PlatformIO project: `src/`, `lib/` (SCP), `include/`, `board_partitions/`, `test/`, `platformio.ini`   |
+| `web/`               | pnpm workspace of SolidJS / Vite apps, shared brand, and dashboard API                                  |
+| `docs/`              | Contributor technical docs (this wiki source — **flat files only**)                                     |
+| `.github/workflows/` | CI: firmware, installer, web build checks, wiki sync, releases                                          |
+| `AGENTS.md`          | Guidance for coding agents and humans on stack and conventions                                          |
 
 ## Web workspace
 
@@ -33,7 +29,7 @@ Run package scripts either from the package directory (`cd web/installer && pnpm
 
 ## Firmware concerns
 
-Firmware is organized by feature (sensors, displays, LoRaWAN, buttons, configuration). Optional pieces are gated with `FEATURE_*` flags in `platformio.ini`. Default env is typically `heltec_wifi_lora_32_V3_HCSR04` (see `platformio.ini`).
+Firmware is organized by feature (sensors, displays, LoRaWAN, buttons, configuration). Optional pieces are gated with `FEATURE_*` flags in `firmware/platformio.ini`. Default env is typically `heltec_wifi_lora_32_V3_HCSR04` (see `firmware/platformio.ini`).
 
 ## Dashboard
 

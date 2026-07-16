@@ -13,4 +13,4 @@ Node tooling lives in the **pnpm workspace** under **`web/*`** (see root `AGENTS
   - `pnpm --filter @ttnleipzig/regenfass-installer <script>`, or
   - root helpers such as `pnpm dev:installer`, `pnpm test`, `pnpm lint`.
 
-Do **not** use the obsolete top-level `installer/` path. Do **not** use npm/yarn for this repo. Firmware builds use PlatformIO from the repo root, not pnpm.
+Do **not** use the obsolete top-level `installer/` path. Do **not** use npm/yarn for this repo. Firmware builds use PlatformIO from `firmware/`, not pnpm.

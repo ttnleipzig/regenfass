@@ -39,7 +39,7 @@
           "jsonpath": "$.version"
         },
         "web/brand/src/version.ts",
-        "src/version.h"
+        "firmware/src/version.h"
       ]
     }
   }
