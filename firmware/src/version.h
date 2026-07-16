@@ -2,7 +2,7 @@
 #define REGENFASS_H
 
 #ifndef REGENFASS_VERSION
-#define REGENFASS_VERSION "0.1.0" // x-release-please-version
+#define REGENFASS_VERSION "0.0.1" // x-release-please-version
 #endif
 
 #endif
