@@ -1,6 +1,6 @@
 # Agent instructions
 
-This file orients coding agents and automation working on **regenfass**: firmware (Arduino / PlatformIO, C++) plus **web apps** under `web/` (installer, brand, marketing, docs site, brand showcase) and an optional Go **backend**. **regenfass** (“rain barrel”) is an IoT project: water-level sensing and LoRaWAN data via The Things Network (TTN). Always-on, path-specific rules also live in `.agents/rules/` (see the `*.mdc` files and, for installer-focused defaults, `.agents/rules/AGENT.md`).
+This file orients coding agents and automation working on **regenfass**: firmware (Arduino / PlatformIO, C++) plus **web apps** under `web/` (installer, brand, marketing, docs site, brand showcase, dashboard) and an optional Go **dashboard** API. **regenfass** (“rain barrel”) is an IoT project: water-level sensing and LoRaWAN data via The Things Network (TTN). Always-on, path-specific rules also live in `.agents/rules/` (see the `*.mdc` files and, for installer-focused defaults, `.agents/rules/AGENT.md`).
 
 ## Scope of the repository
 
@@ -11,10 +11,10 @@ This file orients coding agents and automation working on **regenfass**: firmwar
   - `web/brand-showcase` — design playground (port **5174**)
   - `web/marketing` — `@ttnleipzig/regenfass-marketing`
   - `web/docs` — `@ttnleipzig/regenfass-docs-site` (user-facing docs site)
-- **Backend**: Go API under `backend/`.
+  - `web/dashboard` — Go API + Grafana/Docker for device and sensor data (not a pnpm package)
 - **Contributor docs**: flat Markdown under `docs/` (synced to GitHub Wiki).
 
-When in doubt, limit changes to the area the task actually touches (firmware vs web vs backend).
+When in doubt, limit changes to the area the task actually touches (firmware vs web vs dashboard).
 
 ## Architecture (overview)
 
@@ -163,6 +163,7 @@ chore(deps): bump vite in installer
 - Firmware build: `platformio.ini`, `src/main.cpp`.
 - Installer app entry: `web/installer/src/App.tsx`, `web/installer/components.json` (shadcn-solid).
 - Shared brand: `web/brand`.
+- Dashboard (Go API): `web/dashboard` (`go.mod`, `compose.yml`).
 - Contributor wiki source: `docs/`.
 - Cursor/agent rules: `.agents/rules/`.
 - High-level product overview: root `README.md`.
@@ -178,7 +179,7 @@ chore(deps): bump vite in installer
 
 - **Node / pnpm:** Node 22+ works; pnpm is pinned via root `packageManager` (`pnpm@10.28.0`). Prefer Corepack (`corepack enable`) so installs match the lockfile.
 - **Dependency refresh:** run `pnpm install` from the **repository root** (pnpm workspace). There is **no** top-level `installer/` package — the app lives under `web/installer`.
-- **What must run for installer web work:** only the installer Vite app (`pnpm dev:installer` → **5173**). `@regenfass/brand` is a workspace library (no separate server). Backend/Postgres, PlatformIO firmware, marketing/docs/brand-showcase are optional for installer UI work.
+- **What must run for installer web work:** only the installer Vite app (`pnpm dev:installer` → **5173**). `@regenfass/brand` is a workspace library (no separate server). Dashboard/Postgres (`web/dashboard`), PlatformIO firmware, marketing/docs/brand-showcase are optional for installer UI work.
 - **Other web apps (optional):** `pnpm dev:brand` → 5174, `pnpm dev:marketing` → 5175, `pnpm dev:docs` → 5176.
 - **Lint / test / build:** from root — `pnpm lint`, `pnpm test`, `pnpm build:installer` (or `pnpm build` for all web packages). Details also in `docs/Local-Development.md` and `web/installer/README.md`.
 - **Web Serial:** full flash/configure E2E needs **Chromium** and **physical USB hardware**. Unit tests run without a board; do not block setup on hardware.

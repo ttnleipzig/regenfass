@@ -59,9 +59,9 @@ pio run -t upload -e heltec_wifi_lora_32_V3_HCSR04
 
 See also [CONTRIBUTING.md](https://github.com/ttnleipzig/regenfass/blob/main/CONTRIBUTING.md) for PlatformIO tips.
 
-## Backend
+## Dashboard
 
-Work inside `backend/` with the Go module (`go.mod`). Optional Docker Compose lives next to the Dockerfile there. API swagger host metadata defaults to `localhost:64000`.
+Work inside `web/dashboard/` with the Go module (`go.mod`). Optional Docker Compose lives next to the Dockerfile there. API swagger host metadata defaults to `localhost:64000`.
 
 ## Web Serial caveat
 

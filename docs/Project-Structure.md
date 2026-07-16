@@ -11,8 +11,7 @@ High-level layout of the monorepo. Prefer describing areas by name rather than d
 | `include/`, `board_partitions/` | Headers and flash partition tables                                        |
 | `test/`                         | Firmware / PlatformIO-related tests                                       |
 | `platformio.ini`                | PlatformIO environments and feature flags                                 |
-| `web/`                          | pnpm workspace of SolidJS / Vite apps and shared brand package            |
-| `backend/`                      | Go HTTP API (`go.mod`, `internal/`, SQL via sqlc)                         |
+| `web/`                          | pnpm workspace of SolidJS / Vite apps, shared brand, and dashboard API    |
 | `docs/`                         | Contributor technical docs (this wiki source — **flat files only**)       |
 | `.github/workflows/`            | CI: firmware, installer, web build checks, wiki sync, releases            |
 | `AGENTS.md`                     | Guidance for coding agents and humans on stack and conventions            |
@@ -28,6 +27,7 @@ Root `pnpm-workspace.yaml` includes `web/*`. Root `package.json` defines conveni
 | `web/installer`      | `@ttnleipzig/regenfass-installer`      | Main flash/config UI; Vitest + Playwright                                    |
 | `web/marketing`      | `@ttnleipzig/regenfass-marketing`      | Marketing site (`pnpm dev:marketing` / `build:marketing`)                    |
 | `web/docs`           | `@ttnleipzig/regenfass-docs-site`      | User-facing docs site (`pnpm dev:docs` / `build:docs`)                       |
+| `web/dashboard`      | _(Go module, not npm)_                 | Go HTTP API + Grafana/Docker; not part of the pnpm package graph             |
 
 Run package scripts either from the package directory (`cd web/installer && pnpm …`) or from the root with filters (`pnpm --filter @ttnleipzig/regenfass-installer …`).
 
@@ -35,9 +35,9 @@ Run package scripts either from the package directory (`cd web/installer && pnpm
 
 Firmware is organized by feature (sensors, displays, LoRaWAN, buttons, configuration). Optional pieces are gated with `FEATURE_*` flags in `platformio.ini`. Default env is typically `heltec_wifi_lora_32_V3_HCSR04` (see `platformio.ini`).
 
-## Backend
+## Dashboard
 
-The Go service under `backend/` exposes an API for LoRaWAN rain-barrel devices and sensor data (see `backend/main.go` swagger header). It has its own Docker/`compose` setup separate from the web pnpm workspace.
+The Go service under `web/dashboard/` exposes an API for LoRaWAN rain-barrel devices and sensor data (see `web/dashboard/main.go` swagger header). It has its own Docker/`compose` setup and is **not** a pnpm package (no `package.json`).
 
 ## GitHub Wiki note
 

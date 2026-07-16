@@ -47,9 +47,9 @@ Root: `pnpm lint`.
 
 PlatformIO native / embedded tests live under `test/` as configured by the project. Prefer `pio test` when environments define them. PR firmware builds are covered by `sketch-pr.yml`.
 
-## Backend
+## Dashboard
 
-Go tests: run `go test ./…` from `backend/` (or targeted packages under `internal/`).
+Go tests: run `go test ./…` from `web/dashboard/` (or targeted packages under `internal/`).
 
 ## Coverage
 

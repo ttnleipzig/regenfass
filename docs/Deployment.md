@@ -8,7 +8,7 @@
 | **GitHub Pages** (fallback)     | installer static `dist`                                                                                                  | `.github/workflows/installer-deploy.yml`                                                          |
 | **GitHub Releases**             | Firmware `.bin` artifacts                                                                                                | `.github/workflows/sketch-release.yml` + Release Please                                           |
 | **GitHub Wiki**                 | Contributor docs from `/docs`                                                                                            | `.github/workflows/wiki-sync.yml`                                                                 |
-| **Backend**                     | Go API                                                                                                                   | Deploy from `backend/` (Docker/host) — project-specific                                           |
+| **Dashboard**                   | Go API + Grafana                                                                                                         | Deploy from `web/dashboard/` (Docker/host) — project-specific                                     |
 
 ## Enable GitHub Wiki (required for wiki sync)
 

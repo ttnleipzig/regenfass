@@ -1,6 +1,6 @@
 # Architecture
 
-regenfass splits into three cooperating layers: **firmware on the device**, **browser tools** for flashing and configuration, and an optional **backend** for networked data.
+regenfass splits into three cooperating layers: **firmware on the device**, **browser tools** for flashing and configuration, and an optional **dashboard** API for networked data.
 
 ```mermaid
 flowchart LR
@@ -15,7 +15,7 @@ flowchart LR
   end
   subgraph cloud [Network]
     TTN[The Things Network]
-    API[backend Go API]
+    API[dashboard Go API]
   end
   Sensor --> FW
   FW --> LoRa
@@ -48,9 +48,9 @@ Exportable SolidJS primitives and theme (`@regenfass/brand`, `./styles.css`, `./
 - **brand-showcase** — interactive playground for brand components (dev port 5174).
 - **marketing** / **docs** — public marketing and documentation sites (root scripts `dev:marketing`, `dev:docs`); deploy via Netlify (see [Netlify Deployment](Netlify-Deployment)).
 
-## Backend (`backend/`)
+## Dashboard (`web/dashboard/`)
 
-Go HTTP API (`localhost:64000` in swagger metadata) with sqlc SQL and optional Docker. Firmware uplinks primarily go through TTN; the backend is for project services that need HTTP access to device/sensor data — not a required dependency to develop the installer or flash a board.
+Go HTTP API (`localhost:64000` in swagger metadata) with sqlc SQL and optional Docker/Grafana. Firmware uplinks primarily go through TTN; the dashboard is for project services that need HTTP access to device/sensor data — not a required dependency to develop the installer or flash a board.
 
 ## Boundaries
 
