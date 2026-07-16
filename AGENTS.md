@@ -4,7 +4,7 @@ This file orients coding agents and automation working on **regenfass**: firmwar
 
 ## Scope of the repository
 
-- **Firmware**: LoRaWAN / TTN-related embedded code; builds via PlatformIO (`platformio.ini`).
+- **Firmware**: LoRaWAN / TTN-related embedded code under `firmware/`; builds via PlatformIO (`firmware/platformio.ini`).
 - **Web**: pnpm workspace (`pnpm-workspace.yaml` → `web/*`). Primary apps:
   - `web/installer` — `@ttnleipzig/regenfass-installer` (flash & configure)
   - `web/brand` — `@regenfass/brand` (shared UI / Tailwind preset)
@@ -18,7 +18,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 ## Architecture (overview)
 
-**Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `src/`, with shared SCP (Serial Configuration Protocol) code under `lib/scp/` for device configuration. **Hardware** partition tables live under `board_partitions/`. Do not paste full directory trees into docs (see `.agents/rules/filetree.mdc`).
+**Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `firmware/src/`, with shared SCP (Serial Configuration Protocol) code under `firmware/lib/scp/` for device configuration. **Hardware** partition tables live under `firmware/board_partitions/`. Do not paste full directory trees into docs (see `.agents/rules/filetree.mdc`).
 
 **Installer** is a SolidJS app for device settings, flashing ESP32 hardware, and Web Serial. Shared UI comes from `@regenfass/brand` (`web/brand`). Installer-specific UI lives under `web/installer/src/components/` (for example flash steps); installer logic and state under `web/installer/src/installer/`; shared utilities and SCP under `web/installer/src/libs/`. The component gallery is the brand showcase (`web/brand-showcase`), not an installer playground.
 
@@ -34,7 +34,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 - **Install from the repository root**: `pnpm install` (workspace covers `web/*`).
 - Run scripts via root helpers (`pnpm dev:installer`, `pnpm build`, `pnpm test`, `pnpm lint`) or filters (`pnpm --filter @ttnleipzig/regenfass-installer …`), or `cd web/installer && pnpm …`.
 - Typical installer workflows: `pnpm dev` / `build` / `test:run` / `lint` from `web/installer`.
-- Firmware: `pio run` (from repo root, PlatformIO).
+- Firmware: `pio run` (from `firmware/`, PlatformIO).
 - Component docs generation (installer): `pnpm docs:components` (and playground registry: `pnpm playground:registry` when adding components).
 
 ## Installer UI stack (mandatory choices)
@@ -60,9 +60,9 @@ Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), 
 
 ### New sensor (firmware)
 
-1. Add sensor code under `src/sensors/`.
-2. Wire feature flags in `platformio.ini` if needed.
-3. Integrate in `src/main.cpp` with conditional compilation.
+1. Add sensor code under `firmware/src/sensors/`.
+2. Wire feature flags in `firmware/platformio.ini` if needed.
+3. Integrate in `firmware/src/main.cpp` with conditional compilation.
 4. Update the root `README.md` hardware section if relevant.
 
 ### New installer UI component
@@ -74,7 +74,7 @@ Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), 
 
 ### Configuration
 
-- Firmware: `src/config/` (e.g. `config.h` / `config.cpp`).
+- Firmware: `firmware/src/config/` (e.g. `config.h` / `config.cpp`).
 - Installer forms and flow: `web/installer/src/installer/forms/`, state in `web/installer/src/installer/state.ts`.
 
 ## Guardrails
@@ -160,7 +160,7 @@ chore(deps): bump vite in installer
 ## Where to look first
 
 - Installer app entry and tooling: `web/installer/README.md`, `web/installer/package.json`.
-- Firmware build: `platformio.ini`, `src/main.cpp`.
+- Firmware build: `firmware/platformio.ini`, `firmware/src/main.cpp`.
 - Installer app entry: `web/installer/src/App.tsx`, `web/installer/components.json` (shadcn-solid).
 - Shared brand: `web/brand`.
 - Dashboard (Go API): `web/dashboard` (`go.mod`, `compose.yml`).
@@ -183,7 +183,7 @@ chore(deps): bump vite in installer
 - **Other web apps (optional):** `pnpm dev:brand` → 5174, `pnpm dev:marketing` → 5175, `pnpm dev:docs` → 5176.
 - **Lint / test / build:** from root — `pnpm lint`, `pnpm test`, `pnpm build:installer` (or `pnpm build` for all web packages). Details also in `docs/Local-Development.md` and `web/installer/README.md`.
 - **Web Serial:** full flash/configure E2E needs **Chromium** and **physical USB hardware**. Unit tests run without a board; do not block setup on hardware.
-- **Firmware:** PlatformIO from repo root (`pio run`); unrelated to the pnpm workspace. Not required for installer web setup.
+- **Firmware:** PlatformIO from `firmware/` (`pio run` or `pio run -d firmware`); unrelated to the pnpm workspace. Not required for installer web setup.
 - **Netlify:** GitHub Actions builds + `netlify deploy` (see `docs/Netlify-Deployment.md`). Cursor secrets ≠ GitHub Actions secrets — GHA reads **Environments → production**. CLI deploys in this monorepo need `CI=true` and `--filter <package>` or the CLI hangs on a project picker.
 
 ---

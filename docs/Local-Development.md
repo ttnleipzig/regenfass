@@ -50,7 +50,8 @@ Root shortcuts: `pnpm lint`, `pnpm test`, `pnpm build:installer` delegate to the
 ## Firmware
 
 ```bash
-# from repo root
+# from firmware/
+cd firmware
 pio project config          # inspect merged config
 pio run                     # build default env
 pio run -e heltec_wifi_lora_32_V3_HCSR04

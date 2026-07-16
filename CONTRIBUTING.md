@@ -31,9 +31,12 @@
 
 ### Configuration
 
+Run PlatformIO commands from the `firmware/` directory (or pass `-d firmware` from the repo root).
+
 Get the merged platformio.ini configuration for debugging:
 
 ```bash
+cd firmware
 pio project config
 ```
 
@@ -50,6 +53,7 @@ Result: `["heltec_wifi_lora_32_V3_HCSR04"]`
 Build the project:
 
 ```bash
+cd firmware
 pio run --environment <environment>
 ```
 
@@ -61,7 +65,7 @@ pio run --target upload --environment <environment>
 
 ## Debug level
 
-The debug level can be set in the `platformio.ini` file.
+The debug level can be set in the `firmware/platformio.ini` file.
 
 ```ini
 [env:heltec_wifi_lora_32_V3_HCSR04]

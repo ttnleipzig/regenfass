@@ -11,7 +11,7 @@ Regenfass uses a **single semver** for firmware and all web apps. Source of trut
 | `CHANGELOG.md`                        | Human-readable release notes                |
 | `package.json` + `web/*/package.json` | Same `version` field (synced on release)    |
 | `web/brand/src/version.ts`            | `APP_VERSION` shown in every web app footer |
-| `src/version.h`                       | `REGENFASS_VERSION` for firmware serial/SCP |
+| `firmware/src/version.h`              | `REGENFASS_VERSION` for firmware serial/SCP |
 
 Release Please bumps **all of these together** when the release PR merges (see `extra-files` in `.release-please-config.json`).
 

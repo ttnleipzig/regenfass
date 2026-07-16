@@ -8,7 +8,7 @@ End-user product docs live on [docs.regenfass.eu](https://docs.regenfass.eu). Pu
 
 | Area             | Path                             | Role                                                                   |
 | ---------------- | -------------------------------- | ---------------------------------------------------------------------- |
-| Firmware         | `src/`, `lib/`, `platformio.ini` | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17)             |
+| Firmware         | `firmware/`                      | ESP32 / Heltec LoRaWAN sketch (PlatformIO, Arduino, C++17)             |
 | Web apps         | `web/*`                          | pnpm workspace: installer, brand, marketing, docs site, brand showcase |
 | Dashboard        | `web/dashboard/`                 | Go API + Grafana/Docker for devices and sensor data                    |
 | Contributor docs | `docs/`                          | This wiki source (synced to GitHub Wiki)                               |
@@ -45,6 +45,6 @@ The installer is a **SolidJS** app (not React). It uses Web Serial and `esptool-
 1. Install [Node.js](https://nodejs.org/) (20+; CI uses 20/24) and enable Corepack: `corepack enable`.
 2. From the repo root: `pnpm install` (workspace installs all `web/*` packages).
 3. Start the installer: `pnpm dev:installer` (or `cd web/installer && pnpm dev`).
-4. For firmware: install PlatformIO and run `pio run` from the repo root.
+4. For firmware: install PlatformIO and run `pio run` from `firmware/`.
 
 Full Web Serial flash/configure flows need a **Chromium** browser and a physical device; unit and most E2E smoke tests do not.

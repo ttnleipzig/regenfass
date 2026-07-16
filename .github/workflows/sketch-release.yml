@@ -36,14 +36,16 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
       - name: Build firmware
+        working-directory: firmware
         run: pio run -e ${{ matrix.environment }}
       - name: Display contents of .pio/build directory
+        working-directory: firmware
         run: |
             ls -R .pio/build
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
-          path: .pio/build/${{ matrix.environment }}/*.bin
+          path: firmware/.pio/build/${{ matrix.environment }}/*.bin
           compression-level: 8
 
   release:
@@ -86,14 +88,14 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
-          path: firmware
+          path: firmware-dist
       - name: Create firmware zip
-        run: zip -j regenfass-${{ matrix.environment }}.zip firmware/*
+        run: zip -j regenfass-${{ matrix.environment }}.zip firmware-dist/*
       - name: Upload firmware to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ needs.release.outputs.tag_name }} \
-            firmware/firmware.bin#regenfass-${{ matrix.environment }}.bin \
+            firmware-dist/firmware.bin#regenfass-${{ matrix.environment }}.bin \
             regenfass-${{ matrix.environment }}.zip \
             --repo ${{ github.repository }}
