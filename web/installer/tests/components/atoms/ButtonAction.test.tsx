@@ -30,8 +30,8 @@ describe("ButtonAction", () => {
   it("applies secondary styling", () => {
     const { container } = render(() => <ButtonAction type="secondary">Secondary</ButtonAction>);
     const button = container.querySelector("button");
-    expect(button).toHaveClass("border-gray-300");
-    expect(button).toHaveClass("text-gray-700");
+    expect(button).toHaveClass("border-secondary");
+    expect(button).toHaveClass("text-secondary");
   });
 
   it("shows loading spinner when loading is true", () => {
@@ -75,7 +75,7 @@ describe("ButtonAction", () => {
       </ButtonAction>
     ));
     const spinner = container.querySelector("svg.animate-spin");
-    expect(spinner).toHaveClass("text-gray-500");
+    expect(spinner).toHaveClass("text-secondary");
   });
 
   it("handles nativeType prop as submit", () => {

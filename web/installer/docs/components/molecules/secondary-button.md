@@ -23,11 +23,11 @@ import { ButtonSecondary } from '@/components/forms/ButtonSecondary';
 ## Design notes
 
 - Built on the base Button component with outline variant
-- Custom styling with gray border and text for secondary actions
+- Uses brand `secondary` tokens (teal border and label) for readable contrast in light and dark mode
 - Loading state shows animated spinner icon with proper spacing
 - Button is automatically disabled when loading is true
-- Spinner uses gray-500 color to match secondary button styling
-- Hover state provides subtle gray background feedback
+- Spinner uses `text-secondary` to match the outline label
+- Hover state provides a light secondary tint (`hover:bg-secondary/10`)
 - Loading spinner positioned with consistent spacing using Tailwind classes
 - Maintains accessibility with proper disabled state handling
-- Perfect for cancel, back, or other secondary actions in forms
+- Perfect for cancel, back, docs CTAs, or other secondary actions in forms

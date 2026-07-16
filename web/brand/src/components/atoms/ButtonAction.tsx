@@ -29,7 +29,7 @@ export const ButtonAction: Component<ActionButtonProps> = (props) => {
       class={cn(
         isPrimary()
           ? "bg-blue-600 hover:bg-blue-700 text-white"
-          : "border-gray-300 text-gray-700 hover:bg-gray-50",
+          : "border-secondary bg-background text-secondary hover:bg-secondary/10 hover:text-secondary active:bg-secondary/15 data-[pressed]:bg-secondary/15",
         local.class,
       )}
     >
@@ -38,7 +38,7 @@ export const ButtonAction: Component<ActionButtonProps> = (props) => {
           size="sm" 
           class={cn(
             "-ml-1 mr-3",
-            isPrimary() ? "text-white" : "text-gray-500",
+            isPrimary() ? "text-white" : "text-secondary",
           )}
         />
       )}
