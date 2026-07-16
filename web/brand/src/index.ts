@@ -58,6 +58,38 @@ export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
 
 export { APP_VERSION } from "./version.ts";
 
+// i18n
+export {
+  DEFAULT_LOCALE,
+  isLocale,
+  LOCALE_COOKIE_NAME,
+  LOCALES,
+  clearLocaleCookie,
+  cookieDomainForHost,
+  detectBrowserLocale,
+  parseLocaleFromCookieString,
+  readLocaleCookie,
+  resetLocalePreferenceForTests,
+  resolveLocale,
+  writeLocaleCookie,
+  LocaleProvider,
+  useBrandT,
+  useLocale,
+  useLocaleOptional,
+  LanguageSwitcher,
+  brandDictDe,
+  brandDictEn,
+  brandDictionaries,
+  flatBrandDictionary,
+} from "./i18n/index.ts";
+export type {
+  Locale,
+  LocaleContextValue,
+  LocaleProviderProps,
+  BrandDictionary,
+  FlatBrandDictionary,
+} from "./i18n/index.ts";
+
 // Forms
 export { AppKeyHexField } from "./components/forms/AppKeyHexField.tsx";
 export type { AppKeyHexFieldProps } from "./components/forms/AppKeyHexField.tsx";

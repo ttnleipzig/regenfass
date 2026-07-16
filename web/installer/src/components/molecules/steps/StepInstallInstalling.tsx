@@ -3,11 +3,12 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
+	Progress,
 } from "@regenfass/brand";
-import { Progress } from "@regenfass/brand";
 import { cn } from "@/libs/cn.ts";
 import CircleCheck from "lucide-solid/icons/circle-check";
 import { createMemo, Show } from "solid-js";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -15,6 +16,8 @@ interface StepProps {
 }
 
 export default function StepInstallInstalling(props: StepProps) {
+	const t = useInstallerT();
+
 	const progressRatio = createMemo(() => {
 		const p = props.state.context?.installFlashProgress;
 		if (typeof p !== "number" || Number.isNaN(p)) {
@@ -50,14 +53,15 @@ export default function StepInstallInstalling(props: StepProps) {
 						/>
 					</Show>
 					<span>
-						{isComplete() ? "Installation complete" : "Installing firmware"}
+						{isComplete()
+							? t("installInstalling.titleComplete")
+							: t("installInstalling.titleInProgress")}
 					</span>
 				</AlertTitle>
 				<AlertDescription class="mt-1 flex flex-col gap-4">
 					<Show when={!isComplete()}>
 						<p class="text-muted-foreground">
-							Firmware is being written to the microcontroller over USB—please
-							keep the cable connected until this finishes.
+							{t("installInstalling.descriptionInProgress")}
 						</p>
 					</Show>
 
@@ -70,11 +74,11 @@ export default function StepInstallInstalling(props: StepProps) {
 						role="status"
 						aria-live="polite"
 						aria-busy={!isComplete()}
-						aria-label="Firmware installation progress"
+						aria-label={t("installInstalling.progressAriaLabel")}
 					>
 						<div class="flex items-baseline justify-between gap-3">
 							<span class="text-sm font-medium leading-none text-foreground">
-								Upload progress
+								{t("shared.uploadProgress")}
 							</span>
 							<span
 								class="tabular-nums text-sm font-semibold tracking-tight text-foreground"
@@ -85,7 +89,9 @@ export default function StepInstallInstalling(props: StepProps) {
 						</div>
 						<Progress
 							value={progressPercent()}
-							getValueLabel={() => `${progressPercent()} percent`}
+							getValueLabel={() =>
+								t("shared.progressPercent", { percent: progressPercent() })
+							}
 							class="gap-0"
 						/>
 					</div>
@@ -127,7 +133,7 @@ export default function StepInstallInstalling(props: StepProps) {
 									"motion-safe:animate-success-rise motion-safe:[animation-delay:90ms]",
 								)}
 							>
-								Installation successful
+								{t("installInstalling.successTitle")}
 							</AlertTitle>
 							<AlertDescription
 								class={cn(
@@ -135,11 +141,8 @@ export default function StepInstallInstalling(props: StepProps) {
 									"motion-safe:animate-success-rise motion-safe:[animation-delay:180ms]",
 								)}
 							>
-								<p>The firmware was installed successfully.</p>
-								<p>
-									The next step is configuration. You will be taken there
-									automatically in a moment.
-								</p>
+								<p>{t("installInstalling.successBody")}</p>
+								<p>{t("installInstalling.successNext")}</p>
 							</AlertDescription>
 						</div>
 					</div>

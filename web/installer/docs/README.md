@@ -272,7 +272,7 @@ Configuration can be exported to and imported from JSON files:
 
 ### Error Messages
 
-All error messages are localized in German and provide:
+User-facing error messages follow the active locale (German or English) and provide:
 
 - Clear problem description
 - Specific recovery steps

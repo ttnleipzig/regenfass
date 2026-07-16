@@ -2,6 +2,7 @@ import { Component, For, Show, mergeProps, type JSX } from "solid-js";
 import { A } from "@solidjs/router";
 import { ButtonModeToggle } from "../atoms/ButtonModeToggle.tsx";
 import Link from "../atoms/Link.tsx";
+import { LanguageSwitcher } from "../../i18n/LanguageSwitcher.tsx";
 import { cn } from "../../libs/cn.ts";
 
 export type HeaderNavItem = {
@@ -80,6 +81,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
 
         <div class="flex items-center gap-1">
           {props.trailing}
+          <LanguageSwitcher />
           <ButtonModeToggle />
         </div>
       </div>

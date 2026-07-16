@@ -3,6 +3,7 @@ import {
 	type Config,
 } from "@/libs/install/config.ts";
 import { normalizeAppKeyHexInput } from "@/libs/hexKeyDisplay.ts";
+import { installerMessage } from "@/i18n/index.ts";
 
 export type ConfigExportPayload = Config & {
 	configVersion?: number;
@@ -26,7 +27,9 @@ function requireStringField(
 ): string {
 	const value = data[field];
 	if (typeof value !== "string") {
-		throw new ConfigFileError(`Missing or invalid ${field}`);
+		throw new ConfigFileError(
+			installerMessage("configFileErrors.missingOrInvalidField", { field }),
+		);
 	}
 	return value;
 }
@@ -40,11 +43,11 @@ export function parseConfigFileContent(text: string): {
 	try {
 		parsed = JSON.parse(text);
 	} catch {
-		throw new ConfigFileError("Invalid JSON format");
+		throw new ConfigFileError(installerMessage("configFileErrors.invalidJson"));
 	}
 
 	if (parsed == null || typeof parsed !== "object" || Array.isArray(parsed)) {
-		throw new ConfigFileError("Invalid JSON format");
+		throw new ConfigFileError(installerMessage("configFileErrors.invalidJson"));
 	}
 
 	const data = parsed as Record<string, unknown>;
@@ -54,26 +57,30 @@ export function parseConfigFileContent(text: string): {
 	const appKey = normalizeAppKeyHexInput(requireStringField(data, "appKey")).toUpperCase();
 
 	if (appEUI.length !== 16) {
-		throw new ConfigFileError("appEUI must be 16 hex digits");
+		throw new ConfigFileError(installerMessage("configFileErrors.appEuiLength"));
 	}
 	if (devEUI.length !== 16) {
-		throw new ConfigFileError("devEUI must be 16 hex digits");
+		throw new ConfigFileError(installerMessage("configFileErrors.devEuiLength"));
 	}
 	if (appKey.length !== 32) {
-		throw new ConfigFileError("appKey must be 32 hex digits");
+		throw new ConfigFileError(installerMessage("configFileErrors.appKeyLength"));
 	}
 
 	let configVersion: number | undefined;
 	if ("configVersion" in data && data.configVersion != null) {
 		if (typeof data.configVersion !== "number") {
-			throw new ConfigFileError("configVersion must be a number");
+			throw new ConfigFileError(
+				installerMessage("configFileErrors.configVersionMustBeNumber"),
+			);
 		}
 		const supported = CONFIG_VERSIONS.some(
 			(version) => version.version === data.configVersion
 		);
 		if (!supported) {
 			throw new ConfigFileError(
-				`Unsupported config version: ${data.configVersion}`
+				installerMessage("configFileErrors.unsupportedConfigVersion", {
+					version: data.configVersion as number,
+				}),
 			);
 		}
 		configVersion = data.configVersion;

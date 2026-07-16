@@ -16,6 +16,7 @@ import EyeOff from "lucide-solid/icons/eye-off";
 import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
+import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export interface AppKeyHexFieldProps {
 	id: string;
@@ -107,6 +108,7 @@ const APP_KEY_HEX_COLUMNS_CLASS = "w-[36rem]";
 
 /** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
 export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
+	const t = useBrandT();
 	const [revealed, setRevealed] = createSignal(false);
 	const [spinning, setSpinning] = createSignal(false);
 	const [reelMatrix, setReelMatrix] = createSignal<string[][] | null>(null);
@@ -193,7 +195,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	};
 
 	const copyLabel = () =>
-		copied() ? "Copied appKey" : "Copy appKey to clipboard";
+		copied() ? t("a11y.copiedAppKey") : t("a11y.copyAppKey");
 
 	const copyToClipboard = async () => {
 		const canonical = props.value ?? "";
@@ -299,7 +301,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					type="button"
 					disabled={spinInProgress()}
 					class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
-					aria-label="Clear appKey"
+					aria-label={t("a11y.clearAppKey")}
 					onClick={handleReset}
 				>
 					<BiRegularX aria-hidden={true} size={16} />
@@ -311,7 +313,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 				class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
 				aria-pressed={revealed()}
 				aria-busy={spinInProgress()}
-				aria-label={revealed() ? "Hide app key" : "Show app key"}
+				aria-label={revealed() ? t("a11y.hideAppKey") : t("a11y.showAppKey")}
 				onClick={handleToggleReveal}
 			>
 				<Show when={revealed()} fallback={<Eye class="size-4" strokeWidth={1.75} />}>

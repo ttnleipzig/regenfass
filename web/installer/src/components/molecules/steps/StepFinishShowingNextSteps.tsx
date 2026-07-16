@@ -2,10 +2,11 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
+	Button,
 } from "@regenfass/brand";
-import { Button } from "@regenfass/brand";
 import { cn } from "@/libs/cn.ts";
 import CircleCheck from "lucide-solid/icons/circle-check";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -17,6 +18,7 @@ export default function StepFinishShowingNextSteps({
 	emitEvent,
 }: StepProps) {
 	void state;
+	const t = useInstallerT();
 
 	return (
 		<div class="space-y-3">
@@ -53,7 +55,7 @@ export default function StepFinishShowingNextSteps({
 								"motion-safe:animate-success-rise motion-safe:[animation-delay:90ms]",
 							)}
 						>
-							Success
+							{t("finishShowingNextSteps.title")}
 						</AlertTitle>
 						<AlertDescription
 							class={cn(
@@ -61,7 +63,7 @@ export default function StepFinishShowingNextSteps({
 								"motion-safe:animate-success-rise motion-safe:[animation-delay:180ms]",
 							)}
 						>
-							All set. You can now use your device.
+							{t("finishShowingNextSteps.body")}
 						</AlertDescription>
 						<AlertDescription
 							class={cn(
@@ -69,8 +71,7 @@ export default function StepFinishShowingNextSteps({
 								"motion-safe:animate-success-rise motion-safe:[animation-delay:270ms]",
 							)}
 						>
-							Setting up another device? You can start a new installation
-							whenever you are ready.
+							{t("finishShowingNextSteps.anotherDevice")}
 						</AlertDescription>
 					</div>
 				</div>
@@ -81,7 +82,7 @@ export default function StepFinishShowingNextSteps({
 					class="w-full sm:w-auto"
 					onClick={() => emitEvent({ type: "restart" })}
 				>
-					Flash another device
+					{t("finishShowingNextSteps.flashAnotherDevice")}
 				</Button>
 			</div>
 		</div>
