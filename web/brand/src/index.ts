@@ -92,6 +92,15 @@ export { TextInput } from "./components/forms/TextInput.tsx";
 // Utils
 export { cn } from "./libs/cn.ts";
 export {
+  applyColorMode,
+  initColorMode,
+  persistColorMode,
+  resolveColorMode,
+  KB_COLOR_MODE_STORAGE_KEY,
+  LEGACY_THEME_STORAGE_KEY,
+} from "./libs/colorMode.ts";
+export type { ResolvedColorMode } from "./libs/colorMode.ts";
+export {
   initAnalytics,
   isAnalyticsInitialized,
   trackEvent,
