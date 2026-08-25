@@ -60,7 +60,7 @@ function Shell(props: ParentProps & { lang: Locale }) {
 
 	const navItems = (): HeaderNavItem[] => [
 		{ href: base, label: t("nav.home") },
-		{ href: `${base}#changelog`, label: t("nav.changelog") },
+		{ href: `${base}/changelog`, label: t("nav.changelog") },
 		{
 			href: DOCS_URL,
 			label: t("nav.docs"),
@@ -94,19 +94,34 @@ function Shell(props: ParentProps & { lang: Locale }) {
 	);
 }
 
+function syncRouteLocale(lang: () => string | undefined) {
+	const { locale, setLocale } = useLocale();
+
+	createEffect(() => {
+		const nextLang = lang();
+		if (!isLocale(nextLang)) return;
+		if (locale() !== nextLang) {
+			setLocale(nextLang, { announce: false });
+		}
+		applyMarketingSeo(nextLang);
+	});
+}
+
 function Home() {
 	const params = useParams();
-	const { locale, setLocale } = useLocale();
+	const navigate = useNavigate();
+	const { locale } = useLocale();
 	const t = useMarketingT();
 	const copy = () => marketingCopy(locale());
 
+	syncRouteLocale(() => params.lang);
+
 	createEffect(() => {
-		const lang = params.lang;
-		if (!isLocale(lang)) return;
-		if (locale() !== lang) {
-			setLocale(lang, { announce: false });
+		if (typeof location === "undefined") return;
+		if (!isLocale(params.lang)) return;
+		if (location.hash === "#changelog") {
+			navigate(`/${params.lang}/changelog`, { replace: true });
 		}
-		applyMarketingSeo(lang);
 	});
 
 	return (
@@ -122,7 +137,7 @@ function Home() {
 							aria-hidden="true"
 						/>
 						<div class="site-container relative py-20 sm:py-28 lg:py-32">
-							<p class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-400 bg-clip-text">
+							<p class="inline-block pb-1 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-400 bg-clip-text">
 								Regenfass
 							</p>
 							<h1 class="mt-4 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground">
@@ -257,8 +272,6 @@ function Home() {
 						</div>
 					</section>
 
-					<ChangelogSection />
-
 					<section class="border-t border-border bg-gradient-to-br from-sky-600/10 to-cyan-500/5">
 						<div class="site-container py-14 sm:py-16 space-y-6">
 							<Headline as="h2" align="center">
@@ -288,6 +301,25 @@ function Home() {
 	);
 }
 
+function ChangelogPage() {
+	const params = useParams();
+
+	syncRouteLocale(() => params.lang);
+
+	return (
+		<Show
+			when={isLocale(params.lang) ? params.lang : null}
+			fallback={<InvalidLocaleRedirect />}
+		>
+			{(lang) => (
+				<Shell lang={lang()}>
+					<ChangelogSection />
+				</Shell>
+			)}
+		</Show>
+	);
+}
+
 function initialMarketingLocale(): Locale {
 	if (typeof location !== "undefined") {
 		const segment = location.pathname.split("/").filter(Boolean)[0];
@@ -303,8 +335,14 @@ function MarketingRoot(props: RouteSectionProps) {
 		<LocaleProvider
 			initialLocale={initialMarketingLocale()}
 			onLocaleChange={(next) => {
-				const hash = typeof location !== "undefined" ? location.hash : "";
-				navigate(`/${next}${hash}`);
+				if (typeof location === "undefined") {
+					navigate(`/${next}`);
+					return;
+				}
+
+				const [, ...rest] = location.pathname.split("/").filter(Boolean);
+				const suffix = rest.length > 0 ? `/${rest.join("/")}` : "";
+				navigate(`/${next}${suffix}${location.hash}`);
 			}}
 		>
 			{props.children}
@@ -317,6 +355,7 @@ export default function App() {
 		<Router root={MarketingRoot}>
 			<Route path="/" component={LocaleRedirect} />
 			<Route path="/:lang" component={Home} />
+			<Route path="/:lang/changelog" component={ChangelogPage} />
 		</Router>
 	);
 }

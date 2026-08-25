@@ -6,7 +6,9 @@ export function localeRedirectPath(
 	languages?: readonly string[],
 	hash = "",
 ): string {
-	return `/${resolveLocale(cookieHeader, languages)}${hash}`;
+	const locale = resolveLocale(cookieHeader, languages);
+	if (hash === "#changelog") return `/${locale}/changelog`;
+	return `/${locale}${hash}`;
 }
 
 /** Normalize `/:lang` — return locale or null when invalid. */
