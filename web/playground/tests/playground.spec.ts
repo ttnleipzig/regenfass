@@ -46,3 +46,31 @@ test("Footer displays a release version and links to release notes", async ({ pa
     "https://github.com/ttnleipzig/regenfass/releases",
   );
 });
+
+test("Progress shows the current value in generated JSX", async ({ page }) => {
+  await page.goto("/progress");
+  await page.getByLabel("Value").fill("72");
+  await expect(page.locator("code.tokenized-code")).toContainText("value={72}");
+});
+
+test("Spinner shows the selected size in generated JSX", async ({ page }) => {
+  await page.goto("/spinner");
+  await page.getByLabel("Size").selectOption("lg");
+  await expect(page.locator("code.tokenized-code")).toContainText('size="lg"');
+});
+
+test("Status shows the selected state in generated JSX", async ({ page }) => {
+  await page.goto("/status");
+  await page.getByLabel("Status").selectOption("error");
+  await expect(page.locator("code.tokenized-code")).toContainText('status="error"');
+  await expect(page.locator("code.tokenized-code")).toContainText('message="Connected"');
+});
+
+test("AlertDialog exposes content props and opens with the configured text", async ({ page }) => {
+  await page.goto("/alert-dialog");
+  await page.getByLabel("Title").fill("Remove this device?");
+  await expect(page.locator("code.tokenized-code")).toContainText("Remove this device?");
+  await page.getByRole("button", { name: "Delete device" }).click();
+  await expect(page.getByRole("alertdialog")).toBeVisible();
+  await expect(page.getByRole("alertdialog")).toContainText("Remove this device?");
+});

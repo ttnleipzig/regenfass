@@ -238,6 +238,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Progress indicator for multi-step flows.",
     controls: [{ key: "value", label: "Value", type: "range", defaultValue: 55, min: 0, max: 100 }],
     render: (values) => <Progress value={Number(values.value)} class="max-w-sm" />,
+    code: (values) => `<Progress value={${Number(values.value)}} />`,
   },
   {
     slug: "status",
@@ -260,6 +261,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         message={String(values.message)}
       />
     ),
+    code: (values) => `<Status status="${escapeJsxAttribute(String(values.status))}" message="${escapeJsxAttribute(String(values.message))}" />`,
   },
   {
     slug: "alert-inline",
@@ -444,6 +446,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Animated loading indicator.",
     controls: [{ key: "size", label: "Size", type: "select", defaultValue: "md", options: ["sm", "md", "lg"] }],
     render: (values) => <Spinner size={String(values.size) as "sm" | "md" | "lg"} />,
+    code: (values) => `<Spinner size="${escapeJsxAttribute(String(values.size))}" />`,
   },
   {
     slug: "spinner-confetti",
@@ -602,21 +605,32 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     name: "AlertDialog",
     category: "molecules",
     description: "Modal confirmation dialog for potentially destructive actions.",
-    controls: [],
-    render: () => (
+    controls: [
+      { key: "trigger", label: "Trigger text", type: "text", defaultValue: "Delete device" },
+      { key: "title", label: "Title", type: "text", defaultValue: "Delete this device?" },
+      {
+        key: "description",
+        label: "Description",
+        type: "text",
+        defaultValue: "This action cannot be undone.",
+      },
+      { key: "action", label: "Action text", type: "text", defaultValue: "Confirm delete" },
+    ],
+    render: (values) => (
       <AlertDialog>
-        <AlertDialogTrigger as={Button}>Delete device</AlertDialogTrigger>
+        <AlertDialogTrigger as={Button}>{String(values.trigger)}</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this device?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle>{String(values.title)}</AlertDialogTitle>
+            <AlertDialogDescription>{String(values.description)}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction>Confirm delete</AlertDialogAction>
+            <AlertDialogAction>{String(values.action)}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     ),
+    code: (values) => `<AlertDialog>\n  <AlertDialogTrigger as={Button}>${escapeJsxText(String(values.trigger))}</AlertDialogTrigger>\n  <AlertDialogContent>\n    <AlertDialogHeader>\n      <AlertDialogTitle>${escapeJsxText(String(values.title))}</AlertDialogTitle>\n      <AlertDialogDescription>${escapeJsxText(String(values.description))}</AlertDialogDescription>\n    </AlertDialogHeader>\n    <AlertDialogFooter>\n      <AlertDialogAction>${escapeJsxText(String(values.action))}</AlertDialogAction>\n    </AlertDialogFooter>\n  </AlertDialogContent>\n</AlertDialog>`,
   },
   {
     slug: "error-list",
