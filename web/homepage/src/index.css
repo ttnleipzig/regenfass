@@ -50,7 +50,7 @@
   }
 }
 
-/* Root CHANGELOG.md rendered on the marketing site */
+/* Root CHANGELOG.md rendered on the homepage */
 .changelog-prose {
   @apply text-sm text-foreground leading-relaxed;
 }

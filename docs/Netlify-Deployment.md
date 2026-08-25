@@ -15,7 +15,7 @@ flowchart LR
 
 | Public URL                     | Netlify site (suggested name) | Publish dir (from repo root) | Site ID variable            |
 | ------------------------------ | ----------------------------- | ---------------------------- | --------------------------- |
-| <https://regenfass.eu>         | `regenfass-marketing`         | `web/marketing/dist`         | `NETLIFY_SITE_ID_MARKETING` |
+| <https://regenfass.eu>         | `regenfass-homepage`          | `web/homepage/dist`          | `NETLIFY_SITE_ID_HOMEPAGE`  |
 | <https://docs.regenfass.eu>    | `regenfass-docs`              | `web/docs/dist`              | `NETLIFY_SITE_ID_DOCS`      |
 | <https://install.regenfass.eu> | `regenfass-installer`         | `web/installer/dist`         | `NETLIFY_SITE_ID_INSTALLER` |
 
@@ -65,7 +65,7 @@ The deploy workflow uses the **`production`** environment (repository secrets an
 | Name                        | Type     | Purpose                       |
 | --------------------------- | -------- | ----------------------------- |
 | `NETLIFY_AUTH_TOKEN`        | Secret   | Authenticate `netlify deploy` |
-| `NETLIFY_SITE_ID_MARKETING` | Variable | Marketing site ID             |
+| `NETLIFY_SITE_ID_HOMEPAGE`  | Variable | Homepage site ID              |
 | `NETLIFY_SITE_ID_DOCS`      | Variable | Docs site ID                  |
 | `NETLIFY_SITE_ID_INSTALLER` | Variable | Installer site ID             |
 
@@ -77,7 +77,7 @@ Each site needs its **own** Swetrix project ID at build time (Vite inlines `impo
 
 | Secret                         | App                                                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `SWETRIX_PROJECT_ID_MARKETING` | Marketing                                                                                                        |
+| `SWETRIX_PROJECT_ID_HOMEPAGE`  | Homepage                                                                                                         |
 | `SWETRIX_PROJECT_ID_DOCS`      | Docs                                                                                                             |
 | `SWETRIX_PROJECT_ID_INSTALLER` | Installer                                                                                                        |
 | `SWETRIX_API_URL`              | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
@@ -90,7 +90,7 @@ Build first, then deploy the already-built `dist/` (do not let the CLI rebuild).
 
 ```bash
 corepack enable && pnpm install
-pnpm build:docs   # or :marketing / :installer
+pnpm build:docs   # or :homepage / :installer
 
 export NETLIFY_AUTH_TOKEN=…
 export NETLIFY_SITE_ID=…   # that site’s ID
@@ -100,13 +100,13 @@ CI=true npx netlify-cli@23 deploy --prod --dir=web/docs/dist \
 
 | App       | `--dir`                   | `--filter`                             |
 | --------- | ------------------------- | -------------------------------------- |
-| Marketing | `web/marketing/dist`      | `@ttnleipzig/regenfass-marketing`      |
+| Homepage  | `web/homepage/dist`       | `@ttnleipzig/regenfass-homepage`       |
 | Docs      | `web/docs/dist`           | `@ttnleipzig/regenfass-docs-site`      |
 | Installer | `web/installer/dist`      | `@ttnleipzig/regenfass-installer`      |
 
 Production Netlify hostnames (until custom domains are attached):
 
-- <https://regenfass-marketing.netlify.app>
+- <https://regenfass-homepage.netlify.app>
 - <https://regenfass-docs.netlify.app>
 - <https://regenfass-installer.netlify.app>
 

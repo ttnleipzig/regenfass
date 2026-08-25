@@ -19,7 +19,7 @@ describe("locale preference", () => {
 		expect(cookieDomainForHost("regenfass.eu")).toBe(".regenfass.eu");
 		expect(cookieDomainForHost("install.regenfass.eu")).toBe(".regenfass.eu");
 		expect(cookieDomainForHost("localhost")).toBeUndefined();
-		expect(cookieDomainForHost("regenfass-marketing.netlify.app")).toBeUndefined();
+		expect(cookieDomainForHost("regenfass-homepage.netlify.app")).toBeUndefined();
 	});
 
 	it("detectBrowserLocale prefers German tags", () => {

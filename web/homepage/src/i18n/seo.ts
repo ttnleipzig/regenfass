@@ -1,5 +1,5 @@
 import type { Locale } from "@regenfass/brand";
-import { marketingCopy } from "./index.ts";
+import { homepageCopy } from "./index.ts";
 
 const SITE_ORIGIN = "https://regenfass.eu";
 
@@ -28,8 +28,8 @@ function upsertLink(rel: string, hreflang: string | undefined, href: string) {
 }
 
 /** Update document title, description, canonical, and hreflang for the active locale. */
-export function applyMarketingSeo(locale: Locale) {
-	const copy = marketingCopy(locale);
+export function applyHomepageSeo(locale: Locale) {
+	const copy = homepageCopy(locale);
 	document.title = copy.meta.title;
 	document.documentElement.lang = locale;
 

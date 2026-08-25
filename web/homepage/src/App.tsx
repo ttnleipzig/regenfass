@@ -33,9 +33,9 @@ import ChangelogSection from "./ChangelogSection";
 import UseCaseIllustration, {
 	type UseCaseIllustrationKind,
 } from "./UseCaseIllustration.tsx";
-import { marketingCopy, useMarketingT } from "./i18n/index.ts";
+import { homepageCopy, useHomepageT } from "./i18n/index.ts";
 import { localeRedirectPath } from "./i18n/localeRouting.ts";
-import { applyMarketingSeo } from "./i18n/seo.ts";
+import { applyHomepageSeo } from "./i18n/seo.ts";
 
 const DOCS_URL = "https://docs.regenfass.eu/";
 const INSTALLER_URL = "https://install.regenfass.eu";
@@ -63,7 +63,7 @@ function InvalidLocaleRedirect() {
 }
 
 function Shell(props: ParentProps & { lang: Locale }) {
-	const t = useMarketingT();
+	const t = useHomepageT();
 	const base = `/${props.lang}`;
 
 	const navItems = (): HeaderNavItem[] => [
@@ -109,7 +109,7 @@ function syncRouteLocale(lang: () => string | undefined) {
 		if (locale() !== nextLang) {
 			setLocale(nextLang, { announce: false });
 		}
-		applyMarketingSeo(nextLang);
+		applyHomepageSeo(nextLang);
 	});
 }
 
@@ -117,8 +117,8 @@ function Home() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const { locale } = useLocale();
-	const t = useMarketingT();
-	const copy = () => marketingCopy(locale());
+	const t = useHomepageT();
+	const copy = () => homepageCopy(locale());
 
 	syncRouteLocale(() => params.lang);
 
@@ -334,7 +334,7 @@ function ChangelogPage() {
 	);
 }
 
-function initialMarketingLocale(): Locale {
+function initialHomepageLocale(): Locale {
 	if (typeof location !== "undefined") {
 		const segment = location.pathname.split("/").filter(Boolean)[0];
 		if (isLocale(segment)) return segment;
@@ -342,12 +342,12 @@ function initialMarketingLocale(): Locale {
 	return resolveLocale();
 }
 
-function MarketingRoot(props: RouteSectionProps) {
+function HomepageRoot(props: RouteSectionProps) {
 	const navigate = useNavigate();
 
 	return (
 		<LocaleProvider
-			initialLocale={initialMarketingLocale()}
+			initialLocale={initialHomepageLocale()}
 			onLocaleChange={(next) => {
 				if (typeof location === "undefined") {
 					navigate(`/${next}`);
@@ -366,7 +366,7 @@ function MarketingRoot(props: RouteSectionProps) {
 
 export default function App() {
 	return (
-		<Router root={MarketingRoot}>
+		<Router root={HomepageRoot}>
 			<Route path="/" component={LocaleRedirect} />
 			<Route path="/:lang" component={Home} />
 			<Route path="/:lang/changelog" component={ChangelogPage} />

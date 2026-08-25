@@ -3,13 +3,13 @@
 ## One version everywhere
 
 Regenfass uses a **single semver** for firmware, installer, dashboard, docs, and
-marketing. Release Please owns that number.
+homepage. Release Please owns that number.
 
 | File                                        | Role                                                                              |
 | ------------------------------------------- | --------------------------------------------------------------------------------- |
 | `.release-please-manifest.json`             | **Source of truth** (`"."` → current version). Do not hand-edit except bootstrap. |
 | `package.json` + `web/*/package.json`       | Same `version` field (synced on release)                                          |
-| `web/brand/src/version.ts`                  | `APP_VERSION` for installer, docs, and marketing UI                               |
+| `web/brand/src/version.ts`                  | `APP_VERSION` for installer, docs, and homepage UI                                |
 | `firmware/src/version.h`                    | `REGENFASS_VERSION` for firmware serial/SCP                                       |
 | `web/dashboard/internal/version/version.go` | Dashboard API / Swagger runtime version                                           |
 | `CHANGELOG.md`                              | Human-readable release notes                                                      |
@@ -25,7 +25,7 @@ merge the release PR only.
 | Firmware  | `REGENFASS_VERSION` (serial boot log + SCP `version`) |
 | Installer | Brand footer `v{APP_VERSION}`                         |
 | Docs site | Brand footer `v{APP_VERSION}`                         |
-| Marketing | Brand footer + changelog label `v{APP_VERSION}`       |
+| Homepage  | Brand footer + changelog label `v{APP_VERSION}`       |
 | Dashboard | `internal/version.Version` (startup log + Swagger UI) |
 
 CI runs `node scripts/check-version-sync.mjs` so these cannot drift from the
@@ -64,7 +64,7 @@ flowchart LR
 ## Where release notes appear
 
 1. **GitHub Releases** — <https://github.com/ttnleipzig/regenfass/releases> (Release Please writes the notes from `CHANGELOG.md`).
-2. **Marketing site** — <https://regenfass.eu/#changelog> embeds the same `CHANGELOG.md` at build time.
+2. **Homepage** — <https://regenfass.eu/#changelog> embeds the same `CHANGELOG.md` at build time.
 3. **Every web app footer** — shows `v{APP_VERSION}` and a link to GitHub Releases (via `@regenfass/brand`).
 
 ## What gets released
@@ -100,4 +100,3 @@ it set with a `|| github.token` fallback, because a set secret skips the fallbac
 ## Installer commit lint
 
 When committing in a tree with installer Husky hooks active, subjects must satisfy `@commitlint/config-conventional` (`web/installer/commitlint.config.cjs`).
-

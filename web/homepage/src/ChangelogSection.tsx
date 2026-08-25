@@ -2,11 +2,11 @@ import { createMemo } from "solid-js";
 import { marked } from "marked";
 import changelogMarkdown from "../../../CHANGELOG.md?raw";
 import { APP_VERSION, Headline, Link } from "@regenfass/brand";
-import { useMarketingT } from "./i18n/index.ts";
+import { useHomepageT } from "./i18n/index.ts";
 
 /** Renders the repo CHANGELOG.md (same notes Release Please puts on GitHub Releases). */
 export default function ChangelogSection() {
-	const t = useMarketingT();
+	const t = useHomepageT();
 	const html = createMemo(() =>
 		marked.parse(changelogMarkdown, { async: false }) as string,
 	);

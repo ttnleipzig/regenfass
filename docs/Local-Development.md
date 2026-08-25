@@ -19,7 +19,7 @@ From the **repository root**:
 | -------------------- | -------------------------------------- | -------------------------------------- |
 | `pnpm dev:installer` | `@ttnleipzig/regenfass-installer`      | <http://localhost:5173> (Vite default) |
 | `pnpm dev:playground`     | `@ttnleipzig/regenfass-playground` | <http://localhost:5177>                |
-| `pnpm dev:marketing` | `@ttnleipzig/regenfass-marketing`      | <http://localhost:5175>                |
+| `pnpm dev:homepage`  | `@ttnleipzig/regenfass-homepage`       | <http://localhost:5175>                |
 | `pnpm dev:docs`      | `@ttnleipzig/regenfass-docs-site`      | <http://localhost:5176>                |
 
 Equivalent filter form:
@@ -87,7 +87,7 @@ Each Vite app under `web/` uses its own Swetrix project. Put the IDs in the **re
 
 ```env
 SWETRIX_PROJECT_ID_INSTALLER=…
-SWETRIX_PROJECT_ID_MARKETING=…
+SWETRIX_PROJECT_ID_HOMEPAGE=…
 SWETRIX_PROJECT_ID_DOCS=…
 ```
 
@@ -109,7 +109,7 @@ node scripts/sync-swetrix-env.mjs
 
 If `VITE_SWETRIX_PROJECT_ID` is empty or missing in an app, tracking for that app stays disabled.
 
-Shared helpers live in `@regenfass/brand` (`initAnalytics`, `trackEvent`). Theme toggles emit `theme_toggled`; the installer emits `installer_state_<StateName>` on XState transitions; marketing CTAs emit `navigate_to_docs` / `navigate_to_installer`.
+Shared helpers live in `@regenfass/brand` (`initAnalytics`, `trackEvent`). Theme toggles emit `theme_toggled`; the installer emits `installer_state_<StateName>` on XState transitions; homepage CTAs emit `navigate_to_docs` / `navigate_to_installer`.
 
 ### Funnels
 
@@ -131,20 +131,20 @@ node scripts/provision-swetrix.mjs
 8. `installer_state_Config_WritingConfiguration`
 9. `installer_state_Finish_ShowingNextSteps`
 
-**Marketing** project:
+**Homepage** project:
 
 - `Path to documentation`: page `/` → event `navigate_to_docs`
 - `Path to installer`: page `/` → event `navigate_to_installer`
 
-## Locales (marketing + installer)
+## Locales (homepage + installer)
 
-Marketing and the installer support **German** and **English**.
+The homepage and installer support **German** and **English**.
 
 | Concern        | Behavior                                                                                                                                                                                                 |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Detection      | Cookie override → browser languages (`de*` → `de`, else `en`) → fallback `en`                                                                                                                            |
-| Cookie         | Name `regenfass-locale`, values `de` \| `en`. On `*.regenfass.eu` the cookie uses `Domain=.regenfass.eu` so marketing and installer share the choice. On localhost / Netlify previews the cookie is host-only. |
-| Marketing URLs | SEO paths `/de` and `/en`. `/` redirects to the resolved locale (hash preserved, e.g. `#changelog`). Language switcher updates the cookie and navigates.                                                  |
+| Cookie         | Name `regenfass-locale`, values `de` \| `en`. On `*.regenfass.eu` the cookie uses `Domain=.regenfass.eu` so homepage and installer share the choice. On localhost / Netlify previews the cookie is host-only. |
+| Homepage URLs  | SEO paths `/de` and `/en`. `/` redirects to the resolved locale (hash preserved, e.g. `#changelog`). Language switcher updates the cookie and navigates.                                                  |
 | Installer      | Locale is **not** in the URL (stays `/`). The header switcher only updates the cookie and re-renders copy.                                                                                               |
 
 Shared helpers live in `@regenfass/brand` (`LocaleProvider`, `resolveLocale`, `LanguageSwitcher`).

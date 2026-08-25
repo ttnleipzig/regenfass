@@ -4,7 +4,7 @@
  * (same endpoints as mcp-swetrix admin tools).
  *
  * Prefers existing IDs from root `.env`:
- *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS
+ *   SWETRIX_PROJECT_ID_INSTALLER / _HOMEPAGE / _DOCS
  *
  * Usage (from repo root):
  *   node scripts/provision-swetrix.mjs
@@ -77,8 +77,8 @@ const PROJECTS = [
     origins: ["install.regenfass.eu"],
   },
   {
-    name: "regenfass-marketing",
-    envKey: "SWETRIX_PROJECT_ID_MARKETING",
+    name: "regenfass-homepage",
+    envKey: "SWETRIX_PROJECT_ID_HOMEPAGE",
     origins: ["regenfass.eu"],
   },
   {
@@ -182,7 +182,7 @@ async function main() {
     }
     upsertRootEnv({
       SWETRIX_PROJECT_ID_INSTALLER: ids["regenfass-installer"],
-      SWETRIX_PROJECT_ID_MARKETING: ids["regenfass-marketing"],
+      SWETRIX_PROJECT_ID_HOMEPAGE: ids["regenfass-homepage"],
       SWETRIX_PROJECT_ID_DOCS: ids["regenfass-docs"],
     });
   }
@@ -195,11 +195,11 @@ async function main() {
       "Flash and configure",
       INSTALLER_FUNNEL_STEPS,
     );
-    await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to documentation", [
+    await ensureFunnel(apiKey, ids["regenfass-homepage"], "Path to documentation", [
       "/",
       "navigate_to_docs",
     ]);
-    await ensureFunnel(apiKey, ids["regenfass-marketing"], "Path to installer", [
+    await ensureFunnel(apiKey, ids["regenfass-homepage"], "Path to installer", [
       "/",
       "navigate_to_installer",
     ]);

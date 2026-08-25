@@ -1,6 +1,6 @@
-import type { MarketingDictionary } from "./en.ts";
+import type { HomepageDictionary } from "./en.ts";
 
-export const marketingDictDe: MarketingDictionary = {
+export const homepageDictDe: HomepageDictionary = {
 	meta: {
 		title: "Regenfass – smarte Regenfass-Überwachung",
 		description:

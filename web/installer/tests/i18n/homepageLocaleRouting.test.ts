@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
 	localeRedirectPath,
 	parseLocaleParam,
-} from "../../../marketing/src/i18n/localeRouting.ts";
+} from "../../../homepage/src/i18n/localeRouting.ts";
 import { LOCALE_COOKIE_NAME } from "@regenfass/brand";
 
-describe("marketing locale routing helpers", () => {
+describe("homepage locale routing helpers", () => {
 	it("redirects / to cookie locale and preserves hash", () => {
 		expect(
 			localeRedirectPath(`${LOCALE_COOKIE_NAME}=de`, ["en-US"], "#changelog"),

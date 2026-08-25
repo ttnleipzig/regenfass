@@ -1,6 +1,6 @@
 # Component structure
 
-Shared UI lives in `web/brand` (`@regenfass/brand`). The installer, marketing site, user docs site, and brand showcase all consume that package. [Atomic Design (Brad Frost, chapter 2)](https://atomicdesign.bradfrost.com/chapter-2/) is the mental model — not a rigid “build all atoms first” pipeline.
+Shared UI lives in `web/brand` (`@regenfass/brand`). The installer, homepage, user docs site, and brand showcase all consume that package. [Atomic Design (Brad Frost, chapter 2)](https://atomicdesign.bradfrost.com/chapter-2/) is the mental model — not a rigid “build all atoms first” pipeline.
 
 ## Layers
 
@@ -31,11 +31,11 @@ Shared UI lives in `web/brand` (`@regenfass/brand`). The installer, marketing si
 flowchart TB
   brand[regenfass_brand]
   installer[web_installer]
-  marketing[web_marketing]
+  homepage[web_homepage]
   docs[web_docs]
   showcase[web_brand_showcase]
   brand --> installer
-  brand --> marketing
+  brand --> homepage
   brand --> docs
   brand --> showcase
 ```

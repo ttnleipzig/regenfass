@@ -1,4 +1,4 @@
-export type MarketingDictionary = {
+export type HomepageDictionary = {
 	meta: {
 		title: string;
 		description: string;
@@ -60,7 +60,7 @@ export type MarketingDictionary = {
 	};
 };
 
-export const marketingDictEn: MarketingDictionary = {
+export const homepageDictEn: HomepageDictionary = {
 	meta: {
 		title: "Regenfass – smart rain barrel monitoring",
 		description:

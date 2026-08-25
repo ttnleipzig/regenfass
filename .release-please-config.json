@@ -31,7 +31,7 @@
         },
         {
           "type": "json",
-          "path": "web/marketing/package.json",
+          "path": "web/homepage/package.json",
           "jsonpath": "$.version"
         },
         {

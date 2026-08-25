@@ -21,7 +21,7 @@ export default defineConfig({
   server: {
     port: 5175,
     fs: {
-      // Allow importing root CHANGELOG.md into the marketing app
+      // Allow importing root CHANGELOG.md into the homepage app
       allow: [
         path.resolve(__dirname, ".."),
         path.resolve(__dirname, "../.."),

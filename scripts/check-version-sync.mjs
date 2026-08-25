@@ -18,7 +18,7 @@ const PACKAGE_JSON_PATHS = [
   "web/brand/package.json",
   "web/playground/package.json",
   "web/installer/package.json",
-  "web/marketing/package.json",
+  "web/homepage/package.json",
   "web/docs/package.json",
 ];
 

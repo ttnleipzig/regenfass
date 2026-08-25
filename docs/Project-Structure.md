@@ -21,7 +21,7 @@ Root `pnpm-workspace.yaml` includes `web/*`. Root `package.json` defines conveni
 | `web/brand`          | `@regenfass/brand`                     | Shared components, `styles.css`, Tailwind preset; consumed via `workspace:*` |
 | `web/playground` | `@ttnleipzig/regenfass-playground` | Vite app on port **5177**                                                    |
 | `web/installer`      | `@ttnleipzig/regenfass-installer`      | Main flash/config UI; Vitest + Playwright                                    |
-| `web/marketing`      | `@ttnleipzig/regenfass-marketing`      | Marketing site (`pnpm dev:marketing` / `build:marketing`)                    |
+| `web/homepage`       | `@ttnleipzig/regenfass-homepage`       | Homepage (`pnpm dev:homepage` / `build:homepage`)                             |
 | `web/docs`           | `@ttnleipzig/regenfass-docs-site`      | User-facing docs site (`pnpm dev:docs` / `build:docs`)                       |
 | `web/dashboard`      | _(Go module, not npm)_                 | Go HTTP API + Grafana/Docker; not part of the pnpm package graph             |
 

@@ -53,7 +53,7 @@ jobs:
       - name: Write Swetrix project IDs for Vite builds
         env:
           SWETRIX_PROJECT_ID_INSTALLER: ${{ secrets.SWETRIX_PROJECT_ID_INSTALLER }}
-          SWETRIX_PROJECT_ID_MARKETING: ${{ secrets.SWETRIX_PROJECT_ID_MARKETING }}
+          SWETRIX_PROJECT_ID_HOMEPAGE: ${{ secrets.SWETRIX_PROJECT_ID_HOMEPAGE }}
           SWETRIX_PROJECT_ID_DOCS: ${{ secrets.SWETRIX_PROJECT_ID_DOCS }}
           SWETRIX_API_URL: ${{ secrets.SWETRIX_API_URL }}
         run: |
@@ -73,7 +73,7 @@ jobs:
             fi
           }
           write_env web/installer "$SWETRIX_PROJECT_ID_INSTALLER"
-          write_env web/marketing "$SWETRIX_PROJECT_ID_MARKETING"
+          write_env web/homepage "$SWETRIX_PROJECT_ID_HOMEPAGE"
           write_env web/docs "$SWETRIX_PROJECT_ID_DOCS"
 
       - name: Build web packages
@@ -82,21 +82,21 @@ jobs:
       - name: Install Netlify CLI
         run: npm install -g netlify-cli@23
 
-      - name: Deploy marketing → regenfass.eu
+      - name: Deploy homepage → regenfass.eu
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_MARKETING }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID_HOMEPAGE }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
-            echo "::warning::Skipping marketing deploy (missing NETLIFY_AUTH_TOKEN)"
+            echo "::warning::Skipping homepage deploy (missing NETLIFY_AUTH_TOKEN)"
             exit 0
           fi
           if [ -z "${NETLIFY_SITE_ID}" ]; then
-            echo "::warning::Skipping marketing deploy (missing NETLIFY_SITE_ID_MARKETING — Site ID from Netlify Site configuration)"
+            echo "::warning::Skipping homepage deploy (missing NETLIFY_SITE_ID_HOMEPAGE — Site ID from Netlify Site configuration)"
             exit 0
           fi
           # --filter avoids Netlify CLI monorepo project picker in CI
-          CI=true netlify deploy --prod --dir=web/marketing/dist --filter @ttnleipzig/regenfass-marketing --message "gha ${{ github.sha }}"
+          CI=true netlify deploy --prod --dir=web/homepage/dist --filter @ttnleipzig/regenfass-homepage --message "gha ${{ github.sha }}"
 
       - name: Deploy docs → docs.regenfass.eu
         env:

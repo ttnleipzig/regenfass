@@ -46,7 +46,7 @@ Exportable SolidJS primitives and theme (`@regenfass/brand`, `./styles.css`, `./
 ## Other web apps
 
 - **playground** — interactive playground for brand components (dev port 5177).
-- **marketing** / **docs** — public marketing and documentation sites (root scripts `dev:marketing`, `dev:docs`); deploy via Netlify (see [Netlify Deployment](Netlify-Deployment)).
+- **homepage** / **docs** — public homepage and documentation sites (root scripts `dev:homepage`, `dev:docs`); deploy via Netlify (see [Netlify Deployment](Netlify-Deployment)).
 
 ## Dashboard (`web/dashboard/`)
 

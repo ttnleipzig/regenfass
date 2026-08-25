@@ -3,7 +3,7 @@
  * Sync root `.env` Swetrix settings into each Vite app's `.env`.
  *
  * Expected root vars (no VITE_ prefix):
- *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS
+ *   SWETRIX_PROJECT_ID_INSTALLER / _HOMEPAGE / _DOCS
  *   SWETRIX_API_URL (optional) — Events API log endpoint for the JS SDK
  *     Cloud: omit (defaults to https://api.swetrix.com/log)
  *     Self-hosted CE: https://your-host/backend/log
@@ -20,7 +20,7 @@ const ROOT = resolve(__dirname, "..");
 
 const APPS = [
   { envKey: "SWETRIX_PROJECT_ID_INSTALLER", dir: "web/installer" },
-  { envKey: "SWETRIX_PROJECT_ID_MARKETING", dir: "web/marketing" },
+  { envKey: "SWETRIX_PROJECT_ID_HOMEPAGE", dir: "web/homepage" },
   { envKey: "SWETRIX_PROJECT_ID_DOCS", dir: "web/docs" },
 ];
 
