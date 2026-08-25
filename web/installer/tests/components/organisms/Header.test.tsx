@@ -52,7 +52,8 @@ describe("Header", () => {
 		));
 		const suffix = screen.getByText("Playground");
 
-		expect(suffix).toHaveClass("text-white");
+		expect(suffix).toHaveClass("text-foreground/80");
+		expect(suffix).toHaveClass("dark:text-white");
 		expect(suffix).toHaveClass("font-normal");
 		expect(container.querySelector("h1")).toHaveTextContent("Regenfass Playground");
 	});
@@ -139,7 +140,8 @@ describe("Header", () => {
 
 		const innerDiv = container.querySelector(".site-container");
 		expect(innerDiv).toHaveClass("site-container");
-		expect(innerDiv).toHaveClass("max-w-none");
+		expect(innerDiv).toHaveClass("px-4");
+		expect(innerDiv).toHaveClass("sm:px-6");
 		expect(innerDiv).toHaveClass("lg:px-8");
 		expect(innerDiv).toHaveClass("flex");
 		expect(innerDiv).toHaveClass("justify-between");

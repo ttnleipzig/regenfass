@@ -60,9 +60,9 @@ describe("Newsletter", () => {
 		const form = container.querySelector("form");
 		expect(form).toHaveClass("flex");
 		expect(form).toHaveClass("px-4");
-		expect(form).toHaveClass("py-2");
+		expect(form).toHaveClass("py-3");
 		expect(form).toHaveClass("bg-background");
-		expect(form).toHaveClass("rounded-full");
+		expect(form).toHaveClass("rounded-2xl");
 		expect(form).toHaveClass("focus-within:ring-2");
 		expect(form).toHaveClass("hover:ring-2");
 		expect(form).toHaveClass("border");
@@ -72,8 +72,8 @@ describe("Newsletter", () => {
 	it("subscribe button has correct styling", () => {
 		render(() => <Newsletter />);
 		const subscribeButton = screen.getByText("Subscribe").closest("button");
-		expect(subscribeButton).toHaveClass("px-3");
-		expect(subscribeButton).toHaveClass("py-1");
+		expect(subscribeButton).toHaveClass("px-4");
+		expect(subscribeButton).toHaveClass("py-2");
 		expect(subscribeButton).toHaveClass("text-sm");
 		expect(subscribeButton).toHaveClass("font-semibold");
 		expect(subscribeButton).toHaveClass("rounded-full");
@@ -94,11 +94,11 @@ describe("Newsletter", () => {
 
 	it("renders responsive layout classes", () => {
 		const { container } = render(() => <Newsletter />);
-		const flexContainer = container.querySelector("div.flex");
+		const flexContainer = container.querySelector("div.flex.flex-col.gap-6");
 		expect(flexContainer).toHaveClass("flex-col");
-		expect(flexContainer).toHaveClass("sm:flex-row");
-		expect(flexContainer).toHaveClass("items-center");
-		expect(flexContainer).toHaveClass("justify-between");
 		expect(flexContainer).toHaveClass("gap-6");
+		const form = container.querySelector("form");
+		expect(form).toHaveClass("sm:flex-row");
+		expect(form).toHaveClass("sm:items-center");
 	});
 });

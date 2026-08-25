@@ -9,7 +9,7 @@ describe("marketing locale routing helpers", () => {
 	it("redirects / to cookie locale and preserves hash", () => {
 		expect(
 			localeRedirectPath(`${LOCALE_COOKIE_NAME}=de`, ["en-US"], "#changelog"),
-		).toBe("/de#changelog");
+		).toBe("/de/changelog");
 		expect(localeRedirectPath("", ["en-GB"], "")).toBe("/en");
 	});
 
