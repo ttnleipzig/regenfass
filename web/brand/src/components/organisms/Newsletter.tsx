@@ -12,8 +12,8 @@ export default function Newsletter() {
 
 	return (
 		<aside id="newsletter" class="site-container py-6">
-			<div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
-				<div class="sm:w-7/12">
+			<div class="flex flex-col gap-6">
+				<div class="max-w-xl">
 					<Headline as="h2">
 						{t("newsletter.titleBefore")}{" "}
 						<span class="text-transparent bg-gradient-to-br from-sky-500 to-cyan-400 bg-clip-text">
@@ -22,12 +22,12 @@ export default function Newsletter() {
 					</Headline>
 					<p class="mt-3 text-muted-foreground">{t("newsletter.body")}</p>
 				</div>
-				<div class="w-full sm:w-5/12">
+				<div class="w-full max-w-2xl">
 					<form
 						id="form-newsletter"
 						class={cn(
-							"flex w-full flex-col gap-2 px-4 py-2 bg-background rounded-full",
-							"lg:flex-row lg:items-center lg:gap-0",
+							"flex w-full flex-col gap-2 px-4 py-3 bg-background rounded-2xl",
+							"sm:flex-row sm:items-center sm:gap-3",
 							"focus-within:ring-2 focus-within:ring-ring",
 							"hover:ring-2 hover:ring-ring/50",
 							"border border-input",
@@ -42,7 +42,7 @@ export default function Newsletter() {
 						</TextFieldRoot>
 						<Button
 							id="button-newsletter"
-							class="w-full px-3 py-1 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white lg:ml-2 lg:w-auto"
+							class="w-full px-4 py-2 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white sm:w-auto"
 							type="submit"
 						>
 							{t("newsletter.subscribe")}
