@@ -32,7 +32,11 @@ Root `AGENTS.md` (including **Cursor Cloud specific instructions**) is the sourc
 
 ## Secrets
 
-Do not commit `.env` files. Firmware keys in `firmware/platformio.ini` `[user_configuration]` are local secrets — treat them carefully and avoid pasting them into public issues or wiki pages.
+Do not commit `.env` files or device credentials. The versioned
+`firmware/platformio.ini` only contains dummy TTN values. Configure real
+LoRaWAN credentials through the web installer, or keep local PlatformIO
+overrides in `firmware/platformio.local.ini` / `firmware/secrets.ini`; both
+files are ignored by Git.
 
 ## Wiki prerequisite
 
