@@ -59,7 +59,7 @@ import {
 
 export type PlaygroundCategory = "atoms" | "molecules" | "forms" | "organisms";
 
-export type PlaygroundControlType = "text" | "boolean" | "number" | "select";
+export type PlaygroundControlType = "text" | "boolean" | "number" | "range" | "select";
 
 export type PlaygroundControl = {
   key: string;
@@ -67,6 +67,10 @@ export type PlaygroundControl = {
   type: PlaygroundControlType;
   defaultValue: string | boolean | number;
   options?: string[];
+  description?: string;
+  placeholder?: string;
+  min?: number;
+  max?: number;
 };
 
 export type PlaygroundComponent = {
@@ -76,7 +80,12 @@ export type PlaygroundComponent = {
   description: string;
   controls: PlaygroundControl[];
   render: (values: Record<string, string | boolean | number>) => JSX.Element;
+  code?: (values: Record<string, string | boolean | number>) => string;
 };
+
+function escapeJsxText(value: string) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
   {
@@ -223,7 +232,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     name: "Progress",
     category: "atoms",
     description: "Progress indicator for multi-step flows.",
-    controls: [{ key: "value", label: "Value", type: "number", defaultValue: 55 }],
+    controls: [{ key: "value", label: "Value", type: "range", defaultValue: 55, min: 0, max: 100 }],
     render: (values) => <Progress value={Number(values.value)} class="max-w-sm" />,
   },
   {
@@ -292,6 +301,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         <CardContent>{String(values.content)}</CardContent>
       </Card>
     ),
+    code: (values) => `<Card>\n  <CardHeader>\n    <CardTitle>${escapeJsxText(String(values.title))}</CardTitle>\n    <CardDescription>${escapeJsxText(String(values.description))}</CardDescription>\n  </CardHeader>\n  <CardContent>${escapeJsxText(String(values.content))}</CardContent>\n</Card>`,
   },
   {
     slug: "step-paginator",
@@ -307,7 +317,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         defaultValue: "default",
         options: ["default", "compact"],
       },
-      { key: "activeStep", label: "Active step", type: "number", defaultValue: 2 },
+      { key: "activeStep", label: "Active step", type: "range", defaultValue: 2, min: 1, max: 4 },
     ],
     render: (values) => (
       <StepPaginator
@@ -327,6 +337,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
       { key: "label", label: "Label", type: "text", defaultValue: "Device name" },
       { key: "placeholder", label: "Placeholder", type: "text", defaultValue: "My rain barrel" },
       { key: "value", label: "Value", type: "text", defaultValue: "" },
+      { key: "disabled", label: "Disabled", type: "boolean", defaultValue: false },
     ],
     render: (values) => (
       <div class="max-w-sm">
@@ -334,6 +345,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
           label={String(values.label)}
           placeholder={String(values.placeholder)}
           value={String(values.value)}
+          disabled={Boolean(values.disabled)}
         />
       </div>
     ),

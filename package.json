@@ -12,6 +12,7 @@
     "build:marketing": "pnpm --filter @ttnleipzig/regenfass-marketing build",
     "build:docs": "pnpm --filter @ttnleipzig/regenfass-docs-site build",
     "build:playground": "pnpm --filter @ttnleipzig/regenfass-playground build",
+    "test:playground": "pnpm --filter @ttnleipzig/regenfass-playground test:coverage",
     "test": "pnpm --filter @ttnleipzig/regenfass-installer test:run",
     "lint": "pnpm --filter @ttnleipzig/regenfass-installer lint"
   },
