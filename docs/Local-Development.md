@@ -64,6 +64,14 @@ See also [CONTRIBUTING.md](https://github.com/ttnleipzig/regenfass/blob/main/CON
 
 Work inside `web/dashboard/` with the Go module (`go.mod`). Optional Docker Compose lives next to the Dockerfile there. API swagger host metadata defaults to `localhost:64000`.
 
+The API only allows known browser origins by default: local Vite ports 5173-5176
+and the public regenfass domains. Override the list for local experiments with
+a comma-separated environment variable:
+
+```bash
+REGENFASS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000 go run .
+```
+
 ## Web Serial caveat
 
 Flashing and live device configuration require:
