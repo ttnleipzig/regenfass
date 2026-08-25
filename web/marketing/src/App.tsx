@@ -274,7 +274,7 @@ function Home() {
 								{(item, index) => (
 									<Card>
 										<CardHeader class="gap-4">
-											<div class="overflow-hidden rounded-2xl border border-border/60 bg-card/50 p-2 shadow-inner">
+											<div class="overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-sky-500/12 via-cyan-500/6 to-transparent p-3 shadow-inner">
 												<UseCaseIllustration
 													kind={USE_CASE_ILLUSTRATIONS[index()]}
 												/>
