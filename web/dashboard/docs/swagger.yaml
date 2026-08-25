@@ -329,6 +329,14 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/api.RegisterDeviceResponse'
+        "400":
+          description: Invalid payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "409":
+          description: Device EUI is already registered
+          schema:
+            $ref: '#/definitions/api.HTTPError'
         "500":
           description: Internal server error
           schema:

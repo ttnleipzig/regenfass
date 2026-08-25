@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/contrib/v3/swaggo v1.0.0
 	github.com/gofiber/fiber/v3 v3.5.0
 	github.com/golang-migrate/migrate/v4 v4.18.2
+	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/rs/zerolog v1.34.0
 	github.com/swaggo/swag v1.16.6
