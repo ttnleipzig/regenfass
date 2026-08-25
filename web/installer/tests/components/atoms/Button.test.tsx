@@ -61,6 +61,7 @@ describe("Button", () => {
     const { container } = render(() => <Button size="lg">Large</Button>);
     const button = container.querySelector("button");
     expect(button).toHaveClass("h-10");
+    expect(button).toHaveClass("text-base");
   });
 
   it("applies icon size", () => {

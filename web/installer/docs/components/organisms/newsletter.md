@@ -21,8 +21,7 @@ This component accepts no props - it provides a static newsletter subscription i
 - Uses responsive layout that stacks on mobile and arranges horizontally on larger screens
 - Features gradient text styling for "update newsletters" consistent with brand colors
 - Email input with placeholder text using IoT domain extension for theme relevance
-- Optional name input for listmonk subscriber names
-- Preselected \`Regenfass News\` list using listmonk's \`l\` field
+- Only the required email input is shown
 - Native POST submission to \`https://news.regenfass.eu/subscription/form\`
 - Custom rounded pill-style form with focus and hover ring effects
 - Subscribe button uses gradient background matching site theme

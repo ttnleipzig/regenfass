@@ -36,7 +36,7 @@ describe("Newsletter", () => {
 		);
 	});
 
-	it("renders all listmonk subscription fields", () => {
+	it("renders the required listmonk subscription fields", () => {
 		const { container } = render(() => <Newsletter />);
 
 		expect(container.querySelector('input[name="nonce"]')).toHaveAttribute(
@@ -48,18 +48,8 @@ describe("Newsletter", () => {
 			"email",
 		);
 		expect(container.querySelector('input[name="email"]')).toBeRequired();
-		expect(container.querySelector('input[name="name"]')).toHaveAttribute(
-			"type",
-			"text",
-		);
-
-		const listInput = container.querySelector('input[name="l"]');
-		expect(listInput).toHaveAttribute(
-			"value",
-			"a5bca2e4-c654-4a74-ae01-bf83de6f5623",
-		);
-		expect(listInput).toBeChecked();
-		expect(screen.getByText("Regenfass News")).toBeInTheDocument();
+		expect(container.querySelector('input[name="name"]')).not.toBeInTheDocument();
+		expect(container.querySelector('input[name="l"]')).not.toBeInTheDocument();
 	});
 
 	it("renders a native submit control", () => {

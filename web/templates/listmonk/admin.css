@@ -1,0 +1,109 @@
+/* Regenfass theme for the Listmonk admin UI. */
+:root {
+    --rf-blue: #10a9e6;
+    --rf-blue-dark: #087c91;
+    --rf-blue-soft: #eef7f8;
+    --rf-teal: #08b39f;
+    --rf-text: #18323b;
+    --rf-muted: #78909a;
+    --rf-border: #dcebef;
+}
+
+html body {
+    background: #f4f8fa;
+    color: var(--rf-text);
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+html .navbar {
+    min-height: 76px;
+    background: #fff !important;
+    border-bottom: 1px solid var(--rf-border);
+    box-shadow: 0 2px 12px rgb(24 83 97 / 7%);
+}
+
+html .navbar-item,
+html .navbar-link { color: var(--rf-text); }
+
+html a,
+html .tabs li.is-active a,
+html .menu-list a.is-active,
+html .panel-list a:hover {
+    color: var(--rf-blue) !important;
+}
+
+html .menu-list a {
+    margin: 4px 10px;
+    border-radius: 8px;
+    color: var(--rf-text);
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+html .menu-list a:hover {
+    background: var(--rf-blue-soft);
+    color: var(--rf-blue) !important;
+    transform: translateX(2px);
+}
+
+html .menu-list a.is-active,
+html .b-sidebar .menu-list .router-link-exact-active {
+    background: var(--rf-blue-soft) !important;
+    border-right: 4px solid var(--rf-blue);
+    font-weight: 600;
+}
+
+html .tabs li.is-active a,
+html .b-tabs .tabs li.is-active a,
+html .navbar-item.is-tab.is-active {
+    border-bottom-color: var(--rf-blue) !important;
+    font-weight: 600;
+}
+
+html .box,
+html .card,
+html .panel {
+    border: 1px solid var(--rf-border);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgb(24 83 97 / 5%);
+}
+
+html .input,
+html .textarea,
+html .select select,
+html .taginput .taginput-container {
+    border-color: var(--rf-border);
+    border-radius: 7px;
+    box-shadow: none;
+}
+
+html .input:focus,
+html .textarea:focus,
+html .select select:focus,
+html .taginput .taginput-container.is-focusable:focus {
+    border-color: var(--rf-blue) !important;
+    box-shadow: 0 0 0 3px rgb(16 169 230 / 16%) !important;
+}
+
+html .button.is-primary,
+html .tag.is-primary,
+html .tag.is-info {
+    background: var(--rf-blue) !important;
+    border-color: var(--rf-blue) !important;
+    color: #fff !important;
+}
+
+html .button.is-primary:hover {
+    background: var(--rf-blue-dark) !important;
+    border-color: var(--rf-blue-dark) !important;
+    box-shadow: 0 5px 14px rgb(16 169 230 / 24%);
+}
+
+html .table thead th { background: var(--rf-blue-soft); color: var(--rf-muted); }
+html .table tbody tr:hover { background: #f6fbfc; }
+html .table td,
+html .table th { border-color: var(--rf-border); }
+
+html :focus-visible {
+    outline: 3px solid rgb(16 169 230 / 35%);
+    outline-offset: 2px;
+}

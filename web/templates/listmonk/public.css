@@ -1,0 +1,103 @@
+/* Regenfass theme for Listmonk public pages. */
+* { box-sizing: border-box; }
+
+html,
+body {
+    min-width: 320px;
+    margin: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #f7fbfc 0%, #eef7f8 100%);
+    color: #18323b;
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+a { color: #079acb; text-decoration-color: rgb(7 154 203 / 30%); }
+a:hover { color: #087c91; }
+
+.container { max-width: 620px; }
+
+.wrap {
+    margin-top: 56px;
+    padding: 42px;
+    background: #fff;
+    border: 1px solid #dcebef;
+    border-radius: 12px;
+    box-shadow: 0 18px 45px rgb(24 83 97 / 10%);
+}
+
+.header {
+    min-height: 58px;
+    margin-bottom: 34px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #dcebef;
+}
+
+.header .logo img { max-height: 52px; max-width: 190px; width: auto; }
+
+h1, h2, h3 { color: #18323b; font-weight: 650; letter-spacing: -0.02em; }
+h2 { margin-top: 0; font-size: 1.8rem; }
+
+label { color: #18323b; font-weight: 600; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dcebef;
+    border-radius: 8px;
+    background: #fff;
+    color: #18323b;
+    font: inherit;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+input:focus,
+select:focus {
+    border-color: #10a9e6;
+    box-shadow: 0 0 0 4px rgb(16 169 230 / 14%);
+    outline: none;
+}
+
+.lists {
+    margin: 28px 0;
+    padding: 20px;
+    border: 1px solid #dcebef;
+    border-radius: 9px;
+    background: #fbfdfd;
+    list-style: none;
+}
+
+.lists h2 { font-size: 1.1rem; }
+.lists li { margin-bottom: 13px; }
+.lists .description { color: #78909a; font-size: .88rem; line-height: 1.4rem; }
+input[type="checkbox"], input[type="radio"] { accent-color: #10a9e6; }
+
+.button {
+    min-width: 155px;
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 8px;
+    background: #10a9e6;
+    color: #fff;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.button:hover { background: #087c91; color: #fff; box-shadow: 0 7px 18px rgb(16 169 230 / 25%); transform: translateY(-1px); }
+.button.button-outline { border: 1px solid #10a9e6; background: #fff; color: #079acb; }
+.section, .data-form { margin-top: 30px; padding-top: 28px; border-top: 1px solid #dcebef; }
+.error { border-left: 4px solid #d64545; background: #fff1f1; color: #a52d2d; padding: 12px 15px; }
+.form .nonce { display: none; }
+footer.container { margin: 24px auto 32px; color: #78909a; font-size: .8rem; text-align: center; }
+footer a { color: #78909a; text-decoration: none; }
+
+@media screen and (max-width: 650px) {
+    .wrap { margin: 0; padding: 28px 22px; border-radius: 0; }
+    .button { width: 100%; }
+}

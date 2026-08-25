@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{ .Campaign.Subject }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <base target="_blank">
+
+    <style>
+        body {
+            background-color: #f3f8fa;
+            color: #18323b;
+            font-family: "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 26px;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            max-width: 100%;
+        }
+
+        a { color: #079acb; }
+        a:hover { color: #087c91; }
+
+        .wrap {
+            background-color: #ffffff;
+            border: 1px solid #dcebef;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(24, 83, 97, 0.08);
+            margin: 0 auto;
+            max-width: 580px;
+            overflow: hidden;
+        }
+
+        .brand {
+            background: linear-gradient(135deg, #10a9e6, #08b39f);
+            color: #ffffff;
+            padding: 24px 34px;
+        }
+
+        .brand-mark {
+            background: #ffffff;
+            border-radius: 50%;
+            display: inline-block;
+            height: 14px;
+            margin-right: 9px;
+            vertical-align: -1px;
+            width: 14px;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .content { padding: 34px; }
+
+        .content h1,
+        .content h2,
+        .content h3 {
+            color: #18323b;
+            line-height: 1.25;
+        }
+
+        .content h2 {
+            font-size: 25px;
+            margin: 0 0 22px;
+        }
+
+        .button {
+            background: #10a9e6;
+            border-radius: 8px;
+            color: #ffffff !important;
+            display: inline-block;
+            font-weight: 700;
+            padding: 12px 26px;
+            text-decoration: none !important;
+        }
+
+        .button:hover { background: #087c91; }
+
+        pre {
+            background: #eef7f8;
+            border-left: 4px solid #08b39f;
+            border-radius: 5px;
+            overflow-x: auto;
+            padding: 12px 15px;
+        }
+
+        table.data-table {
+            border: 1px solid #dcebef;
+            width: 100%;
+        }
+
+        table.data-table td,
+        table.data-table th {
+            border: 1px solid #dcebef;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table.data-table th {
+            background: #eef7f8;
+            color: #18323b;
+        }
+
+        .footer {
+            color: #78909a;
+            font-size: 12px;
+            line-height: 20px;
+            padding: 24px 15px 30px;
+            text-align: center;
+        }
+
+        .footer a { color: #78909a; margin: 0 5px; }
+        .gutter { padding: 24px; }
+
+        @media screen and (max-width: 600px) {
+            .gutter { padding: 10px; }
+            .wrap {
+                border-radius: 0;
+                margin: 0;
+                width: 100% !important;
+            }
+            .brand,
+            .content { padding: 25px 22px !important; }
+        }
+    </style>
+</head>
+
+<body style="background-color:#f3f8fa;color:#18323b;font-family:'Helvetica Neue','Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:26px;margin:0;">
+    <div class="gutter" style="padding:24px;">&nbsp;</div>
+
+    <div class="wrap" style="background-color:#ffffff;border:1px solid #dcebef;border-radius:14px;margin:0 auto;max-width:580px;overflow:hidden;">
+        <div class="brand" style="background:linear-gradient(135deg,#10a9e6,#08b39f);color:#ffffff;padding:24px 34px;">
+            <span class="brand-mark" style="background:#ffffff;border-radius:50%;display:inline-block;height:14px;margin-right:9px;vertical-align:-1px;width:14px;"></span>
+            <span class="brand-name" style="font-size:22px;font-weight:700;letter-spacing:-0.03em;">regenfass</span>
+        </div>
+
+        <div class="content" style="padding:34px;">
+            {{ template "content" . }}
+        </div>
+    </div>
+
+    <div class="footer" style="color:#78909a;font-size:12px;line-height:20px;padding:24px 15px 30px;text-align:center;">
+        <p>
+            <a href="{{ UnsubscribeURL }}" style="color:#78909a;">{{ L.T "email.unsub" }}</a>
+            &nbsp;&nbsp;·&nbsp;&nbsp;
+            <a href="{{ MessageURL }}" style="color:#78909a;">{{ L.T "email.viewInBrowser" }}</a>
+        </p>
+    </div>
+
+    <div class="gutter" style="padding:24px;">&nbsp;{{ TrackView }}</div>
+</body>
+</html>

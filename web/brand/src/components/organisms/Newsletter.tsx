@@ -42,25 +42,6 @@ export default function Newsletter() {
 								placeholder={t("newsletter.placeholder")}
 							/>
 						</TextFieldRoot>
-						<TextFieldRoot class="min-w-0 flex-1">
-							<TextFieldInput
-								name="name"
-								type="text"
-								class="w-full appearance-none bg-transparent focus:outline-none border-0"
-								placeholder={t("newsletter.namePlaceholder")}
-							/>
-						</TextFieldRoot>
-						<label class="flex items-center gap-2 text-sm text-muted-foreground">
-							<input
-								id="newsletter-list"
-								type="checkbox"
-								name="l"
-								value="a5bca2e4-c654-4a74-ae01-bf83de6f5623"
-								checked
-								class="size-4 rounded border-input accent-primary"
-							/>
-							<span>{t("newsletter.listLabel")}</span>
-						</label>
 						<Button
 							id="button-newsletter"
 							class="w-full px-4 py-2 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white sm:w-auto"

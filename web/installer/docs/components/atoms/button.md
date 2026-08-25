@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 <Button variant='secondary'>Secondary</Button>
 <Button variant='outline'>Outline</Button>
 <Button variant='destructive'>Delete</Button>
+<Button size='lg'>Large</Button>
 ```
 
 ## Props
@@ -27,4 +28,5 @@ import { Button } from '@/components/ui/button';
 - Hover and active states provide clear interaction feedback
 - Icon size variant creates perfect square buttons for icon-only use cases
 - Link variant appears as text with underline styling
+- Large size uses a larger text size together with increased height and horizontal padding
 - All variants use design system color tokens for theme consistency
