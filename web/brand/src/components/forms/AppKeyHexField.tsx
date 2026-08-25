@@ -13,9 +13,12 @@ import {
 import { copyTextToClipboard } from "../../libs/copyToClipboard.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
-import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
+import Check from "lucide-solid/icons/check";
+import BiRegularClipboard from "lucide-solid/icons/clipboard";
+import BiRegularX from "lucide-solid/icons/x";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
+import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export interface AppKeyHexFieldProps {
 	id: string;
@@ -88,7 +91,7 @@ const SlotPairReel: Component<{
 	});
 
 	return (
-		<div class="flex h-10 w-9 shrink-0 flex-col overflow-hidden border-r border-input bg-background last:border-r-0">
+		<div class="flex h-10 min-w-0 flex-1 flex-col overflow-hidden border-r border-input bg-background last:border-r-0">
 			<div ref={(el) => (innerEl = el)} class="flex flex-col">
 				<For each={props.rows}>
 					{(row) => (
@@ -103,10 +106,11 @@ const SlotPairReel: Component<{
 };
 
 /** Width of 16 hex pair columns (`w-9` each), aligned with AppEUI/DevEUI slot rows. */
-const APP_KEY_HEX_COLUMNS_CLASS = "w-[36rem]";
+const APP_KEY_HEX_COLUMNS_CLASS = "w-full";
 
 /** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
 export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
+	const t = useBrandT();
 	const [revealed, setRevealed] = createSignal(false);
 	const [spinning, setSpinning] = createSignal(false);
 	const [reelMatrix, setReelMatrix] = createSignal<string[][] | null>(null);
@@ -193,7 +197,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	};
 
 	const copyLabel = () =>
-		copied() ? "Copied appKey" : "Copy appKey to clipboard";
+		copied() ? t("a11y.copiedAppKey") : t("a11y.copyAppKey");
 
 	const copyToClipboard = async () => {
 		const canonical = props.value ?? "";
@@ -217,11 +221,11 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	return (
 		<div
 			class={cn(
-				"flex h-10 w-fit max-w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+				"flex h-10 w-full max-w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
 				props.class,
 			)}
 		>
-			<div class={cn("relative min-h-10 shrink-0", APP_KEY_HEX_COLUMNS_CLASS)}>
+			<div class={cn("relative min-h-10 min-w-0 flex-1", APP_KEY_HEX_COLUMNS_CLASS)}>
 				<Show when={!revealed() && !spinInProgress() && canonicalPairs().length > 0}>
 					<div
 						aria-hidden="true"
@@ -229,7 +233,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					>
 						<For each={canonicalPairs()}>
 							{(pair) => (
-								<div class="flex h-10 w-9 shrink-0 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
+								<div class="flex h-10 min-w-0 flex-1 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
 									{maskHexPairForDisplay(pair)}
 								</div>
 							)}
@@ -255,7 +259,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					>
 						<For each={canonicalPairs()}>
 							{(pair) => (
-								<div class="flex h-10 w-9 shrink-0 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
+								<div class="flex h-10 min-w-0 flex-1 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
 									{pair}
 								</div>
 							)}
@@ -291,7 +295,9 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					aria-label={copyLabel()}
 					onClick={copyToClipboard}
 				>
-					<BiRegularClipboard aria-hidden={true} size={16} />
+					<Show when={copied()} fallback={<BiRegularClipboard aria-hidden={true} size={16} />}>
+						<Check class="text-success" aria-hidden={true} size={16} />
+					</Show>
 				</button>
 			</Show>
 			<Show when={props.showResetButton && (props.value ?? "")}>
@@ -299,7 +305,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					type="button"
 					disabled={spinInProgress()}
 					class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
-					aria-label="Clear appKey"
+					aria-label={t("a11y.clearAppKey")}
 					onClick={handleReset}
 				>
 					<BiRegularX aria-hidden={true} size={16} />
@@ -311,7 +317,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 				class="flex h-10 w-10 shrink-0 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
 				aria-pressed={revealed()}
 				aria-busy={spinInProgress()}
-				aria-label={revealed() ? "Hide app key" : "Show app key"}
+				aria-label={revealed() ? t("a11y.hideAppKey") : t("a11y.showAppKey")}
 				onClick={handleToggleReveal}
 			>
 				<Show when={revealed()} fallback={<Eye class="size-4" strokeWidth={1.75} />}>

@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "class",
+  // Match both Tailwind `.dark` and Kobalte `data-kb-theme` so dark: utilities
+  // work even when only one of the two theme switches is set.
+  darkMode: ["selector", ':is(.dark, [data-kb-theme="dark"])'],
   theme: {
     extend: {
       colors: {

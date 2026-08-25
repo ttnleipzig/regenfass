@@ -18,7 +18,7 @@ From the **repository root**:
 | Script               | Package                                | Typical URL                            |
 | -------------------- | -------------------------------------- | -------------------------------------- |
 | `pnpm dev:installer` | `@ttnleipzig/regenfass-installer`      | <http://localhost:5173> (Vite default) |
-| `pnpm dev:brand`     | `@ttnleipzig/regenfass-brand-showcase` | <http://localhost:5174>                |
+| `pnpm dev:playground`     | `@ttnleipzig/regenfass-playground` | <http://localhost:5177>                |
 | `pnpm dev:marketing` | `@ttnleipzig/regenfass-marketing`      | <http://localhost:5175>                |
 | `pnpm dev:docs`      | `@ttnleipzig/regenfass-docs-site`      | <http://localhost:5176>                |
 
@@ -64,6 +64,14 @@ See also [CONTRIBUTING.md](https://github.com/ttnleipzig/regenfass/blob/main/CON
 
 Work inside `web/dashboard/` with the Go module (`go.mod`). Optional Docker Compose lives next to the Dockerfile there. API swagger host metadata defaults to `localhost:64000`.
 
+The API only allows known browser origins by default: local Vite ports 5173-5176
+and the public regenfass domains. Override the list for local experiments with
+a comma-separated environment variable:
+
+```bash
+REGENFASS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000 go run .
+```
+
 ## Web Serial caveat
 
 Flashing and live device configuration require:
@@ -81,7 +89,6 @@ Each Vite app under `web/` uses its own Swetrix project. Put the IDs in the **re
 SWETRIX_PROJECT_ID_INSTALLER=…
 SWETRIX_PROJECT_ID_MARKETING=…
 SWETRIX_PROJECT_ID_DOCS=…
-SWETRIX_PROJECT_ID_BRAND=…
 ```
 
 Optional (self-hosted Community Edition):
@@ -128,6 +135,19 @@ node scripts/provision-swetrix.mjs
 
 - `Path to documentation`: page `/` → event `navigate_to_docs`
 - `Path to installer`: page `/` → event `navigate_to_installer`
+
+## Locales (marketing + installer)
+
+Marketing and the installer support **German** and **English**.
+
+| Concern        | Behavior                                                                                                                                                                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Detection      | Cookie override → browser languages (`de*` → `de`, else `en`) → fallback `en`                                                                                                                            |
+| Cookie         | Name `regenfass-locale`, values `de` \| `en`. On `*.regenfass.eu` the cookie uses `Domain=.regenfass.eu` so marketing and installer share the choice. On localhost / Netlify previews the cookie is host-only. |
+| Marketing URLs | SEO paths `/de` and `/en`. `/` redirects to the resolved locale (hash preserved, e.g. `#changelog`). Language switcher updates the cookie and navigates.                                                  |
+| Installer      | Locale is **not** in the URL (stays `/`). The header switcher only updates the cookie and re-renders copy.                                                                                               |
+
+Shared helpers live in `@regenfass/brand` (`LocaleProvider`, `resolveLocale`, `LanguageSwitcher`).
 
 ## SolidJS reminder
 

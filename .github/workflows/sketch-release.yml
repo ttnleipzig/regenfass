@@ -3,8 +3,6 @@ name: Sketch - release
 on:
   push:
     branches: [main]
-    tags:
-      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -14,88 +12,147 @@ permissions:
   pull-requests: write
 
 jobs:
-
+  # ─────────────────────────────────────────────────────────────────────────
+  # Build all firmware environments in parallel.
+  # fail-fast: false keeps other boards building even if one fails.
+  # ─────────────────────────────────────────────────────────────────────────
   build:
-    name: 🏗️ Build
+    name: 🏗️ Build [${{ matrix.environment }}]
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        environment: ["heltec_wifi_lora_32_V3_HCSR04"]
+        environment:
+          - heltec_wifi_lora_32_V3_HCSR04
+          - heltec_wifi_lora_32_V3_VL53L1X
+          - heltec_wifi_lora_32_V3_DS18B20
+          - az-delivery-devkit-v4_VL53L1X
+          - az-delivery-devkit-v4_HCSR04
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
             ~/.platformio/.cache
-          key: ${{ runner.os }}-pio
-      - uses: actions/setup-python@v4
+          key: ${{ runner.os }}-pio-${{ matrix.environment }}-${{ hashFiles('firmware/platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-${{ matrix.environment }}-
+            ${{ runner.os }}-pio-
+
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "3.11"
+
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
+
       - name: Build firmware
         working-directory: firmware
         run: pio run -e ${{ matrix.environment }}
-      - name: Display contents of .pio/build directory
+
+      - name: List build output
         working-directory: firmware
-        run: |
-            ls -R .pio/build
+        run: ls -lR .pio/build/${{ matrix.environment }}/
+
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
+          # firmware.bin  — main application image
+          # bootloader.bin and partitions.bin — needed for a full flash
           path: firmware/.pio/build/${{ matrix.environment }}/*.bin
+          if-no-files-found: warn
           compression-level: 8
 
+  # ─────────────────────────────────────────────────────────────────────────
+  # Release Please runs independently; it does not need the build to finish.
+  # It opens / merges release PRs and, when a release PR is merged, creates
+  # the GitHub Release and tag.
+  # ─────────────────────────────────────────────────────────────────────────
   release:
-    name: 📦 Release
+    name: 📦 Release Please
     runs-on: ubuntu-latest
-    needs: build
     permissions:
       contents: write
       pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
-      upload_url: ${{ steps.release.outputs.upload_url }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          # Use GITHUB_TOKEN — job already has contents:write + pull-requests:write.
-          # Do not prefer secrets.RELEASE_PLEASE_ORGANISATION: if that PAT is set but
-          # lacks push access, GitHub returns 404 on git/refs and no release PR opens.
+          # Use the built-in GITHUB_TOKEN; it already has contents:write
+          # and pull-requests:write from the top-level permissions block.
           token: ${{ github.token }}
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
-      - name: Print the release URL if present
-        if: ${{ steps.release.outputs.release_created == 'true' }}
-        run: |
-          echo "Release created: ${{ steps.release.outputs.tag_name }}"
-          echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
 
+      - if: steps.release.outputs.release_created == 'true'
+        run: echo "Release created → ${{ steps.release.outputs.tag_name }}"
 
+  # ─────────────────────────────────────────────────────────────────────────
+  # Upload firmware binaries to the GitHub Release.
+  #
+  # Waits for both build and release to complete.
+  # Uses `always()` so that partial build failures (fail-fast: false) do not
+  # prevent uploading the environments that did succeed.
+  # Individual download steps use continue-on-error to skip environments
+  # whose build failed without failing the whole upload job.
+  # ─────────────────────────────────────────────────────────────────────────
   upload:
-    name: 💾 Upload Artifacts
+    name: 💾 Upload [${{ matrix.environment }}]
     runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.release_created == 'true' }}
-    needs: release
+    needs: [build, release]
+    # Run whenever a release was created, even if some build matrix items failed.
+    if: >-
+      always() &&
+      needs.release.result == 'success' &&
+      needs.release.outputs.release_created == 'true'
     strategy:
+      fail-fast: false
       matrix:
-        environment: ["heltec_wifi_lora_32_V3_HCSR04"]
+        environment:
+          - heltec_wifi_lora_32_V3_HCSR04
+          - heltec_wifi_lora_32_V3_VL53L1X
+          - heltec_wifi_lora_32_V3_DS18B20
+          - az-delivery-devkit-v4_VL53L1X
+          - az-delivery-devkit-v4_HCSR04
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download firmware artifact
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
           path: firmware-dist
-      - name: Create firmware zip
-        run: zip -j regenfass-${{ matrix.environment }}.zip firmware-dist/*
-      - name: Upload firmware to release
+
+      - name: Package firmware archive
+        if: steps.download.outcome == 'success'
+        run: |
+          zip -j \
+            regenfass-${{ needs.release.outputs.tag_name }}-${{ matrix.environment }}.zip \
+            firmware-dist/*.bin
+
+      - name: Upload assets to GitHub Release
+        if: steps.download.outcome == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ needs.release.outputs.tag_name }} \
-            firmware-dist/firmware.bin#regenfass-${{ matrix.environment }}.bin \
-            regenfass-${{ matrix.environment }}.zip \
-            --repo ${{ github.repository }}
+          TAG="${{ needs.release.outputs.tag_name }}"
+          ENV="${{ matrix.environment }}"
+          FILES=()
+
+          # Upload the main application binary with a descriptive name.
+          if [ -f "firmware-dist/firmware.bin" ]; then
+            FILES+=("firmware-dist/firmware.bin#regenfass-${TAG}-${ENV}.bin")
+          fi
+
+          # Always include the zip (contains all .bin files for a full flash).
+          FILES+=("regenfass-${TAG}-${ENV}.zip")
+
+          gh release upload "${TAG}" \
+            "${FILES[@]}" \
+            --repo "${{ github.repository }}" \
+            --clobber

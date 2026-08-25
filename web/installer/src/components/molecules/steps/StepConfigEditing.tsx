@@ -1,9 +1,7 @@
-import {
-	IconClearAll,
-	IconDeviceFloppy,
-	IconFileExport,
-	IconFileImport,
-} from "@tabler/icons-solidjs";
+import IconClearAll from "lucide-solid/icons/list-x";
+import IconDeviceFloppy from "lucide-solid/icons/save";
+import IconFileExport from "lucide-solid/icons/file-output";
+import IconFileImport from "lucide-solid/icons/file-input";
 import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import {
 	ConfigFileError,
@@ -11,15 +9,16 @@ import {
 	readConfigFromFile,
 } from "@/libs/downloadConfig.ts";
 import { playErrorSound } from "@/libs/errorSound.ts";
-import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
+import BiRegularClipboard from "lucide-solid/icons/clipboard";
+import BiRegularX from "lucide-solid/icons/x";
 import { For, Show, createSignal, onCleanup } from "solid-js";
-import { Button } from "@regenfass/brand";
-import { AppKeyHexField } from "@regenfass/brand";
-import { TextFieldRoot } from "@regenfass/brand";
 import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
+	AppKeyHexField,
+	Button,
+	TextFieldRoot,
 } from "@regenfass/brand";
 import {
 	OTPField,
@@ -27,6 +26,7 @@ import {
 	OTPFieldInput,
 	OTPFieldSlot,
 } from "@regenfass/brand";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -43,6 +43,7 @@ function HexOtp16(props: {
 	onValueChange: (value: string) => void;
 	showCopyButton?: boolean;
 }) {
+	const t = useInstallerT();
 	const [copied, setCopied] = createSignal(false);
 	let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -64,8 +65,8 @@ function HexOtp16(props: {
 
 	const copyLabel = () =>
 		copied()
-			? `Copied ${props.labelText}`
-			: `Copy ${props.labelText} to clipboard`;
+			? t("configEditing.copied", { label: props.labelText })
+			: t("configEditing.copyToClipboard", { label: props.labelText });
 
 	return (
 		<>
@@ -118,7 +119,9 @@ function HexOtp16(props: {
 						variant="ghost"
 						size="icon"
 						class="h-9 w-9 shrink-0 text-muted-foreground"
-						aria-label={`Clear ${props.labelText}`}
+						aria-label={t("configEditing.clearField", {
+							label: props.labelText,
+						})}
 						onClick={() => props.onValueChange("")}
 					>
 						<BiRegularX aria-hidden={true} size={16} />
@@ -130,6 +133,7 @@ function HexOtp16(props: {
 }
 
 export default function StepConfigEditing({ state, emitEvent }: StepProps) {
+	const t = useInstallerT();
 	const [importError, setImportError] = createSignal<string | null>(null);
 	let fileInputRef: HTMLInputElement | undefined;
 
@@ -156,7 +160,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 			if (error instanceof ConfigFileError) {
 				setImportError(error.message);
 			} else {
-				setImportError("Could not read the configuration file.");
+				setImportError(t("configEditing.couldNotReadFile"));
 			}
 		} finally {
 			input.value = "";
@@ -167,10 +171,10 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 		<div class="rounded-xl border border-border bg-card p-6 shadow-sm ring-1 ring-border/50 dark:ring-border/80">
 			<header class="mb-6 space-y-1.5 border-b border-border pb-5">
 				<h2 class="text-base font-semibold leading-tight tracking-tight text-foreground">
-					Device credentials
+					{t("configEditing.heading")}
 				</h2>
 				<p class="max-w-prose text-sm leading-relaxed text-muted-foreground">
-					These values identify your device on the network. Use hex digits only; the app key stays hidden until you choose to reveal it.
+					{t("configEditing.description")}
 				</p>
 			</header>
 
@@ -178,7 +182,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 				{/* TODO: Autogenerate fields from ConfigV<T> objects */}
 				<TextFieldRoot class="space-y-0">
 					<HexOtp16
-						labelText="appEUI"
+						labelText={t("configEditing.fieldAppEui")}
 						inputId="appEUI-otp"
 						field="appEUI"
 						value={state.context.deviceInfo.config.appEUI}
@@ -195,7 +199,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 
 				<TextFieldRoot class="space-y-0">
 					<HexOtp16
-						labelText="devEUI"
+						labelText={t("configEditing.fieldDevEui")}
 						inputId="devEUI-otp"
 						field="devEUI"
 						value={state.context.deviceInfo.config.devEUI}
@@ -215,7 +219,9 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						class="block text-sm font-medium leading-none tracking-tight text-foreground"
 						for="appKey-input"
 					>
-						<span class="font-mono text-xs uppercase text-muted-foreground">appKey</span>
+						<span class="font-mono text-xs uppercase text-muted-foreground">
+							{t("configEditing.fieldAppKey")}
+						</span>
 					</label>
 					<div class="mt-2">
 						<AppKeyHexField
@@ -241,7 +247,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 			<Show when={importError()}>
 				{(message) => (
 					<AlertInline variant="destructive" class="mt-6">
-						<AlertTitle>Could not load configuration</AlertTitle>
+						<AlertTitle>{t("configEditing.importErrorTitle")}</AlertTitle>
 						<AlertDescription>{message()}</AlertDescription>
 					</AlertInline>
 				)}
@@ -252,7 +258,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 				type="file"
 				accept=".json,application/json"
 				class="sr-only"
-				aria-label="Load configuration from JSON file"
+				aria-label={t("configEditing.loadFromFileAriaLabel")}
 				onChange={handleFileInputChange}
 			/>
 
@@ -264,8 +270,8 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={() => emitEvent({ type: "config.clear" })}
 					>
-						<IconClearAll aria-hidden={true} size={16} stroke="1.75" />
-						clear
+						<IconClearAll aria-hidden={true} size={16} strokeWidth={1.75} />
+						{t("configEditing.clear")}
 					</Button>
 					<Button
 						class="gap-1.5"
@@ -273,8 +279,8 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={handleLoadFromFileClick}
 					>
-						<IconFileImport aria-hidden={true} size={16} stroke="1.75" />
-						load from file
+						<IconFileImport aria-hidden={true} size={16} strokeWidth={1.75} />
+						{t("configEditing.loadFromFile")}
 					</Button>
 					<Button
 						class="gap-1.5"
@@ -283,20 +289,20 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						onClick={() =>
 							downloadConfigAsJson(
 								state.context.deviceInfo.config,
-								state.context.deviceInfo.configVersion
+								state.context.deviceInfo.configVersion,
 							)
 						}
 					>
-						<IconFileExport aria-hidden={true} size={16} stroke="1.75" />
-						save to file
+						<IconFileExport aria-hidden={true} size={16} strokeWidth={1.75} />
+						{t("configEditing.saveToFile")}
 					</Button>
 				</div>
 				<Button
 					class="gap-1.5 sm:min-w-[7rem]"
 					onClick={() => emitEvent({ type: "config.next" })}
 				>
-					<IconDeviceFloppy aria-hidden={true} size={16} stroke="1.75" />
-					Save to device
+					<IconDeviceFloppy aria-hidden={true} size={16} strokeWidth={1.75} />
+					{t("configEditing.saveToDevice")}
 				</Button>
 			</footer>
 		</div>

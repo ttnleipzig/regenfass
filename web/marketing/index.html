@@ -4,11 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Regenfass – smart rain barrel monitoring</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%207c7%208%2011%2013%2011%2020a11%2011%200%200%201-22%200c0-7%204-12%2011-20Z%22%20fill%3D%22%230ea5e9%22%2F%3E%3Cpath%20d%3D%22M20%2025h24l-3%2030H23z%22%20fill%3D%22%230f172a%22%2F%3E%3Cpath%20d%3D%22M23%2033h18M22%2041h20%22%20stroke%3D%22%23e2e8f0%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M26%2049c2%202%204%203%206%203s4-1%206-3%22%20fill%3D%22none%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E"
+    />
     <meta
       name="description"
       content="Regenfass measures water level in rain barrels and tanks, and sends readings over LoRaWAN via The Things Network. Open source IoT by TTN Leipzig."
     />
-    <link rel="canonical" href="https://regenfass.eu/" />
+    <link rel="canonical" href="https://regenfass.eu/en" />
+    <link rel="alternate" hreflang="en" href="https://regenfass.eu/en" />
+    <link rel="alternate" hreflang="de" href="https://regenfass.eu/de" />
+    <link rel="alternate" hreflang="x-default" href="https://regenfass.eu/en" />
+    <!-- Sync Tailwind .dark + Kobalte data-kb-theme before first paint -->
+    <script>
+      (() => {
+        try {
+          const saved =
+            localStorage.getItem("kb-color-mode") ||
+            localStorage.getItem("theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          const isDark =
+            saved === "dark" || (saved !== "light" && prefersDark);
+          const root = document.documentElement;
+          root.classList.toggle("dark", isDark);
+          root.setAttribute("data-kb-theme", isDark ? "dark" : "light");
+          root.style.colorScheme = isDark ? "dark" : "light";
+        } catch {}
+      })();
+    </script>
   </head>
   <body
     class="min-h-screen min-h-dvh bg-fixed text-slate-700 dark:text-slate-100 bg-slate-100 dark:bg-slate-900"

@@ -46,13 +46,24 @@ describe("Header", () => {
 		expect(title.tagName).toBe("H1");
 	});
 
+	it("renders an optional white title suffix", () => {
+		const { container } = renderWithRouter(() => (
+			<Header title="Regenfass" titleSuffix="Playground" />
+		));
+		const suffix = screen.getByText("Playground");
+
+		expect(suffix).toHaveClass("text-white");
+		expect(suffix).toHaveClass("font-normal");
+		expect(container.querySelector("h1")).toHaveTextContent("Regenfass Playground");
+	});
+
 	it("renders default navigation links", () => {
 		renderWithRouter(() => <Header />);
-		const componentsLink = screen.getByText(/Components/);
-		expect(componentsLink).toBeInTheDocument();
-		expect(componentsLink.closest("a")).toHaveAttribute(
+		const homeLink = screen.getByText("Home");
+		expect(homeLink).toBeInTheDocument();
+		expect(homeLink.closest("a")).toHaveAttribute(
 			"href",
-			"https://brand.regenfass.eu",
+			"https://regenfass.eu/",
 		);
 
 		const docsLink = screen.getByText("Docs");
@@ -76,12 +87,25 @@ describe("Header", () => {
 			"https://github.com/ttnleipzig/regenfass",
 		);
 
-		const matrixLink = screen.getByText("Matrix");
-		expect(matrixLink).toBeInTheDocument();
-		expect(matrixLink.closest("a")).toHaveAttribute(
-			"href",
-			"https://matrix.to/#/#ttn-leipzig:matrix.org",
-		);
+		expect(screen.queryByText("Brand")).not.toBeInTheDocument();
+	});
+
+	it("renders nested navigation items and marks the current route active", () => {
+		renderWithRouter(() => (
+			<Header
+				navItems={[
+					{
+						href: "/",
+						label: "Home",
+						children: [{ href: "/changelog", label: "Changelog" }],
+					},
+				]}
+			/>
+		));
+
+		const homeLink = screen.getByText("Home");
+		expect(homeLink.closest("a")).toHaveAttribute("aria-current", "page");
+		expect(screen.getByText("Changelog")).toBeInTheDocument();
 	});
 
 	it("accepts custom navItems", () => {
@@ -115,9 +139,22 @@ describe("Header", () => {
 
 		const innerDiv = container.querySelector(".site-container");
 		expect(innerDiv).toHaveClass("site-container");
+		expect(innerDiv).toHaveClass("max-w-none");
+		expect(innerDiv).toHaveClass("lg:px-8");
 		expect(innerDiv).toHaveClass("flex");
 		expect(innerDiv).toHaveClass("justify-between");
 		expect(innerDiv).toHaveClass("items-center");
+	});
+
+	it("supports left-aligned navigation", () => {
+		const { container } = renderWithRouter(() => <Header navPosition="left" />);
+		const innerDiv = container.querySelector(".site-container");
+		const nav = container.querySelector("nav");
+		const controls = nav?.nextElementSibling;
+
+		expect(innerDiv).toHaveClass("justify-start");
+		expect(nav).toHaveClass("ml-8");
+		expect(controls).toHaveClass("ml-auto");
 	});
 
 	it("applies gradient text to title", () => {

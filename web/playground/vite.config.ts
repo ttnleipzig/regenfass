@@ -19,7 +19,7 @@ export default defineConfig({
     dedupe: ["solid-js", "@solidjs/router", "@kobalte/core"],
   },
   server: {
-    port: 5174,
+    port: 5177,
     fs: {
       allow: [path.resolve(__dirname, "..")],
     },

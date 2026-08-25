@@ -7,6 +7,7 @@ export { ButtonPrimary } from "./components/atoms/ButtonPrimary.tsx";
 export { ButtonSecondary } from "./components/atoms/ButtonSecondary.tsx";
 export { ButtonSoundToggle } from "./components/atoms/ButtonSoundToggle.tsx";
 export { default as Confetti, CONFETTI_PARTICLE_COUNT } from "./components/atoms/Confetti.tsx";
+export { playConfettiTadaSound } from "./libs/confettiSound.ts";
 export { Headline } from "./components/atoms/Headline.tsx";
 export { default as Link } from "./components/atoms/Link.tsx";
 export { Progress } from "./components/atoms/Progress.tsx";
@@ -58,6 +59,38 @@ export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
 
 export { APP_VERSION } from "./version.ts";
 
+// i18n
+export {
+  DEFAULT_LOCALE,
+  isLocale,
+  LOCALE_COOKIE_NAME,
+  LOCALES,
+  clearLocaleCookie,
+  cookieDomainForHost,
+  detectBrowserLocale,
+  parseLocaleFromCookieString,
+  readLocaleCookie,
+  resetLocalePreferenceForTests,
+  resolveLocale,
+  writeLocaleCookie,
+  LocaleProvider,
+  useBrandT,
+  useLocale,
+  useLocaleOptional,
+  LanguageSwitcher,
+  brandDictDe,
+  brandDictEn,
+  brandDictionaries,
+  flatBrandDictionary,
+} from "./i18n/index.ts";
+export type {
+  Locale,
+  LocaleContextValue,
+  LocaleProviderProps,
+  BrandDictionary,
+  FlatBrandDictionary,
+} from "./i18n/index.ts";
+
 // Forms
 export { AppKeyHexField } from "./components/forms/AppKeyHexField.tsx";
 export type { AppKeyHexFieldProps } from "./components/forms/AppKeyHexField.tsx";
@@ -91,6 +124,15 @@ export { TextInput } from "./components/forms/TextInput.tsx";
 
 // Utils
 export { cn } from "./libs/cn.ts";
+export {
+  applyColorMode,
+  initColorMode,
+  persistColorMode,
+  resolveColorMode,
+  KB_COLOR_MODE_STORAGE_KEY,
+  LEGACY_THEME_STORAGE_KEY,
+} from "./libs/colorMode.ts";
+export type { ResolvedColorMode } from "./libs/colorMode.ts";
 export {
   initAnalytics,
   isAnalyticsInitialized,

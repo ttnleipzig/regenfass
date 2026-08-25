@@ -2,18 +2,17 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
-} from "@regenfass/brand";
-import { StepPaginator } from "@regenfass/brand";
-import { INSTALLATION_STEPS } from "@/components/molecules/steps/StepStartWaitingForUser.tsx";
-import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
-import { Button } from "@regenfass/brand";
-import {
+	Button,
 	SelectContent,
 	SelectField,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
+	StepPaginator,
 } from "@regenfass/brand";
+import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
+import { useInstallerT } from "@/i18n/index.ts";
+import { installationSteps } from "@/i18n/installationSteps.ts";
 
 interface StepProps {
 	state: any;
@@ -24,19 +23,23 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 	state,
 	emitEvent,
 }: StepProps) {
+	const t = useInstallerT();
+
 	return (
 		<div class="space-y-4">
 			<StepPaginator
-				title="Installation"
-				steps={INSTALLATION_STEPS}
-				listAriaLabel="Installation steps"
+				title={t("shared.paginatorTitle")}
+				steps={installationSteps(t)}
+				listAriaLabel={t("shared.paginatorListAriaLabel")}
 				activeStep={getInstallationActiveStep(state)}
 			/>
 
 			<AlertInline>
-				<AlertTitle>Choose installation method</AlertTitle>
+				<AlertTitle>
+					{t("installWaitingForInstallationMethodChoice.alertTitle")}
+				</AlertTitle>
 				<AlertDescription>
-					Install fresh or update existing firmware.
+					{t("installWaitingForInstallationMethodChoice.alertDescription")}
 				</AlertDescription>
 			</AlertInline>
 
@@ -45,20 +48,22 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 					disabled={!state.can({ type: "install.install" })}
 					onClick={() => emitEvent({ type: "install.install" })}
 				>
-					Install
+					{t("installWaitingForInstallationMethodChoice.install")}
 				</Button>
 				<Button
 					disabled={!state.can({ type: "install.configure" })}
 					onClick={() => emitEvent({ type: "install.configure" })}
 				>
-					Configure
+					{t("installWaitingForInstallationMethodChoice.configure")}
 				</Button>
 			</div>
 
 			<SelectField
 				value={state.context.targetFirmwareVersion}
 				options={state.context.upstreamVersions}
-				placeholder="SelectField a version"
+				placeholder={t(
+					"installWaitingForInstallationMethodChoice.versionSelectPlaceholder",
+				)}
 				onChange={(version) =>
 					emitEvent({
 						type: "install.target_version_selected",

@@ -16,7 +16,7 @@ const ROOT = resolve(__dirname, "..");
 const PACKAGE_JSON_PATHS = [
   "package.json",
   "web/brand/package.json",
-  "web/brand-showcase/package.json",
+  "web/playground/package.json",
   "web/installer/package.json",
   "web/marketing/package.json",
   "web/docs/package.json",

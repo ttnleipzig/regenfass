@@ -6,6 +6,8 @@
 !/firmware
 !/firmware/**
 /firmware/.pio
+/firmware/platformio.local.ini
+/firmware/secrets.ini
 
 !/docs
 !/CONTRIBUTING.md

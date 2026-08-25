@@ -3,6 +3,7 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@regenfass/brand";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -10,14 +11,16 @@ interface StepProps {
 }
 
 export default function StepStartFetchUpstreamVersions({
-	state,
-	emitEvent,
+	state: _state,
+	emitEvent: _emitEvent,
 }: StepProps) {
+	const t = useInstallerT();
+
 	return (
 		<AlertInline>
-			<AlertTitle>Fetching versions</AlertTitle>
+			<AlertTitle>{t("startFetchUpstreamVersions.title")}</AlertTitle>
 			<AlertDescription>
-				Getting the latest available firmware versions.
+				{t("startFetchUpstreamVersions.description")}
 			</AlertDescription>
 		</AlertInline>
 	);

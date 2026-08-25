@@ -18,7 +18,8 @@
     --primary-foreground: 210 40% 98%;
 
     --secondary: 171  91%  36%;
-    --secondary-foreground: 171 100% 89%;
+    /* Near-white on teal — same-hue mint failed ~3:1 in light mode */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -58,7 +59,8 @@
     --primary-foreground: 0 0% 80%;
 
     --secondary: 171 91% 36%;
-    --secondary-foreground: 171 100% 9%;
+    /* Keep light label on teal so filled secondary stays readable in dark */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;

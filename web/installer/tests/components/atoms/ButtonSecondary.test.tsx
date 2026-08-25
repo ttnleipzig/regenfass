@@ -14,12 +14,12 @@ describe("ButtonSecondary", () => {
     expect(screen.getByText("Secondary Button")).toBeInTheDocument();
   });
 
-  it("applies secondary gray styling", () => {
+  it("applies secondary brand outline styling", () => {
     const { container } = render(() => <ButtonSecondary>Secondary</ButtonSecondary>);
     const button = container.querySelector("button");
-    expect(button).toHaveClass("border-gray-300");
-    expect(button).toHaveClass("text-gray-700");
-    expect(button).toHaveClass("hover:bg-gray-50");
+    expect(button).toHaveClass("border-secondary");
+    expect(button).toHaveClass("text-secondary");
+    expect(button).toHaveClass("hover:bg-secondary/10");
   });
 
   it("applies outline variant", () => {
@@ -59,7 +59,7 @@ describe("ButtonSecondary", () => {
   it("shows spinner with correct styling when loading", () => {
     const { container } = render(() => <ButtonSecondary loading>Loading</ButtonSecondary>);
     const spinner = container.querySelector("svg.animate-spin");
-    expect(spinner).toHaveClass("text-gray-500");
+    expect(spinner).toHaveClass("text-secondary");
     expect(spinner).toHaveClass("-ml-1");
     expect(spinner).toHaveClass("mr-3");
     expect(spinner).toHaveClass("size-3");
@@ -76,7 +76,7 @@ describe("ButtonSecondary", () => {
     const { container } = render(() => <ButtonSecondary class="custom-class">Custom</ButtonSecondary>);
     const button = container.querySelector("button");
     expect(button).toHaveClass("custom-class");
-    expect(button).toHaveClass("border-gray-300");
+    expect(button).toHaveClass("border-secondary");
   });
 
   it("handles click events", () => {

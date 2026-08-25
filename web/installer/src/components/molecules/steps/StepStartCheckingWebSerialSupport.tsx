@@ -3,6 +3,7 @@ import {
 	AlertInline,
 	AlertTitle,
 } from "@regenfass/brand";
+import { useInstallerT } from "@/i18n/index.ts";
 
 interface StepProps {
 	state: any;
@@ -10,14 +11,16 @@ interface StepProps {
 }
 
 export default function StepStartCheckingWebSerialSupport({
-	state,
-	emitEvent,
+	state: _state,
+	emitEvent: _emitEvent,
 }: StepProps) {
+	const t = useInstallerT();
+
 	return (
 		<AlertInline>
-			<AlertTitle>Checking Web Serial support</AlertTitle>
+			<AlertTitle>{t("startCheckingWebSerialSupport.title")}</AlertTitle>
 			<AlertDescription>
-				We are verifying that your browser supports the Web Serial API.
+				{t("startCheckingWebSerialSupport.description")}
 			</AlertDescription>
 		</AlertInline>
 	);

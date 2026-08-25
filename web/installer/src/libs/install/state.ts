@@ -12,6 +12,7 @@ import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
 import { playErrorSound } from "@/libs/errorSound.ts";
 import { startModemSound, stopModemSound } from "@/libs/modemSound.ts";
+import { installerMessage } from "@/i18n/index.ts";
 import { assign, fromCallback, fromPromise, setup } from "xstate";
 
 const url =
@@ -48,7 +49,9 @@ const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 	);
 	if (!applicableConfig) {
 		throw new Error(
-			`Unknown config version: ${configVersion}, there is no loader implemented`
+			installerMessage("stateErrors.unknownConfigVersion", {
+				configVersion,
+			}),
 		);
 	}
 
@@ -97,7 +100,11 @@ const migrateConfiguration = async (
 		);
 		if (!nextConfigVersion) {
 			throw new Error(
-				`Failed to migrate from ${info.configVersion} to ${nextVersion} (to get to ${desiredVersion}), could not find handler for config format for v${nextVersion}`
+				installerMessage("stateErrors.migrateFailed", {
+					fromVersion: info.configVersion,
+					toVersion: nextVersion,
+					desiredVersion,
+				}),
 			);
 		}
 
@@ -410,7 +417,8 @@ export const setupStateMachine = setup({
 						target: "Finish_ShowingError",
 						guard: "webSerialNotSupported",
 						actions: assign({
-							error: () => "Unsupported browser",
+							error: () =>
+								installerMessage("stateErrors.unsupportedBrowser"),
 						}),
 					},
 				],

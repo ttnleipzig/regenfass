@@ -1,25 +1,15 @@
 /* @refresh reload */
 import { render } from 'solid-js/web'
-import { initAnalytics } from '@regenfass/brand'
+import { initAnalytics, initColorMode } from '@regenfass/brand'
 
 import './index.css'
 import App from './App'
 
+initColorMode();
+
 initAnalytics(import.meta.env.VITE_SWETRIX_PROJECT_ID, {
   apiURL: import.meta.env.VITE_SWETRIX_API_URL,
 });
-
-// Initialize theme from localStorage or system preference
-(() => {
-  try {
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = saved ? saved === 'dark' : prefersDark;
-    const root = document.documentElement;
-    root.classList.toggle('dark', isDark);
-    root.setAttribute('data-kb-theme', isDark ? 'dark' : 'light');
-  } catch {}
-})();
 
 const root = document.getElementById('root')
 

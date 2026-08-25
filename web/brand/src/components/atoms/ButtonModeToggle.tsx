@@ -1,22 +1,26 @@
+import { createEffect } from "solid-js";
 import { Button } from "./Button.tsx";
 import Moon from "lucide-solid/icons/moon";
 import Sun from "lucide-solid/icons/sun";
 import { useColorMode } from "@kobalte/core/color-mode";
 import { trackEvent } from "../../libs/analytics.ts";
+import { applyColorMode, persistColorMode } from "../../libs/colorMode.ts";
+import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export function ButtonModeToggle() {
 	const { colorMode, setColorMode } = useColorMode();
+	const t = useBrandT();
+
+	// Keep Tailwind `.dark` aligned with Kobalte after hydrate / system changes.
+	createEffect(() => {
+		applyColorMode(colorMode() === "dark" ? "dark" : "light");
+	});
 
 	const toggle = () => {
 		const next = colorMode() === "light" ? "dark" : "light";
 		setColorMode(next);
-		const isDark = next === "dark";
-		const root = document.documentElement;
-		root.classList.toggle("dark", isDark);
-		root.setAttribute("data-kb-theme", isDark ? "dark" : "light");
-		try {
-			localStorage.setItem("theme", isDark ? "dark" : "light");
-		} catch {}
+		applyColorMode(next);
+		persistColorMode(next);
 		trackEvent("theme_toggled", { theme: next });
 	};
 
@@ -24,7 +28,7 @@ export function ButtonModeToggle() {
 		<Button
 			variant="ghost"
 			size="icon"
-			aria-label="Toggle color mode"
+			aria-label={t("a11y.toggleColorMode")}
 			onClick={toggle}
 			class="transition-transform duration-200 active:scale-95 text-foreground/80 hover:text-foreground"
 		>
@@ -51,5 +55,3 @@ export function ButtonModeToggle() {
 		</Button>
 	);
 }
-
-

@@ -6,7 +6,7 @@ What you need on a machine (or in a Cloud Agent / Dev Container) to work on rege
 
 | Tool                | Used for              | Notes                                                              |
 | ------------------- | --------------------- | ------------------------------------------------------------------ |
-| **Node.js** 20+     | All `web/*` packages  | CI installer tests use Node 20; Pages deploy uses 24               |
+| **Node.js** 22+     | All `web/*` packages  | Web CI and deploy jobs use Node 22+                                |
 | **pnpm** 10.x       | Workspace installs    | Repo pins `packageManager: pnpm@10.28.0`; prefer `corepack enable` |
 | **Git**             | Source control        | Conventional Commits (see [Coding Guidelines](Coding-Guidelines))  |
 | **PlatformIO Core** | Firmware build/upload | `pip install platformio` or PlatformIO IDE                         |
@@ -32,7 +32,11 @@ Root `AGENTS.md` (including **Cursor Cloud specific instructions**) is the sourc
 
 ## Secrets
 
-Do not commit `.env` files. Firmware keys in `firmware/platformio.ini` `[user_configuration]` are local secrets — treat them carefully and avoid pasting them into public issues or wiki pages.
+Do not commit `.env` files or device credentials. The versioned
+`firmware/platformio.ini` only contains dummy TTN values. Configure real
+LoRaWAN credentials through the web installer, or keep local PlatformIO
+overrides in `firmware/platformio.local.ini` / `firmware/secrets.ini`; both
+files are ignored by Git.
 
 ## Wiki prerequisite
 

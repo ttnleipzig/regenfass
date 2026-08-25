@@ -22,11 +22,13 @@ const navItems: HeaderNavItem[] = [
 
 ## Props
 
-| Name       | Type              | Default                                     | Description                                            |
-| ---------- | ----------------- | ------------------------------------------- | ------------------------------------------------------ |
-| `title`    | `string`          | `"Regenfass"`                               | Optional brand title shown in the header.              |
-| `navItems` | `HeaderNavItem[]` | Docs / installer / GitHub / Matrix defaults | Navigation items.                                      |
-| `trailing` | `JSX.Element`     | —                                           | Extra controls rendered next to the color-mode toggle. |
+| Name          | Type                     | Default                                | Description                                            |
+| ------------- | ------------------------ | -------------------------------------- | ------------------------------------------------------ |
+| `title`       | `string`                 | `"Regenfass"`                          | Optional brand title shown in the header.              |
+| `titleSuffix` | `string`                 | —                                      | Optional white, normal-weight suffix rendered after the brand. |
+| `navItems`    | `HeaderNavItem[]`        | Home / Docs / Installer / GitHub       | Navigation items.                                      |
+| `navPosition` | `"right" \| "left"`     | `"right"`                              | Positions navigation to the right or next to the title. |
+| `trailing`    | `JSX.Element`            | —                                      | Extra controls rendered next to the color-mode toggle. |
 
 ### `HeaderNavItem`
 

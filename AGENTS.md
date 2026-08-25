@@ -8,7 +8,7 @@ This file orients coding agents and automation working on **regenfass**: firmwar
 - **Web**: pnpm workspace (`pnpm-workspace.yaml` → `web/*`). Primary apps:
   - `web/installer` — `@ttnleipzig/regenfass-installer` (flash & configure)
   - `web/brand` — `@regenfass/brand` (shared UI / Tailwind preset)
-  - `web/brand-showcase` — design playground (port **5174**)
+  - `web/playground` — design playground (port **5177**)
   - `web/marketing` — `@ttnleipzig/regenfass-marketing`
   - `web/docs` — `@ttnleipzig/regenfass-docs-site` (user-facing docs site)
   - `web/dashboard` — Go API + Grafana/Docker for device and sensor data (not a pnpm package)
@@ -20,7 +20,7 @@ When in doubt, limit changes to the area the task actually touches (firmware vs 
 
 **Firmware** is organized by concern: sensors (e.g. water level), displays, LoRaWAN, buttons, and configuration under `firmware/src/`, with shared SCP (Serial Configuration Protocol) code under `firmware/lib/scp/` for device configuration. **Hardware** partition tables live under `firmware/board_partitions/`. Do not paste full directory trees into docs (see `.agents/rules/filetree.mdc`).
 
-**Installer** is a SolidJS app for device settings, flashing ESP32 hardware, and Web Serial. Shared UI comes from `@regenfass/brand` (`web/brand`). Installer-specific UI lives under `web/installer/src/components/` (for example flash steps); installer logic and state under `web/installer/src/installer/`; shared utilities and SCP under `web/installer/src/libs/`. The component gallery is the brand showcase (`web/brand-showcase`), not an installer playground.
+**Installer** is a SolidJS app for device settings, flashing ESP32 hardware, and Web Serial. Shared UI comes from `@regenfass/brand` (`web/brand`). Installer-specific UI lives under `web/installer/src/components/` (for example flash steps); installer logic and state under `web/installer/src/installer/`; shared utilities and SCP under `web/installer/src/libs/`. The component gallery is the shared playground (`web/playground`), not an installer playground.
 
 ## Technology stack
 
@@ -70,7 +70,7 @@ Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), 
 1. Place it under the right layer: `atoms/`, `molecules/`, or `organisms/`.
 2. Prefer shadcn-solid primitives; add proper TypeScript types.
 3. Run `pnpm docs:components` and update hand-written docs under `web/installer/docs` as needed.
-4. If the component is shared, expose it from `@regenfass/brand` and verify it in the brand showcase (`pnpm dev:brand`).
+4. If the component is shared, expose it from `@regenfass/brand` and verify it in the playground (`pnpm dev:playground`).
 
 ### Configuration
 
@@ -179,8 +179,8 @@ chore(deps): bump vite in installer
 
 - **Node / pnpm:** Node 22+ works; pnpm is pinned via root `packageManager` (`pnpm@10.28.0`). Prefer Corepack (`corepack enable`) so installs match the lockfile.
 - **Dependency refresh:** run `pnpm install` from the **repository root** (pnpm workspace). There is **no** top-level `installer/` package — the app lives under `web/installer`.
-- **What must run for installer web work:** only the installer Vite app (`pnpm dev:installer` → **5173**). `@regenfass/brand` is a workspace library (no separate server). Dashboard/Postgres (`web/dashboard`), PlatformIO firmware, marketing/docs/brand-showcase are optional for installer UI work.
-- **Other web apps (optional):** `pnpm dev:brand` → 5174, `pnpm dev:marketing` → 5175, `pnpm dev:docs` → 5176.
+- **What must run for installer web work:** only the installer Vite app (`pnpm dev:installer` → **5173**). `@regenfass/brand` is a workspace library (no separate server). Dashboard/Postgres (`web/dashboard`), PlatformIO firmware, marketing/docs/playground are optional for installer UI work.
+- **Other web apps (optional):** `pnpm dev:playground` → 5177, `pnpm dev:marketing` → 5175, `pnpm dev:docs` → 5176.
 - **Lint / test / build:** from root — `pnpm lint`, `pnpm test`, `pnpm build:installer` (or `pnpm build` for all web packages). Details also in `docs/Local-Development.md` and `web/installer/README.md`.
 - **Web Serial:** full flash/configure E2E needs **Chromium** and **physical USB hardware**. Unit tests run without a board; do not block setup on hardware.
 - **Firmware:** PlatformIO from `firmware/` (`pio run` or `pio run -d firmware`); unrelated to the pnpm workspace. Not required for installer web setup.

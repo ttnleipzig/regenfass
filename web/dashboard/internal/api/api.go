@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	swaggo "github.com/gofiber/contrib/v3/swaggo"
 	"github.com/gofiber/fiber/v3"
@@ -23,7 +25,15 @@ type API struct {
 	log    zerolog.Logger
 }
 
+type Config struct {
+	AllowedOrigins []string
+}
+
 func New(dbPool *pgxpool.Pool) *API {
+	return NewWithConfig(dbPool, Config{AllowedOrigins: DefaultAllowedOrigins()})
+}
+
+func NewWithConfig(dbPool *pgxpool.Pool, config Config) *API {
 	log := log.With().Str("component", "api").Logger()
 
 	app := fiber.New()
@@ -31,10 +41,7 @@ func New(dbPool *pgxpool.Pool) *API {
 	api := &API{app, db.New(dbPool), dbPool, log}
 
 	api.app.Use(cors.New(cors.Config{
-		AllowOriginsFunc: func(origin string) bool {
-			panic("TODO")
-		},
-		AllowOrigins:          []string{"*"},
+		AllowOrigins:          normalizeAllowedOrigins(config.AllowedOrigins),
 		AllowMethods:          []string{"GET", "POST", "PATCH"},
 		AllowHeaders:          []string{},
 		ExposeHeaders:         []string{},
@@ -58,6 +65,33 @@ func New(dbPool *pgxpool.Pool) *API {
 	app.Get("/swagger/*", swaggo.HandlerDefault)
 
 	return api
+}
+
+func DefaultAllowedOrigins() []string {
+	if raw := os.Getenv("REGENFASS_ALLOWED_ORIGINS"); raw != "" {
+		return strings.Split(raw, ",")
+	}
+
+	return []string{
+		"http://localhost:5173",
+		"http://localhost:5174",
+		"http://localhost:5175",
+		"http://localhost:5176",
+		"https://regenfass.eu",
+		"https://docs.regenfass.eu",
+		"https://install.regenfass.eu",
+	}
+}
+
+func normalizeAllowedOrigins(origins []string) []string {
+	normalized := make([]string, 0, len(origins))
+	for _, origin := range origins {
+		origin = strings.TrimSpace(origin)
+		if origin != "" {
+			normalized = append(normalized, origin)
+		}
+	}
+	return normalized
 }
 
 func (a *API) Listen(addr string) error {

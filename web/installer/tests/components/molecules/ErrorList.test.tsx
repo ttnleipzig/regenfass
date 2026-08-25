@@ -34,13 +34,13 @@ describe("ErrorList", () => {
 
   it("renders with default title", () => {
     render(() => <ErrorList errors={["Error"]} />);
-    expect(screen.getByText("Fehler")).toBeInTheDocument();
+    expect(screen.getByText("Errors")).toBeInTheDocument();
   });
 
   it("renders with custom title", () => {
     render(() => <ErrorList errors={["Error"]} title="Custom Title" />);
     expect(screen.getByText("Custom Title")).toBeInTheDocument();
-    expect(screen.queryByText("Fehler")).not.toBeInTheDocument();
+    expect(screen.queryByText("Errors")).not.toBeInTheDocument();
   });
 
   it("has correct role attribute", () => {

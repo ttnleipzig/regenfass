@@ -43,7 +43,7 @@ describe("FileUploader", () => {
 
 	it("renders select button", () => {
 		render(() => <FileUploader label="Upload File" />);
-		expect(screen.getByText("Datei auswählen")).toBeInTheDocument();
+		expect(screen.getByText("Select file")).toBeInTheDocument();
 	});
 
 	it("calls onFileSelect when file is selected", () => {
@@ -90,7 +90,7 @@ describe("FileUploader", () => {
 		});
 
 		fireEvent.change(input);
-		expect(screen.getByText("Ausgewählte Dateien:")).toBeInTheDocument();
+		expect(screen.getByText("Selected files:")).toBeInTheDocument();
 		expect(screen.getByText(/test\.txt/)).toBeInTheDocument();
 	});
 
@@ -114,7 +114,7 @@ describe("FileUploader", () => {
 		});
 
 		fireEvent.change(input);
-		expect(screen.getByText("Löschen")).toBeInTheDocument();
+		expect(screen.getByText("Clear")).toBeInTheDocument();
 	});
 
 	it("clears files when delete button is clicked", () => {
@@ -138,7 +138,7 @@ describe("FileUploader", () => {
 		});
 
 		fireEvent.change(input);
-		const deleteButton = screen.getByText("Löschen");
+		const deleteButton = screen.getByText("Clear");
 		fireEvent.click(deleteButton);
 		expect(handleFileSelect).toHaveBeenCalledWith(null);
 	});

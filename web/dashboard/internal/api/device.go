@@ -32,6 +32,8 @@ type RegisterDevicePayload struct {
 //	@Produce		json
 //	@Param			body		body		RegisterDevicePayload	true	"Device to register"
 //	@Success		201			{object}	RegisterDeviceResponse
+//	@Failure		400			{object}	HTTPError	"Invalid payload"
+//	@Failure		409			{object}	HTTPError	"Device EUI is already registered"
 //	@Failure		500			{object}	HTTPError	"Internal server error"
 //	@Router			/device [post]
 func (a *API) handleRegisterDevice(c fiber.Ctx) error {
@@ -45,8 +47,14 @@ func (a *API) handleRegisterDevice(c fiber.Ctx) error {
 
 	created, err := a.db.CreateDevice(c.Context(), payload.DeviceEUI)
 	if err != nil {
-		log.Error().Err(err).Msg("could not save group in database")
-		return fiber.NewError(fiber.StatusInternalServerError, "could not save group in database")
+		// device_eui is unique: a device that is already enrolled must keep the
+		// tokens it was handed the first time, so say so instead of failing hard.
+		if utils.IsUniqueViolation(err) {
+			log.Debug().Msg("device EUI is already registered")
+			return fiber.NewError(fiber.StatusConflict, "device EUI is already registered")
+		}
+		log.Error().Err(err).Msg("could not save device in database")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not save device in database")
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(RegisterDeviceResponse{

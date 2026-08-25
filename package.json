@@ -1,17 +1,18 @@
 {
   "name": "regenfass",
   "private": true,
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@11.24.0",
   "scripts": {
     "dev:installer": "pnpm --filter @ttnleipzig/regenfass-installer dev",
     "dev:marketing": "pnpm --filter @ttnleipzig/regenfass-marketing dev",
     "dev:docs": "pnpm --filter @ttnleipzig/regenfass-docs-site dev",
-    "dev:brand": "pnpm --filter @ttnleipzig/regenfass-brand-showcase dev",
+    "dev:playground": "pnpm --filter @ttnleipzig/regenfass-playground dev",
     "build": "pnpm -r --filter \"./web/**\" run build",
     "build:installer": "pnpm --filter @ttnleipzig/regenfass-installer build",
     "build:marketing": "pnpm --filter @ttnleipzig/regenfass-marketing build",
     "build:docs": "pnpm --filter @ttnleipzig/regenfass-docs-site build",
-    "build:brand": "pnpm --filter @ttnleipzig/regenfass-brand-showcase build",
+    "build:playground": "pnpm --filter @ttnleipzig/regenfass-playground build",
+    "test:playground": "pnpm --filter @ttnleipzig/regenfass-playground test:coverage",
     "test": "pnpm --filter @ttnleipzig/regenfass-installer test:run",
     "lint": "pnpm --filter @ttnleipzig/regenfass-installer lint"
   },
@@ -20,5 +21,5 @@
       "esbuild"
     ]
   },
-  "version": "0.1.0"
+  "version": "0.0.1"
 }

@@ -1,31 +1,50 @@
 import { isSoundEnabled } from "./soundPreference.ts";
+import { getAudioContext, resumeAudioContext } from "./webAudioContext.ts";
 
-/** Camera shutter sample (served from `public/audio/`). */
-const PHOTO_SOUND_URL = "/audio/photo.mp3";
-
-let photoAudio: HTMLAudioElement | null = null;
-
-function getPhotoAudio(): HTMLAudioElement {
-	if (!photoAudio) {
-		photoAudio = new Audio(PHOTO_SOUND_URL);
-		photoAudio.preload = "auto";
-	}
-	return photoAudio;
-}
-
-/** Vintage camera shutter when copy succeeds. */
+/** Short synthesized camera shutter when copy succeeds. */
 export function playCameraCopySound(): void {
 	if (!isSoundEnabled()) return;
 	try {
-		const audio = getPhotoAudio();
-		audio.currentTime = 0;
-		void audio.play();
+		const ctx = getAudioContext();
+		if (!ctx) return;
+		resumeAudioContext();
+
+		const start = ctx.currentTime;
+		const master = ctx.createGain();
+		master.gain.setValueAtTime(0.0001, start);
+		master.gain.exponentialRampToValueAtTime(0.32, start + 0.004);
+		master.gain.exponentialRampToValueAtTime(0.0001, start + 0.12);
+		master.connect(ctx.destination);
+
+		const click = ctx.createOscillator();
+		click.type = "square";
+		click.frequency.setValueAtTime(220, start);
+		click.frequency.exponentialRampToValueAtTime(72, start + 0.08);
+		click.connect(master);
+		click.start(start);
+		click.stop(start + 0.13);
+
+		const noiseBuffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.045), ctx.sampleRate);
+		const noise = noiseBuffer.getChannelData(0);
+		for (let index = 0; index < noise.length; index += 1) {
+			noise[index] = (Math.random() * 2 - 1) * (1 - index / noise.length);
+		}
+		const shutter = ctx.createBufferSource();
+		shutter.buffer = noiseBuffer;
+		const filter = ctx.createBiquadFilter();
+		filter.type = "bandpass";
+		filter.frequency.value = 1500;
+		filter.Q.value = 0.7;
+		shutter.connect(filter);
+		filter.connect(master);
+		shutter.start(start);
+		shutter.stop(start + 0.05);
 	} catch {
-		/* autoplay blocked or missing audio */
+		/* no audio context (SSR, policy, …) */
 	}
 }
 
 /** @internal Reset cached audio element between tests. */
 export function resetCameraCopySoundForTests(): void {
-	photoAudio = null;
+	// The sound uses the shared Web Audio context and has no cached asset.
 }

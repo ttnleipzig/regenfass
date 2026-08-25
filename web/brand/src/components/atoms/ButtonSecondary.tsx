@@ -16,10 +16,14 @@ const ButtonSecondary: Component<SecondaryButtonProps> = (props) => {
       {...rest}
       variant="outline"
       disabled={local.loading || local.disabled}
-      class={cn("border-gray-300 text-gray-700 hover:bg-gray-50", local.class)}
+      class={cn(
+        // Brand teal outline — readable on light hero surfaces and dark chrome
+        "border-secondary bg-background text-secondary hover:bg-secondary/10 hover:text-secondary active:bg-secondary/15 data-[pressed]:bg-secondary/15",
+        local.class,
+      )}
     >
       {local.loading && (
-        <Spinner size="sm" class="-ml-1 mr-3 text-gray-500" />
+        <Spinner size="sm" class="-ml-1 mr-3 text-secondary" />
       )}
       {local.children}
     </Button>

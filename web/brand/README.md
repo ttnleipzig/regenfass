@@ -20,4 +20,4 @@ export default {
 };
 ```
 
-See `web/brand-showcase` for a live gallery (brand.regenfass.eu).
+See `web/playground` for the interactive component gallery (`pnpm dev:playground`).
