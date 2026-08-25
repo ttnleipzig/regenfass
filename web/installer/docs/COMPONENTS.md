@@ -224,7 +224,6 @@ import { Header } from '@regenfass/brand';
 *External:*
 
 - `lucide-solid`
-- `solid-icons`
 - `solid-js`
 
 **Import:**
@@ -331,4 +330,4 @@ import { TextInput } from '@regenfass/brand';
 
 ---
 
-Generated on August 25, 2026 at 02:40 PM
+Generated on August 25, 2026 at 08:41 PM
