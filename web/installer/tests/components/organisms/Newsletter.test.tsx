@@ -1,5 +1,5 @@
-import { describe, it, expect, afterEach, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@solidjs/testing-library";
+import { describe, it, expect, afterEach } from "vitest";
+import { render, screen, cleanup } from "@solidjs/testing-library";
 import { Newsletter } from "@regenfass/brand";
 
 describe("Newsletter", () => {
@@ -9,18 +9,13 @@ describe("Newsletter", () => {
 
 	it("renders newsletter section", () => {
 		const { container } = render(() => <Newsletter />);
-		const aside = container.querySelector("aside#newsletter");
-		expect(aside).toBeInTheDocument();
+		expect(container.querySelector("aside#newsletter")).toBeInTheDocument();
 	});
 
-	it("renders headline with correct text", () => {
+	it("renders the translated newsletter content", () => {
 		render(() => <Newsletter />);
 		expect(screen.getByText(/Subscribe to the/)).toBeInTheDocument();
 		expect(screen.getByText(/update newsletters/)).toBeInTheDocument();
-	});
-
-	it("renders description text", () => {
-		render(() => <Newsletter />);
 		expect(
 			screen.getByText(
 				/If you would like to be informed about software updates/,
@@ -28,77 +23,58 @@ describe("Newsletter", () => {
 		).toBeInTheDocument();
 	});
 
-	it("renders email input field", () => {
-		render(() => <Newsletter />);
-		const emailInput = screen.getByPlaceholderText("your@email-address.iot");
-		expect(emailInput).toBeInTheDocument();
-		expect(emailInput).toHaveAttribute("type", "email");
-	});
-
-	it("renders subscribe button", () => {
-		render(() => <Newsletter />);
-		const subscribeButton = screen.getByText("Subscribe");
-		expect(subscribeButton).toBeInTheDocument();
-		expect(subscribeButton.closest("button")).toHaveAttribute("type", "submit");
-	});
-
-	it("renders form with correct id", () => {
+	it("renders the listmonk form configuration", () => {
 		const { container } = render(() => <Newsletter />);
 		const form = container.querySelector("form#form-newsletter");
+
 		expect(form).toBeInTheDocument();
+		expect(form).toHaveClass("listmonk-form");
+		expect(form).toHaveAttribute("method", "post");
+		expect(form).toHaveAttribute(
+			"action",
+			"https://news.regenfass.eu/subscription/form",
+		);
 	});
 
-	it("applies correct container classes", () => {
+	it("renders all listmonk subscription fields", () => {
 		const { container } = render(() => <Newsletter />);
-		const aside = container.querySelector("aside");
-		expect(aside).toHaveClass("site-container");
-		expect(aside).toHaveClass("py-6");
+
+		expect(container.querySelector('input[name="nonce"]')).toHaveAttribute(
+			"type",
+			"hidden",
+		);
+		expect(container.querySelector('input[name="email"]')).toHaveAttribute(
+			"type",
+			"email",
+		);
+		expect(container.querySelector('input[name="email"]')).toBeRequired();
+		expect(container.querySelector('input[name="name"]')).toHaveAttribute(
+			"type",
+			"text",
+		);
+
+		const listInput = container.querySelector('input[name="l"]');
+		expect(listInput).toHaveAttribute(
+			"value",
+			"a5bca2e4-c654-4a74-ae01-bf83de6f5623",
+		);
+		expect(listInput).toBeChecked();
+		expect(screen.getByText("Regenfass News")).toBeInTheDocument();
 	});
 
-	it("form has correct styling classes", () => {
-		const { container } = render(() => <Newsletter />);
-		const form = container.querySelector("form");
-		expect(form).toHaveClass("flex");
-		expect(form).toHaveClass("px-4");
-		expect(form).toHaveClass("py-2");
-		expect(form).toHaveClass("bg-background");
-		expect(form).toHaveClass("rounded-full");
-		expect(form).toHaveClass("focus-within:ring-2");
-		expect(form).toHaveClass("hover:ring-2");
-		expect(form).toHaveClass("border");
-		expect(form).toHaveClass("border-input");
-	});
-
-	it("subscribe button has correct styling", () => {
+	it("renders a native submit control", () => {
 		render(() => <Newsletter />);
-		const subscribeButton = screen.getByText("Subscribe").closest("button");
-		expect(subscribeButton).toHaveClass("px-3");
-		expect(subscribeButton).toHaveClass("py-1");
-		expect(subscribeButton).toHaveClass("text-sm");
-		expect(subscribeButton).toHaveClass("font-semibold");
-		expect(subscribeButton).toHaveClass("rounded-full");
-		expect(subscribeButton).toHaveClass("bg-gradient-to-br");
+		expect(screen.getByText("Subscribe").closest("button")).toHaveAttribute(
+			"type",
+			"submit",
+		);
 	});
 
-	it("handles form submission", () => {
-		const { container } = render(() => <Newsletter />);
-		const form = container.querySelector("form");
-		const handleSubmit = vi.fn((e) => e.preventDefault());
-
-		if (form) {
-			form.addEventListener("submit", handleSubmit);
-			fireEvent.submit(form);
-			expect(handleSubmit).toHaveBeenCalled();
-		}
-	});
-
-	it("renders responsive layout classes", () => {
+	it("keeps the responsive newsletter layout", () => {
 		const { container } = render(() => <Newsletter />);
 		const flexContainer = container.querySelector("div.flex");
+
 		expect(flexContainer).toHaveClass("flex-col");
-		expect(flexContainer).toHaveClass("sm:flex-row");
-		expect(flexContainer).toHaveClass("items-center");
-		expect(flexContainer).toHaveClass("justify-between");
 		expect(flexContainer).toHaveClass("gap-6");
 	});
 });

@@ -1,14 +1,11 @@
-import { createSignal, Show } from "solid-js";
 import { Headline } from "../atoms/Headline.tsx";
 import { Button } from "../atoms/Button.tsx";
 import { TextFieldRoot, TextFieldInput } from "../forms/TextField.tsx";
-import { AlertDescription, AlertInline, AlertTitle } from "../molecules/AlertInline.tsx";
 import { cn } from "../../libs/cn.ts";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export default function Newsletter() {
 	const t = useBrandT();
-	const [submittedEmail, setSubmittedEmail] = createSignal<string | null>(null);
 
 	return (
 		<aside id="newsletter" class="site-container py-6">
@@ -25,23 +22,17 @@ export default function Newsletter() {
 				<div class="w-full max-w-2xl">
 					<form
 						id="form-newsletter"
-						onSubmit={(event) => {
-							event.preventDefault();
-							const form = event.currentTarget;
-							const data = new FormData(form);
-							const email = String(data.get("email") ?? "").trim();
-							if (!email) return;
-							setSubmittedEmail(email);
-							form.reset();
-						}}
+						method="post"
+						action="https://news.regenfass.eu/subscription/form"
 						class={cn(
-							"flex w-full flex-col gap-2 px-4 py-3 bg-background rounded-2xl",
-							"sm:flex-row sm:items-center sm:gap-3",
+							"listmonk-form",
+							"flex w-full flex-col gap-3 px-4 py-4 bg-background rounded-2xl",
 							"focus-within:ring-2 focus-within:ring-ring",
 							"hover:ring-2 hover:ring-ring/50",
 							"border border-input",
 						)}
 					>
+						<input type="hidden" name="nonce" />
 						<TextFieldRoot class="min-w-0 flex-1">
 							<TextFieldInput
 								name="email"
@@ -51,6 +42,25 @@ export default function Newsletter() {
 								placeholder={t("newsletter.placeholder")}
 							/>
 						</TextFieldRoot>
+						<TextFieldRoot class="min-w-0 flex-1">
+							<TextFieldInput
+								name="name"
+								type="text"
+								class="w-full appearance-none bg-transparent focus:outline-none border-0"
+								placeholder={t("newsletter.namePlaceholder")}
+							/>
+						</TextFieldRoot>
+						<label class="flex items-center gap-2 text-sm text-muted-foreground">
+							<input
+								id="newsletter-list"
+								type="checkbox"
+								name="l"
+								value="a5bca2e4-c654-4a74-ae01-bf83de6f5623"
+								checked
+								class="size-4 rounded border-input accent-primary"
+							/>
+							<span>{t("newsletter.listLabel")}</span>
+						</label>
 						<Button
 							id="button-newsletter"
 							class="w-full px-4 py-2 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white sm:w-auto"
@@ -59,23 +69,6 @@ export default function Newsletter() {
 							{t("newsletter.subscribe")}
 						</Button>
 					</form>
-					<Show when={submittedEmail()}>
-						{(email) => (
-							<AlertInline
-								variant="success"
-								class="mt-4"
-								role="status"
-								aria-live="polite"
-							>
-								<AlertTitle>{t("newsletter.successTitle")}</AlertTitle>
-								<AlertDescription class="mt-1">
-									{t("newsletter.successBodyBefore")}{" "}
-									<span class="font-medium text-foreground">{email()}</span>{" "}
-									{t("newsletter.successBodyAfter")}
-								</AlertDescription>
-							</AlertInline>
-						)}
-					</Show>
 				</div>
 			</div>
 		</aside>

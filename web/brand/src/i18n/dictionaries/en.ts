@@ -16,6 +16,8 @@ export type BrandDictionary = {
 		titleHighlight: string;
 		body: string;
 		placeholder: string;
+		namePlaceholder: string;
+		listLabel: string;
 		subscribe: string;
 		successTitle: string;
 		successBodyBefore: string;
@@ -60,6 +62,8 @@ export const brandDictEn: BrandDictionary = {
 		titleHighlight: "update newsletters",
 		body: "If you would like to be informed about software updates, you can subscribe to this newsletter.",
 		placeholder: "your@email-address.iot",
+		namePlaceholder: "Name (optional)",
+		listLabel: "Regenfass News",
 		subscribe: "Subscribe",
 		successTitle: "Almost done",
 		successBodyBefore:
