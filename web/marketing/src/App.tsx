@@ -30,12 +30,20 @@ import {
 	type Locale,
 } from "@regenfass/brand";
 import ChangelogSection from "./ChangelogSection";
+import UseCaseIllustration, {
+	type UseCaseIllustrationKind,
+} from "./UseCaseIllustration.tsx";
 import { marketingCopy, useMarketingT } from "./i18n/index.ts";
 import { localeRedirectPath } from "./i18n/localeRouting.ts";
 import { applyMarketingSeo } from "./i18n/seo.ts";
 
 const DOCS_URL = "https://docs.regenfass.eu/";
 const INSTALLER_URL = "https://install.regenfass.eu";
+const USE_CASE_ILLUSTRATIONS: UseCaseIllustrationKind[] = [
+	"home",
+	"garden",
+	"tank",
+];
 
 function trackNavigateToDocs() {
 	trackEvent("navigate_to_docs");
@@ -263,9 +271,14 @@ function Home() {
 						<Headline as="h2">{t("cases.title")}</Headline>
 						<div class="grid gap-4 sm:grid-cols-3">
 							<For each={[...copy().cases.items]}>
-								{(item) => (
+								{(item, index) => (
 									<Card>
-										<CardHeader>
+										<CardHeader class="gap-4">
+											<div class="overflow-hidden rounded-2xl border border-border/60 bg-card/50 p-2 shadow-inner">
+												<UseCaseIllustration
+													kind={USE_CASE_ILLUSTRATIONS[index()]}
+												/>
+											</div>
 											<CardTitle>{item.title}</CardTitle>
 											<CardDescription>{item.body}</CardDescription>
 										</CardHeader>
