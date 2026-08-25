@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/0.0.1...0.0.2) (2026-08-25)
+
+
+### Features
+
+* **brand:** connect newsletter form to listmonk ([1c78735](https://github.com/ttnleipzig/regenfass/commit/1c7873503686cc11b6a8035dfae7581829dcbe45))
+
+
+### Bug Fixes
+
+* **brand:** simplify newsletter form and enlarge buttons ([c6b494f](https://github.com/ttnleipzig/regenfass/commit/c6b494fae49453d22db0b54b89e2ee89acbfade4))
+
+
+### Refactoring
+
+* **web:** rename marketing app to homepage ([5f9d406](https://github.com/ttnleipzig/regenfass/commit/5f9d4066d436f4b2bdfb015761eca08633f5f4e0))
+
+
+### Tests
+
+* **installer:** update UI, routing, and audio mocks ([8b8bb8d](https://github.com/ttnleipzig/regenfass/commit/8b8bb8d0eede603971dd4061afc8b27a7ed5a4f4))
+
+
+### Chores
+
+* **release:** configure patch bumps and changelog sections ([b3a94af](https://github.com/ttnleipzig/regenfass/commit/b3a94af4eee5dadf8a88b3d8c421052ca19320ec))
+
 ## [0.0.1](https://github.com/ttnleipzig/regenfass/compare/v0.0.1...0.0.1) (2026-08-25)
 
 
