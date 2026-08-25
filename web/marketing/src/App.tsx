@@ -238,7 +238,10 @@ function Home() {
 									<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
 										<ButtonPrimary>{t("software.openInstaller")}</ButtonPrimary>
 									</a>
-									<Link href="https://github.com/ttnleipzig/regenfass">
+									<Link
+										href="https://github.com/ttnleipzig/regenfass"
+										class="inline-flex h-10 items-center rounded-md px-3 text-sm font-medium text-primary underline-offset-4 hover:bg-primary/10 hover:no-underline"
+									>
 										{t("software.viewSource")}
 									</Link>
 								</div>
