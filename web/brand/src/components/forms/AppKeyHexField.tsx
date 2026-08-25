@@ -13,7 +13,8 @@ import {
 import { copyTextToClipboard } from "../../libs/copyToClipboard.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
-import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
+import BiRegularClipboard from "lucide-solid/icons/clipboard";
+import BiRegularX from "lucide-solid/icons/x";
 import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";

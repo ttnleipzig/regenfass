@@ -5,7 +5,7 @@ import {
 	AlertTitle,
 	Progress,
 } from "@regenfass/brand";
-import { BiSolidMicrochip } from "solid-icons/bi";
+import BiSolidMicrochip from "lucide-solid/icons/cpu";
 import { createMemo } from "solid-js";
 import { useInstallerT } from "@/i18n/index.ts";
 

@@ -1,6 +1,7 @@
 import { Button } from "./Button.tsx";
 import { soundEnabled, toggleSoundEnabled } from "../../libs/soundPreference.ts";
-import { BiRegularVolumeFull, BiRegularVolumeMute } from "solid-icons/bi";
+import BiRegularVolumeFull from "lucide-solid/icons/volume-2";
+import BiRegularVolumeMute from "lucide-solid/icons/volume-x";
 import { Show } from "solid-js";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 

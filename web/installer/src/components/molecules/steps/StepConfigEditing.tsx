@@ -1,9 +1,7 @@
-import {
-	IconClearAll,
-	IconDeviceFloppy,
-	IconFileExport,
-	IconFileImport,
-} from "@tabler/icons-solidjs";
+import IconClearAll from "lucide-solid/icons/list-x";
+import IconDeviceFloppy from "lucide-solid/icons/save";
+import IconFileExport from "lucide-solid/icons/file-output";
+import IconFileImport from "lucide-solid/icons/file-input";
 import { copyTextToClipboard } from "@/libs/copyToClipboard.ts";
 import {
 	ConfigFileError,
@@ -11,7 +9,8 @@ import {
 	readConfigFromFile,
 } from "@/libs/downloadConfig.ts";
 import { playErrorSound } from "@/libs/errorSound.ts";
-import { BiRegularClipboard, BiRegularX } from "solid-icons/bi";
+import BiRegularClipboard from "lucide-solid/icons/clipboard";
+import BiRegularX from "lucide-solid/icons/x";
 import { For, Show, createSignal, onCleanup } from "solid-js";
 import {
 	AlertDescription,
@@ -271,7 +270,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={() => emitEvent({ type: "config.clear" })}
 					>
-						<IconClearAll aria-hidden={true} size={16} stroke="1.75" />
+						<IconClearAll aria-hidden={true} size={16} strokeWidth={1.75} />
 						{t("configEditing.clear")}
 					</Button>
 					<Button
@@ -280,7 +279,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						size="sm"
 						onClick={handleLoadFromFileClick}
 					>
-						<IconFileImport aria-hidden={true} size={16} stroke="1.75" />
+						<IconFileImport aria-hidden={true} size={16} strokeWidth={1.75} />
 						{t("configEditing.loadFromFile")}
 					</Button>
 					<Button
@@ -294,7 +293,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 							)
 						}
 					>
-						<IconFileExport aria-hidden={true} size={16} stroke="1.75" />
+						<IconFileExport aria-hidden={true} size={16} strokeWidth={1.75} />
 						{t("configEditing.saveToFile")}
 					</Button>
 				</div>
@@ -302,7 +301,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 					class="gap-1.5 sm:min-w-[7rem]"
 					onClick={() => emitEvent({ type: "config.next" })}
 				>
-					<IconDeviceFloppy aria-hidden={true} size={16} stroke="1.75" />
+					<IconDeviceFloppy aria-hidden={true} size={16} strokeWidth={1.75} />
 					{t("configEditing.saveToDevice")}
 				</Button>
 			</footer>

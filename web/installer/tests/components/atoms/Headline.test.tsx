@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@solidjs/testing-library";
 import { Headline } from "@regenfass/brand";
-import { IconAlertCircle } from "@tabler/icons-solidjs";
+import IconAlertCircle from "lucide-solid/icons/circle-alert";
 
 describe("Headline", () => {
   afterEach(() => {
