@@ -16,10 +16,12 @@ export type HeaderNavItem = {
 };
 
 export type HeaderProps = {
-  /** Optional brand title shown in the header. */
-  title?: string;
-  /** Optional title suffix rendered separately from the brand title. */
-  titleSuffix?: string;
+	/** Optional brand title shown in the header. */
+	title?: string;
+	/** Optional title suffix rendered separately from the brand title. */
+	titleSuffix?: string;
+	/** Stretch the header content across the available width instead of using the site container. */
+	fullWidth?: boolean;
   /** Navigation items. Defaults link to Home, docs, installer, and GitHub. */
   navItems?: HeaderNavItem[];
   /** Position of the navigation relative to the title. */
@@ -139,14 +141,15 @@ const Header: Component<HeaderProps> = (rawProps) => {
     <header class="w-full py-6 border-b border-border">
       <div
         class={cn(
-          "site-container max-w-none px-4 sm:px-6 lg:px-8 flex items-center",
+			"site-container px-4 sm:px-6 lg:px-8 flex items-center",
+			props.fullWidth && "max-w-none",
           props.navPosition === "left" ? "justify-start" : "justify-between",
         )}
       >
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
           {props.title}
           <Show when={props.titleSuffix}>
-            <span class="font-normal text-foreground dark:text-white"> {props.titleSuffix}</span>
+            <span class="font-normal text-foreground/80 dark:text-white"> {props.titleSuffix}</span>
           </Show>
         </h1>
 

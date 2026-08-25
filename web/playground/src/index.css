@@ -1,1 +1,38 @@
 @import "@regenfass/brand/styles.css";
+
+@layer components {
+  .tokenized-code .token.comment,
+  .tokenized-code .token.prolog,
+  .tokenized-code .token.doctype,
+  .tokenized-code .token.cdata {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .tokenized-code .token.punctuation {
+    color: hsl(var(--foreground) / 0.7);
+  }
+
+  .tokenized-code .token.tag,
+  .tokenized-code .token.tag .token.tag,
+  .tokenized-code .token.keyword {
+    color: hsl(var(--primary));
+  }
+
+  .tokenized-code .token.attr-name,
+  .tokenized-code .token.property,
+  .tokenized-code .token.boolean {
+    color: hsl(var(--secondary));
+  }
+
+  .tokenized-code .token.attr-value,
+  .tokenized-code .token.string,
+  .tokenized-code .token.char {
+    color: hsl(var(--success));
+  }
+
+  .tokenized-code .token.operator,
+  .tokenized-code .token.entity,
+  .tokenized-code .token.url {
+    color: hsl(var(--warning));
+  }
+}

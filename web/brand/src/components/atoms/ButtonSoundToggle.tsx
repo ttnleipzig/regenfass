@@ -1,5 +1,6 @@
 import { Button } from "./Button.tsx";
 import { soundEnabled, toggleSoundEnabled } from "../../libs/soundPreference.ts";
+import { resumeAudioContext } from "../../libs/webAudioContext.ts";
 import BiRegularVolumeFull from "lucide-solid/icons/volume-2";
 import BiRegularVolumeMute from "lucide-solid/icons/volume-x";
 import { Show } from "solid-js";
@@ -16,7 +17,9 @@ export function ButtonSoundToggle() {
 			size="icon"
 			aria-label={label()}
 			aria-pressed={!soundEnabled()}
-			onClick={() => toggleSoundEnabled()}
+			onClick={() => {
+				if (toggleSoundEnabled()) resumeAudioContext();
+			}}
 			class="transition-transform duration-200 active:scale-95 text-foreground/80 hover:text-foreground"
 		>
 			<Show

@@ -14,6 +14,7 @@ function Shell(props: ParentProps) {
       <Header
         title="Regenfass"
         titleSuffix="Playground"
+        fullWidth
         navPosition="left"
         navItems={[
           {

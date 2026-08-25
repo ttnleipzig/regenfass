@@ -13,6 +13,7 @@ import {
 import { copyTextToClipboard } from "../../libs/copyToClipboard.ts";
 import Eye from "lucide-solid/icons/eye";
 import EyeOff from "lucide-solid/icons/eye-off";
+import Check from "lucide-solid/icons/check";
 import BiRegularClipboard from "lucide-solid/icons/clipboard";
 import BiRegularX from "lucide-solid/icons/x";
 import type { Component } from "solid-js";
@@ -294,7 +295,9 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					aria-label={copyLabel()}
 					onClick={copyToClipboard}
 				>
-					<BiRegularClipboard aria-hidden={true} size={16} />
+					<Show when={copied()} fallback={<BiRegularClipboard aria-hidden={true} size={16} />}>
+						<Check class="text-success" aria-hidden={true} size={16} />
+					</Show>
 				</button>
 			</Show>
 			<Show when={props.showResetButton && (props.value ?? "")}>

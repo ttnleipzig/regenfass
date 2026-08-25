@@ -434,7 +434,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     name: "Confetti",
     category: "atoms",
     description: "Full-screen celebratory confetti burst.",
-    controls: [{ key: "active", label: "Active", type: "boolean", defaultValue: true }],
+    controls: [{ key: "active", label: "Active", type: "boolean", defaultValue: false }],
     render: (values) => <Confetti active={Boolean(values.active)} />,
   },
   {

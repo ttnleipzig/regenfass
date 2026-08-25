@@ -7,6 +7,7 @@ export { ButtonPrimary } from "./components/atoms/ButtonPrimary.tsx";
 export { ButtonSecondary } from "./components/atoms/ButtonSecondary.tsx";
 export { ButtonSoundToggle } from "./components/atoms/ButtonSoundToggle.tsx";
 export { default as Confetti, CONFETTI_PARTICLE_COUNT } from "./components/atoms/Confetti.tsx";
+export { playConfettiTadaSound } from "./libs/confettiSound.ts";
 export { Headline } from "./components/atoms/Headline.tsx";
 export { default as Link } from "./components/atoms/Link.tsx";
 export { Progress } from "./components/atoms/Progress.tsx";

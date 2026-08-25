@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
-import { For, Show } from "solid-js";
+import { For, Show, createEffect } from "solid-js";
 import { cn } from "../../libs/cn.ts";
+import { playConfettiTadaSound } from "../../libs/confettiSound.ts";
 import "./Confetti.css";
 
 /** Number of confetti pieces in one burst (exported for tests). */
@@ -46,6 +47,16 @@ interface ConfettiProps {
  * Full-viewport confetti: radial burst from the center, then pieces fall with gravity.
  */
 const Confetti: Component<ConfettiProps> = (props) => {
+	let previousActive = props.active ?? false;
+
+	createEffect(() => {
+		const active = props.active ?? false;
+		if (active && !previousActive) {
+			playConfettiTadaSound();
+		}
+		previousActive = active;
+	});
+
 	return (
 		<Show when={props.active}>
 			<div

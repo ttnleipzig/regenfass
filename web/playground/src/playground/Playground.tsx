@@ -1,4 +1,6 @@
 import { A, useParams } from "@solidjs/router";
+import Prism from "prismjs";
+import "prismjs/components/prism-jsx";
 import { For, Show, createEffect, createMemo, createSignal, type ParentProps } from "solid-js";
 import {
   PLAYGROUND_CATEGORIES,
@@ -358,6 +360,8 @@ export function PlaygroundComponentPage() {
     return hasChildren ? `${openingTag}${childContent}</${entry.name}>` : `<${entry.name} />`;
   });
 
+  const highlightedCode = createMemo(() => Prism.highlight(generatedCode(), Prism.languages.jsx, "jsx"));
+
   const copyGeneratedCode = async () => {
     try {
       await navigator.clipboard.writeText(generatedCode());
@@ -417,7 +421,7 @@ export function PlaygroundComponentPage() {
                 </button>
               </div>
               <pre class="overflow-x-auto rounded-md border border-border bg-muted p-3 text-sm leading-6">
-                <code>{generatedCode()}</code>
+                <code class="tokenized-code" innerHTML={highlightedCode()} />
               </pre>
             </div>
 
