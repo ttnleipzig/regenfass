@@ -67,4 +67,61 @@ describe("reduceMeasurementsToReadings", () => {
     expect(reading.value).toBe(12);
     expect(reading.history?.map((h) => h.value)).toEqual([10, 11, 12]);
   });
+
+  it("reports latestAt as the timestamp of the headline reading", () => {
+    const rows = [
+      row(1, "2026-06-01T00:00:00Z", 10),
+      row(1, "2026-06-01T00:02:00Z", 12),
+    ];
+    const [reading] = reduceMeasurementsToReadings(rows);
+    expect(reading.latestAt).toBe(Date.parse("2026-06-01T00:02:00Z"));
+  });
+
+  describe("window clipping via `since`", () => {
+    const since = Date.parse("2026-06-01T00:00:00Z");
+
+    it("drops points older than the window", () => {
+      const rows = [
+        row(1, "2026-05-01T00:00:00Z", 1),
+        row(1, "2026-05-20T00:00:00Z", 2),
+        row(1, "2026-06-02T00:00:00Z", 30),
+        row(1, "2026-06-03T00:00:00Z", 31),
+      ];
+      const [reading] = reduceMeasurementsToReadings(rows, since);
+      expect(reading.history?.map((h) => h.value)).toEqual([30, 31]);
+      expect(reading.value).toBe(31);
+    });
+
+    it("omits a channel whose only readings predate the window", () => {
+      // This is the case that used to surface month-old values as current:
+      // nothing in range means nothing to report, not a stale headline.
+      const rows = [
+        row(1, "2026-05-01T00:00:00Z", 1),
+        row(1, "2026-05-20T00:00:00Z", 2),
+      ];
+      expect(reduceMeasurementsToReadings(rows, since)).toEqual([]);
+    });
+
+    it("keeps in-window channels while dropping out-of-window ones", () => {
+      const rows = [
+        row(1, "2026-05-01T00:00:00Z", 1),
+        row(2, "2026-06-02T00:00:00Z", 20),
+      ];
+      const out = reduceMeasurementsToReadings(rows, since);
+      expect(out.map((r) => r.channel)).toEqual([2]);
+    });
+
+    it("includes a point exactly on the window boundary", () => {
+      const rows = [row(1, "2026-06-01T00:00:00Z", 5)];
+      const [reading] = reduceMeasurementsToReadings(rows, since);
+      expect(reading.history?.map((h) => h.value)).toEqual([5]);
+    });
+
+    it("skips rows with an unparseable timestamp", () => {
+      const rows = [row(1, "not-a-date", 5), row(1, "2026-06-02T00:00:00Z", 6)];
+      const [reading] = reduceMeasurementsToReadings(rows, since);
+      expect(reading.history?.map((h) => h.value)).toEqual([6]);
+      expect(reading.value).toBe(6);
+    });
+  });
 });

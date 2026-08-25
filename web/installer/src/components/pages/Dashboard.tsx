@@ -1,4 +1,11 @@
-import { Component, createEffect, createSignal, For, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  Show,
+} from "solid-js";
 import { A } from "@solidjs/router";
 import ChevronDown from "lucide-solid/icons/chevron-down";
 import Plus from "lucide-solid/icons/plus";
@@ -10,11 +17,18 @@ import Lock from "lucide-solid/icons/lock";
 import LeipzigMap from "./LeipzigMap";
 import {
   ALL_SENSOR_TYPES,
+  DEFAULT_HISTORY_PERIOD,
+  HISTORY_PRESETS,
+  isValidPeriod,
+  periodLabel,
+  periodToWindow,
   sensorLabel,
   SensorType,
   useChannelHistory,
   useDeviceMeasurements,
   useOverview,
+  type HistoryPeriod,
+  type HistoryPreset,
   type Sensor,
 } from "../../libs/sensors";
 import {
@@ -25,6 +39,7 @@ import {
   useSubscriptions,
 } from "../../libs/subscriptions";
 import { resolveToken, updateDeviceName } from "../../libs/api";
+import { fromDateTimeInput, toDateTimeInput } from "../../libs/dateTimeInput";
 import SensorGraph from "../molecules/SensorGraph";
 import {
   Select,
@@ -47,6 +62,19 @@ const DISABLED = "#0b142a";
 const CHANNELS = Array.from({ length: 16 }, (_, i) => i);
 const SELECTED = "#6bb2fa";
 
+// The graph period selector offers the rolling presets plus an explicit range.
+type PeriodChoice = HistoryPreset | "custom";
+const PERIOD_CHOICES: PeriodChoice[] = [
+  ...HISTORY_PRESETS.map((p) => p.id),
+  "custom",
+];
+
+function periodChoiceLabel(choice: PeriodChoice): string {
+  if (choice === "custom") return "Custom";
+  return HISTORY_PRESETS.find((p) => p.id === choice)?.label ?? choice;
+}
+
+
 const Dashboard: Component = () => {
   const [activeView, setActiveView] = createSignal<"map" | "list">("map");
   const [devicesExpanded, setDevicesExpanded] = createSignal(true);
@@ -62,12 +90,56 @@ const Dashboard: Component = () => {
   const [tokenInput, setTokenInput] = createSignal("");
 
   const sensors = () => overview()?.all ?? [];
-  const { readings: liveReadings } = useDeviceMeasurements(() => activeDeviceToken());
-  // Last 7 days of readings for the channel the user is about to map, fetched
-  // on demand when a channel is selected in the slot editor.
-  const { reading: selectedChannelReading } = useChannelHistory(
+
+  // Which range the panel's graphs cover. A preset is a rolling lookback; the
+  // custom pair is absolute, held as input strings so a half-typed value can
+  // exist without being sent to the backend.
+  const [periodChoice, setPeriodChoice] = createSignal<PeriodChoice>(
+    DEFAULT_HISTORY_PERIOD.kind === "preset"
+      ? DEFAULT_HISTORY_PERIOD.preset
+      : "week",
+  );
+  const [customStart, setCustomStart] = createSignal("");
+  const [customEnd, setCustomEnd] = createSignal("");
+
+  const period = createMemo<HistoryPeriod>(() => {
+    const choice = periodChoice();
+    if (choice !== "custom") return { kind: "preset", preset: choice };
+    return {
+      kind: "custom",
+      start: fromDateTimeInput(customStart()),
+      end: fromDateTimeInput(customEnd()),
+    };
+  });
+  const periodText = () => periodLabel(period());
+  const customRangeInvalid = () =>
+    periodChoice() === "custom" && !isValidPeriod(period());
+
+  // Switching to Custom seeds the pickers from the range currently on screen,
+  // so the graphs don't blank out waiting for two empty fields to be filled in.
+  const handlePeriodChoice = (choice: PeriodChoice) => {
+    if (choice === "custom" && periodChoice() !== "custom") {
+      const w = periodToWindow(period());
+      setCustomStart(toDateTimeInput(w.start));
+      setCustomEnd(toDateTimeInput(w.end));
+    }
+    setPeriodChoice(choice);
+  };
+
+  const {
+    readings: liveReadings,
+    window: historyWindow,
+  } = useDeviceMeasurements(() => activeDeviceToken(), period);
+  // Readings for the channel the user is about to map, over the same period as
+  // the graphs above, fetched on demand when a channel is selected.
+  const {
+    result: selectedChannelResult,
+    reading: selectedChannelReading,
+    window: selectedChannelWindow,
+  } = useChannelHistory(
     () => activeDeviceToken(),
     () => selectedChannel(),
+    period,
   );
 
   const toggleGroupCollapsed = (token: string) => {
@@ -188,11 +260,17 @@ const Dashboard: Component = () => {
     }
   };
 
+  // Readings for the open panel. The ranged endpoint (clipped to the graph
+  // window) is the source of truth; when it returns nothing for this device we
+  // still list the channels from /overview so the slot editor knows which are
+  // taken. Those carry no history — there is none in the window — but they keep
+  // their `received_at`, so each card can say how old the value actually is
+  // instead of presenting it as the device's current state.
   const readingsForActiveSensor = () => {
     const live = liveReadings();
     if (live && live.length > 0) return live;
     const sensor = activeSensor();
-    return sensor ? sensor.readings.map((r) => ({ ...r, history: undefined })) : [];
+    return sensor ? sensor.readings.map((r) => ({ ...r, history: [] })) : [];
   };
 
   // Channels that already carry a reading (and therefore a type) for the active
@@ -370,14 +448,75 @@ const Dashboard: Component = () => {
           </Show>
           <div class="h-0.5 w-full" style={{ "background-color": INACTIVE }} />
 
+          {/* Period selector — governs every graph in the panel */}
+          <div class="flex flex-col gap-2 px-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs opacity-60 shrink-0">Period</span>
+              <Select<PeriodChoice>
+                options={PERIOD_CHOICES}
+                value={periodChoice()}
+                onChange={(v) => v !== null && handlePeriodChoice(v)}
+                itemComponent={(itemProps) => (
+                  <SelectItem
+                    item={itemProps.item}
+                    class="text-white focus:bg-[#061846] focus:text-white"
+                  >
+                    {periodChoiceLabel(itemProps.item.rawValue)}
+                  </SelectItem>
+                )}
+              >
+                <SelectTrigger
+                  aria-label="Graph period"
+                  class="w-[160px] bg-transparent text-white"
+                  style={{ "border-color": INACTIVE }}
+                >
+                  <SelectValue<PeriodChoice>>
+                    {(state) => periodChoiceLabel(state.selectedOption())}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent class="bg-[#020817] border-[#061846] text-white" />
+              </Select>
+            </div>
+
+            <Show when={periodChoice() === "custom"}>
+              <div class="flex items-center gap-2 flex-wrap">
+                <input
+                  type="datetime-local"
+                  aria-label="Period start"
+                  class="h-9 rounded-md border bg-transparent px-2 text-sm text-white"
+                  style={{ "border-color": INACTIVE, "color-scheme": "dark" }}
+                  value={customStart()}
+                  onChange={(e) => setCustomStart(e.currentTarget.value)}
+                />
+                <span class="text-xs opacity-60">to</span>
+                <input
+                  type="datetime-local"
+                  aria-label="Period end"
+                  class="h-9 rounded-md border bg-transparent px-2 text-sm text-white"
+                  style={{ "border-color": INACTIVE, "color-scheme": "dark" }}
+                  value={customEnd()}
+                  onChange={(e) => setCustomEnd(e.currentTarget.value)}
+                />
+              </div>
+              <Show when={customRangeInvalid()}>
+                <p class="text-xs text-red-400">
+                  Pick a start and an end, with the start first. Showing the
+                  previous range until then.
+                </p>
+              </Show>
+            </Show>
+          </div>
+
           {/* Graphs */}
           <div class="flex-1 min-h-0 overflow-y-auto flex flex-col gap-3 pr-1">
             <For each={readingsForActiveSensor()}>
               {(reading) => (
                 <SensorGraph
                   reading={reading}
-                  seed={`${sensor().id}:${reading.type}`}
                   history={reading.history}
+                  latestAt={reading.latestAt}
+                  window={historyWindow()}
+                  periodLabel={periodText()}
                 />
               )}
             </For>
@@ -493,7 +632,7 @@ const Dashboard: Component = () => {
                   }
                 >
                   <Show
-                    when={!selectedChannelReading.loading}
+                    when={!selectedChannelResult.loading}
                     fallback={
                       <div class="h-full flex items-center justify-center text-xs opacity-60">
                         Loading…
@@ -503,16 +642,18 @@ const Dashboard: Component = () => {
                     <Show
                       when={selectedChannelReading()}
                       fallback={
-                        <div class="h-full flex items-center justify-center text-xs opacity-60">
-                          No data yet
+                        <div class="h-full flex items-center justify-center text-xs opacity-60 px-3 text-center">
+                          No data in {periodText()}
                         </div>
                       }
                     >
                       {(reading) => (
                         <SensorGraph
                           reading={reading()}
-                          seed={`channel:${activeSensorId()}:${selectedChannel()}`}
                           history={reading().history}
+                          latestAt={reading().latestAt}
+                          window={selectedChannelWindow()}
+                          periodLabel={periodText()}
                           class="h-full"
                         />
                       )}
