@@ -146,7 +146,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
           {props.title}
           <Show when={props.titleSuffix}>
-            <span class="font-normal text-white"> {props.titleSuffix}</span>
+            <span class="font-normal text-foreground dark:text-white"> {props.titleSuffix}</span>
           </Show>
         </h1>
 

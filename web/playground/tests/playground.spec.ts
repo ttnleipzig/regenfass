@@ -28,3 +28,21 @@ test("TextInput exposes and applies the disabled prop", async ({ page }) => {
   await page.getByLabel("Disabled").check();
   await expect(page.locator("pre")).toContainText("disabled={true}");
 });
+
+test("AppKeyHexField shows actions, sound control, and selected props", async ({ page }) => {
+  await page.goto("/app-key-hex-field");
+  await expect(page.getByRole("button", { name: /(?:Unmute|Mute) sounds/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy appKey to clipboard" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Clear appKey" })).toBeVisible();
+  await expect(page.locator("pre")).toContainText('showCopyButton={true}');
+  await expect(page.locator("pre")).toContainText('showResetButton={true}');
+});
+
+test("Footer displays a release version and links to release notes", async ({ page }) => {
+  await page.goto("/footer");
+  await expect(page.getByText(/^v\\d+\\.\\d+\\.\\d+$/)).toBeVisible();
+  await expect(page.getByRole("link", { name: "Release notes" })).toHaveAttribute(
+    "href",
+    "https://github.com/ttnleipzig/regenfass/releases",
+  );
+});

@@ -1,11 +1,34 @@
 import Book from "lucide-solid/icons/book";
 import Github from "lucide-solid/icons/github";
 import MessageSquare from "lucide-solid/icons/message-square";
+import { createSignal, onMount } from "solid-js";
 import { APP_VERSION } from "../../version.ts";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export default function Footer() {
 	const t = useBrandT();
+	const [releaseVersion, setReleaseVersion] = createSignal(APP_VERSION);
+
+	onMount(() => {
+		void fetch("https://api.github.com/repos/ttnleipzig/regenfass/releases/latest", {
+			headers: { Accept: "application/vnd.github+json" },
+		})
+			.then((response) => (response.ok ? response.json() : null))
+			.then((release: unknown) => {
+				if (
+					typeof release === "object" &&
+					release !== null &&
+					"tag_name" in release &&
+					typeof release.tag_name === "string" &&
+					release.tag_name.length > 0
+				) {
+					setReleaseVersion(release.tag_name.replace(/^v/, ""));
+				}
+			})
+			.catch(() => {
+				// Keep the build-time version when GitHub is unavailable.
+			});
+	});
 
 	return (
 		<footer class="site-container py-6">
@@ -58,7 +81,7 @@ export default function Footer() {
 					</a>
 				</p>
 				<p class="mt-2">
-					<span class="font-mono">v{APP_VERSION}</span>
+					<span class="font-mono" aria-live="polite">v{releaseVersion()}</span>
 					{" · "}
 					<a
 						href="https://github.com/ttnleipzig/regenfass/releases"

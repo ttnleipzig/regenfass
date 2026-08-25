@@ -90,7 +90,7 @@ const SlotPairReel: Component<{
 	});
 
 	return (
-		<div class="flex h-10 w-9 shrink-0 flex-col overflow-hidden border-r border-input bg-background last:border-r-0">
+		<div class="flex h-10 min-w-0 flex-1 flex-col overflow-hidden border-r border-input bg-background last:border-r-0">
 			<div ref={(el) => (innerEl = el)} class="flex flex-col">
 				<For each={props.rows}>
 					{(row) => (
@@ -105,7 +105,7 @@ const SlotPairReel: Component<{
 };
 
 /** Width of 16 hex pair columns (`w-9` each), aligned with AppEUI/DevEUI slot rows. */
-const APP_KEY_HEX_COLUMNS_CLASS = "w-[36rem]";
+const APP_KEY_HEX_COLUMNS_CLASS = "w-full";
 
 /** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
 export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
@@ -220,11 +220,11 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 	return (
 		<div
 			class={cn(
-				"flex h-10 w-fit max-w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+				"flex h-10 w-full max-w-full overflow-hidden rounded-md border border-input bg-background text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
 				props.class,
 			)}
 		>
-			<div class={cn("relative min-h-10 shrink-0", APP_KEY_HEX_COLUMNS_CLASS)}>
+			<div class={cn("relative min-h-10 min-w-0 flex-1", APP_KEY_HEX_COLUMNS_CLASS)}>
 				<Show when={!revealed() && !spinInProgress() && canonicalPairs().length > 0}>
 					<div
 						aria-hidden="true"
@@ -232,7 +232,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					>
 						<For each={canonicalPairs()}>
 							{(pair) => (
-								<div class="flex h-10 w-9 shrink-0 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
+								<div class="flex h-10 min-w-0 flex-1 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
 									{maskHexPairForDisplay(pair)}
 								</div>
 							)}
@@ -258,7 +258,7 @@ export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
 					>
 						<For each={canonicalPairs()}>
 							{(pair) => (
-								<div class="flex h-10 w-9 shrink-0 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
+								<div class="flex h-10 min-w-0 flex-1 items-center justify-center border-r border-input bg-background font-mono text-sm font-semibold tabular-nums text-foreground last:border-r-0">
 									{pair}
 								</div>
 							)}

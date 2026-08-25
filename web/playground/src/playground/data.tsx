@@ -87,6 +87,10 @@ function escapeJsxText(value: string) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function escapeJsxAttribute(value: string) {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
+}
+
 export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
   {
     slug: "button",
@@ -469,6 +473,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         showResetButton={Boolean(values.showResetButton)}
       />
     ),
+    code: (values) => `<AppKeyHexField\n  id="playground-app-key"\n  name="appKey"\n  value="${escapeJsxAttribute(String(values.value))}"\n  showCopyButton={${Boolean(values.showCopyButton)}}\n  showResetButton={${Boolean(values.showResetButton)}}\n/>`,
   },
   {
     slug: "file-uploader",
