@@ -52,7 +52,8 @@ describe("Header", () => {
 		));
 		const suffix = screen.getByText("Playground");
 
-		expect(suffix).toHaveClass("text-white");
+		expect(suffix).toHaveClass("text-foreground/80");
+		expect(suffix).toHaveClass("dark:text-white");
 		expect(suffix).toHaveClass("font-normal");
 		expect(container.querySelector("h1")).toHaveTextContent("Regenfass Playground");
 	});
@@ -139,11 +140,17 @@ describe("Header", () => {
 
 		const innerDiv = container.querySelector(".site-container");
 		expect(innerDiv).toHaveClass("site-container");
-		expect(innerDiv).toHaveClass("max-w-none");
 		expect(innerDiv).toHaveClass("lg:px-8");
 		expect(innerDiv).toHaveClass("flex");
 		expect(innerDiv).toHaveClass("justify-between");
 		expect(innerDiv).toHaveClass("items-center");
+	});
+
+	it("stretches the container when fullWidth is enabled", () => {
+		const { container } = renderWithRouter(() => <Header fullWidth />);
+		const innerDiv = container.querySelector(".site-container");
+
+		expect(innerDiv).toHaveClass("max-w-none");
 	});
 
 	it("supports left-aligned navigation", () => {
