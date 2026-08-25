@@ -399,4 +399,4 @@ import { LeipzigMap } from '@regenfass/brand';
 
 ---
 
-Generated on August 25, 2026 at 08:41 PM
+Generated on August 25, 2026 at 07:25 PM

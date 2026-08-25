@@ -61,6 +61,23 @@ export type InstallerDictionary = {
 		body: string;
 		anotherDevice: string;
 		flashAnotherDevice: string;
+		cloud: {
+			title: string;
+			body: string;
+			enroll: string;
+			enrolling: string;
+			missingDevEui: string;
+			alreadyEnrolled: string;
+			failed: string;
+			retry: string;
+			enrolledTitle: string;
+			enrolledBody: string;
+			readWriteToken: string;
+			readOnlyToken: string;
+			copyToken: string;
+			tokenCopied: string;
+			openDashboard: string;
+		};
 	};
 	finishShowingError: { title: string; restart: string };
 	stateErrors: {
@@ -173,6 +190,27 @@ export const installerDictEn: InstallerDictionary = {
 		anotherDevice:
 			"Setting up another device? You can start a new installation whenever you are ready.",
 		flashAnotherDevice: "Flash another device",
+		cloud: {
+			title: "Regenfass Cloud",
+			body:
+				"Enroll this device to have its measurements stored in the Regenfass Cloud and shown on the dashboard.",
+			enroll: "Enroll in the cloud",
+			enrolling: "Enrolling…",
+			missingDevEui:
+				"This device has no DevEUI configured, so it cannot be enrolled yet.",
+			alreadyEnrolled:
+				"This DevEUI is already enrolled. Add the device on the dashboard using the token you got the first time.",
+			failed: "Could not enroll the device: {{message}}",
+			retry: "Try again",
+			enrolledTitle: "Device enrolled",
+			enrolledBody:
+				"The device is now shown on the dashboard in this browser. Keep both tokens somewhere safe — they are the only way back to this device from another browser.",
+			readWriteToken: "Read/write token",
+			readOnlyToken: "Read-only token",
+			copyToken: "Copy {{label}}",
+			tokenCopied: "{{label}} copied",
+			openDashboard: "Open dashboard",
+		},
 	},
 	finishShowingError: {
 		title: "Critical error",

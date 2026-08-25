@@ -93,6 +93,27 @@ export const installerDictDe: InstallerDictionary = {
 		anotherDevice:
 			"Noch ein Gerät einrichten? Du kannst jederzeit eine neue Installation starten.",
 		flashAnotherDevice: "Weiteres Gerät flashen",
+		cloud: {
+			title: "Regenfass Cloud",
+			body:
+				"Registriere dieses Gerät, damit seine Messwerte in der Regenfass Cloud gespeichert und im Dashboard angezeigt werden.",
+			enroll: "In der Cloud registrieren",
+			enrolling: "Wird registriert…",
+			missingDevEui:
+				"Für dieses Gerät ist keine DevEUI konfiguriert, daher kann es noch nicht registriert werden.",
+			alreadyEnrolled:
+				"Diese DevEUI ist bereits registriert. Füge das Gerät im Dashboard mit dem Token hinzu, das du beim ersten Mal erhalten hast.",
+			failed: "Gerät konnte nicht registriert werden: {{message}}",
+			retry: "Erneut versuchen",
+			enrolledTitle: "Gerät registriert",
+			enrolledBody:
+				"Das Gerät wird in diesem Browser jetzt im Dashboard angezeigt. Bewahre beide Tokens sicher auf — nur mit ihnen kommst du aus einem anderen Browser wieder an dieses Gerät.",
+			readWriteToken: "Schreib-/Lese-Token",
+			readOnlyToken: "Nur-Lese-Token",
+			copyToken: "{{label}} kopieren",
+			tokenCopied: "{{label}} kopiert",
+			openDashboard: "Dashboard öffnen",
+		},
 	},
 	finishShowingError: {
 		title: "Kritischer Fehler",

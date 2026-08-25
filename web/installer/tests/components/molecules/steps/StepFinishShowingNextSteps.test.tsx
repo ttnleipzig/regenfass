@@ -3,7 +3,13 @@ import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
 import StepFinishShowingNextSteps from "@/components/molecules/steps/StepFinishShowingNextSteps.tsx";
 
 describe("StepFinishShowingNextSteps", () => {
-  const mockState = {};
+  const mockState = {
+    context: {
+      deviceInfo: {
+        config: { appEUI: "", appKey: "", devEUI: "AABBCCDDEEFF0011" },
+      },
+    },
+  };
   const mockEmitEvent = vi.fn();
 
   afterEach(() => {
@@ -65,6 +71,18 @@ describe("StepFinishShowingNextSteps", () => {
     expect(
       screen.getByRole("button", { name: "Flash another device" }),
     ).toBeInTheDocument();
+  });
+
+  it("offers cloud enrollment for the configured device", () => {
+    render(() => (
+      <StepFinishShowingNextSteps
+        state={mockState}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+    expect(
+      screen.getByRole("button", { name: "Enroll in the cloud" }),
+    ).toBeEnabled();
   });
 
   it("calls emitEvent when flash another device button is clicked", () => {
