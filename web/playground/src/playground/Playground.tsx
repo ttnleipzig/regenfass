@@ -1,7 +1,7 @@
 import { A, useParams } from "@solidjs/router";
 import Prism from "prismjs";
 import "prismjs/components/prism-jsx";
-import { For, Show, createEffect, createMemo, createSignal, type ParentProps } from "solid-js";
+import { For, Show, createEffect, createMemo, createSignal, onMount, type ParentProps } from "solid-js";
 import {
   PLAYGROUND_CATEGORIES,
   PLAYGROUND_COMPONENTS,
@@ -9,6 +9,7 @@ import {
   getPlaygroundComponent,
   type PlaygroundCategory,
 } from "./data";
+import { COLOR_TOKEN_GROUPS, COLOR_TOKENS, FONT_TOKENS } from "./tokens";
 
 function toCodeValue(value: string | boolean | number) {
   if (typeof value === "string") {
@@ -72,6 +73,19 @@ function PlaygroundSidebar(props: { onNavigate: () => void }) {
           class="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
         />
       </label>
+
+      <div class="mt-4 space-y-2">
+        <p class="px-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Tokens</p>
+        <A
+          href="/tokens"
+          class="block rounded-md border border-transparent px-3 py-2 text-sm transition hover:border-border hover:bg-accent"
+          activeClass="border-border bg-accent text-foreground shadow-sm"
+          end
+          onClick={props.onNavigate}
+        >
+          Tokens
+        </A>
+      </div>
 
       <div class="mt-4 space-y-4">
         <For each={grouped()}>
@@ -185,6 +199,129 @@ export function PlaygroundHomePage() {
         <p class="text-sm text-muted-foreground">Total</p>
         <p class="mt-1 text-3xl font-bold">{total}</p>
       </div>
+    </section>
+  );
+}
+
+type TokenValues = Record<string, { light: string; dark: string }>;
+
+function readThemeTokenValues(): TokenValues {
+  const values: TokenValues = {};
+  const lightElement = document.createElement("div");
+  const darkElement = document.createElement("div");
+  darkElement.setAttribute("data-kb-theme", "dark");
+  lightElement.style.display = darkElement.style.display = "none";
+  document.body.append(lightElement, darkElement);
+
+  for (const token of COLOR_TOKENS) {
+    values[token.variable] = {
+      light: getComputedStyle(lightElement).getPropertyValue(token.variable).trim(),
+      dark: getComputedStyle(darkElement).getPropertyValue(token.variable).trim(),
+    };
+  }
+
+  lightElement.remove();
+  darkElement.remove();
+  return values;
+}
+
+function readFontValues(): Record<string, string> {
+  const values: Record<string, string> = {};
+  const elements = FONT_TOKENS.map((token) => {
+    const element = document.createElement("span");
+    element.className = token.className;
+    element.style.position = "absolute";
+    element.style.visibility = "hidden";
+    element.textContent = token.name;
+    document.body.append(element);
+    return [token.name, element] as const;
+  });
+
+  for (const [name, element] of elements) {
+    values[name] = getComputedStyle(element).fontFamily || FONT_TOKENS.find((token) => token.name === name)?.fallback || "";
+    element.remove();
+  }
+
+  return values;
+}
+
+export function TokensPage() {
+  const [colorValues, setColorValues] = createSignal<TokenValues>({});
+  const [fontValues, setFontValues] = createSignal<Record<string, string>>({});
+
+  onMount(() => {
+    setColorValues(readThemeTokenValues());
+    setFontValues(readFontValues());
+  });
+
+  return (
+    <section class="space-y-8">
+      <header class="space-y-2">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Tokens · Brand system</p>
+        <h1 class="text-3xl font-bold tracking-tight">Design tokens</h1>
+        <p class="max-w-3xl text-muted-foreground">The semantic colors and typography defaults that shape Regenfass interfaces. Every color is shown with its Light and Dark theme value.</p>
+      </header>
+
+      <section class="space-y-5" aria-labelledby="color-tokens-heading">
+        <div>
+          <h2 id="color-tokens-heading" class="text-xl font-semibold">Color tokens</h2>
+          <p class="mt-1 text-sm text-muted-foreground">CSS variables from <code class="font-mono text-xs">web/brand/src/styles.css</code>.</p>
+        </div>
+        <For each={COLOR_TOKEN_GROUPS}>
+          {(group) => {
+            const groupId = `token-group-${group.title.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+            return (
+              <section class="space-y-3" aria-labelledby={groupId}>
+                <h3 id={groupId} class="text-sm font-semibold text-muted-foreground">{group.title}</h3>
+                <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <For each={group.tokens}>
+                    {(token) => {
+                      const values = () => colorValues()[token.variable];
+                      return (
+                        <article class="rounded-lg border border-border bg-card/70 p-4">
+                          <div class="flex items-center gap-3">
+                            <div class="flex shrink-0 gap-1" aria-label={`${token.name} Light and Dark color swatches`}>
+                              <span data-token-swatch={`${token.variable}-light`} class="size-8 rounded-md border border-border shadow-inner" style={{ "background-color": values()?.light ? `hsl(${values()?.light})` : `hsl(var(${token.variable}))` }} aria-hidden="true" />
+                              <span data-token-swatch={`${token.variable}-dark`} class="size-8 rounded-md border border-border shadow-inner" style={{ "background-color": values()?.dark ? `hsl(${values()?.dark})` : `hsl(var(${token.variable}))` }} aria-hidden="true" />
+                            </div>
+                            <div class="min-w-0">
+                              <h4 class="font-medium">{token.name}</h4>
+                              <code class="text-xs text-muted-foreground">{token.variable}</code>
+                            </div>
+                          </div>
+                          <dl class="mt-4 grid grid-cols-2 gap-3 text-xs">
+                            <div class="rounded-md bg-background/70 p-2"><dt class="font-semibold text-muted-foreground">Light</dt><dd class="mt-1 break-all font-mono">{values()?.light || "—"}</dd></div>
+                            <div class="rounded-md bg-background/70 p-2"><dt class="font-semibold text-muted-foreground">Dark</dt><dd class="mt-1 break-all font-mono">{values()?.dark || "—"}</dd></div>
+                          </dl>
+                        </article>
+                      );
+                    }}
+                  </For>
+                </div>
+              </section>
+            );
+          }}
+        </For>
+      </section>
+
+      <section class="space-y-5" aria-labelledby="font-tokens-heading">
+        <div>
+          <h2 id="font-tokens-heading" class="text-xl font-semibold">Typography</h2>
+          <p class="mt-1 text-sm text-muted-foreground">The current Tailwind and system fallback stacks used by the playground.</p>
+        </div>
+        <div class="grid gap-4 lg:grid-cols-2">
+          <For each={FONT_TOKENS}>
+            {(token) => (
+              <article class="rounded-lg border border-border bg-card/70 p-5">
+                <div class="flex items-baseline justify-between gap-3"><h3 class="font-semibold">{token.name}</h3><span class="text-xs text-muted-foreground">{token.label}</span></div>
+                <p class={`mt-5 text-2xl ${token.className}`}>The quick brown fox jumps over the lazy dog.</p>
+                <p class="mt-4 text-xs text-muted-foreground">{token.description}</p>
+                <code class="mt-2 block break-words rounded-md bg-background/70 p-3 text-xs text-muted-foreground">{fontValues()[token.name] || token.fallback}</code>
+              </article>
+            )}
+          </For>
+        </div>
+      </section>
     </section>
   );
 }

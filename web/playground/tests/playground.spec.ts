@@ -10,7 +10,7 @@ const components = [...registry.matchAll(/\n    slug: "([^"]+)",\n    name: "([^
 for (const component of components) {
   test(`${component.name} route renders`, async ({ page }) => {
     await page.goto(`/${component.slug}`);
-    await expect(page.locator("main h1")).toHaveText(component.name);
+    await expect(page.locator("main h1").first()).toHaveText(component.name);
     await expect(page.getByText("Unknown playground component.")).not.toBeVisible();
   });
 }
@@ -20,6 +20,18 @@ test("component search filters the sidebar", async ({ page }) => {
   await page.getByPlaceholder("Search components…").fill("ButtonPrimary");
   await expect(page.getByRole("link", { name: "ButtonPrimary" })).toBeVisible();
   await expect(page.getByRole("link", { name: "ButtonSecondary" })).not.toBeVisible();
+});
+
+test("tokens route shows brand colors and fonts", async ({ page }) => {
+  await page.goto("/tokens");
+  await expect(page.locator("main h1")).toHaveText("Design tokens");
+  await expect(page.getByRole("link", { name: "Tokens", exact: true })).toBeVisible();
+  await expect(page.getByText("--primary", { exact: true })).toBeVisible();
+  await expect(page.getByText("--primary-foreground", { exact: true })).toBeVisible();
+  await expect(page.getByText("font-sans", { exact: true })).toBeVisible();
+  await expect(page.getByText("font-mono", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-token-swatch="--primary-light"]')).toBeVisible();
+  await expect(page.locator('[data-token-swatch="--primary-dark"]')).toBeVisible();
 });
 
 test("TextInput exposes and applies the disabled prop", async ({ page }) => {
@@ -40,7 +52,7 @@ test("AppKeyHexField shows actions, sound control, and selected props", async ({
 
 test("Footer displays a release version and links to release notes", async ({ page }) => {
   await page.goto("/footer");
-  await expect(page.getByText(/^v\\d+\\.\\d+\\.\\d+$/)).toBeVisible();
+  await expect(page.getByText(/^v\d+\.\d+\.\d+$/)).toBeVisible();
   await expect(page.getByRole("link", { name: "Release notes" })).toHaveAttribute(
     "href",
     "https://github.com/ttnleipzig/regenfass/releases",

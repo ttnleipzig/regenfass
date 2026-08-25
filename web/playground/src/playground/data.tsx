@@ -355,6 +355,12 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => `<TextInput
+  label="${escapeJsxAttribute(String(values.label))}"
+  placeholder="${escapeJsxAttribute(String(values.placeholder))}"
+  value="${escapeJsxAttribute(String(values.value))}"
+  disabled={${Boolean(values.disabled)}}
+/>`,
   },
   {
     slug: "input-field",

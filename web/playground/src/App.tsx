@@ -5,6 +5,7 @@ import {
   PlaygroundComponentPage,
   PlaygroundHomePage,
   PlaygroundLayout,
+  TokensPage,
   findFirstPlaygroundSlug,
 } from "./playground/Playground";
 
@@ -43,6 +44,7 @@ export default function App() {
       <Route path="/" component={Shell}>
         <Route path="/" component={PlaygroundLayout}>
           <Route path="/" component={PlaygroundHomePage} />
+          <Route path="/tokens" component={TokensPage} />
           <Route path="/:slug" component={PlaygroundComponentPage} />
         </Route>
       </Route>

@@ -15,7 +15,8 @@
 
     --primary: 199  89% 48%;
     --primary-500: 199  89% 24%;
-    --primary-foreground: 210 40% 98%;
+    /* Dark label keeps the bright cyan primary surface readable in light mode. */
+    --primary-foreground: 222.2 84% 4.9%;
 
     --secondary: 171  91%  36%;
     /* Near-white on teal — same-hue mint failed ~3:1 in light mode */
@@ -56,7 +57,7 @@
     --popover-foreground: 210 40% 98%;
 
     --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 80%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 171 91% 36%;
     /* Keep light label on teal so filled secondary stays readable in dark */
