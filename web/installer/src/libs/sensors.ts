@@ -38,9 +38,12 @@ export type SensorReading =
   | { type: SensorType.SoundLevel; value: number; unit: "dB" };
 
 // `channel` is the device channel (0–15) the reading arrived on. It's optional
-// because sample/preview readings aren't tied to a real channel.
+// because sample/preview readings aren't tied to a real channel. `latestAt` is
+// when the reading arrived — the latest endpoints are unbounded in time, so
+// without it a months-old value is indistinguishable from a current one.
 export type SensorReadingWithChannel = SensorReading & {
   channel?: number;
+  latestAt?: number;
 };
 
 export type Sensor = {
@@ -55,6 +58,9 @@ export type Sensor = {
 
 export type SensorReadingWithHistory = SensorReading & {
   history?: { t: number; value: number }[];
+  // Epoch ms of the reading that produced `value`. Lets the UI tell a fresh
+  // headline value apart from one that is only the newest thing on record.
+  latestAt?: number;
   channel?: number;
 };
 
@@ -191,7 +197,13 @@ export function deviceToSensor(device: BackendLatestDevice): Sensor {
   const readings: SensorReadingWithChannel[] = [];
   for (const m of device.measurements) {
     const reading = readingFromBackend(m.measurement_type, m.value);
-    if (reading) readings.push({ ...reading, channel: m.channel_id });
+    if (!reading) continue;
+    const at = Date.parse(m.received_at);
+    readings.push({
+      ...reading,
+      channel: m.channel_id,
+      latestAt: Number.isNaN(at) ? undefined : at,
+    });
   }
   return {
     id: device.device_id,
@@ -202,79 +214,209 @@ export function deviceToSensor(device: BackendLatestDevice): Sensor {
   };
 }
 
-// How far back the device detail panel graphs reach. The ranged measurements
-// endpoint downsamples to ~2000 points across this window, so the exact width
-// only affects resolution, not payload size.
-const DEVICE_HISTORY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+// The window a fetch actually covered. Graphs pin their time axis to this so a
+// point from outside the window can't be drawn as if it were recent, and an
+// empty window renders as "no data" rather than as a flat or fabricated line.
+export type HistoryWindow = { start: number; end: number };
 
-export function useDeviceMeasurements(deviceToken: () => string | null | undefined) {
-  const [measurements, { refetch }] = createResource(
-    () => deviceToken() ?? null,
-    async (token) => {
-      if (!token) return [] as BackendDeviceMeasurement[];
-      const end = new Date();
-      const start = new Date(end.getTime() - DEVICE_HISTORY_WINDOW_MS);
-      return getDeviceMeasurements(token, { start, end });
-    },
-    { initialValue: [] },
+const MINUTE_MS = 60 * 1000;
+const HOUR_MS = 60 * MINUTE_MS;
+const DAY_MS = 24 * HOUR_MS;
+
+// The rolling ranges offered in the graph period selector. Each is a lookback
+// from "now"; the ranged measurements endpoint downsamples to ~2000 points
+// across whatever span it's given, so a wider range costs resolution, not
+// payload size.
+export const HISTORY_PRESETS = [
+  { id: "day", label: "Last day", spanLabel: "day", ms: DAY_MS },
+  { id: "week", label: "Last 7 days", spanLabel: "7 days", ms: 7 * DAY_MS },
+  { id: "month", label: "Last month", spanLabel: "month", ms: 30 * DAY_MS },
+  { id: "year", label: "Last year", spanLabel: "year", ms: 365 * DAY_MS },
+] as const;
+
+export type HistoryPreset = (typeof HISTORY_PRESETS)[number]["id"];
+
+// A rolling preset, or an explicit start/end the user picked. Custom ranges are
+// absolute, so they don't drift as time passes.
+export type HistoryPeriod =
+  | { kind: "preset"; preset: HistoryPreset }
+  | { kind: "custom"; start: number; end: number };
+
+export const DEFAULT_HISTORY_PERIOD: HistoryPeriod = {
+  kind: "preset",
+  preset: "week",
+};
+
+export function historyPresetMs(preset: HistoryPreset): number {
+  return (
+    HISTORY_PRESETS.find((p) => p.id === preset)?.ms ?? 7 * DAY_MS
   );
-
-  const readings = createMemo<SensorReadingWithHistory[]>(() => {
-    const rows = measurements();
-    if (!rows || rows.length === 0) return [];
-    return reduceMeasurementsToReadings(rows);
-  });
-
-  return { measurements, readings, refetch: () => void refetch() };
 }
 
-// Fetch the given window of measurements for a single channel of a device and
+// Resolves a period to concrete bounds. Presets are anchored to `now` at the
+// moment of resolution, which is why this is called inside fetchers rather than
+// held in a signal — a stored "last day" would otherwise go stale on the clock.
+export function periodToWindow(
+  period: HistoryPeriod,
+  now = Date.now(),
+): HistoryWindow {
+  if (period.kind === "custom") return { start: period.start, end: period.end };
+  return { start: now - historyPresetMs(period.preset), end: now };
+}
+
+// How the period reads in prose: "the last 7 days", or a formatted range for a
+// custom window. Used in the panel header and the graphs' empty state.
+export function periodLabel(period: HistoryPeriod): string {
+  if (period.kind === "preset") {
+    const preset = HISTORY_PRESETS.find((p) => p.id === period.preset);
+    return `the last ${preset?.spanLabel ?? "7 days"}`;
+  }
+  const fmt = (t: number) =>
+    new Date(t).toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  return `${fmt(period.start)} – ${fmt(period.end)}`;
+}
+
+// True when the period describes a usable range. Custom ranges come from user
+// input, so they can be half-filled or backwards.
+export function isValidPeriod(period: HistoryPeriod): boolean {
+  if (period.kind === "preset") return true;
+  return (
+    Number.isFinite(period.start) &&
+    Number.isFinite(period.end) &&
+    period.start < period.end
+  );
+}
+
+const EMPTY_WINDOW_RESULT: {
+  window: HistoryWindow;
+  rows: BackendDeviceMeasurement[];
+} = { window: { start: 0, end: 0 }, rows: [] };
+
+export function useDeviceMeasurements(
+  deviceToken: () => string | null | undefined,
+  period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
+) {
+  const [result, { refetch }] = createResource(
+    () => {
+      const token = deviceToken();
+      if (!token) return null;
+      const p = period();
+      // An unusable custom range would otherwise be sent to the backend as a
+      // backwards or NaN interval; hold the previous view until it's complete.
+      if (!isValidPeriod(p)) return null;
+      return { token, period: p };
+    },
+    async ({ token, period: p }) => {
+      const window = periodToWindow(p);
+      const rows = await getDeviceMeasurements(token, {
+        start: new Date(window.start),
+        end: new Date(window.end),
+      });
+      return { window, rows };
+    },
+    { initialValue: EMPTY_WINDOW_RESULT },
+  );
+
+  const measurements = createMemo(() => result()?.rows ?? []);
+
+  // Falls back to the requested period so a graph rendered before the first
+  // fetch resolves still has a sane axis instead of the 1970 epoch.
+  const window = createMemo<HistoryWindow>(() => {
+    const w = result()?.window;
+    if (w && w.end > 0) return w;
+    return periodToWindow(period());
+  });
+
+  const readings = createMemo<SensorReadingWithHistory[]>(() => {
+    const rows = result()?.rows;
+    if (!rows || rows.length === 0) return [];
+    // Clip to the requested window: the backend is the source of truth for the
+    // range, but clipping here means a stale or unbounded response can never
+    // put out-of-period points on the graph.
+    return reduceMeasurementsToReadings(rows, window().start);
+  });
+
+  return { result, measurements, readings, window, refetch: () => void refetch() };
+}
+
+// Fetch the given period of measurements for a single channel of a device and
 // reduce them to one reading-with-history. Returns null while there is no
 // device token / selected channel, or when the channel has no data in range.
 export function useChannelHistory(
   deviceToken: () => string | null | undefined,
   channel: () => number | null,
-  windowMs = DEVICE_HISTORY_WINDOW_MS,
+  period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
 ) {
-  const [reading, { refetch }] = createResource(
+  const [result, { refetch }] = createResource(
     () => {
       const token = deviceToken();
       const ch = channel();
       if (!token || ch === null) return null;
-      return { token, channel: ch };
+      const p = period();
+      if (!isValidPeriod(p)) return null;
+      return { token, channel: ch, period: p };
     },
-    async ({ token, channel: ch }) => {
-      const end = new Date();
-      const start = new Date(end.getTime() - windowMs);
-      const rows = await getDeviceMeasurements(token, { start, end, channel: ch });
-      if (rows.length === 0) return null;
-      return reduceMeasurementsToReadings(rows)[0] ?? null;
+    async ({ token, channel: ch, period: p }) => {
+      const window = periodToWindow(p);
+      const rows = await getDeviceMeasurements(token, {
+        start: new Date(window.start),
+        end: new Date(window.end),
+        channel: ch,
+      });
+      if (rows.length === 0) return { window, reading: null };
+      const reading = reduceMeasurementsToReadings(rows, window.start)[0] ?? null;
+      return { window, reading };
     },
     { initialValue: null },
   );
 
-  return { reading, refetch: () => void refetch() };
+  const reading = createMemo(() => result()?.reading ?? null);
+  const window = createMemo<HistoryWindow>(() => {
+    const w = result()?.window;
+    if (w && w.end > 0) return w;
+    return periodToWindow(period());
+  });
+
+  return { result, reading, window, refetch: () => void refetch() };
 }
 
+// `since` (epoch ms) clips the result to the graph window: rows older than it
+// are dropped, and a channel whose only rows fall outside the window is left
+// out entirely rather than reported as a current reading.
 export function reduceMeasurementsToReadings(
   rows: BackendDeviceMeasurement[],
+  since?: number,
 ): SensorReadingWithHistory[] {
   // Rows arrive grouped by channel, ascending in time within each channel.
   // Build history per channel and keep the most recent reading as the headline
   // value (compared by timestamp so ordering assumptions can't silently break).
   type Acc = {
     latest: BackendDeviceMeasurement;
+    latestAt: number;
     history: { t: number; value: number }[];
   };
   const byChannel = new Map<number, Acc>();
   for (const row of rows) {
     const t = Date.parse(row.received_at);
+    // Unparseable timestamps can't be placed on a time axis, and can't be
+    // checked against the window either — skip them.
+    if (Number.isNaN(t)) continue;
+    if (since !== undefined && t < since) continue;
     let acc = byChannel.get(row.channel_id);
     if (!acc) {
-      acc = { latest: row, history: [] };
+      acc = { latest: row, latestAt: t, history: [] };
       byChannel.set(row.channel_id, acc);
     }
-    if (t >= Date.parse(acc.latest.received_at)) acc.latest = row;
+    if (t >= acc.latestAt) {
+      acc.latest = row;
+      acc.latestAt = t;
+    }
     if (typeof row.value === "number") {
       acc.history.push({ t, value: row.value });
     } else if (typeof row.value === "boolean") {
@@ -289,7 +431,12 @@ export function reduceMeasurementsToReadings(
     acc.history.sort((a, b) => a.t - b.t);
     const reading = readingFromBackend(acc.latest.measurement_type, acc.latest.value);
     if (!reading) continue;
-    out.push({ ...reading, history: acc.history, channel: acc.latest.channel_id });
+    out.push({
+      ...reading,
+      history: acc.history,
+      latestAt: acc.latestAt,
+      channel: acc.latest.channel_id,
+    });
   }
   return out;
 }
@@ -449,40 +596,4 @@ export function sensorLabel(type: SensorType): string {
 
 export function sensorUnit(r: SensorReading): string | undefined {
   return "unit" in r ? r.unit : undefined;
-}
-
-// Deterministic fake history per (sensor, reading) so mock graphs are stable
-// across renders. Replace this when real time-series data arrives from the API.
-export function sensorHistory(
-  seed: string,
-  latest: number,
-  points = 24,
-): number[] {
-  const rng = mulberry32(hashString(seed));
-  const variance = Math.max(Math.abs(latest) * 0.15, 0.5);
-  const out: number[] = [];
-  let v = latest + (rng() - 0.5) * variance * 1.5;
-  for (let i = 0; i < points - 1; i++) {
-    v += (rng() - 0.5) * variance * 0.6;
-    out.push(Math.round(v * 100) / 100);
-  }
-  out.push(Math.round(latest * 100) / 100);
-  return out;
-}
-
-function hashString(s: string): number {
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < s.length; i++) {
-    h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  }
-  return h >>> 0;
-}
-
-function mulberry32(seed: number) {
-  return () => {
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
 }
