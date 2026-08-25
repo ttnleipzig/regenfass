@@ -34,6 +34,7 @@ function Shell(props: ParentProps) {
       <Header
         title="Regenfass Brand"
         navItems={[
+          { href: "https://regenfass.eu/", label: "Home", external: true },
           { href: "/", label: "Gallery" },
           { href: "https://docs.regenfass.eu/", label: "Docs", external: true },
           {

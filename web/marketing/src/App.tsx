@@ -67,8 +67,11 @@ function Shell(props: ParentProps & { lang: Locale }) {
 	const base = `/${props.lang}`;
 
 	const navItems = (): HeaderNavItem[] => [
-		{ href: base, label: t("nav.home") },
-		{ href: `${base}/changelog`, label: t("nav.changelog") },
+		{
+			href: base,
+			label: t("nav.home"),
+			children: [{ href: `${base}/changelog`, label: t("nav.changelog") }],
+		},
 		{
 			href: DOCS_URL,
 			label: t("nav.docs"),

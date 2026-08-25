@@ -84,6 +84,24 @@ describe("Header", () => {
 		);
 	});
 
+	it("renders nested navigation items and marks the current route active", () => {
+		renderWithRouter(() => (
+			<Header
+				navItems={[
+					{
+						href: "/",
+						label: "Home",
+						children: [{ href: "/changelog", label: "Changelog" }],
+					},
+				]}
+			/>
+		));
+
+		const homeLink = screen.getByText("Home");
+		expect(homeLink.closest("a")).toHaveAttribute("aria-current", "page");
+		expect(screen.getByText("Changelog")).toBeInTheDocument();
+	});
+
 	it("accepts custom navItems", () => {
 		renderWithRouter(() => (
 			<Header
