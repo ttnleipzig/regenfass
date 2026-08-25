@@ -25,7 +25,7 @@ const navItems: HeaderNavItem[] = [
 | Name       | Type              | Default                                     | Description                                            |
 | ---------- | ----------------- | ------------------------------------------- | ------------------------------------------------------ |
 | `title`    | `string`          | `"Regenfass"`                               | Optional brand title shown in the header.              |
-| `navItems` | `HeaderNavItem[]` | Docs / installer / GitHub / Matrix defaults | Navigation items.                                      |
+| `navItems` | `HeaderNavItem[]` | Home / Docs / Installer / Brand / GitHub defaults | Navigation items.                                      |
 | `trailing` | `JSX.Element`     | —                                           | Extra controls rendered next to the color-mode toggle. |
 
 ### `HeaderNavItem`

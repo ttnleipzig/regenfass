@@ -65,7 +65,7 @@ export const DOCS_NAV: NavItem[] = [
 ];
 
 export const HEADER_NAV = [
-  { href: "https://regenfass.eu/", label: "Marketing", external: true },
+  { href: "https://regenfass.eu/", label: "Home", external: true },
   { href: "/", label: "Docs" },
   {
     href: "https://install.regenfass.eu",

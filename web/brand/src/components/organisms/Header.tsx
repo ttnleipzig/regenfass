@@ -17,18 +17,18 @@ export type HeaderNavItem = {
 export type HeaderProps = {
   /** Optional brand title shown in the header. */
   title?: string;
-  /** Navigation items. Defaults link to docs, installer, GitHub, and Matrix. */
+  /** Navigation items. Defaults link to Home, docs, installer, brand, and GitHub. */
   navItems?: HeaderNavItem[];
   /** Extra controls rendered next to the color-mode toggle. */
   trailing?: JSX.Element;
 };
 
 const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
-  { href: "https://brand.regenfass.eu", label: "🎨 Components", external: true },
+  { href: "https://regenfass.eu/", label: "Home", external: true },
   { href: "https://docs.regenfass.eu/", label: "Docs", external: true },
   { href: "https://install.regenfass.eu", label: "Installer", external: true },
+  { href: "https://brand.regenfass.eu", label: "Brand", external: true },
   { href: "https://github.com/ttnleipzig/regenfass", label: "GitHub", external: true },
-  { href: "https://matrix.to/#/#ttn-leipzig:matrix.org", label: "Matrix", external: true },
 ];
 
 const Header: Component<HeaderProps> = (rawProps) => {

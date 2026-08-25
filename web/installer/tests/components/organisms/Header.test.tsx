@@ -48,11 +48,11 @@ describe("Header", () => {
 
 	it("renders default navigation links", () => {
 		renderWithRouter(() => <Header />);
-		const componentsLink = screen.getByText(/Components/);
-		expect(componentsLink).toBeInTheDocument();
-		expect(componentsLink.closest("a")).toHaveAttribute(
+		const homeLink = screen.getByText("Home");
+		expect(homeLink).toBeInTheDocument();
+		expect(homeLink.closest("a")).toHaveAttribute(
 			"href",
-			"https://brand.regenfass.eu",
+			"https://regenfass.eu/",
 		);
 
 		const docsLink = screen.getByText("Docs");
@@ -76,11 +76,11 @@ describe("Header", () => {
 			"https://github.com/ttnleipzig/regenfass",
 		);
 
-		const matrixLink = screen.getByText("Matrix");
-		expect(matrixLink).toBeInTheDocument();
-		expect(matrixLink.closest("a")).toHaveAttribute(
+		const brandLink = screen.getByText("Brand");
+		expect(brandLink).toBeInTheDocument();
+		expect(brandLink.closest("a")).toHaveAttribute(
 			"href",
-			"https://matrix.to/#/#ttn-leipzig:matrix.org",
+			"https://brand.regenfass.eu",
 		);
 	});
 
