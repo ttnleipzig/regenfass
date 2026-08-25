@@ -37,6 +37,18 @@ export type LatestMeasurementsRequest = {
   devices?: string[];
 };
 
+// Carries the HTTP status so callers can branch on it (e.g. 409 when a device
+// EUI has already been enrolled) instead of matching on the message text.
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
@@ -53,7 +65,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       detail = await res.text().catch(() => "");
     }
-    throw new Error(
+    throw new ApiError(
+      res.status,
       `API ${init?.method ?? "GET"} ${path} failed: ${res.status} ${res.statusText}${detail ? ` — ${detail}` : ""}`,
     );
   }
@@ -102,6 +115,29 @@ export type DeviceInfoResponse = {
   read_only_token: string;
   read_write_token?: string;
 };
+
+export type RegisterDeviceResponse = {
+  read_write_token: string;
+  read_only_token: string;
+};
+
+// Enrolls a device in the cloud by its LoRaWAN DevEUI. /ingest only stores
+// uplinks for devices that already exist, so this is what makes a freshly
+// flashed device start collecting measurements. An EUI the backend already
+// knows comes back as 409 — the tokens handed out the first time are the only
+// way back to that device.
+export async function registerDevice(
+  deviceEUI: string,
+): Promise<RegisterDeviceResponse> {
+  return request<RegisterDeviceResponse>("/device", {
+    method: "POST",
+    body: JSON.stringify({ device_eui: deviceEUI }),
+  });
+}
+
+export async function getDeviceInfo(token: string): Promise<DeviceInfoResponse> {
+  return request<DeviceInfoResponse>(`/device/${encodeURIComponent(token)}`);
+}
 
 export async function updateDeviceName(
   deviceToken: string,

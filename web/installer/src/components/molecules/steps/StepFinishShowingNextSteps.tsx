@@ -7,6 +7,7 @@ import {
 import { cn } from "@/libs/cn.ts";
 import CircleCheck from "lucide-solid/icons/circle-check";
 import { useInstallerT } from "@/i18n/index.ts";
+import CloudEnrollment from "@/components/molecules/CloudEnrollment.tsx";
 
 interface StepProps {
 	state: any;
@@ -17,7 +18,6 @@ export default function StepFinishShowingNextSteps({
 	state,
 	emitEvent,
 }: StepProps) {
-	void state;
 	const t = useInstallerT();
 
 	return (
@@ -76,6 +76,7 @@ export default function StepFinishShowingNextSteps({
 					</div>
 				</div>
 			</AlertInline>
+			<CloudEnrollment devEUI={state.context?.deviceInfo?.config?.devEUI} />
 			<div class="flex justify-stretch pt-1 sm:justify-end">
 				<Button
 					variant="outline"
