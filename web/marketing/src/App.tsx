@@ -85,11 +85,6 @@ function Shell(props: ParentProps & { lang: Locale }) {
 			onClick: trackNavigateToInstaller,
 		},
 		{
-			href: "https://brand.regenfass.eu",
-			label: t("nav.brand"),
-			external: true,
-		},
-		{
 			href: "https://github.com/ttnleipzig/regenfass",
 			label: t("nav.github"),
 			external: true,

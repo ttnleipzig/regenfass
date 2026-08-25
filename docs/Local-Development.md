@@ -18,7 +18,7 @@ From the **repository root**:
 | Script               | Package                                | Typical URL                            |
 | -------------------- | -------------------------------------- | -------------------------------------- |
 | `pnpm dev:installer` | `@ttnleipzig/regenfass-installer`      | <http://localhost:5173> (Vite default) |
-| `pnpm dev:brand`     | `@ttnleipzig/regenfass-brand-showcase` | <http://localhost:5174>                |
+| `pnpm dev:playground`     | `@ttnleipzig/regenfass-playground` | <http://localhost:5177>                |
 | `pnpm dev:marketing` | `@ttnleipzig/regenfass-marketing`      | <http://localhost:5175>                |
 | `pnpm dev:docs`      | `@ttnleipzig/regenfass-docs-site`      | <http://localhost:5176>                |
 
@@ -89,7 +89,6 @@ Each Vite app under `web/` uses its own Swetrix project. Put the IDs in the **re
 SWETRIX_PROJECT_ID_INSTALLER=…
 SWETRIX_PROJECT_ID_MARKETING=…
 SWETRIX_PROJECT_ID_DOCS=…
-SWETRIX_PROJECT_ID_BRAND=…
 ```
 
 Optional (self-hosted Community Edition):

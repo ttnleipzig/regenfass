@@ -14,7 +14,7 @@ Build helpers from root `package.json`:
 | ---------------------- | ------------------------------------------------------------------------------------ |
 | `pnpm build`           | `pnpm -r --filter "./web/**" run build` — all workspace packages that define `build` |
 | `pnpm build:installer` | `@ttnleipzig/regenfass-installer` production build                                   |
-| `pnpm build:brand`     | brand-showcase production build                                                      |
+| `pnpm build:playground`     | playground production build                                                      |
 | `pnpm build:marketing` | marketing package (when present)                                                     |
 | `pnpm build:docs`      | docs-site package (when present)                                                     |
 

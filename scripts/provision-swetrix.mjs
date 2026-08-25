@@ -4,7 +4,7 @@
  * (same endpoints as mcp-swetrix admin tools).
  *
  * Prefers existing IDs from root `.env`:
- *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS / _BRAND
+ *   SWETRIX_PROJECT_ID_INSTALLER / _MARKETING / _DOCS
  *
  * Usage (from repo root):
  *   node scripts/provision-swetrix.mjs
@@ -85,11 +85,6 @@ const PROJECTS = [
     name: "regenfass-docs",
     envKey: "SWETRIX_PROJECT_ID_DOCS",
     origins: ["docs.regenfass.eu"],
-  },
-  {
-    name: "regenfass-brand",
-    envKey: "SWETRIX_PROJECT_ID_BRAND",
-    origins: ["brand.regenfass.eu"],
   },
 ];
 
@@ -189,7 +184,6 @@ async function main() {
       SWETRIX_PROJECT_ID_INSTALLER: ids["regenfass-installer"],
       SWETRIX_PROJECT_ID_MARKETING: ids["regenfass-marketing"],
       SWETRIX_PROJECT_ID_DOCS: ids["regenfass-docs"],
-      SWETRIX_PROJECT_ID_BRAND: ids["regenfass-brand"],
     });
   }
 

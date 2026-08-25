@@ -18,8 +18,12 @@ export type HeaderNavItem = {
 export type HeaderProps = {
   /** Optional brand title shown in the header. */
   title?: string;
-  /** Navigation items. Defaults link to Home, docs, installer, brand, and GitHub. */
+  /** Optional title suffix rendered separately from the brand title. */
+  titleSuffix?: string;
+  /** Navigation items. Defaults link to Home, docs, installer, and GitHub. */
   navItems?: HeaderNavItem[];
+  /** Position of the navigation relative to the title. */
+  navPosition?: "right" | "left";
   /** Extra controls rendered next to the color-mode toggle. */
   trailing?: JSX.Element;
 };
@@ -28,7 +32,6 @@ const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
   { href: "https://regenfass.eu/", label: "Home", external: true },
   { href: "https://docs.regenfass.eu/", label: "Docs", external: true },
   { href: "https://install.regenfass.eu", label: "Installer", external: true },
-  { href: "https://brand.regenfass.eu", label: "Brand", external: true },
   { href: "https://github.com/ttnleipzig/regenfass", label: "GitHub", external: true },
 ];
 
@@ -36,7 +39,6 @@ const LOCAL_REGENFASS_URLS = [
   ["https://regenfass.eu/", "http://localhost:5175/"],
   ["https://docs.regenfass.eu/", "http://localhost:5176/"],
   ["https://install.regenfass.eu", "http://localhost:5173/"],
-  ["https://brand.regenfass.eu", "http://localhost:5174/"],
 ] as const;
 
 function isLocalHost(hostname: string) {
@@ -67,7 +69,7 @@ function normalizePathname(pathname: string) {
 
 const Header: Component<HeaderProps> = (rawProps) => {
   const props = mergeProps(
-    { title: "Regenfass", navItems: DEFAULT_NAV_ITEMS },
+    { title: "Regenfass", navItems: DEFAULT_NAV_ITEMS, navPosition: "right" as const },
     rawProps,
   );
   const location = useLocation();
@@ -135,12 +137,20 @@ const Header: Component<HeaderProps> = (rawProps) => {
 
   return (
     <header class="w-full py-6 border-b border-border">
-      <div class="site-container flex justify-between items-center">
+      <div
+        class={cn(
+          "site-container max-w-none px-4 sm:px-6 lg:px-8 flex items-center",
+          props.navPosition === "left" ? "justify-start" : "justify-between",
+        )}
+      >
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
           {props.title}
+          <Show when={props.titleSuffix}>
+            <span class="font-normal text-white"> {props.titleSuffix}</span>
+          </Show>
         </h1>
 
-        <nav class="hidden md:block">
+        <nav class={cn("hidden md:block", props.navPosition === "left" && "ml-8")}>
           <ul class="flex font-medium gap-x-3 text-foreground/80">
             <For each={props.navItems}>
               {(item) => (
@@ -219,7 +229,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
           </ul>
         </nav>
 
-        <div class="flex items-center gap-1">
+        <div class={cn("flex items-center gap-1", props.navPosition === "left" && "ml-auto")}>
           {props.trailing}
           <LanguageSwitcher />
           <ButtonModeToggle />

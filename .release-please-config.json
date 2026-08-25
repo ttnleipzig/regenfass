@@ -19,7 +19,7 @@
         },
         {
           "type": "json",
-          "path": "web/brand-showcase/package.json",
+          "path": "web/playground/package.json",
           "jsonpath": "$.version"
         },
         {

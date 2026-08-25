@@ -80,7 +80,6 @@ func DefaultAllowedOrigins() []string {
 		"https://regenfass.eu",
 		"https://docs.regenfass.eu",
 		"https://install.regenfass.eu",
-		"https://brand.regenfass.eu",
 	}
 }
 

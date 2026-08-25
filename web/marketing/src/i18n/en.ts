@@ -8,7 +8,6 @@ export type MarketingDictionary = {
 		changelog: string;
 		docs: string;
 		installer: string;
-		brand: string;
 		github: string;
 	};
 	hero: {
@@ -72,7 +71,6 @@ export const marketingDictEn: MarketingDictionary = {
 		changelog: "Changelog",
 		docs: "Docs",
 		installer: "Installer",
-		brand: "Brand",
 		github: "GitHub",
 	},
 	hero: {

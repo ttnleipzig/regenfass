@@ -11,7 +11,6 @@ export const marketingDictDe: MarketingDictionary = {
 		changelog: "Changelog",
 		docs: "Docs",
 		installer: "Installer",
-		brand: "Brand",
 		github: "GitHub",
 	},
 	hero: {

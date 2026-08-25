@@ -9,7 +9,6 @@ flowchart LR
   cli --> m[regenfass.eu]
   cli --> d[docs.regenfass.eu]
   cli --> i[install.regenfass.eu]
-  cli --> b[brand.regenfass.eu]
 ```
 
 ## Target sites and subdomains
@@ -19,7 +18,6 @@ flowchart LR
 | <https://regenfass.eu>         | `regenfass-marketing`         | `web/marketing/dist`         | `NETLIFY_SITE_ID_MARKETING` |
 | <https://docs.regenfass.eu>    | `regenfass-docs`              | `web/docs/dist`              | `NETLIFY_SITE_ID_DOCS`      |
 | <https://install.regenfass.eu> | `regenfass-installer`         | `web/installer/dist`         | `NETLIFY_SITE_ID_INSTALLER` |
-| <https://brand.regenfass.eu>   | `regenfass-brand`             | `web/brand-showcase/dist`    | `NETLIFY_SITE_ID_BRAND`     |
 
 Auth for all deploys: repository secret `NETLIFY_AUTH_TOKEN` (personal access token or Netlify deploy token with site deploy rights). Site IDs are **repository variables** (not secrets) — the deploy workflow reads them via `vars.*`.
 
@@ -29,11 +27,11 @@ Workflow: `.github/workflows/web-deploy-netlify.yml`.
 
 A previous Netlify setup used `cd ../..` inside `web/*/netlify.toml`, which assumes a package **Base directory**. With Base directory left empty (repo root = `/opt/build/repo`), that `cd` ends up in `/opt` and fails with `ERR_PNPM_NO_PKG_MANIFEST`.
 
-Building in GitHub Actions keeps one workspace install (`pnpm install` at the monorepo root), shared `@regenfass/brand`, and identical artifacts for all four sites.
+Building in GitHub Actions keeps one workspace install (`pnpm install` at the monorepo root), shared `@regenfass/brand`, and identical artifacts for all three sites.
 
 ## One-time Netlify setup
 
-For each of the four sites:
+For each of the three sites:
 
 1. **Add site** in Netlify (empty site or “Import from Git”, then disable auto-build — see below).
 2. Attach the custom domain (table above) and wait for DNS + HTTPS.
@@ -70,7 +68,6 @@ The deploy workflow uses the **`production`** environment (repository secrets an
 | `NETLIFY_SITE_ID_MARKETING` | Variable | Marketing site ID             |
 | `NETLIFY_SITE_ID_DOCS`      | Variable | Docs site ID                  |
 | `NETLIFY_SITE_ID_INSTALLER` | Variable | Installer site ID             |
-| `NETLIFY_SITE_ID_BRAND`     | Variable | Brand showcase site ID        |
 
 Site IDs are public identifiers — store them as **Settings → Secrets and variables → Actions → Variables**. If the workflow reads `secrets.*` for a site ID that was only added as a variable, deploy steps are skipped with a warning while the job stays green.
 
@@ -83,7 +80,6 @@ Each site needs its **own** Swetrix project ID at build time (Vite inlines `impo
 | `SWETRIX_PROJECT_ID_MARKETING` | Marketing                                                                                                        |
 | `SWETRIX_PROJECT_ID_DOCS`      | Docs                                                                                                             |
 | `SWETRIX_PROJECT_ID_INSTALLER` | Installer                                                                                                        |
-| `SWETRIX_PROJECT_ID_BRAND`     | Brand showcase                                                                                                   |
 | `SWETRIX_API_URL`              | Optional. Self-hosted Events API log URL (e.g. `https://analytics-api.example.com/log`). Omit for Swetrix Cloud. |
 
 Locally, put the same names in the repository root `.env`, then run `node scripts/sync-swetrix-env.mjs`.
@@ -94,7 +90,7 @@ Build first, then deploy the already-built `dist/` (do not let the CLI rebuild).
 
 ```bash
 corepack enable && pnpm install
-pnpm build:docs   # or :marketing / :installer / :brand
+pnpm build:docs   # or :marketing / :installer
 
 export NETLIFY_AUTH_TOKEN=…
 export NETLIFY_SITE_ID=…   # that site’s ID
@@ -107,14 +103,12 @@ CI=true npx netlify-cli@23 deploy --prod --dir=web/docs/dist \
 | Marketing | `web/marketing/dist`      | `@ttnleipzig/regenfass-marketing`      |
 | Docs      | `web/docs/dist`           | `@ttnleipzig/regenfass-docs-site`      |
 | Installer | `web/installer/dist`      | `@ttnleipzig/regenfass-installer`      |
-| Brand     | `web/brand-showcase/dist` | `@ttnleipzig/regenfass-brand-showcase` |
 
 Production Netlify hostnames (until custom domains are attached):
 
 - <https://regenfass-marketing.netlify.app>
 - <https://regenfass-docs.netlify.app>
 - <https://regenfass-installer.netlify.app>
-- <https://regenfass-brand.netlify.app>
 
 ## Fallback build command (if you must build on Netlify)
 

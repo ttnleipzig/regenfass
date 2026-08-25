@@ -72,7 +72,6 @@ export const HEADER_NAV = [
     label: "Installer",
     external: true,
   },
-  { href: "https://brand.regenfass.eu", label: "Brand", external: true },
   {
     href: "https://github.com/ttnleipzig/regenfass",
     label: "GitHub",

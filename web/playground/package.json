@@ -1,12 +1,12 @@
 {
-  "name": "@ttnleipzig/regenfass-brand-showcase",
+  "name": "@ttnleipzig/regenfass-playground",
   "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5174",
+    "dev": "vite --port 5177",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --port 5174",
+    "preview": "vite preview --port 5177",
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {

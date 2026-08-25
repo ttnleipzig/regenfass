@@ -9,7 +9,7 @@ Shared UI lives in `web/brand` (`@regenfass/brand`). The installer, marketing si
 | **Atoms**     | `web/brand/src/components/atoms/`                                                                                                                     |
 | **Molecules** | Shared under `web/brand/src/components/molecules/`; installer-specific flows (steps, Flasher) stay in `web/installer/src/components/molecules/`       |
 | **Organisms** | Shared Header/Footer/Newsletter under `web/brand/src/components/organisms/`; installer-only organisms under `web/installer/src/components/organisms/` |
-| **Templates** | Layout shells (e.g. `MainApp` in `web/installer/src/App.tsx`, brand showcase under `web/brand-showcase/`)                                             |
+| **Templates** | Layout shells (e.g. `MainApp` in `web/installer/src/App.tsx`, playground under `web/playground/`)                                             |
 | **Pages**     | Routed screens with real content and states                                                                                                           |
 
 ## Special folders
@@ -45,6 +45,6 @@ flowchart TB
 - Installer tests: `web/installer/tests/components/…` mirrors installer `src/components/…` for installer-specific UI.
 - Brand component tests, when added, should live next to the brand package.
 - Hand-written component docs: `web/installer/docs/` (match existing layout).
-- After prop changes on shared components: update types in `web/brand`, hand-written docs if needed, and verify brand-showcase still renders.
+- After prop changes on shared components: update types in `web/brand`, hand-written docs if needed, and verify the playground still renders.
 
 Cursor rule: `.agents/rules/atomic-design-installer.mdc`.
