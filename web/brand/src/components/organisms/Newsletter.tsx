@@ -26,13 +26,14 @@ export default function Newsletter() {
 					<form
 						id="form-newsletter"
 						class={cn(
-							"flex px-4 py-2 bg-background rounded-full",
+							"flex w-full flex-col gap-2 px-4 py-2 bg-background rounded-full",
+							"lg:flex-row lg:items-center lg:gap-0",
 							"focus-within:ring-2 focus-within:ring-ring",
 							"hover:ring-2 hover:ring-ring/50",
 							"border border-input",
 						)}
 					>
-						<TextFieldRoot class="flex-1">
+						<TextFieldRoot class="min-w-0 flex-1">
 							<TextFieldInput
 								type="email"
 								class="w-full appearance-none bg-transparent focus:outline-none border-0"
@@ -41,7 +42,7 @@ export default function Newsletter() {
 						</TextFieldRoot>
 						<Button
 							id="button-newsletter"
-							class="px-3 py-1 ml-2 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white"
+							class="w-full px-3 py-1 text-sm font-semibold rounded-full shrink-0 bg-gradient-to-br from-sky-500 to-cyan-400 hover:from-sky-700 hover:to-cyan-600 text-white lg:ml-2 lg:w-auto"
 							type="submit"
 						>
 							{t("newsletter.subscribe")}
