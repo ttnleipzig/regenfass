@@ -17,6 +17,9 @@ export type BrandDictionary = {
 		body: string;
 		placeholder: string;
 		subscribe: string;
+		successTitle: string;
+		successBodyBefore: string;
+		successBodyAfter: string;
 	};
 	a11y: {
 		toggleColorMode: string;
@@ -58,6 +61,11 @@ export const brandDictEn: BrandDictionary = {
 		body: "If you would like to be informed about software updates, you can subscribe to this newsletter.",
 		placeholder: "your@email-address.iot",
 		subscribe: "Subscribe",
+		successTitle: "Almost done",
+		successBodyBefore:
+			"We sent a confirmation email to",
+		successBodyAfter:
+			"Click the link in that email to finish your subscription.",
 	},
 	a11y: {
 		toggleColorMode: "Toggle color mode",

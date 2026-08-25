@@ -1,14 +1,14 @@
+import { createSignal, Show } from "solid-js";
 import { Headline } from "../atoms/Headline.tsx";
 import { Button } from "../atoms/Button.tsx";
-import {
-	TextFieldRoot,
-	TextFieldInput,
-} from "../forms/TextField.tsx";
+import { TextFieldRoot, TextFieldInput } from "../forms/TextField.tsx";
+import { AlertDescription, AlertInline, AlertTitle } from "../molecules/AlertInline.tsx";
 import { cn } from "../../libs/cn.ts";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
 export default function Newsletter() {
 	const t = useBrandT();
+	const [submittedEmail, setSubmittedEmail] = createSignal<string | null>(null);
 
 	return (
 		<aside id="newsletter" class="site-container py-6">
@@ -25,6 +25,15 @@ export default function Newsletter() {
 				<div class="w-full max-w-2xl">
 					<form
 						id="form-newsletter"
+						onSubmit={(event) => {
+							event.preventDefault();
+							const form = event.currentTarget;
+							const data = new FormData(form);
+							const email = String(data.get("email") ?? "").trim();
+							if (!email) return;
+							setSubmittedEmail(email);
+							form.reset();
+						}}
 						class={cn(
 							"flex w-full flex-col gap-2 px-4 py-3 bg-background rounded-2xl",
 							"sm:flex-row sm:items-center sm:gap-3",
@@ -35,7 +44,9 @@ export default function Newsletter() {
 					>
 						<TextFieldRoot class="min-w-0 flex-1">
 							<TextFieldInput
+								name="email"
 								type="email"
+								required
 								class="w-full appearance-none bg-transparent focus:outline-none border-0"
 								placeholder={t("newsletter.placeholder")}
 							/>
@@ -48,6 +59,23 @@ export default function Newsletter() {
 							{t("newsletter.subscribe")}
 						</Button>
 					</form>
+					<Show when={submittedEmail()}>
+						{(email) => (
+							<AlertInline
+								variant="success"
+								class="mt-4"
+								role="status"
+								aria-live="polite"
+							>
+								<AlertTitle>{t("newsletter.successTitle")}</AlertTitle>
+								<AlertDescription class="mt-1">
+									{t("newsletter.successBodyBefore")}{" "}
+									<span class="font-medium text-foreground">{email()}</span>{" "}
+									{t("newsletter.successBodyAfter")}
+								</AlertDescription>
+							</AlertInline>
+						)}
+					</Show>
 				</div>
 			</div>
 		</aside>

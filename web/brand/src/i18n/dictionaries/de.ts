@@ -19,6 +19,11 @@ export const brandDictDe: BrandDictionary = {
 		body: "Wenn du über Software-Updates informiert werden möchtest, kannst du diesen Newsletter abonnieren.",
 		placeholder: "deine@email-adresse.iot",
 		subscribe: "Abonnieren",
+		successTitle: "Fast fertig",
+		successBodyBefore:
+			"Wir haben dir eine Bestätigungs-E-Mail an",
+		successBodyAfter:
+			"geschickt. Klick auf den Link in der E-Mail, um die Anmeldung abzuschließen.",
 	},
 	a11y: {
 		toggleColorMode: "Farbmodus umschalten",
