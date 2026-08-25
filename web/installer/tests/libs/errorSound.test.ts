@@ -17,11 +17,13 @@ describe("errorSound", () => {
 
 	it("plays the error.mp3 sample", () => {
 		setSoundEnabled(true);
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 
 		playErrorSound();
@@ -32,11 +34,13 @@ describe("errorSound", () => {
 
 	it("reuses the same audio element on repeat play", () => {
 		setSoundEnabled(true);
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 
 		playErrorSound();
@@ -47,11 +51,13 @@ describe("errorSound", () => {
 	});
 
 	it("does not play when sounds are muted", () => {
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 		setSoundEnabled(false);
 

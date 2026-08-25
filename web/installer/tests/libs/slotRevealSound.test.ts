@@ -50,14 +50,16 @@ function installMockAudioContext() {
 		connect: vi.fn(),
 	}));
 
-	const MockAudioContext = vi.fn(() => ({
-		currentTime: 0,
-		destination: {},
-		resume,
-		createOscillator,
-		createGain,
-		createDelay,
-	}));
+	const MockAudioContext = vi.fn(function () {
+		return {
+			currentTime: 0,
+			destination: {},
+			resume,
+			createOscillator,
+			createGain,
+			createDelay,
+		};
+	});
 
 	vi.stubGlobal("AudioContext", MockAudioContext);
 

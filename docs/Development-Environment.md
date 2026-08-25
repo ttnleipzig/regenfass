@@ -6,7 +6,7 @@ What you need on a machine (or in a Cloud Agent / Dev Container) to work on rege
 
 | Tool                | Used for              | Notes                                                              |
 | ------------------- | --------------------- | ------------------------------------------------------------------ |
-| **Node.js** 20+     | All `web/*` packages  | CI installer tests use Node 20; Pages deploy uses 24               |
+| **Node.js** 22+     | All `web/*` packages  | Web CI and deploy jobs use Node 22+                                |
 | **pnpm** 10.x       | Workspace installs    | Repo pins `packageManager: pnpm@10.28.0`; prefer `corepack enable` |
 | **Git**             | Source control        | Conventional Commits (see [Coding Guidelines](Coding-Guidelines))  |
 | **PlatformIO Core** | Firmware build/upload | `pip install platformio` or PlatformIO IDE                         |

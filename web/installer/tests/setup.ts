@@ -31,6 +31,11 @@ if (typeof HTMLElement !== "undefined" && !HTMLElement.prototype.animate) {
 	};
 }
 
+// jsdom exposes scrollTo as a not-implemented method; some UI cleanup paths call it.
+if (typeof window !== "undefined") {
+	window.scrollTo = vi.fn();
+}
+
 // Web Serial (used by guards / integration tests; jsdom has no navigator.serial)
 if (!("serial" in navigator)) {
 	Object.defineProperty(navigator, "serial", {

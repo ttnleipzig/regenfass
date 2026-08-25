@@ -17,7 +17,7 @@ permissions:
   checks: write
 
 env:
-  NODE_VERSION: "20"
+  NODE_VERSION: "22"
   PLAYWRIGHT_JSON_OUTPUT_NAME: report.json
   PLAYWRIGHT_JUNIT_OUTPUT_NAME: report.xml
 

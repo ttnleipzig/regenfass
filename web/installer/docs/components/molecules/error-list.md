@@ -12,12 +12,12 @@ import { ErrorList } from '@/components/forms/ErrorList';
 
 ## Props
 
-| Name   | Type                               | Default | Description                                               |
-| ------ | ---------------------------------- | ------- | --------------------------------------------------------- |
-| errors | string[]                           | []      | Array of error messages to display                        |
-| title  | string                             | locale  | Title text; defaults via brand i18n (`Errors` / `Fehler`) |
-| class  | string                             | -       | Additional CSS classes                                    |
-| ...    | JSX.HTMLAttributes\<HTMLDivElement\> | -     | All native div attributes                                 |
+| Name   | Type                                  | Default | Description                                               |
+| ------ | ------------------------------------- | ------- | --------------------------------------------------------- |
+| errors | string[]                              | []      | Array of error messages to display                        |
+| title  | string                                | locale  | Title text; defaults via brand i18n (`Errors` / `Fehler`) |
+| class  | string                                | -       | Additional CSS classes                                    |
+| ...    | JSX.HTMLAttributes\<HTMLDivElement\>  | -       | All native div attributes                                 |
 
 ## Design notes
 

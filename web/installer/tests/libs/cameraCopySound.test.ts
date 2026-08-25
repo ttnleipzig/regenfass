@@ -17,11 +17,13 @@ describe("cameraCopySound", () => {
 
 	it("plays the photo.mp3 sample", () => {
 		setSoundEnabled(true);
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 
 		playCameraCopySound();
@@ -32,11 +34,13 @@ describe("cameraCopySound", () => {
 
 	it("reuses the same audio element on repeat play", () => {
 		setSoundEnabled(true);
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 
 		playCameraCopySound();
@@ -47,11 +51,13 @@ describe("cameraCopySound", () => {
 	});
 
 	it("does not play when sounds are muted", () => {
-		const AudioMock = vi.fn(() => ({
-			preload: "",
-			currentTime: 0,
-			play: playMock,
-		}));
+		const AudioMock = vi.fn(function () {
+			return {
+				preload: "",
+				currentTime: 0,
+				play: playMock,
+			};
+		});
 		vi.stubGlobal("Audio", AudioMock);
 		setSoundEnabled(false);
 

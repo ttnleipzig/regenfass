@@ -468,13 +468,13 @@ This document contains automatically generated documentation for all components 
 
     markdown += `---
 
-*Generated on ${new Date().toLocaleString('en-US', { 
+Generated on ${new Date().toLocaleString('en-US', { 
   day: '2-digit', 
   month: 'long', 
   year: 'numeric',
   hour: '2-digit',
   minute: '2-digit'
-})}*\n`;
+})}\n`;
 
     return markdown;
   }
