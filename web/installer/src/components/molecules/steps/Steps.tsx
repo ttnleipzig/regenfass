@@ -2,7 +2,7 @@ import { setupStateMachine } from "@/libs/install/state.ts";
 import { trackEvent } from "@regenfass/brand";
 import { createBrowserInspector } from "@statelyai/inspect";
 import { fromActorRef, useActorRef } from "@xstate/solid";
-import { createEffect, Match, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import StepStartCheckingWebSerialSupport from "./StepStartCheckingWebSerialSupport.tsx";
 import StepStartFetchUpstreamVersions from "./StepStartFetchUpstreamVersions.tsx";
 import StepStartWaitingForUser from "./StepStartWaitingForUser.tsx";
@@ -49,15 +49,16 @@ export default function Steps() {
 
 	return (
 		<div class="site-container py-6 space-y-6">
-			<Switch fallback={<pre>{JSON.stringify(snapshot().toJSON(), null, 2)}</pre>}>
+			<Show
+				when={snapshot().matches("Start_WaitingForUser")}
+				fallback={
+					<div class="space-y-6 rounded-2xl border border-border/70 bg-card/20 p-4 shadow-sm sm:p-6">
+						<Switch fallback={<pre>{JSON.stringify(snapshot().toJSON(), null, 2)}</pre>}>
 				<Match when={snapshot().matches("Start_CheckingWebSerialSupport")}>
 					<StepStartCheckingWebSerialSupport state={snapshot()} emitEvent={send} />
 				</Match>
 				<Match when={snapshot().matches("Start_FetchUpstreamVersions")}>
 					<StepStartFetchUpstreamVersions state={snapshot()} emitEvent={send} />
-				</Match>
-				<Match when={snapshot().matches("Start_WaitingForUser")}>
-					<StepStartWaitingForUser state={snapshot()} emitEvent={send} />
 				</Match>
 				<Match when={snapshot().matches("Connect_Connecting")}>
 					<StepConnectConnecting state={snapshot()} emitEvent={send} />
@@ -91,7 +92,12 @@ export default function Steps() {
 				<Match when={snapshot().matches("Finish_ShowingError")}>
 					<StepFinishShowingError state={snapshot()} emitEvent={send} />
 				</Match>
-			</Switch>
+						</Switch>
+					</div>
+				}
+			>
+				<StepStartWaitingForUser state={snapshot()} emitEvent={send} />
+			</Show>
 		</div>
 	);
 }

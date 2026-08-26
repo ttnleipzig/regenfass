@@ -100,6 +100,9 @@ export const installerDictDe: InstallerDictionary = {
 	},
 	finishShowingError: {
 		title: "Kritischer Fehler",
+		usbTitle: "USB-Verbindung fehlgeschlagen",
+		usbDescription:
+			"Es wurde kein Controller ausgewählt. Verbinde deinen Controller per USB, stelle sicher, dass er eingeschaltet ist, und versuche es erneut.",
 		restart: "Neu starten",
 	},
 	stateErrors: {

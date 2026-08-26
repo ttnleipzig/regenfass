@@ -51,6 +51,18 @@ test("Button exposes semantic variants and loading state", async ({ page }) => {
   await expect(page.locator("code.tokenized-code")).toContainText("loading={true}");
 });
 
+test("StepPaginator exposes its props and steps in generated JSX", async ({ page }) => {
+  await page.goto("/step-paginator");
+  await page.getByLabel("Title").fill("Setup flow");
+  await page.getByRole("textbox", { name: "Steps" }).fill("Connect, Flash, Finish");
+  await page.getByLabel("Active step").fill("2");
+
+  const code = page.locator("code.tokenized-code");
+  await expect(code).toContainText('title="Setup flow"');
+  await expect(code).toContainText('steps={["Connect","Flash","Finish"]}');
+  await expect(code).toContainText("activeStep={2}");
+});
+
 test("tokens route shows brand colors and fonts", async ({ page }) => {
   await page.goto("/tokens");
   await expect(page.locator("main h1")).toHaveText("Design tokens");

@@ -11,17 +11,33 @@ interface StepProps {
 	emitEvent: (event: any) => void;
 }
 
+function isUsbConnectionError(error: unknown) {
+	if (!error || typeof error !== "object") return false;
+
+	const candidate = error as { name?: unknown; message?: unknown };
+	return (
+		candidate.name === "NotFoundError" ||
+		(typeof candidate.message === "string" && candidate.message.includes("requestPort"))
+	);
+}
+
 export default function StepFinishShowingError({ state, emitEvent }: StepProps) {
 	const t = useInstallerT();
+	const error = state.context.error as unknown;
+	const usbError = isUsbConnectionError(error);
 
 	return (
 		<div class="space-y-3">
 			<AlertInline variant="destructive">
-				<AlertTitle>{t("finishShowingError.title")}</AlertTitle>
+				<AlertTitle>
+					{usbError ? t("finishShowingError.usbTitle") : t("finishShowingError.title")}
+				</AlertTitle>
 				<AlertDescription>
-					{(state.context.error as unknown as Error).toString()}
-					{(state.context.error as unknown as Error).stack}
-					{JSON.stringify((state.context.error as unknown as Error).cause!)}
+					{usbError
+						? t("finishShowingError.usbDescription")
+						: (error as Error).toString()}
+					{!usbError && (error as Error).stack}
+					{!usbError && JSON.stringify((error as Error).cause!)}
 				</AlertDescription>
 			</AlertInline>
 			<div class="pt-1">

@@ -66,7 +66,12 @@ export type InstallerDictionary = {
 		anotherDevice: string;
 		flashAnotherDevice: string;
 	};
-	finishShowingError: { title: string; restart: string };
+	finishShowingError: {
+		title: string;
+		usbTitle: string;
+		usbDescription: string;
+		restart: string;
+	};
 	stateErrors: {
 		unsupportedBrowser: string;
 		unknownConfigVersion: string;
@@ -184,6 +189,9 @@ export const installerDictEn: InstallerDictionary = {
 	},
 	finishShowingError: {
 		title: "Critical error",
+		usbTitle: "USB connection failed",
+		usbDescription:
+			"No controller was selected. Connect your controller with a USB cable, make sure it is powered on, and try again.",
 		restart: "Restart",
 	},
 	stateErrors: {

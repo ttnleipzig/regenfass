@@ -34,6 +34,22 @@ describe("StepFinishShowingError", () => {
     expect(screen.getByText(/Test error/)).toBeInTheDocument();
   });
 
+  it("renders a localized USB connection error", () => {
+    const usbError = new DOMException("The user aborted a request.", "NotFoundError");
+    render(() => (
+      <StepFinishShowingError
+        state={{ context: { error: usbError } }}
+        emitEvent={mockEmitEvent}
+      />
+    ));
+
+    expect(screen.getByText("USB connection failed")).toBeInTheDocument();
+    expect(
+      screen.getByText(/No controller was selected/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/requestPort/)).not.toBeInTheDocument();
+  });
+
   it("renders error stack trace", () => {
     render(() => (
       <StepFinishShowingError state={mockState} emitEvent={mockEmitEvent} />

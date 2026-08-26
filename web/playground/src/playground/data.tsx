@@ -284,6 +284,13 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     controls: [
       { key: "title", label: "Title", type: "text", defaultValue: "Installation steps" },
       {
+        key: "steps",
+        label: "Steps",
+        type: "text",
+        defaultValue: "Connect, Install, Configure, Finish",
+        description: "Comma-separated step labels",
+      },
+      {
         key: "variant",
         label: "Variant",
         type: "select",
@@ -292,14 +299,29 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
       },
       { key: "activeStep", label: "Active step", type: "range", defaultValue: 2, min: 1, max: 4 },
     ],
-    render: (values) => (
-      <StepPaginator
-        title={String(values.title)}
-        variant={String(values.variant) as "default" | "compact"}
-        activeStep={Number(values.activeStep)}
-        steps={["Connect", "Install", "Configure", "Finish"]}
-      />
-    ),
+    render: (values) => {
+      const steps = String(values.steps)
+        .split(",")
+        .map((step) => step.trim())
+        .filter(Boolean);
+
+      return (
+        <StepPaginator
+          title={String(values.title)}
+          variant={String(values.variant) as "default" | "compact"}
+          activeStep={Number(values.activeStep)}
+          steps={steps.length > 0 ? steps : ["Step"]}
+        />
+      );
+    },
+    code: (values) => {
+      const steps = String(values.steps)
+        .split(",")
+        .map((step) => step.trim())
+        .filter(Boolean);
+
+      return `<StepPaginator\n  title="${escapeJsxAttribute(String(values.title))}"\n  variant="${escapeJsxAttribute(String(values.variant))}"\n  activeStep={${Number(values.activeStep)}}\n  steps={${JSON.stringify(steps.length > 0 ? steps : ["Step"])}}\n/>`;
+    },
   },
   {
     slug: "text-input",
