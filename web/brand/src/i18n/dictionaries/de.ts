@@ -14,6 +14,8 @@ export const brandDictDe: BrandDictionary = {
 		github: "GitHub",
 		matrix: "Matrix",
 		releaseNotes: "Release Notes",
+		privacy: "Datenschutz",
+		imprint: "Impressum",
 	},
 	newsletter: {
 		titleBefore: "Abonniere den",

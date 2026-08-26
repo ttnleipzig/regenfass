@@ -358,6 +358,47 @@ function BetaTesterRedirect() {
 	return <Navigate href={`/${resolveLocale()}/beta-testers`} />;
 }
 
+function LegalPage(props: { kind: "privacy" | "imprint" }) {
+	const params = useParams();
+	const { locale } = useLocale();
+	syncRouteLocale(() => params.lang);
+
+	return (
+		<Show when={isLocale(params.lang) ? params.lang : null} fallback={<InvalidLocaleRedirect />}>
+			{(lang) => {
+				const content = () => homepageCopy(locale()).legal[props.kind];
+				return (
+					<Shell lang={lang()}>
+						<main class="site-container max-w-3xl space-y-10 py-16 sm:py-20">
+							<header class="space-y-4">
+								<Headline as="h1">{content().title}</Headline>
+								<p class="max-w-2xl text-lg text-muted-foreground">{content().intro}</p>
+							</header>
+							<div class="space-y-8">
+								<For each={content().sections}>
+									{(section) => (
+										<section class="space-y-2 border-t border-border pt-6">
+											<h2 class="text-xl font-semibold">{section.title}</h2>
+											<p class="whitespace-pre-line leading-7 text-muted-foreground">{section.body}</p>
+										</section>
+									)}
+								</For>
+								<a href="https://matrix.to/#/#ttn-leipzig:matrix.org" class="inline-flex text-sm font-medium text-primary underline underline-offset-4" target="_blank" rel="noopener noreferrer">
+									{homepageCopy(locale()).legal.matrixLabel}
+								</a>
+							</div>
+						</main>
+					</Shell>
+				);
+			}}
+		</Show>
+	);
+}
+
+function LegalRedirect(props: { kind: "privacy" | "imprint" }) {
+	return <Navigate href={`/${resolveLocale()}/${props.kind}`} />;
+}
+
 function initialHomepageLocale(): Locale {
 	if (typeof location !== "undefined") {
 		const segment = location.pathname.split("/").filter(Boolean)[0];
@@ -394,9 +435,13 @@ export default function App() {
 		<Router root={HomepageRoot}>
 			<Route path="/" component={LocaleRedirect} />
 			<Route path="/beta-testers" component={BetaTesterRedirect} />
+			<Route path="/privacy" component={() => <LegalRedirect kind="privacy" />} />
+			<Route path="/imprint" component={() => <LegalRedirect kind="imprint" />} />
 			<Route path="/:lang" component={Home} />
 			<Route path="/:lang/changelog" component={ChangelogPage} />
 			<Route path="/:lang/beta-testers" component={BetaTesterPage} />
+			<Route path="/:lang/privacy" component={() => <LegalPage kind="privacy" />} />
+			<Route path="/:lang/imprint" component={() => <LegalPage kind="imprint" />} />
 		</Router>
 	);
 }

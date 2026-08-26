@@ -59,6 +59,11 @@ export type HomepageDictionary = {
 		ctaDocs: string;
 		betaTesters: string;
 	};
+	legal: {
+		matrixLabel: string;
+		privacy: { title: string; intro: string; sections: { title: string; body: string }[] };
+		imprint: { title: string; intro: string; sections: { title: string; body: string }[] };
+	};
 };
 
 export const homepageDictEn: HomepageDictionary = {
@@ -195,5 +200,28 @@ export const homepageDictEn: HomepageDictionary = {
 		ctaStart: "Get started",
 		ctaDocs: "Read the docs",
 		betaTesters: "Beta testers",
+	},
+	legal: {
+		privacy: {
+			title: "Privacy policy",
+			intro: "This page explains in simple terms what happens to your data when you use regenfass.",
+			sections: [
+				{ title: "Who is responsible?", body: "regenfass is an open-source project by the TTN Leipzig user group. The project contact is André Lademan, Hardenbergstraße 48, 04275 Leipzig, Germany. For questions, please use our Matrix channel." },
+				{ title: "Newsletter and beta testing", body: "If you subscribe to the newsletter or beta test, we process your email address, your optional name, and the selected language. Listmonk stores this information and sends a confirmation email. Your subscription only becomes active after you click the confirmation link (double opt-in). You can unsubscribe at any time using the link in an email." },
+				{ title: "How the dashboard works", body: "The dashboard displays sensor data sent by your regenfass device, such as water level, timestamps, device identifiers, and connection information. We process this data to show measurements and trends. Access tokens or subscriptions are used to associate readings with the right dashboard view. Only send data you need for your own monitoring." },
+				{ title: "Services involved", body: "The homepage and subscription endpoints are hosted by Netlify. Newsletter and beta subscriptions are managed in our self-hosted Listmonk instance; emails are delivered through the configured SMTP provider. Dashboard data is handled by the regenfass dashboard service. These services receive only the data needed for their stated purpose." },
+				{ title: "Your choices", body: "Providing an email address is voluntary, but it is required for a newsletter or beta subscription. You can request information, correction, deletion, or restriction of your data, or withdraw your consent, by contacting the project. This does not affect processing that was lawful before withdrawal." },
+			],
+		},
+		imprint: {
+			title: "Imprint",
+			intro: "Information about the provider of the regenfass project website.",
+			sections: [
+				{ title: "Provider", body: "TTN Leipzig user group\nRepresented by André Lademan\nHardenbergstraße 48\n04275 Leipzig\nGermany" },
+				{ title: "Contact", body: "For questions about regenfass, please use our Matrix channel." },
+				{ title: "Project responsibility", body: "regenfass is an open-source IoT project for measuring water levels in rain barrels and tanks. The source code is available at github.com/ttnleipzig/regenfass." },
+			],
+		},
+		matrixLabel: "Contact us in Matrix",
 	},
 };

@@ -6,6 +6,7 @@ import { AlertInline, AlertTitle, AlertDescription } from "../molecules/AlertInl
 import { cn } from "../../libs/cn.ts";
 import { useBrandT, useLocaleOptional } from "../../i18n/LocaleProvider.tsx";
 import type { Locale } from "../../i18n/types.ts";
+import { homepageLink } from "../../libs/homepageLinks.ts";
 
 export type BetaTesterProps = {
   endpoint?: string;
@@ -103,6 +104,11 @@ export default function BetaTester(props: BetaTesterProps = {}) {
                 {status() === "submitting" ? t("a11y.loading") : t("betaTester.subscribe")}
               </Button>
             </form>
+            <p class="text-xs text-muted-foreground">
+              <a class="underline underline-offset-2 hover:text-foreground" href={homepageLink(currentLocale(), "privacy")}>
+                {t("footer.privacy")}
+              </a>
+            </p>
             {status() === "error" && <p class="text-sm text-destructive" role="alert">{t("betaTester.error")}</p>}
           </div>
         )}

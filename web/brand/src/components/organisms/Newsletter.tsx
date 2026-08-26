@@ -9,6 +9,7 @@ import {
 } from "../../i18n/LocaleProvider.tsx";
 import { createSignal } from "solid-js";
 import type { Locale } from "../../i18n/types.ts";
+import { homepageLink } from "../../libs/homepageLinks.ts";
 
 export type NewsletterProps = {
 	/** Central endpoint that enriches Listmonk subscriptions with the locale. */
@@ -102,6 +103,11 @@ export default function Newsletter(props: NewsletterProps = {}) {
 							{t("newsletter.subscribe")}
 						</Button>
 					</form>
+					<p class="mt-3 text-xs text-muted-foreground">
+						<a class="underline underline-offset-2 hover:text-foreground" href={homepageLink(currentLocale(), "privacy")}>
+							{t("footer.privacy")}
+						</a>
+					</p>
 					{status() === "error" && (
 						<p class="mt-3 text-sm text-destructive" role="alert">
 							{t("newsletter.error")}

@@ -136,4 +136,27 @@ export const homepageDictDe: HomepageDictionary = {
 		ctaDocs: "Docs lesen",
 		betaTesters: "Beta-Tester:innen",
 	},
+	legal: {
+		matrixLabel: "Im Matrix-Kanal kontaktieren",
+		privacy: {
+			title: "Datenschutzerklärung",
+			intro: "Hier erklären wir in einfachen Worten, was mit deinen Daten passiert, wenn du regenfass nutzt.",
+			sections: [
+				{ title: "Wer ist verantwortlich?", body: "regenfass ist ein Open-Source-Projekt der TTN Leipzig user group. Projektkontakt ist André Lademan, Hardenbergstraße 48, 04275 Leipzig, Deutschland. Bei Fragen nutze bitte unseren Matrix-Kanal." },
+				{ title: "Newsletter und Beta-Test", body: "Wenn du den Newsletter oder den Beta-Test abonnierst, verarbeiten wir deine E-Mail-Adresse, deinen optionalen Namen und die gewählte Sprache. Listmonk speichert diese Daten und sendet eine Bestätigungs-E-Mail. Erst nach Klick auf den Bestätigungslink wird die Anmeldung aktiv (Double-Opt-in). Du kannst dich jederzeit über den Link in einer E-Mail abmelden." },
+				{ title: "So funktioniert das Dashboard", body: "Das Dashboard zeigt Sensordaten deines regenfass-Geräts, zum Beispiel Wasserstand, Zeitpunkte, Gerätekennungen und Verbindungsinformationen. Wir verarbeiten diese Daten, um Messwerte und Entwicklungen anzuzeigen. Zugriffstoken oder Abonnements ordnen Messungen der richtigen Dashboard-Ansicht zu. Sende nur Daten, die du für deine Überwachung brauchst." },
+				{ title: "Beteiligte Dienste", body: "Homepage und Anmelde-Endpunkte werden von Netlify gehostet. Newsletter- und Beta-Anmeldungen verwalten wir in unserer selbst betriebenen Listmonk-Instanz; E-Mails werden über den konfigurierten SMTP-Anbieter versendet. Dashboard-Daten verarbeitet der regenfass-Dashboard-Dienst. Die Dienste erhalten nur die für ihren Zweck nötigen Daten." },
+				{ title: "Deine Rechte", body: "Eine E-Mail-Adresse ist freiwillig, aber für Newsletter oder Beta-Test erforderlich. Du kannst Auskunft, Berichtigung, Löschung oder Einschränkung deiner Daten verlangen oder deine Einwilligung widerrufen. Wende dich dafür an das Projekt. Die Rechtmäßigkeit der Verarbeitung bis zum Widerruf bleibt unberührt." },
+			],
+		},
+		imprint: {
+			title: "Impressum",
+			intro: "Angaben zum Anbieter der regenfass-Projektwebsite.",
+			sections: [
+				{ title: "Anbieter", body: "TTN Leipzig user group\nVertreten durch André Lademan\nHardenbergstraße 48\n04275 Leipzig\nDeutschland" },
+				{ title: "Kontakt", body: "Bei Fragen zu regenfass nutze bitte unseren Matrix-Kanal." },
+				{ title: "Verantwortung für das Projekt", body: "regenfass ist ein Open-Source-IoT-Projekt zur Messung von Wasserständen in Regenfässern und Tanks. Der Quellcode ist unter github.com/ttnleipzig/regenfass verfügbar." },
+			],
+		},
+	},
 };

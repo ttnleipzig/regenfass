@@ -12,6 +12,8 @@ export type BrandDictionary = {
 		github: string;
 		matrix: string;
 		releaseNotes: string;
+		privacy: string;
+		imprint: string;
 	};
 	newsletter: {
 		titleBefore: string;
@@ -75,6 +77,8 @@ export const brandDictEn: BrandDictionary = {
 		github: "GitHub",
 		matrix: "Matrix",
 		releaseNotes: "Release notes",
+		privacy: "Privacy",
+		imprint: "Imprint",
 	},
 	newsletter: {
 		titleBefore: "Subscribe to the",

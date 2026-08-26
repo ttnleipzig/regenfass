@@ -4,9 +4,13 @@ import MessageSquare from "lucide-solid/icons/message-square";
 import { createSignal, onMount } from "solid-js";
 import { APP_VERSION } from "../../version.ts";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
+import { useLocaleOptional } from "../../i18n/LocaleProvider.tsx";
+import { homepageLink } from "../../libs/homepageLinks.ts";
 
 export default function Footer() {
 	const t = useBrandT();
+	const localeContext = useLocaleOptional();
+	const locale = () => localeContext?.locale() ?? "en";
 	const [releaseVersion, setReleaseVersion] = createSignal(APP_VERSION);
 
 	onMount(() => {
@@ -69,6 +73,16 @@ export default function Footer() {
 									>
 										<Book size={15} />
 										<span>{t("footer.docs")}</span>
+									</a>
+								</li>
+								<li>
+									<a href={homepageLink(locale(), "privacy")} class="text-muted-foreground transition-colors hover:text-foreground">
+										{t("footer.privacy")}
+									</a>
+								</li>
+								<li>
+									<a href={homepageLink(locale(), "imprint")} class="text-muted-foreground transition-colors hover:text-foreground">
+										{t("footer.imprint")}
 									</a>
 								</li>
 								<li>
