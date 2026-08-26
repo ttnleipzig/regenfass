@@ -56,6 +56,8 @@ export type { HeaderNavItem, HeaderProps } from "./components/organisms/Header.t
 export { default as Footer } from "./components/organisms/Footer.tsx";
 export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
 export type { NewsletterProps } from "./components/organisms/Newsletter.tsx";
+export { default as BetaTester } from "./components/organisms/BetaTester.tsx";
+export type { BetaTesterProps } from "./components/organisms/BetaTester.tsx";
 export { SidebarNav } from "./components/organisms/SidebarNav.tsx";
 export type { SidebarNavItem, SidebarNavProps } from "./components/organisms/SidebarNav.tsx";
 

@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
   AlertInline,
   AppShell,
+  BetaTester,
   TextFieldHex,
   Badge,
   Button,
@@ -826,6 +827,15 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     controls: [],
     render: () => <Newsletter />,
     code: () => `<Newsletter />`,
+  },
+  {
+    slug: "beta-tester",
+    name: "BetaTester",
+    category: "organisms",
+    description: "Accessible beta tester signup with locale-aware Listmonk submission.",
+    controls: [],
+    render: () => <BetaTester endpoint="https://example.test/beta-tester-subscribe" />,
+    code: () => `<BetaTester endpoint="https://example.test/beta-tester-subscribe" />`,
   },
 ];
 

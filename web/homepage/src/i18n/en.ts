@@ -57,6 +57,7 @@ export type HomepageDictionary = {
 		body: string;
 		ctaStart: string;
 		ctaDocs: string;
+		betaTesters: string;
 	};
 };
 
@@ -193,5 +194,6 @@ export const homepageDictEn: HomepageDictionary = {
 		body: "Flash a board in minutes, join The Things Network, and start reading your rain barrel from anywhere with coverage.",
 		ctaStart: "Get started",
 		ctaDocs: "Read the docs",
+		betaTesters: "Beta testers",
 	},
 };

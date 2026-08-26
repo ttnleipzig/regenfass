@@ -40,10 +40,34 @@ describe("Header", () => {
 	});
 
 	it("renders regenfass title", () => {
-		renderWithRouter(() => <Header />);
-		const title = screen.getByText("regenfass");
+		const { container } = renderWithRouter(() => <Header />);
+		const title = container.querySelector("h1");
 		expect(title).toBeInTheDocument();
-		expect(title.tagName).toBe("H1");
+		expect(title).toHaveTextContent("regenfass");
+	});
+
+	it("marks the wordmark as an alpha version", () => {
+		const { container } = renderWithRouter(() => <Header />);
+		const badge = container.querySelector('[data-version-badge="alpha"]');
+
+		expect(badge).toHaveTextContent("ALPHA");
+		expect(badge).toHaveAttribute("role", "status");
+		expect(badge?.closest("button")).toHaveClass("absolute", "bottom-1", "right-0");
+	});
+
+	it("connects the alpha badge to an accessible beta tester tooltip", () => {
+		const { container } = renderWithRouter(() => <Header />);
+		const badge = container.querySelector('[data-version-badge="alpha"]');
+		const badgeLink = badge?.closest("button");
+		const tooltip = container.querySelector('[role="tooltip"]');
+
+		expect(badgeLink).toHaveAttribute("aria-describedby", "alpha-tooltip");
+		expect(badgeLink).toHaveAttribute("aria-label", "Alpha version");
+		expect(badgeLink).toHaveAttribute("aria-expanded", "false");
+		expect(tooltip).toHaveTextContent("early stage of development");
+		expect(tooltip).toHaveClass("left-0");
+		expect(tooltip).not.toHaveClass("right-0");
+		expect(tooltip?.querySelector("a")).toHaveAttribute("href", "http://localhost:5175/en/beta-testers");
 	});
 
 	it("renders an optional white title suffix", () => {
@@ -55,7 +79,7 @@ describe("Header", () => {
 		expect(suffix).toHaveClass("text-foreground/80");
 		expect(suffix).toHaveClass("dark:text-white");
 		expect(suffix).toHaveClass("font-normal");
-		expect(container.querySelector("h1")).toHaveTextContent("regenfass Playground");
+		expect(container.querySelector("h1")).toHaveTextContent(/regenfass.*ALPHA.*Playground/);
 	});
 
 	it("renders default navigation links", () => {

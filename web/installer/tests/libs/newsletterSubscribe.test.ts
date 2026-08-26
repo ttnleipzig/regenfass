@@ -63,9 +63,10 @@ describe("newsletter-subscribe function", () => {
 
 		expect(result.status).toBe(200);
 		expect(fetchMock.mock.calls[1]?.[0]).toBe("https://news.regenfass.eu/api/subscribers/12");
-		expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
-			attribs: { language: "de" },
-		});
+	expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toMatchObject({
+		lists: [7],
+		attribs: { language: "de" },
+	});
 	});
 
 	it("rejects unsupported languages before calling Listmonk", async () => {

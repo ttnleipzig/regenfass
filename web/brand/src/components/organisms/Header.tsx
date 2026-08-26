@@ -1,8 +1,9 @@
-import { Component, For, Show, createMemo, mergeProps, type JSX } from "solid-js";
+import { Component, For, Show, createMemo, createSignal, mergeProps, type JSX } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import { ButtonToggleMode } from "../atoms/ButtonToggleMode.tsx";
 import Link from "../atoms/Link.tsx";
 import { LanguageSwitcher } from "../../i18n/LanguageSwitcher.tsx";
+import { useBrandT, useLocaleOptional } from "../../i18n/LocaleProvider.tsx";
 import { cn } from "../../libs/cn.ts";
 
 export type HeaderNavItem = {
@@ -75,6 +76,16 @@ const Header: Component<HeaderProps> = (rawProps) => {
     rawProps,
   );
   const location = useLocation();
+  const t = useBrandT();
+  const localeContext = useLocaleOptional();
+  const [alphaOpen, setAlphaOpen] = createSignal(false);
+  const betaTesterUrl = () => {
+    const routeLocale = location.pathname.split("/").filter(Boolean)[0];
+    const locale = routeLocale === "de" || routeLocale === "en"
+      ? routeLocale
+      : localeContext?.locale() ?? "en";
+    return `https://regenfass.eu/${locale}/beta-testers`;
+  };
 
   const currentUrl = createMemo(() => {
     if (typeof window === "undefined") {
@@ -147,7 +158,43 @@ const Header: Component<HeaderProps> = (rawProps) => {
         )}
       >
         <h1 class="text-3xl font-bold tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-100 bg-clip-text">
-          {props.title}
+          <span class="group relative inline-block pb-2">
+            {props.title}
+            <button
+              type="button"
+              aria-describedby="alpha-tooltip"
+              aria-label={t("header.alphaLabel")}
+              aria-expanded={alphaOpen()}
+              aria-controls="alpha-tooltip"
+              class="absolute bottom-1 right-0 translate-y-1/2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              onClick={() => setAlphaOpen((open) => !open)}
+            >
+              <span
+                data-version-badge="alpha"
+                role="status"
+                class="block border border-amber-300/70 bg-amber-300 px-1.5 py-0.5 text-[0.5rem] font-bold leading-none tracking-[0.18em] text-slate-950 shadow-sm"
+              >
+                ALPHA
+              </span>
+            </button>
+            <span
+              id="alpha-tooltip"
+              role="tooltip"
+              class={cn(
+                "invisible absolute left-0 top-full z-30 w-[min(16rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] translate-x-0 translate-y-1 rounded-lg border border-border bg-background p-3 pt-5 text-xs font-normal tracking-normal text-foreground opacity-0 shadow-xl transition duration-150",
+                "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
+                alphaOpen() && "visible translate-y-0 opacity-100",
+              )}
+            >
+              <span class="block leading-relaxed text-muted-foreground">{t("header.alphaTooltip")}</span>
+              <Link
+                href={resolveNavHref(betaTesterUrl())}
+                class="mt-2 inline-block font-semibold text-primary underline underline-offset-2"
+              >
+                {t("header.alphaCta")}
+              </Link>
+            </span>
+          </span>
           <Show when={props.titleSuffix}>
             <span class="font-normal text-foreground/80 dark:text-white"> {props.titleSuffix}</span>
           </Show>

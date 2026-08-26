@@ -3,6 +3,9 @@ export type BrandDictionary = {
 		switchToDe: string;
 		switchToEn: string;
 		language: string;
+		alphaLabel: string;
+		alphaTooltip: string;
+		alphaCta: string;
 	};
 	footer: {
 		docs: string;
@@ -22,6 +25,20 @@ export type BrandDictionary = {
 		successBodyBefore: string;
 		successBodyAfter: string;
 		error: string;
+	};
+	betaTester: {
+		titleBefore: string;
+		titleHighlight: string;
+		body: string;
+		namePlaceholder: string;
+		placeholder: string;
+		subscribe: string;
+		successTitle: string;
+		successBodyBefore: string;
+		successBodyAfter: string;
+		error: string;
+		processTitle: string;
+		processSteps: string[];
 	};
 	a11y: {
 		toggleColorMode: string;
@@ -49,6 +66,9 @@ export const brandDictEn: BrandDictionary = {
 		switchToDe: "Switch to German",
 		switchToEn: "Switch to English",
 		language: "Language",
+		alphaLabel: "Alpha version",
+		alphaTooltip: "This software is in an early stage of development.",
+		alphaCta: "Become a beta tester",
 	},
 	footer: {
 		docs: "Docs",
@@ -70,6 +90,24 @@ export const brandDictEn: BrandDictionary = {
 		successBodyAfter:
 			"Click the link in that email to finish your subscription.",
 		error: "We couldn't complete the subscription. Please try again.",
+	},
+	betaTester: {
+		titleBefore: "Join the",
+		titleHighlight: "beta test",
+		body: "regenfass is still in an early stage of development. Help shape it and get updates as a beta tester.",
+		namePlaceholder: "Name (optional)",
+		placeholder: "your@email-address.iot",
+		subscribe: "Join the beta test",
+		successTitle: "Almost done",
+		successBodyBefore: "We sent a confirmation email to",
+		successBodyAfter: "Click the link in that email to finish your registration.",
+		error: "We couldn't complete the registration. Please try again.",
+		processTitle: "How it works",
+		processSteps: [
+			"Sign up with your email address.",
+			"Confirm your registration using the email we send you.",
+			"Try new versions and share your feedback with us.",
+		],
 	},
 	a11y: {
 		toggleColorMode: "Toggle color mode",

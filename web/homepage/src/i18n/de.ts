@@ -134,5 +134,6 @@ export const homepageDictDe: HomepageDictionary = {
 		body: "Flashe ein Board in Minuten, tritt The Things Network bei und lies dein Regenfass überall dort, wo Coverage ist.",
 		ctaStart: "Loslegen",
 		ctaDocs: "Docs lesen",
+		betaTesters: "Beta-Tester:innen",
 	},
 };

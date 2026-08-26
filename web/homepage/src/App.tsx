@@ -9,6 +9,7 @@ import {
 } from "@solidjs/router";
 import {
 	Badge,
+	BetaTester,
 	AppShell,
 	Button,
 	Card,
@@ -62,7 +63,10 @@ function Shell(props: ParentProps & { lang: Locale }) {
 		{
 			href: base,
 			label: t("nav.home"),
-			children: [{ href: `${base}/changelog`, label: t("nav.changelog") }],
+			children: [
+				{ href: `${base}/changelog`, label: t("nav.changelog") },
+				{ href: `${base}/beta-testers`, label: t("cta.betaTesters") },
+			],
 		},
 		{
 			href: DOCS_URL,
@@ -332,6 +336,28 @@ function ChangelogPage() {
 	);
 }
 
+function BetaTesterPage() {
+	const params = useParams();
+	syncRouteLocale(() => params.lang);
+
+	return (
+		<Show
+			when={isLocale(params.lang) ? params.lang : null}
+			fallback={<InvalidLocaleRedirect />}
+		>
+			{(lang) => (
+				<Shell lang={lang()}>
+					<BetaTester />
+				</Shell>
+			)}
+		</Show>
+	);
+}
+
+function BetaTesterRedirect() {
+	return <Navigate href={`/${resolveLocale()}/beta-testers`} />;
+}
+
 function initialHomepageLocale(): Locale {
 	if (typeof location !== "undefined") {
 		const segment = location.pathname.split("/").filter(Boolean)[0];
@@ -347,14 +373,15 @@ function HomepageRoot(props: RouteSectionProps) {
 		<LocaleProvider
 			initialLocale={initialHomepageLocale()}
 			onLocaleChange={(next) => {
-				if (typeof location === "undefined") {
+				if (typeof window === "undefined") {
 					navigate(`/${next}`);
 					return;
 				}
 
-				const [, ...rest] = location.pathname.split("/").filter(Boolean);
+				const [, ...rest] = window.location.pathname.split("/").filter(Boolean);
 				const suffix = rest.length > 0 ? `/${rest.join("/")}` : "";
-				navigate(`/${next}${suffix}${location.hash}`);
+				const target = `/${next}${suffix}${window.location.hash}`;
+				window.location.assign(target);
 			}}
 		>
 			{props.children}
@@ -366,8 +393,10 @@ export default function App() {
 	return (
 		<Router root={HomepageRoot}>
 			<Route path="/" component={LocaleRedirect} />
+			<Route path="/beta-testers" component={BetaTesterRedirect} />
 			<Route path="/:lang" component={Home} />
 			<Route path="/:lang/changelog" component={ChangelogPage} />
+			<Route path="/:lang/beta-testers" component={BetaTesterPage} />
 		</Router>
 	);
 }
