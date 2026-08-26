@@ -7,7 +7,7 @@ import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 function MainApp() {
 	return (
 		<div class="min-h-screen flex flex-col">
-			<Header />
+			<Header titleSuffix="Installer" />
 			<main class="flex flex-col w-full flex-1">
 				<Steps />
 			</main>
