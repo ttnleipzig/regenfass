@@ -33,6 +33,8 @@
 !/netlify.toml
 !/scripts
 !/scripts/**
+!/infrastructure
+!/infrastructure/**
 
 !/web
 /web/**/node_modules

@@ -1,0 +1,5 @@
+# Copy this file to terraform.tfvars and fill in credentials locally.
+# terraform.tfvars is ignored by git.
+listmonk_host     = "https://news.regenfass.eu"
+listmonk_username = ""
+listmonk_token    = ""
