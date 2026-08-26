@@ -29,20 +29,12 @@ import {
 	type Locale,
 } from "@regenfass/brand";
 import ChangelogSection from "./ChangelogSection";
-import UseCaseIllustration, {
-	type UseCaseIllustrationKind,
-} from "./UseCaseIllustration.tsx";
 import { homepageCopy, useHomepageT } from "./i18n/index.ts";
 import { localeRedirectPath } from "./i18n/localeRouting.ts";
 import { applyHomepageSeo } from "./i18n/seo.ts";
 
 const DOCS_URL = "https://docs.regenfass.eu/";
 const INSTALLER_URL = "https://install.regenfass.eu";
-const USE_CASE_ILLUSTRATIONS: UseCaseIllustrationKind[] = [
-	"home",
-	"garden",
-	"tank",
-];
 
 function trackNavigateToDocs() {
 	trackEvent("navigate_to_docs");
@@ -141,28 +133,38 @@ function Home() {
 							class="absolute inset-0 grid-quiet pointer-events-none"
 							aria-hidden="true"
 						/>
-						<div class="site-container relative py-20 sm:py-28 lg:py-32">
-							<p class="inline-block pb-1 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-400 bg-clip-text">
-								regenfass
-							</p>
-							<h1 class="mt-4 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground">
-								{t("hero.headline")}
-							</h1>
-							<p class="mt-4 max-w-xl text-base sm:text-lg text-muted-foreground">
-								{t("hero.body")}
-							</p>
-							<div class="mt-8 flex flex-wrap items-center gap-3">
-								<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
-									<Button variant="primary" class="px-5 py-2.5 text-base">
-										{t("hero.ctaStart")}
-									</Button>
-								</a>
-								<a href={DOCS_URL} onClick={trackNavigateToDocs}>
-									<Button variant="secondary" class="px-5 py-2.5 text-base">
-										{t("hero.ctaDocs")}
-									</Button>
-								</a>
+						<div class="site-container relative grid items-center gap-10 py-20 sm:py-28 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,0.8fr)] lg:gap-14 lg:py-24">
+							<div>
+								<p class="inline-block pb-1 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-400 bg-clip-text">
+									regenfass
+								</p>
+								<h1 class="mt-4 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground">
+									{t("hero.headline")}
+								</h1>
+								<p class="mt-4 max-w-xl text-base sm:text-lg text-muted-foreground">
+									{t("hero.body")}
+								</p>
+								<div class="mt-8 flex flex-wrap items-center gap-3">
+									<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
+										<Button variant="primary" class="px-5 py-2.5 text-base">
+											{t("hero.ctaStart")}
+										</Button>
+									</a>
+									<a href={DOCS_URL} onClick={trackNavigateToDocs}>
+										<Button variant="secondary" class="px-5 py-2.5 text-base">
+											{t("hero.ctaDocs")}
+										</Button>
+									</a>
+								</div>
 							</div>
+							<figure class="hero-visual relative mx-auto w-full max-w-lg lg:max-w-none" aria-label="IBC container with waterproof ultrasonic level sensor">
+								<img
+									src="/img/ibc-container-sketch.png"
+									alt="Technical sketch of an IBC container with a waterproof ultrasonic level sensor and a compact electronics enclosure"
+									class="relative z-10 h-auto w-full -scale-x-100"
+									fetchpriority="high"
+								/>
+							</figure>
 						</div>
 					</section>
 
@@ -268,14 +270,9 @@ function Home() {
 						<Headline as="h2">{t("cases.title")}</Headline>
 						<div class="grid gap-4 sm:grid-cols-3">
 							<For each={[...copy().cases.items]}>
-								{(item, index) => (
+								{(item) => (
 									<Card>
-										<CardHeader class="gap-4">
-											<div class="overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-sky-500/12 via-cyan-500/6 to-transparent p-3 shadow-inner">
-												<UseCaseIllustration
-													kind={USE_CASE_ILLUSTRATIONS[index()]}
-												/>
-											</div>
+										<CardHeader>
 											<CardTitle>{item.title}</CardTitle>
 											<CardDescription>{item.body}</CardDescription>
 										</CardHeader>

@@ -48,6 +48,24 @@
     background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
   }
+
+  .hero-visual::before {
+    content: "";
+    position: absolute;
+    inset: 8% 3% 4%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, hsl(190 92% 48% / 0.22), transparent 68%);
+    filter: blur(18px);
+    transform: rotate(-8deg);
+  }
+
+  .hero-visual img {
+    filter: drop-shadow(0 1.5rem 1.5rem hsl(211 51% 20% / 0.2));
+  }
+
+  [data-kb-theme="dark"] .hero-visual img {
+    filter: invert(1) grayscale(1) contrast(0.92) drop-shadow(0 1.5rem 1.5rem hsl(190 92% 48% / 0.2));
+  }
 }
 
 /* Root CHANGELOG.md rendered on the homepage */
