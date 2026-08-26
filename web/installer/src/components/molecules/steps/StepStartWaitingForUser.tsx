@@ -43,7 +43,11 @@ export default function StepStartWaitingForUser({ state, emitEvent }: StepProps)
 				</p>
 			</section>
 
-			<AlertInline variant="info" icon={<Usb size={24} aria-hidden="true" />}>
+			<AlertInline
+				variant="info"
+				class="[&:has(svg)]:pl-20 [&>svg]:left-6 [&>svg]:top-5"
+				icon={<Usb size={32} aria-hidden="true" />}
+			>
 				<AlertTitle>{t("startWaitingForUser.alertTitle")}</AlertTitle>
 				<AlertDescription>
 					{t("startWaitingForUser.alertDescription")}
