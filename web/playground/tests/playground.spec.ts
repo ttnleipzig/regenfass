@@ -47,7 +47,7 @@ test("Button exposes semantic variants and loading state", async ({ page }) => {
   const previewButton = page.locator("main button").filter({ hasText: "Click me" });
   await expect(previewButton).toHaveClass(/border-secondary/);
   await expect(previewButton).toBeDisabled();
-  await expect(page.locator("code.tokenized-code")).toContainText('variant={"secondary"}');
+  await expect(page.locator("code.tokenized-code")).toContainText('variant="secondary"');
   await expect(page.locator("code.tokenized-code")).toContainText("loading={true}");
 });
 
@@ -80,6 +80,18 @@ test("TextInput exposes and applies the disabled prop", async ({ page }) => {
   await expect(page.getByLabel("Disabled")).toBeVisible();
   await page.getByLabel("Disabled").check();
   await expect(page.locator("pre")).toContainText("disabled={true}");
+});
+
+test("Checkbox exposes its props in generated JSX", async ({ page }) => {
+  await page.goto("/checkbox");
+  await page.getByLabel("Label").fill("Enable sensor");
+  await page.getByLabel("Checked").uncheck();
+  await page.getByLabel("Helper text").fill("Connect a supported sensor");
+
+  const code = page.locator("code.tokenized-code");
+  await expect(code).toContainText('label="Enable sensor"');
+  await expect(code).toContainText("checked={false}");
+  await expect(code).toContainText('helperText="Connect a supported sensor"');
 });
 
 test("TextFieldHex shows actions, sound control, and selected props", async ({ page }) => {

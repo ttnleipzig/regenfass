@@ -21,6 +21,7 @@ export type BrandDictionary = {
 		successTitle: string;
 		successBodyBefore: string;
 		successBodyAfter: string;
+		error: string;
 	};
 	a11y: {
 		toggleColorMode: string;
@@ -68,6 +69,7 @@ export const brandDictEn: BrandDictionary = {
 			"We sent a confirmation email to",
 		successBodyAfter:
 			"Click the link in that email to finish your subscription.",
+		error: "We couldn't complete the subscription. Please try again.",
 	},
 	a11y: {
 		toggleColorMode: "Toggle color mode",

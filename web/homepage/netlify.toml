@@ -6,6 +6,9 @@
   publish = "web/homepage/dist"
   ignore = "exit 0"
 
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

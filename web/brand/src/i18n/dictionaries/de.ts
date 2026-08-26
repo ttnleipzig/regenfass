@@ -25,6 +25,7 @@ export const brandDictDe: BrandDictionary = {
 			"Wir haben dir eine Bestätigungs-E-Mail an",
 		successBodyAfter:
 			"geschickt. Klick auf den Link in der E-Mail, um die Anmeldung abzuschließen.",
+		error: "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
 	},
 	a11y: {
 		toggleColorMode: "Farbmodus umschalten",

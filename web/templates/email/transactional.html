@@ -45,11 +45,19 @@
             <div class="waterline" style="background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1);height:7px;margin:0 -38px;">&nbsp;</div>
         </div>
         <div class="content" style="padding:42px 42px 36px;">
+            {{ if eq .Subscriber.Attribs.language "en" }}
             <p>Hello {{ .Subscriber.Name }}</p>
             <p><strong>Order number:</strong> {{ .Tx.Data.order_id }}<br><strong>Shipping date:</strong> {{ .Tx.Data.shipping_date }}</p>
+            <p>This message was sent automatically by regenfass.</p>
+            <p>Transactional templates can use arbitrary parameters. For example, you can render <code>.Tx.Data.order_id</code>.</p>
+            <p>Find more information in the <a href="https://listmonk.app/docs/transactional">Listmonk documentation</a>.</p>
+            {{ else }}
+            <p>Hallo {{ .Subscriber.Name }}</p>
+            <p><strong>Bestellnummer:</strong> {{ .Tx.Data.order_id }}<br><strong>Versanddatum:</strong> {{ .Tx.Data.shipping_date }}</p>
             <p>Diese Nachricht wurde automatisch von regenfass versendet.</p>
-            <p>Transactional templates können beliebige Parameter verwenden. Du kannst sie beispielsweise mit <code>.Tx.Data.order_id</code> ausgeben.</p>
+            <p>Transaktionale Templates können beliebige Parameter verwenden. Du kannst sie beispielsweise mit <code>.Tx.Data.order_id</code> ausgeben.</p>
             <p>Weitere Informationen findest du in der <a href="https://listmonk.app/docs/transactional">Listmonk-Dokumentation</a>.</p>
+            {{ end }}
         </div>
     </div>
     <div class="footer" style="color:#6c8991;font-size:12px;line-height:1.6;padding:0 28px 34px;text-align:center;"><p class="footer-nav" style="font-size:12px;margin:0 0 10px;"><a href="https://regenfass.eu" style="color:#6c8991;">Projektseite</a> · <a href="https://docs.regenfass.eu" style="color:#6c8991;">Doku</a> · <a href="https://install.regenfass.eu" style="color:#6c8991;">Installer</a> · <a href="https://dashboard.regenfass.eu" style="color:#6c8991;">Dashboard</a></p><p>Automatisch versendet von <a href="https://regenfass.eu" target="_blank" rel="noreferrer" style="color:#6c8991;">regenfass</a></p></div>

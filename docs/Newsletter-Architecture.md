@@ -40,7 +40,7 @@ The shared Regenfass brand package provides the newsletter form used by the web 
 
 <https://news.regenfass.eu/subscription/form>
 
-The public form currently offers the **Regenfass News** list. A subscriber enters an email address, optionally provides a name, and submits the form. Listmonk then handles the subscription workflow and list membership.
+The shared form offers the **Regenfass News** list and sends the current `de` or `en` locale to the central homepage Netlify Function. The function validates the request and uses the authenticated Listmonk API to store the locale as the subscriber attribute `language`. Listmonk then handles the subscription workflow and list membership.
 
 ### Self-hosted Listmonk
 
@@ -51,6 +51,8 @@ Listmonk is responsible for:
 - handling subscriptions and unsubscribes;
 - preparing and managing newsletter campaigns; and
 - handing outgoing messages to the configured SMTP service.
+
+Subscriber language is stored in the JSON attribute `attribs.language`. Campaign and system templates use this value to render German or English content. Missing or unknown values intentionally fall back to German for existing subscribers.
 
 The Listmonk installation is self-hosted. Its administration interface is the place to maintain lists, review subscribers, and manage newsletter campaigns.
 
@@ -67,8 +69,9 @@ Brevo administration and automation settings are available at:
 ### A new subscription
 
 1. A visitor opens the newsletter form on the homepage, documentation site, or installer.
-2. The form sends the email address to Listmonk over HTTPS.
-3. Listmonk adds the subscriber to the **Regenfass News** list and applies its configured subscription process.
+2. The form sends the email address and active locale to the central subscription function over HTTPS.
+3. The function validates the request and upserts the subscriber through the authenticated Listmonk API.
+4. Listmonk adds the subscriber to the **Regenfass News** list and applies its configured subscription process.
 
 ### Maintaining the list
 

@@ -1,6 +1,6 @@
 # Newsletter
 
-Newsletter subscription section with gradient styling and a listmonk-backed form.
+Newsletter subscription section with gradient styling and a locale-aware Listmonk-backed form.
 
 ```tsx
 import Newsletter from '@/components/organisms/Newsletter';
@@ -10,11 +10,12 @@ import Newsletter from '@/components/organisms/Newsletter';
 
 ## Props
 
-This component accepts no props - it provides a static newsletter subscription interface.
+The optional `endpoint` prop is intended for local testing. Production uses the central
+homepage Netlify Function, which stores the active `de` or `en` locale in Listmonk.
 
-| Name | Type | Default | Description        |
-| ---- | ---- | ------- | ------------------ |
-| -    | -    | -       | No props available |
+| Name     | Type   | Default             | Description                                          |
+| -------- | ------ | ------------------- | ---------------------------------------------------- |
+| endpoint | string | production function | Optional subscription endpoint for testing           |
 
 ## Design notes
 
@@ -22,7 +23,7 @@ This component accepts no props - it provides a static newsletter subscription i
 - Features gradient text styling for "update newsletters" consistent with brand colors
 - Email input with placeholder text using IoT domain extension for theme relevance
 - Only the required email input is shown
-- Native POST submission to \`https://news.regenfass.eu/subscription/form\`
+- Sends the active locale to the central subscription function
 - Custom rounded pill-style form with focus and hover ring effects
 - Subscribe button uses gradient background matching site theme
 - Includes proper form accessibility with input types, labels, and focus management

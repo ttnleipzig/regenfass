@@ -42,8 +42,11 @@ describe("FileUploader", () => {
 	});
 
 	it("renders select button", () => {
-		render(() => <FileUploader label="Upload File" />);
+		const { container } = render(() => <FileUploader label="Upload File" />);
 		expect(screen.getByText("Select file")).toBeInTheDocument();
+		const actions = container.querySelector("div.flex.items-center");
+		expect(actions).toHaveClass("gap-3");
+		expect(actions).not.toHaveClass("space-x-3");
 	});
 
 	it("calls onFileSelect when file is selected", () => {

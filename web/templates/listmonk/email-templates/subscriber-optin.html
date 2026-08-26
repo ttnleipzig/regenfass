@@ -1,0 +1,31 @@
+{{ define "subscriber-optin" }}
+{{ template "header" . }}
+{{ if eq .Subscriber.Attribs.language "en" }}
+<h2>Confirm your subscription</h2>
+<p>Welcome {{ .Subscriber.FirstName }}!</p>
+<p>Please confirm your subscription to the following list:</p>
+{{ else }}
+<h2>Bestätige deine Anmeldung</h2>
+<p>Willkommen {{ .Subscriber.FirstName }}!</p>
+<p>Bitte bestätige deine Anmeldung für die folgende Liste:</p>
+{{ end }}
+<ul>
+    {{ range $i, $l := .Lists }}
+        {{ if eq .Type "public" }}
+            <li>{{ .Name }}</li>
+        {{ else }}
+            <li>{{ if eq $.Subscriber.Attribs.language "en" }}Private list{{ else }}Private Liste{{ end }}</li>
+        {{ end }}
+    {{ end }}
+</ul>
+{{ if eq .Subscriber.Attribs.language "en" }}
+<p>If you did not request this subscription, you can ignore this message.</p>
+<p><a href="{{ .OptinURL }}" class="button">Confirm subscription</a></p>
+<a href="{{ .UnsubURL }}?manage=true">Unsubscribe</a>
+{{ else }}
+<p>Wenn du diese Anmeldung nicht angefordert hast, kannst du diese Nachricht ignorieren.</p>
+<p><a href="{{ .OptinURL }}" class="button">Anmeldung bestätigen</a></p>
+<a href="{{ .UnsubURL }}?manage=true">Abmelden</a>
+{{ end }}
+{{ template "footer" }}
+{{ end }}

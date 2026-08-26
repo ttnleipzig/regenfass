@@ -1,0 +1,10 @@
+{{ define "optin-campaign" }}
+{{ if eq .Subscriber.Attribs.language "en" }}
+<p>Please confirm your subscription{{ with .Subscriber.FirstName }}, {{ . }}{{ end }}.</p>
+<p>Click the button below to receive future Regenfass updates in English.</p>
+{{ else }}
+<p>Bitte bestätige deine Anmeldung{{ with .Subscriber.FirstName }}, {{ . }}{{ end }}.</p>
+<p>Klicke auf den folgenden Button, um zukünftige Regenfass-Updates auf Deutsch zu erhalten.</p>
+{{ end }}
+<p><a class="button" {{ .OptinURLAttr }}>{{ if eq .Subscriber.Attribs.language "en" }}Confirm subscription{{ else }}Anmeldung bestätigen{{ end }}</a></p>
+{{ end }}

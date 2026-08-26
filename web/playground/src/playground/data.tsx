@@ -123,6 +123,12 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         {String(values.children)}
       </Button>
     ),
+    code: (values) => `<Button
+  variant="${escapeJsxAttribute(String(values.variant))}"
+  size="${escapeJsxAttribute(String(values.size))}"
+  loading={${Boolean(values.loading)}}
+  disabled={${Boolean(values.disabled)}}
+>${escapeJsxText(String(values.children))}</Button>`,
   },
   {
     slug: "badge",
@@ -144,6 +150,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         {String(values.children)}
       </Badge>
     ),
+    code: (values) => `<Badge variant="${escapeJsxAttribute(String(values.variant))}">${escapeJsxText(String(values.children))}</Badge>`,
   },
   {
     slug: "headline",
@@ -177,6 +184,11 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         {String(values.children)}
       </Headline>
     ),
+    code: (values) => `<Headline
+  as="${escapeJsxAttribute(String(values.as))}"
+  align="${escapeJsxAttribute(String(values.align))}"
+  subtitle="${escapeJsxAttribute(String(values.subtitle))}"
+>${escapeJsxText(String(values.children))}</Headline>`,
   },
   {
     slug: "link",
@@ -197,6 +209,11 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         {String(values.children)}
       </Link>
     ),
+    code: (values) => `<Link
+  href="${escapeJsxAttribute(String(values.href))}"
+  target={${Boolean(values.targetBlank) ? '"_blank"' : "undefined"}}
+  rel={${Boolean(values.targetBlank) ? '"noreferrer"' : "undefined"}}
+>${escapeJsxText(String(values.children))}</Link>`,
   },
   {
     slug: "progress",
@@ -254,6 +271,10 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         {String(values.children)}
       </AlertInline>
     ),
+    code: (values) => `<AlertInline
+  variant="${escapeJsxAttribute(String(values.variant))}"
+  showIcon={${Boolean(values.showIcon)}}
+>${escapeJsxText(String(values.children))}</AlertInline>`,
   },
   {
     slug: "card",
@@ -370,6 +391,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => `<ButtonToggleMode />`,
   },
   {
     slug: "checkbox",
@@ -390,6 +412,11 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => `<Checkbox
+  label="${escapeJsxAttribute(String(values.label))}"
+  checked={${Boolean(values.checked)}}
+  helperText="${escapeJsxAttribute(String(values.helperText))}"
+/>`,
   },
   {
     slug: "button-toggle-mode",
@@ -406,6 +433,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Toggle sound feedback preferences.",
     controls: [],
     render: () => <ButtonToggleSound />,
+    code: () => `<ButtonToggleSound />`,
   },
   {
     slug: "confetti",
@@ -414,6 +442,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Full-screen celebratory confetti burst.",
     controls: [{ key: "active", label: "Active", type: "boolean", defaultValue: false }],
     render: (values) => <Confetti active={Boolean(values.active)} />,
+    code: (values) => `<Confetti active={${Boolean(values.active)}} />`,
   },
   {
     slug: "spinner",
@@ -431,6 +460,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Loading indicator with animated confetti accents.",
     controls: [],
     render: () => <SpinnerConfetti />,
+    code: () => `<SpinnerConfetti />`,
   },
   {
     slug: "text-field-hex",
@@ -473,6 +503,11 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => `<FileUploader
+  label="${escapeJsxAttribute(String(values.label))}"
+  helperText="${escapeJsxAttribute(String(values.helperText))}"
+  multiple={${Boolean(values.multiple)}}
+/>`,
   },
   {
     slug: "form-field",
@@ -495,6 +530,13 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         </FormField>
       </div>
     ),
+    code: (values) => `<FormField
+  label="${escapeJsxAttribute(String(values.label))}"
+  helperText="${escapeJsxAttribute(String(values.helperText))}"
+  error="${escapeJsxAttribute(String(values.error))}"
+>
+  <InputField placeholder="My rain barrel" />
+</FormField>`,
   },
   {
     slug: "form-layout",
@@ -517,6 +559,14 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         </FormLayout>
       </div>
     ),
+    code: (values) => `<FormLayout
+  title="${escapeJsxAttribute(String(values.title))}"
+  subtitle="${escapeJsxAttribute(String(values.subtitle))}"
+  actions={<Button variant="primary" type="submit">Save</Button>}
+>
+  <InputField placeholder="Device name" />
+  <Checkbox label="Enable notifications" />
+</FormLayout>`,
   },
   {
     slug: "select",
@@ -537,6 +587,12 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => `<Select
+  label="${escapeJsxAttribute(String(values.label))}"
+  placeholder="${escapeJsxAttribute(String(values.placeholder))}"
+  options={["Ultrasonic", "ToF", "Manual"]}
+  value="Ultrasonic"
+/>`,
   },
   {
     slug: "select-field",
@@ -554,6 +610,12 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         </SelectField>
       </div>
     ),
+    code: () => `<SelectField options={["Home", "Garden", "Community"]} placeholder="Choose a use case">
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent />
+</SelectField>`,
   },
   {
     slug: "text-field",
@@ -575,6 +637,12 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         </TextFieldRoot>
       </div>
     ),
+    code: (values) => `<TextFieldRoot validationState="${Boolean(values.invalid) ? "invalid" : "valid"}">
+  <TextFieldLabel>${escapeJsxText(String(values.label))}</TextFieldLabel>
+  <TextFieldInput type="email" placeholder="you@example.com" />
+  <TextFieldDescription>${escapeJsxText(String(values.description))}</TextFieldDescription>
+  <TextFieldErrorMessage>Enter a valid email address.</TextFieldErrorMessage>
+</TextFieldRoot>`,
   },
   {
     slug: "alert-dialog",
@@ -653,6 +721,20 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         </OTPFieldGroup>
       </OTPField>
     ),
+    code: () => `<OTPField maxLength={6} value="1234">
+  <OTPFieldInput aria-label="One-time code" />
+  <OTPFieldGroup>
+    <OTPFieldSlot index={0} />
+    <OTPFieldSlot index={1} />
+    <OTPFieldSlot index={2} />
+  </OTPFieldGroup>
+  <OTPFieldSeparator />
+  <OTPFieldGroup>
+    <OTPFieldSlot index={3} />
+    <OTPFieldSlot index={4} />
+    <OTPFieldSlot index={5} />
+  </OTPFieldGroup>
+</OTPField>`,
   },
   {
     slug: "header",
@@ -684,6 +766,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Shared footer with documentation, project, and release links.",
     controls: [],
     render: () => <Footer />,
+    code: () => `<Footer />`,
   },
   {
     slug: "newsletter",
@@ -692,6 +775,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     description: "Newsletter signup form with success feedback state.",
     controls: [],
     render: () => <Newsletter />,
+    code: () => `<Newsletter />`,
   },
 ];
 

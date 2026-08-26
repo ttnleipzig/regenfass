@@ -53,6 +53,7 @@ export { default as Header } from "./components/organisms/Header.tsx";
 export type { HeaderNavItem, HeaderProps } from "./components/organisms/Header.tsx";
 export { default as Footer } from "./components/organisms/Footer.tsx";
 export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
+export type { NewsletterProps } from "./components/organisms/Newsletter.tsx";
 
 export { APP_VERSION } from "./version.ts";
 

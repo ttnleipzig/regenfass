@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { render, screen, cleanup } from "@solidjs/testing-library";
-import { Newsletter } from "@regenfass/brand";
+import { render, screen, cleanup, fireEvent } from "@solidjs/testing-library";
+import { LocaleProvider, Newsletter } from "@regenfass/brand";
 
 describe("Newsletter", () => {
 	afterEach(() => {
@@ -32,7 +32,7 @@ describe("Newsletter", () => {
 		expect(form).toHaveAttribute("method", "post");
 		expect(form).toHaveAttribute(
 			"action",
-			"https://news.regenfass.eu/subscription/form",
+			"https://regenfass.eu/.netlify/functions/newsletter-subscribe",
 		);
 	});
 
@@ -50,6 +50,32 @@ describe("Newsletter", () => {
 		expect(container.querySelector('input[name="email"]')).toBeRequired();
 		expect(container.querySelector('input[name="name"]')).not.toBeInTheDocument();
 		expect(container.querySelector('input[name="l"]')).not.toBeInTheDocument();
+		expect(container.querySelector('input[name="language"]')).toHaveValue("en");
+	});
+
+	it("sends the selected locale and shows the confirmation", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify({ ok: true }), { status: 200 }),
+		);
+		render(() => (
+			<LocaleProvider initialLocale="de">
+				<Newsletter endpoint="https://example.test/subscribe" />
+			</LocaleProvider>
+		));
+
+		const form = document.querySelector("form#form-newsletter") as HTMLFormElement;
+		const email = form.querySelector('input[name="email"]') as HTMLInputElement;
+		email.value = "test@example.com";
+		await fireEvent.submit(form);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"https://example.test/subscribe",
+			expect.objectContaining({ method: "POST" }),
+		);
+		const request = fetchMock.mock.calls[0]?.[1];
+		expect((request?.body as FormData).get("language")).toBe("de");
+		expect(await screen.findByRole("status")).toHaveTextContent("Fast fertig");
+		fetchMock.mockRestore();
 	});
 
 	it("renders a native submit control", () => {

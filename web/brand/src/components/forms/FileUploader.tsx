@@ -51,7 +51,7 @@ const FileUploader: Component<FileUploaderProps> = (props) => {
 			helperText={local.helperText}
 		>
 			<div class={cn("space-y-3", local.class)}>
-				<div class="flex items-center space-x-3">
+				<div class="flex items-center gap-3">
 					<input
 						{...rest}
 						type="file"
