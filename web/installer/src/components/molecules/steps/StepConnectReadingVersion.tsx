@@ -29,6 +29,7 @@ export default function StepConnectReadingVersion({
 			</AlertInline>
 
 			<StepPaginator
+				class="rounded-none border-0 shadow-none ring-0"
 				title={t("shared.paginatorTitle")}
 				steps={installationSteps(t)}
 				listAriaLabel={t("shared.paginatorListAriaLabel")}

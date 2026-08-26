@@ -28,6 +28,7 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 	return (
 		<div class="space-y-4">
 			<StepPaginator
+				class="rounded-none border-0 shadow-none ring-0"
 				title={t("shared.paginatorTitle")}
 				steps={installationSteps(t)}
 				listAriaLabel={t("shared.paginatorListAriaLabel")}

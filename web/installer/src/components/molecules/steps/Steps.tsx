@@ -52,7 +52,7 @@ export default function Steps() {
 			<Show
 				when={snapshot().matches("Start_WaitingForUser")}
 				fallback={
-					<div class="space-y-6 rounded-2xl border border-border/70 bg-card/20 p-4 shadow-sm sm:p-6">
+					<div class="space-y-6 overflow-hidden rounded-2xl border border-border/70 bg-card/20 p-0 shadow-sm">
 						<Switch fallback={<pre>{JSON.stringify(snapshot().toJSON(), null, 2)}</pre>}>
 				<Match when={snapshot().matches("Start_CheckingWebSerialSupport")}>
 					<StepStartCheckingWebSerialSupport state={snapshot()} emitEvent={send} />
