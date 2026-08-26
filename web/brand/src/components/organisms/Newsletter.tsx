@@ -1,6 +1,7 @@
 import { Headline } from "../atoms/Headline.tsx";
 import { Button } from "../atoms/Button.tsx";
 import { TextFieldRoot, TextFieldInput } from "../forms/TextField.tsx";
+import { AlertInline, AlertTitle, AlertDescription } from "../molecules/AlertInline.tsx";
 import { cn } from "../../libs/cn.ts";
 import {
 	useBrandT,
@@ -50,12 +51,12 @@ export default function Newsletter(props: NewsletterProps = {}) {
 	return (
 		<aside id="newsletter" class="site-container py-6">
 			{status() === "success" ? (
-				<div class="max-w-xl" role="status">
-					<Headline as="h2">{t("newsletter.successTitle")}</Headline>
-					<p class="mt-3 text-muted-foreground">
+				<AlertInline variant="info" class="max-w-xl" role="status">
+					<AlertTitle>{t("newsletter.successTitle")}</AlertTitle>
+					<AlertDescription class="mt-1">
 						{t("newsletter.successBodyBefore")} {submittedEmail()} {t("newsletter.successBodyAfter")}
-					</p>
-				</div>
+					</AlertDescription>
+				</AlertInline>
 			) : (
 			<div class="flex flex-col gap-6">
 				<div class="max-w-xl">
