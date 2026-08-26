@@ -2,9 +2,13 @@
 # Keep Base directory empty (repository root) if this site is linked in Netlify UI.
 # `ignore = "exit 0"` skips Netlify’s own builder so deploys come from GHA via netlify-cli.
 [build]
-  command = "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @ttnleipzig/regenfass-homepage build"
+  command = "pnpm install --frozen-lockfile && pnpm --filter @ttnleipzig/regenfass-homepage build"
   publish = "web/homepage/dist"
   ignore = "exit 0"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PNPM_VERSION = "11.24.0"
 
 [functions]
   directory = "netlify/functions"
