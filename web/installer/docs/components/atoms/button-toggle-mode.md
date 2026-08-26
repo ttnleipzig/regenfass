@@ -3,9 +3,9 @@
 Dark/light theme toggle button with smooth icon transitions.
 
 ```tsx
-import { ButtonModeToggle } from '@/components/ui/mode-toggle';
+import { ButtonToggleMode } from '@regenfass/brand';
 
-<ButtonModeToggle />
+<ButtonToggleMode />
 ```
 
 ## Props

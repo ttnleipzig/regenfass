@@ -1,7 +1,7 @@
 /** localStorage key used by @kobalte/core ColorModeProvider */
 export const KB_COLOR_MODE_STORAGE_KEY = "kb-color-mode";
 
-/** Legacy key written by ButtonModeToggle before Kobalte sync */
+/** Legacy key written by ButtonToggleMode before Kobalte sync */
 export const LEGACY_THEME_STORAGE_KEY = "theme";
 
 export type ResolvedColorMode = "light" | "dark";

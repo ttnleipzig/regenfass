@@ -55,6 +55,7 @@ Important rule files under `.agents/rules/` include: `framework.mdc` (SolidJS), 
 - **Code and collaboration**: Gender-neutral wording where it applies; **Conventional Commits** in English for commit subjects (full detail below).
 - **Firmware**: Use feature flags (`FEATURE_*`) for optional parts; keep sensor, display, and button code modular; follow usual Arduino naming habits.
 - **Installer**: TypeScript for new code; shadcn-solid and solid-icons as above; hand-written component docs under `web/installer/docs` following existing layout.
+- **Component naming**: Name toggle button components `ButtonToggle<Feature>` (for example, `ButtonToggleMode` and `ButtonToggleSound`); filenames, exports, tests, docs, and Playground entries must use the same name.
 
 ## Common tasks
 

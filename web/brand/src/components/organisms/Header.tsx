@@ -1,6 +1,6 @@
 import { Component, For, Show, createMemo, mergeProps, type JSX } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
-import { ButtonModeToggle } from "../atoms/ButtonModeToggle.tsx";
+import { ButtonToggleMode } from "../atoms/ButtonToggleMode.tsx";
 import Link from "../atoms/Link.tsx";
 import { LanguageSwitcher } from "../../i18n/LanguageSwitcher.tsx";
 import { cn } from "../../libs/cn.ts";
@@ -235,7 +235,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
         <div class={cn("flex items-center gap-1", props.navPosition === "left" && "ml-auto")}>
           {props.trailing}
           <LanguageSwitcher />
-          <ButtonModeToggle />
+          <ButtonToggleMode />
         </div>
       </div>
     </header>

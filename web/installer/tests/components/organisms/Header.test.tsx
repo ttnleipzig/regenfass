@@ -120,13 +120,13 @@ describe("Header", () => {
 		expect(screen.queryByText("Docs")).not.toBeInTheDocument();
 	});
 
-	it("renders ButtonModeToggle", () => {
+	it("renders ButtonToggleMode", () => {
 		renderWithRouter(() => <Header />);
 		const toggleButton = screen.getByLabelText("Toggle color mode");
 		expect(toggleButton).toBeInTheDocument();
 	});
 
-	it("does not render ButtonSoundToggle", () => {
+	it("does not render ButtonToggleSound", () => {
 		renderWithRouter(() => <Header />);
 		expect(screen.queryByLabelText("Mute sounds")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("Unmute sounds")).not.toBeInTheDocument();

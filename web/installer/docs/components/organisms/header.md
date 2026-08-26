@@ -43,6 +43,6 @@ const navItems: HeaderNavItem[] = [
 
 - Features the Regenfass brand name with gradient text styling
 - Navigation is hidden on mobile devices (`hidden md:block`)
-- Integrates the ButtonModeToggle component for dark/light theme switching
+- Integrates the ButtonToggleMode component for dark/light theme switching
 - Uses responsive layout with max-width container and proper spacing
 - Gradient text uses sky-600 to cyan-100 for brand recognition

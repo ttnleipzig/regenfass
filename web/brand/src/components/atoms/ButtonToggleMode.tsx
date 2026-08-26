@@ -7,7 +7,7 @@ import { trackEvent } from "../../libs/analytics.ts";
 import { applyColorMode, persistColorMode } from "../../libs/colorMode.ts";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
-export function ButtonModeToggle() {
+export function ButtonToggleMode() {
 	const { colorMode, setColorMode } = useColorMode();
 	const t = useBrandT();
 

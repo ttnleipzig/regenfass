@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
-import { ButtonModeToggle } from "@regenfass/brand";
+import { ButtonToggleMode } from "@regenfass/brand";
 
 vi.mock("swetrix", () => ({
   init: vi.fn(),
@@ -26,7 +26,7 @@ vi.mock("@kobalte/core/color-mode", async () => {
   };
 });
 
-describe("ButtonModeToggle", () => {
+describe("ButtonToggleMode", () => {
   beforeEach(() => {
     // Clear localStorage before each test (using removeItem for jsdom compatibility)
     try {
@@ -47,20 +47,20 @@ describe("ButtonModeToggle", () => {
   });
 
   it("renders toggle button", () => {
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     expect(button).toBeInTheDocument();
   });
 
   it("shows moon icon when in light mode", () => {
-    const { container } = render(() => <ButtonModeToggle />);
+    const { container } = render(() => <ButtonToggleMode />);
     // In light mode, moon should be visible
     const moonIcon = container.querySelector("svg");
     expect(moonIcon).toBeInTheDocument();
   });
 
   it("toggles color mode on click", () => {
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     // Initially should be light mode
@@ -82,7 +82,7 @@ describe("ButtonModeToggle", () => {
     
     // Mock localStorage.setItem to track calls
     const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     // Clear any existing calls
@@ -99,7 +99,7 @@ describe("ButtonModeToggle", () => {
   });
 
   it("updates document classes on toggle", () => {
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     fireEvent.click(button);
@@ -109,7 +109,7 @@ describe("ButtonModeToggle", () => {
   });
 
   it("toggles back to light mode on second click", () => {
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     // First click - to dark
@@ -127,7 +127,7 @@ describe("ButtonModeToggle", () => {
       throw new Error("Storage quota exceeded");
     });
     
-    render(() => <ButtonModeToggle />);
+    render(() => <ButtonToggleMode />);
     const button = screen.getByRole("button", { name: /toggle color mode/i });
     
     // Should not throw error
@@ -137,7 +137,7 @@ describe("ButtonModeToggle", () => {
   });
 
   it("has correct button styling", () => {
-    const { container } = render(() => <ButtonModeToggle />);
+    const { container } = render(() => <ButtonToggleMode />);
     const button = container.querySelector("button");
     expect(button).toHaveClass("transition-transform");
   });

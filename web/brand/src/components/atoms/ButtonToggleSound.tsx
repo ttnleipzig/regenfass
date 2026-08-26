@@ -6,7 +6,7 @@ import BiRegularVolumeMute from "lucide-solid/icons/volume-x";
 import { Show } from "solid-js";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
-export function ButtonSoundToggle() {
+export function ButtonToggleSound() {
 	const t = useBrandT();
 	const label = () =>
 		soundEnabled() ? t("a11y.muteSounds") : t("a11y.unmuteSounds");

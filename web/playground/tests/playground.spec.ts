@@ -19,7 +19,7 @@ test("component search filters the sidebar", async ({ page }) => {
   await page.goto("/button");
   await page.getByPlaceholder("Search components…").fill("Button");
   await expect(page.getByRole("link", { name: "Button", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "ButtonModeToggle", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "ButtonToggleMode", exact: true })).toBeVisible();
 });
 
 test("Button exposes semantic variants and loading state", async ({ page }) => {

@@ -3,9 +3,9 @@
 Mute button for installer UI sounds (for example the slot-machine dings when revealing an AppKey).
 
 ```tsx
-import { ButtonSoundToggle } from "@/components/atoms/ButtonSoundToggle.tsx";
+import { ButtonToggleSound } from "@regenfass/brand";
 
-<ButtonSoundToggle />
+<ButtonToggleSound />
 ```
 
 ## Props
