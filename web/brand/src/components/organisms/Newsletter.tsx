@@ -49,7 +49,8 @@ export default function Newsletter(props: NewsletterProps = {}) {
 	const currentLocale = (): Locale => localeContext?.locale() ?? "en";
 
 	return (
-		<aside id="newsletter" class="site-container py-6">
+		<section class="w-full border-y border-border/70 bg-muted/30 dark:bg-muted/15">
+		<aside id="newsletter" class="site-container py-8 sm:py-10">
 			{status() === "success" ? (
 				<AlertInline variant="info" class="max-w-xl" role="status">
 					<AlertTitle>{t("newsletter.successTitle")}</AlertTitle>
@@ -110,5 +111,6 @@ export default function Newsletter(props: NewsletterProps = {}) {
 			</div>
 			)}
 		</aside>
+		</section>
 	);
 }
