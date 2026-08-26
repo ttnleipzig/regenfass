@@ -27,11 +27,39 @@ function escapeCodeString(value: string) {
   return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n")}"`;
 }
 
+const PLAYGROUND_CATEGORY_STORAGE_KEY = "regenfass-playground-open-categories";
+
+function defaultOpenCategories() {
+  return Object.fromEntries(PLAYGROUND_CATEGORIES.map((category) => [category.id, true]));
+}
+
+function readOpenCategories() {
+  const defaults = defaultOpenCategories();
+
+  try {
+    const stored = JSON.parse(localStorage.getItem(PLAYGROUND_CATEGORY_STORAGE_KEY) ?? "null");
+    if (!stored || typeof stored !== "object") {
+      return defaults;
+    }
+
+    return Object.fromEntries(
+      Object.keys(defaults).map((category) => [
+        category,
+        typeof stored[category] === "boolean" ? stored[category] : true,
+      ]),
+    );
+  } catch {
+    return defaults;
+  }
+}
+
 function PlaygroundSidebar(props: { onNavigate: () => void }) {
   const [query, setQuery] = createSignal("");
-  const [openCategories, setOpenCategories] = createSignal<Record<string, boolean>>(
-    Object.fromEntries(PLAYGROUND_CATEGORIES.map((category) => [category.id, true])),
-  );
+  const [openCategories, setOpenCategories] = createSignal<Record<string, boolean>>(defaultOpenCategories());
+
+  onMount(() => {
+    setOpenCategories(readOpenCategories());
+  });
 
   const grouped = createMemo(() => {
     const normalizedQuery = query().trim().toLowerCase();
@@ -48,7 +76,17 @@ function PlaygroundSidebar(props: { onNavigate: () => void }) {
   });
 
   const toggleCategory = (category: string) => {
-    setOpenCategories((current) => ({ ...current, [category]: !current[category] }));
+    setOpenCategories((current) => {
+      const next = { ...current, [category]: !current[category] };
+
+      try {
+        localStorage.setItem(PLAYGROUND_CATEGORY_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // Keep the in-memory state when browser storage is unavailable.
+      }
+
+      return next;
+    });
   };
 
   return (
@@ -98,7 +136,18 @@ function PlaygroundSidebar(props: { onNavigate: () => void }) {
                 onClick={() => toggleCategory(category.id)}
               >
                 <span>{category.title}</span>
-                <span aria-hidden="true" class="text-xs">{openCategories()[category.id] ? "−" : "+"}</span>
+                <svg
+                  aria-hidden="true"
+                  class={`h-4 w-4 shrink-0 transition-transform duration-150 ${openCategories()[category.id] ? "rotate-180" : ""}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </button>
               <Show when={openCategories()[category.id]}>
                 <ul class="space-y-1">

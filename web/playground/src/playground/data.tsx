@@ -637,8 +637,23 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     name: "Header",
     category: "organisms",
     description: "Responsive site header with navigation and color-mode toggle.",
-    controls: [],
-    render: () => <Header title="Regenfass Playground" navItems={[{ href: "/", label: "Home" }]} />,
+    controls: [
+      { key: "title", label: "Title", type: "text", defaultValue: "Regenfass" },
+      { key: "titleSuffix", label: "Title suffix", type: "text", defaultValue: "Playground" },
+    ],
+    render: (values) => (
+      <Header
+        title={String(values.title)}
+        titleSuffix={String(values.titleSuffix) || undefined}
+        navItems={[{ href: "/", label: "Home" }]}
+      />
+    ),
+    code: (values) => {
+      const title = escapeJsxAttribute(String(values.title));
+      const suffix = String(values.titleSuffix);
+
+      return `<Header\n  title="${title}"${suffix ? `\n  titleSuffix="${escapeJsxAttribute(suffix)}"` : ""}\n/>`;
+    },
   },
   {
     slug: "footer",

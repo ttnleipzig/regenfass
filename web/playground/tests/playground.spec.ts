@@ -22,6 +22,24 @@ test("component search filters the sidebar", async ({ page }) => {
   await expect(page.getByRole("link", { name: "ButtonToggleMode", exact: true })).toBeVisible();
 });
 
+test("persists open category state in localStorage", async ({ page }) => {
+  await page.goto("/button");
+  await page.evaluate(() => localStorage.removeItem("regenfass-playground-open-categories"));
+  await page.reload();
+
+  const atomsCategory = page.getByRole("button", { name: /^Atoms/ });
+  await expect(atomsCategory).toHaveAttribute("aria-expanded", "true");
+  await atomsCategory.click();
+  await expect(atomsCategory).toHaveAttribute("aria-expanded", "false");
+
+  await page.reload();
+  await expect(page.getByRole("button", { name: /^Atoms/ })).toHaveAttribute("aria-expanded", "false");
+
+  await page.getByRole("button", { name: /^Atoms/ }).click();
+  await page.reload();
+  await expect(page.getByRole("button", { name: /^Atoms/ })).toHaveAttribute("aria-expanded", "true");
+});
+
 test("Button exposes semantic variants and loading state", async ({ page }) => {
   await page.goto("/button");
   await page.getByLabel("Variant").selectOption("secondary");
@@ -68,6 +86,18 @@ test("Footer displays a release version and links to release notes", async ({ pa
     "href",
     "https://github.com/ttnleipzig/regenfass/releases",
   );
+});
+
+test("Header exposes an optional title suffix", async ({ page }) => {
+  await page.goto("/header");
+  await page.getByLabel("Title suffix").fill("Docs");
+
+  const heading = page.locator("main h1").last();
+  await expect(heading).toContainText("Regenfass");
+  await expect(heading).toContainText("Docs");
+  await expect(heading.locator("span")).toHaveClass(/font-normal/);
+  await expect(heading.locator("span")).toHaveClass(/text-foreground\/80/);
+  await expect(page.locator("code.tokenized-code")).toContainText('titleSuffix="Docs"');
 });
 
 test("Progress shows the current value in generated JSX", async ({ page }) => {
