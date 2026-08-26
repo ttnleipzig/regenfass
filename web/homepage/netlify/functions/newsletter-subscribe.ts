@@ -15,16 +15,14 @@ const allowedOrigins = new Set([
 ]);
 
 function getConfig() {
-	const values = {
-		url: Netlify.env.get("LISTMONK_URL"),
-		user: Netlify.env.get("LISTMONK_API_USER"),
-		token: Netlify.env.get("LISTMONK_API_TOKEN"),
-		listId: Number(Netlify.env.get("LISTMONK_NEWS_LIST_ID")),
-	};
-	if (!values.url || !values.user || !values.token || !Number.isInteger(values.listId)) {
+	const url = Netlify.env.get("LISTMONK_URL");
+	const user = Netlify.env.get("LISTMONK_API_USER");
+	const token = Netlify.env.get("LISTMONK_API_TOKEN");
+	const listId = Number(Netlify.env.get("LISTMONK_NEWS_LIST_ID"));
+	if (!url || !user || !token || !Number.isInteger(listId)) {
 		throw new Error("Newsletter endpoint is not configured");
 	}
-	return values;
+	return { url, user, token, listId };
 }
 
 function corsHeaders(origin: string | null) {

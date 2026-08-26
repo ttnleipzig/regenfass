@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import handler from "../../../homepage/netlify/functions/newsletter-subscribe.ts";
 
 const event = (body: string) =>
