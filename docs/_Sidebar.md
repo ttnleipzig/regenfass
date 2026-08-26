@@ -4,6 +4,7 @@
 - [Project Structure](Project-Structure)
 - [Hardware Support](Hardware-Support)
 - [Architecture](Architecture)
+- [Newsletter Architecture](Newsletter-Architecture)
 - [Development Environment](Development-Environment)
 - [Local Development](Local-Development)
 - [Build Process](Build-Process)
