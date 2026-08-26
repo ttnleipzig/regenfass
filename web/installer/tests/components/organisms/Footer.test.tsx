@@ -14,23 +14,25 @@ describe("Footer", () => {
 	});
 
 	it("renders address information", () => {
-		render(() => <Footer />);
-		expect(screen.getByText(/TTN Leipzig/)).toBeInTheDocument();
-		expect(screen.getByText(/Hardenbergstraße 48/)).toBeInTheDocument();
+		const { container } = render(() => <Footer />);
+		const address = container.querySelector("address");
+		expect(address).toBeInTheDocument();
+		expect(address).toHaveTextContent("TTN Leipzig");
+		expect(address).toHaveTextContent("Hardenbergstraße 48");
 	});
 
-	it("renders powered by link", () => {
+	it("credits the TTN Leipzig user group", () => {
 		render(() => <Footer />);
-		const poweredByLink = screen.getByText(/Powered by/);
-		expect(poweredByLink).toBeInTheDocument();
-		const espLink = screen.getByText("ESP Web Tools");
-		expect(espLink).toBeInTheDocument();
-		expect(espLink.closest("a")).toHaveAttribute(
-			"href",
-			"https://esphome.github.io/esp-web-tools/",
-		);
-		expect(espLink.closest("a")).toHaveAttribute("target", "_blank");
-		expect(espLink.closest("a")).toHaveAttribute("rel", "noopener noreferrer");
+		const projectLink = screen.getByRole("link", { name: "TTN Leipzig user group" });
+		expect(projectLink).toHaveAttribute("href", "https://ttn-leipzig.de");
+		expect(projectLink).toHaveAttribute("target", "_blank");
+		expect(projectLink).toHaveAttribute("rel", "noopener noreferrer");
+	});
+
+	it("does not render the former ESP Web Tools credit", () => {
+		render(() => <Footer />);
+		expect(screen.queryByText("ESP Web Tools")).not.toBeInTheDocument();
+		expect(screen.queryByText(/Powered by/)).not.toBeInTheDocument();
 	});
 
 	it("renders mobile navigation links", () => {
@@ -61,7 +63,7 @@ describe("Footer", () => {
 		const { container } = render(() => <Footer />);
 		const footer = container.querySelector("footer");
 		expect(footer).toHaveClass("site-container");
-		expect(footer).toHaveClass("py-6");
+		expect(footer).toHaveClass("py-8");
 	});
 
 	it("renders navigation icons", () => {

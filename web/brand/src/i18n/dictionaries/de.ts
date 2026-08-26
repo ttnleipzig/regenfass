@@ -10,7 +10,6 @@ export const brandDictDe: BrandDictionary = {
 		docs: "Docs",
 		github: "GitHub",
 		matrix: "Matrix",
-		poweredBy: "Bereitgestellt mit",
 		releaseNotes: "Release Notes",
 	},
 	newsletter: {

@@ -42,6 +42,7 @@ describe("Button", () => {
   it("applies secondary variant", () => {
     const { container } = render(() => <Button variant="secondary">Secondary</Button>);
     const button = container.querySelector("button");
+    expect(button).toHaveClass("border");
     expect(button).toHaveClass("border-secondary");
     expect(button).toHaveClass("text-secondary");
   });

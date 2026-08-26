@@ -22,7 +22,7 @@ export const buttonVariants = cva(
 				outline:
 					"border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground active:bg-accent/90 data-[pressed]:bg-accent/90",
 				secondary:
-					"border-secondary bg-background text-secondary hover:bg-secondary/10 hover:text-secondary active:bg-secondary/15 data-[pressed]:bg-secondary/15",
+					"border border-secondary bg-background text-secondary shadow-sm hover:bg-secondary/10 hover:text-secondary active:bg-secondary/15 data-[pressed]:bg-secondary/15",
 				ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80 data-[pressed]:bg-accent/80",
 				link: "text-primary underline-offset-4 hover:underline active:underline",
 			},

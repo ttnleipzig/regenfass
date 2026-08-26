@@ -31,67 +31,80 @@ export default function Footer() {
 	});
 
 	return (
-		<footer class="site-container py-6">
-			<div class="pt-5 text-xs sm:text-sm  antialiased text-gray-400 border-t border-gray-300 dark:border-gray-00 dark:text-gray-400">
-				{/* Mobile links (hidden on md and up) */}
-				<nav class="md:hidden mb-4">
-					<ul class="flex font-medium text-gray-800 gap-x-3 dark:text-gray-400">
-						<li>
+		<footer class="site-container px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+			<div class="relative overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-card via-card/80 to-primary/5 px-5 py-6 shadow-sm ring-1 ring-border/30 sm:px-7 sm:py-7">
+				<div aria-hidden="true" class="pointer-events-none absolute -right-20 -top-24 size-56 rounded-full bg-primary/10 blur-3xl" />
+				<div class="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+					<div class="max-w-xl space-y-4">
+						<div>
+							<p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+								Regenfass · Open-source IoT
+							</p>
+							<address class="mt-3 not-italic text-sm leading-6 text-muted-foreground">
+								TTN Leipzig, André Lademan, Hardenbergstraße 48, 04275 Leipzig,
+								Germany, Europe, United Nations, Milky Way
+							</address>
+						</div>
+						<p class="max-w-lg text-sm leading-6 text-foreground/80">
+							Regenfass is a project by{" "}
 							<a
-								href="https://docs.regenfass.eu/"
-								class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline"
+								href="https://ttn-leipzig.de"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="font-medium text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
 							>
-								<Book size={18} />
-								<span>{t("footer.docs")}</span>
+								TTN Leipzig user group
 							</a>
-						</li>
-						<li>
+							.
+						</p>
+					</div>
+
+					<div class="space-y-4 md:min-w-56 md:text-right">
+						<nav aria-label="Footer links">
+							<ul class="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium md:justify-end">
+								<li>
+									<a
+										href="https://docs.regenfass.eu/"
+										class="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+									>
+										<Book size={15} />
+										<span>{t("footer.docs")}</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="https://github.com/ttnleipzig/regenfass"
+										class="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+									>
+										<Github size={15} />
+										<span>{t("footer.github")}</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="https://matrix.to/#/#ttn-leipzig:matrix.org"
+										class="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+									>
+										<MessageSquare size={15} />
+										<span>{t("footer.matrix")}</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+						<p class="text-xs text-muted-foreground">
+							<span class="font-mono" aria-live="polite">v{releaseVersion()}</span>
+							<span class="mx-1.5 text-border">·</span>
 							<a
-								href="https://github.com/ttnleipzig/regenfass"
-								class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline"
+								href="https://github.com/ttnleipzig/regenfass/releases"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="transition-colors hover:text-foreground"
 							>
-								<Github size={18} />
-								<span>{t("footer.github")}</span>
+								{t("footer.releaseNotes")}
 							</a>
-						</li>
-						<li>
-							<a
-								href="https://matrix.to/#/#ttn-leipzig:matrix.org"
-								class="p-2 inline-flex items-center gap-1 hover:text-slate-500 dark:hover:text-white hover:underline"
-							>
-								<MessageSquare size={18} />
-								<span>{t("footer.matrix")}</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
-				<address>
-					TTN Leipzig, André Lademan, Hardenbergstraße 48, 04275 Leipzig,
-					Germany, Europe, United Nations, Milky Way
-				</address>
-				<p>
-					{t("footer.poweredBy")}{" "}
-					<a
-						href="https://esphome.github.io/esp-web-tools/"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="hover:text-slate-500 dark:hover:text-white hover:underline"
-					>
-						ESP Web Tools
-					</a>
-				</p>
-				<p class="mt-2">
-					<span class="font-mono" aria-live="polite">v{releaseVersion()}</span>
-					{" · "}
-					<a
-						href="https://github.com/ttnleipzig/regenfass/releases"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="hover:text-slate-500 dark:hover:text-white hover:underline"
-					>
-						{t("footer.releaseNotes")}
-					</a>
-				</p>
+						</p>
+					</div>
+				</div>
 			</div>
 		</footer>
 	);

@@ -8,7 +8,6 @@ export type BrandDictionary = {
 		docs: string;
 		github: string;
 		matrix: string;
-		poweredBy: string;
 		releaseNotes: string;
 	};
 	newsletter: {
@@ -54,7 +53,6 @@ export const brandDictEn: BrandDictionary = {
 		docs: "Docs",
 		github: "GitHub",
 		matrix: "Matrix",
-		poweredBy: "Powered by",
 		releaseNotes: "Release notes",
 	},
 	newsletter: {
