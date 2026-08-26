@@ -18,12 +18,12 @@ const allowedOrigins = new Set([
 	"http://localhost:5176",
 ]);
 
-function getConfig() {
+function getConfig(language: "de" | "en") {
 	const url = Netlify.env.get("LISTMONK_URL");
 	const user = Netlify.env.get("LISTMONK_API_USER");
 	const token = Netlify.env.get("LISTMONK_API_TOKEN");
-	const listId = Number(Netlify.env.get("LISTMONK_NEWS_LIST_ID"));
-	if (!url || !user || !token || !Number.isInteger(listId)) {
+	const listId = Number(Netlify.env.get(`LISTMONK_NEWS_${language.toUpperCase()}_LIST_ID`));
+	if (!url || !user || !token || !Number.isInteger(listId) || listId < 1) {
 		throw new Error("Newsletter endpoint is not configured");
 	}
 	return { url, user, token, listId };
@@ -37,8 +37,8 @@ function corsHeaders(origin: string | null) {
 	};
 }
 
-async function listmonkRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
-	const settings = getConfig();
+async function listmonkRequest<T>(language: "de" | "en", path: string, init: RequestInit = {}): Promise<T> {
+	const settings = getConfig(language);
 	const authorization = btoa(`${settings.user}:${settings.token}`);
 	const result = await fetch(`${settings.url.replace(/\/$/, "")}${path}`, {
 		...init,
@@ -79,15 +79,15 @@ export default async (request: Request, _context: Context) => {
 	if (language !== "de" && language !== "en") return jsonResponse(400, { error: "Invalid language" }, origin);
 
 	try {
-		const settings = getConfig();
+		const settings = getConfig(language);
 		const query = encodeURIComponent(`subscribers.email = '${email.replace(/'/g, "''")}'`);
-		const existing = await listmonkRequest<{ data: { results: Subscriber[] } }>(
+		const existing = await listmonkRequest<{ data: { results: Subscriber[] } }>(language,
 			`/api/subscribers?query=${query}&per_page=1`,
 		);
 		const subscriber = existing.data.results[0];
 
 		if (subscriber) {
-			await listmonkRequest(`/api/subscribers/${subscriber.id}`, {
+			await listmonkRequest(language, `/api/subscribers/${subscriber.id}`, {
 				method: "PUT",
 				body: JSON.stringify({
 					email: subscriber.email,
@@ -98,7 +98,7 @@ export default async (request: Request, _context: Context) => {
 				}),
 			});
 			if (!subscriber.lists?.some((list) => list.id === settings.listId)) {
-				await listmonkRequest("/api/subscribers/lists", {
+				await listmonkRequest(language, "/api/subscribers/lists", {
 					method: "PUT",
 					body: JSON.stringify({
 						ids: [subscriber.id],
@@ -109,7 +109,7 @@ export default async (request: Request, _context: Context) => {
 				});
 			}
 		} else {
-			await listmonkRequest("/api/subscribers", {
+			await listmonkRequest(language, "/api/subscribers", {
 				method: "POST",
 				body: JSON.stringify({
 					email,

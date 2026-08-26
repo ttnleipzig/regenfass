@@ -14,7 +14,7 @@ describe("beta-tester-subscribe function", () => {
     vi.stubEnv("LISTMONK_URL", "https://news.example");
     vi.stubEnv("LISTMONK_API_USER", "user");
     vi.stubEnv("LISTMONK_API_TOKEN", "token");
-    vi.stubEnv("LISTMONK_BETA_LIST_ID", "42");
+    vi.stubEnv("LISTMONK_BETA_EN_LIST_ID", "42");
     (globalThis as typeof globalThis & { Netlify?: { env: { get: (key: string) => string | undefined } } }).Netlify = {
       env: { get: (key) => process.env[key] },
     };

@@ -27,7 +27,7 @@ describe("newsletter-subscribe function", () => {
 		vi.stubEnv("LISTMONK_URL", "https://news.regenfass.eu");
 		vi.stubEnv("LISTMONK_API_USER", "api-user");
 		vi.stubEnv("LISTMONK_API_TOKEN", "api-token");
-		vi.stubEnv("LISTMONK_NEWS_LIST_ID", "7");
+		vi.stubEnv("LISTMONK_NEWS_EN_LIST_ID", "8");
 		const fetchMock = vi
 			.spyOn(globalThis, "fetch")
 			.mockResolvedValueOnce(
@@ -41,7 +41,7 @@ describe("newsletter-subscribe function", () => {
 		const [, request] = fetchMock.mock.calls[1] ?? [];
 		expect(JSON.parse(String(request?.body))).toMatchObject({
 			email: "person@example.com",
-			lists: [7],
+			lists: [8],
 			attribs: { language: "en" },
 			preconfirm_subscriptions: false,
 		});
@@ -51,7 +51,7 @@ describe("newsletter-subscribe function", () => {
 		vi.stubEnv("LISTMONK_URL", "https://news.regenfass.eu");
 		vi.stubEnv("LISTMONK_API_USER", "api-user");
 		vi.stubEnv("LISTMONK_API_TOKEN", "api-token");
-		vi.stubEnv("LISTMONK_NEWS_LIST_ID", "7");
+		vi.stubEnv("LISTMONK_NEWS_DE_LIST_ID", "7");
 		const fetchMock = vi
 			.spyOn(globalThis, "fetch")
 			.mockResolvedValueOnce(
@@ -64,7 +64,7 @@ describe("newsletter-subscribe function", () => {
 		expect(result.status).toBe(200);
 		expect(fetchMock.mock.calls[1]?.[0]).toBe("https://news.regenfass.eu/api/subscribers/12");
 	expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toMatchObject({
-		lists: [7],
+			lists: [7],
 		attribs: { language: "de" },
 	});
 	});

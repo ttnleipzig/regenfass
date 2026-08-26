@@ -8,8 +8,9 @@ import {
 	useLocaleOptional,
 } from "../../i18n/LocaleProvider.tsx";
 import { createSignal } from "solid-js";
-import type { Locale } from "../../i18n/types.ts";
 import { homepageLink } from "../../libs/homepageLinks.ts";
+import { subscriptionListKey } from "../../libs/subscriptionList.ts";
+import { currentLocale as readCurrentLocale } from "../../libs/currentLocale.ts";
 
 export type NewsletterProps = {
 	/** Central endpoint that enriches Listmonk subscriptions with the locale. */
@@ -28,14 +29,18 @@ export default function Newsletter(props: NewsletterProps = {}) {
 	const submit = async (event: SubmitEvent) => {
 		event.preventDefault();
 		const form = event.currentTarget as HTMLFormElement;
-		const email = new FormData(form).get("email");
+		const data = new FormData(form);
+		const locale = currentLocale();
+		data.set("language", locale);
+		data.set("list", subscriptionListKey("news", locale));
+		const email = data.get("email");
 		if (typeof email !== "string") return;
 
 		setStatus("submitting");
 		try {
 			const response = await fetch(props.endpoint ?? DEFAULT_ENDPOINT, {
 				method: "POST",
-				body: new FormData(form),
+				body: data,
 				headers: { Accept: "application/json" },
 			});
 			if (!response.ok) throw new Error("Newsletter subscription failed");
@@ -47,7 +52,7 @@ export default function Newsletter(props: NewsletterProps = {}) {
 		}
 	};
 
-	const currentLocale = (): Locale => localeContext?.locale() ?? "en";
+	const currentLocale = () => readCurrentLocale(localeContext?.locale());
 
 	return (
 		<section class="w-full border-y border-border/70 bg-muted/30 dark:bg-muted/15">
@@ -85,7 +90,8 @@ export default function Newsletter(props: NewsletterProps = {}) {
 						)}
 					>
 						<input type="hidden" name="nonce" />
-						<input type="hidden" name="language" value={currentLocale()} />
+						<input type="hidden" name="language" ref={(element) => { element.value = currentLocale(); }} />
+						<input type="hidden" name="list" ref={(element) => { element.value = subscriptionListKey("news", currentLocale()); }} />
 						<TextFieldRoot class="min-w-0 flex-1">
 							<TextFieldInput
 								name="email"

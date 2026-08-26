@@ -26,6 +26,7 @@ describe("BetaTester", () => {
     expect(body.get("name")).toBe("Ada Lovelace");
     expect(body.get("email")).toBe("ada@example.com");
     expect(body.get("language")).toBe("de");
+    expect(body.get("list")).toBe("beta-de");
     expect(await screen.findByRole("status")).toHaveTextContent("Fast fertig");
     expect((form.elements.namedItem("email") as HTMLInputElement).value).toBe("");
   });

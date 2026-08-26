@@ -40,19 +40,19 @@ function corsHeaders(origin: string | null) {
   };
 }
 
-function config() {
+function config(language: "de" | "en") {
   const url = Netlify.env.get("LISTMONK_URL");
   const user = Netlify.env.get("LISTMONK_API_USER");
   const token = Netlify.env.get("LISTMONK_API_TOKEN");
-  const listId = Number(Netlify.env.get("LISTMONK_BETA_LIST_ID"));
+  const listId = Number(Netlify.env.get(`LISTMONK_BETA_${language.toUpperCase()}_LIST_ID`));
   if (!url || !user || !token || !Number.isInteger(listId) || listId < 1) {
     throw new Error("Beta tester endpoint is not configured");
   }
   return { url: url.replace(/\/$/, ""), user, token, listId };
 }
 
-async function listmonkRequest<T>(path: string, init: RequestInit = {}) {
-  const settings = config();
+async function listmonkRequest<T>(language: "de" | "en", path: string, init: RequestInit = {}) {
+  const settings = config(language);
   const result = await fetch(`${settings.url}${path}`, {
     ...init,
     headers: {
@@ -79,13 +79,13 @@ export default async (request: Request, _context: Context) => {
   if (language !== "de" && language !== "en") return jsonResponse(400, { error: "Invalid language" }, origin);
 
   try {
-    const settings = config();
+    const settings = config(language);
     const query = encodeURIComponent(`subscribers.email = '${email.replace(/'/g, "''")}'`);
-    const existing = await listmonkRequest<{ data: { results: Subscriber[] } }>(`/api/subscribers?query=${query}&per_page=1`);
+    const existing = await listmonkRequest<{ data: { results: Subscriber[] } }>(language, `/api/subscribers?query=${query}&per_page=1`);
     const subscriber = existing.data.results[0];
 
     if (subscriber) {
-      await listmonkRequest(`/api/subscribers/${subscriber.id}`, {
+      await listmonkRequest(language, `/api/subscribers/${subscriber.id}`, {
         method: "PUT",
         body: JSON.stringify({
           email: subscriber.email,
@@ -96,13 +96,13 @@ export default async (request: Request, _context: Context) => {
         }),
       });
       if (!subscriber.lists?.some((list) => list.id === settings.listId)) {
-        await listmonkRequest("/api/subscribers/lists", {
+        await listmonkRequest(language, "/api/subscribers/lists", {
           method: "PUT",
           body: JSON.stringify({ ids: [subscriber.id], action: "add", target_list_ids: [settings.listId], status: "unconfirmed" }),
         });
       }
     } else {
-      await listmonkRequest("/api/subscribers", {
+      await listmonkRequest(language, "/api/subscribers", {
         method: "POST",
         body: JSON.stringify({
           email,

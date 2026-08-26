@@ -5,8 +5,9 @@ import { TextFieldRoot, TextFieldInput } from "../forms/TextField.tsx";
 import { AlertInline, AlertTitle, AlertDescription } from "../molecules/AlertInline.tsx";
 import { cn } from "../../libs/cn.ts";
 import { useBrandT, useLocaleOptional } from "../../i18n/LocaleProvider.tsx";
-import type { Locale } from "../../i18n/types.ts";
 import { homepageLink } from "../../libs/homepageLinks.ts";
+import { subscriptionListKey } from "../../libs/subscriptionList.ts";
+import { currentLocale as readCurrentLocale } from "../../libs/currentLocale.ts";
 
 export type BetaTesterProps = {
   endpoint?: string;
@@ -20,12 +21,15 @@ export default function BetaTester(props: BetaTesterProps = {}) {
   const localeContext = useLocaleOptional();
   const [status, setStatus] = createSignal<"idle" | "submitting" | "success" | "error">("idle");
   const [submittedEmail, setSubmittedEmail] = createSignal("");
-  const currentLocale = (): Locale => localeContext?.locale() ?? "en";
+  const currentLocale = () => readCurrentLocale(localeContext?.locale());
 
   const submit = async (event: SubmitEvent) => {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const data = new FormData(form);
+    const locale = currentLocale();
+    data.set("language", locale);
+    data.set("list", subscriptionListKey("beta", locale));
     const email = data.get("email");
     if (typeof email !== "string" || !email.trim()) return;
 
@@ -93,7 +97,8 @@ export default function BetaTester(props: BetaTesterProps = {}) {
               )}
             >
               <input type="hidden" name="nonce" />
-              <input type="hidden" name="language" value={currentLocale()} />
+              <input type="hidden" name="language" ref={(element) => { element.value = currentLocale(); }} />
+              <input type="hidden" name="list" ref={(element) => { element.value = subscriptionListKey("beta", currentLocale()); }} />
               <TextFieldRoot class="min-w-0 flex-1">
                 <TextFieldInput name="name" type="text" autocomplete="name" placeholder={t("betaTester.namePlaceholder")} class="w-full border-0 bg-transparent focus:outline-none" />
               </TextFieldRoot>

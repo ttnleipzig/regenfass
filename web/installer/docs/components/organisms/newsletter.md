@@ -2,6 +2,10 @@
 
 Newsletter subscription section with gradient styling and a locale-aware Listmonk-backed form.
 
+The form keeps the current locale in both `language` and a stable `list` key
+(`news-de` or `news-en`). The server maps that locale to the configured
+Listmonk list ID, so list IDs never need to be exposed in the browser.
+
 ```tsx
 import Newsletter from '@/components/organisms/Newsletter';
 

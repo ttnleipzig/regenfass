@@ -51,6 +51,7 @@ describe("Newsletter", () => {
 		expect(container.querySelector('input[name="name"]')).not.toBeInTheDocument();
 		expect(container.querySelector('input[name="l"]')).not.toBeInTheDocument();
 		expect(container.querySelector('input[name="language"]')).toHaveValue("en");
+		expect(container.querySelector('input[name="list"]')).toHaveValue("news-en");
 	});
 
 	it("sends the selected locale and shows the confirmation", async () => {
@@ -74,6 +75,7 @@ describe("Newsletter", () => {
 		);
 		const request = fetchMock.mock.calls[0]?.[1];
 		expect((request?.body as FormData).get("language")).toBe("de");
+		expect((request?.body as FormData).get("list")).toBe("news-de");
 		expect(await screen.findByRole("status")).toHaveTextContent("Fast fertig");
 		fetchMock.mockRestore();
 	});
