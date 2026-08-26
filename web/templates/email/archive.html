@@ -1,13 +1,14 @@
+{{/* Archive messages use the same shell as campaign messages. */}}
 <!doctype html>
 <html>
 <head>
+    <title>{{ .Campaign.Subject }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <base target="_blank">
     <style>
         body { background:#eaf8fb; color:#173640; font:16px/1.65 "Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif; margin:0; }
         a { color:#087f99; font-weight:600; }
-        code { background:#effbfd; border-radius:4px; color:#087f99; padding:2px 5px; }
         .gutter { padding:32px 18px; }
         .wrap { background:#fff; border:1px solid #cfe9ee; border-radius:22px; box-shadow:0 18px 50px rgba(16,86,101,.14); margin:0 auto; max-width:620px; overflow:hidden; }
         .brand { background:#123f4a; color:#fff; padding:30px 38px 0; }
@@ -17,11 +18,14 @@
         .waterline { background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1); height:7px; margin:0 -38px; }
         .content { padding:42px 42px 36px; }
         .content h1,.content h2,.content h3 { color:#123f4a; font-weight:750; letter-spacing:-.035em; line-height:1.2; }
+        .content h1 { font-size:32px; margin:0 0 20px; }
         .content h2 { font-size:25px; margin:28px 0 14px; }
+        .content h3 { font-size:19px; margin:24px 0 10px; }
         .content p { margin:0 0 18px; }
+        .content blockquote { background:#effbfd; border-left:5px solid #10a9e6; border-radius:0 12px 12px 0; margin:24px 0; padding:16px 20px; }
         .footer { color:#6c8991; font-size:12px; line-height:1.6; padding:0 28px 34px; text-align:center; }
         .footer a { color:#6c8991; margin:0 5px; }
-        @media screen and (max-width:600px) { .gutter{padding:12px 0}.wrap{border-radius:0;width:100%!important}.brand{padding:26px 24px 0!important}.waterline{margin:0 -24px}.content{padding:32px 24px 28px!important} }
+        @media screen and (max-width:600px) { .gutter{padding:12px 0}.wrap{border-radius:0;width:100%!important}.brand{padding:26px 24px 0!important}.waterline{margin:0 -24px}.content{padding:32px 24px 28px!important}.content h1{font-size:28px} }
     </style>
 </head>
 <body style="background:#eaf8fb;color:#173640;font:16px/1.65 'Helvetica Neue','Segoe UI',Helvetica,Arial,sans-serif;margin:0;">
@@ -33,14 +37,8 @@
             <div class="brand-tagline" style="color:#b9edf0;font-size:14px;margin:8px 0 30px;">Wasser im Blick. Zukunft im Blick.</div>
             <div class="waterline" style="background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1);height:7px;margin:0 -38px;">&nbsp;</div>
         </div>
-        <div class="content" style="padding:42px 42px 36px;">
-            <p>Hello {{ .Subscriber.Name }}</p>
-            <p><strong>Order number:</strong> {{ .Tx.Data.order_id }}<br><strong>Shipping date:</strong> {{ .Tx.Data.shipping_date }}</p>
-            <p>Diese Nachricht wurde automatisch von regenfass versendet.</p>
-            <p>Transactional templates können beliebige Parameter verwenden. Du kannst sie beispielsweise mit <code>.Tx.Data.order_id</code> ausgeben.</p>
-            <p>Weitere Informationen findest du in der <a href="https://listmonk.app/docs/transactional">Listmonk-Dokumentation</a>.</p>
-        </div>
+        <div class="content" style="padding:42px 42px 36px;">{{ template "content" . }}</div>
     </div>
-    <div class="footer" style="color:#6c8991;font-size:12px;line-height:1.6;padding:0 28px 34px;text-align:center;"><p>Automatisch versendet von <a href="https://regenfass.eu" target="_blank" rel="noreferrer" style="color:#6c8991;">regenfass</a></p></div>
+    <div class="footer" style="color:#6c8991;font-size:12px;line-height:1.6;padding:0 28px 34px;text-align:center;"><p><a href="{{ UnsubscribeURL }}" style="color:#6c8991;">{{ L.T "email.unsub" }}</a> &nbsp;&nbsp;·&nbsp;&nbsp; <a href="{{ MessageURL }}" style="color:#6c8991;">{{ L.T "email.viewInBrowser" }}</a></p></div>
 </body>
 </html>
