@@ -9,7 +9,7 @@
     <meta name="supported-color-schemes" content="light dark">
     <base target="_blank">
     <style>
-        body { background:#ffffff; color:#1E2A45; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; margin:0; }
+        body { color:#1E2A45; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; margin:0; }
         a { color:#006B5F; font-weight:600; }
         .content { padding:32px 0 40px; }
         .content h1,.content h2,.content h3 { color:#1E2A45; font-weight:750; letter-spacing:-.035em; line-height:1.2; }
@@ -27,13 +27,12 @@
         .email-footer a { color:#006B5F !important; }
         .footer-logo-dark { display:none; }
         .footer-divider { border-color:#CCCCCC !important; }
-        .footer-waterline { background:#ffffff; }
+        .footer-waterline { background:transparent; }
         .email-controls { background:#ffffff; color:#666666; }
-        .email-background { background:#ffffff; }
         .email-content { background:transparent; color:#1E2A45; }
         @media (prefers-color-scheme:dark) {
-            body { background:#0B2649 !important; color:#FFFFFF !important; }
-            .email-background { background:#0B2649 !important; color:#FFFFFF !important; }
+            body { color:#FFFFFF !important; }
+            .email-background { color:#FFFFFF !important; }
             .email-content { background:transparent !important; color:#FFFFFF !important; }
             .content h1,.content h2,.content h3,.content strong,.content th { color:#FFFFFF !important; }
             .content p,.content td,.content li { color:#FFFFFF !important; }
@@ -53,8 +52,8 @@
         @media screen and (max-width:600px) { .content { padding:24px 0 32px !important; } .content h1 { font-size:28px; } }
     </style>
 </head>
-<body style="background:#ffffff;color:#1E2A45;font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;margin:0;">
-<table class="email-background" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;margin:0;padding:0;">
+<body style="color:#1E2A45;font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;margin:0;">
+<table class="email-background" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:0;">
     <tr><td align="center" style="padding:32px 20px 40px;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;"><tr><td class="content email-content" style="padding:32px 0 40px;">{{ template "content" . }}</td></tr></table></td></tr>
     <tr><td align="center" class="email-footer" bgcolor="#ffffff" style="background:#ffffff;padding:40px 20px 0;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
         <tr><td align="left" style="padding-bottom:25px;"><img class="footer-logo-light" src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-light.svg" alt="Regenfass" width="128" height="32" style="display:block;height:32px;width:auto;border:0;"><img class="footer-logo-dark" src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-dark.svg" alt="" width="128" height="32" style="display:none;height:32px;width:auto;border:0;"></td></tr>
@@ -62,7 +61,7 @@
         <tr><td class="footer-divider" style="border-top:1px solid #CCCCCC;padding:20px 0;font-size:12px;line-height:1.5;">{{ if eq .Subscriber.Attribs.language "en" }}Represented by André Lademann{{ else }}Vertreten durch André Lademann{{ end }}</td></tr>
         <tr><td style="padding:0 0 24px;font-size:12px;line-height:1.6;"><a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en{{ else }}https://regenfass.eu/de{{ end }}" style="text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Project site{{ else }}Projektseite{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://docs.regenfass.eu/en{{ else }}https://docs.regenfass.eu/de{{ end }}" style="text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Docs{{ else }}Doku{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/imprint{{ else }}https://regenfass.eu/de/imprint{{ end }}" style="text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Imprint{{ else }}Impressum{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/beta-testers{{ else }}https://regenfass.eu/de/beta-testers{{ end }}" style="text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Beta testers{{ else }}Beta-Tester{{ end }}</a></td></tr>
     </table></td></tr>
-    <tr><td class="footer-waterline" bgcolor="#ffffff" style="background:#ffffff;line-height:0;font-size:0;padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="line-height:0;font-size:0;padding:0;"><img src="https://brand.regenfass.eu/backgrounds/waterline-strip.svg" alt="" width="1024" height="56" style="display:block;width:100%;max-width:none;height:56px;border:0;line-height:0;font-size:0;"></td></tr></table></td></tr>
+    <tr><td align="center" class="footer-waterline" bgcolor="#ffffff" style="background:#ffffff;line-height:0;font-size:0;padding:0;"><table role="presentation" align="center" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;background:transparent;"><tr><td align="center" style="background:transparent;line-height:0;font-size:0;padding:0;"><img src="https://brand.regenfass.eu/backgrounds/waterline-strip-wide.png?v=3" alt="" width="600" height="56" style="display:block;width:600px;max-width:100%;height:56px;background:transparent;border:0;line-height:0;font-size:0;"></td></tr></table></td></tr>
     <tr><td class="email-controls" align="center" style="background:#ffffff;color:#666666;font-size:12px;line-height:1.6;padding:20px;"><a href="{{ UnsubscribeURL }}" style="color:#666666;">{{ L.T "email.unsub" }}</a> &nbsp;·&nbsp; <a href="{{ MessageURL }}" style="color:#666666;">{{ L.T "email.viewInBrowser" }}</a></td></tr>
 </table>
 {{ TrackView }}
