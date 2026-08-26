@@ -1,4 +1,4 @@
-import { A, useParams } from "@solidjs/router";
+import { useParams } from "@solidjs/router";
 import Prism from "prismjs";
 import "prismjs/components/prism-jsx";
 import { For, Show, createEffect, createMemo, createSignal, onMount, type ParentProps } from "solid-js";
@@ -10,6 +10,7 @@ import {
   type PlaygroundCategory,
 } from "./data";
 import { COLOR_TOKEN_GROUPS, COLOR_TOKENS, FONT_TOKENS } from "./tokens";
+import { Button, InputField, SidebarNav, type SidebarNavItem } from "@regenfass/brand";
 
 function toCodeValue(value: string | boolean | number) {
   if (typeof value === "string") {
@@ -75,19 +76,21 @@ function PlaygroundSidebar(props: { onNavigate: () => void }) {
     })).filter((category) => category.components.length > 0);
   });
 
-  const toggleCategory = (category: string) => {
-    setOpenCategories((current) => {
-      const next = { ...current, [category]: !current[category] };
+  const navItems = createMemo<SidebarNavItem[]>(() => [
+    { id: "tokens", label: "Tokens", href: "/tokens" },
+    ...grouped().map((category) => ({
+      id: category.id,
+      label: category.title,
+      children: category.components.map((entry) => ({
+        id: entry.slug,
+        label: entry.name,
+        href: `/${entry.slug}`,
+      })),
+    })),
+  ]);
 
-      try {
-        localStorage.setItem(PLAYGROUND_CATEGORY_STORAGE_KEY, JSON.stringify(next));
-      } catch {
-        // Keep the in-memory state when browser storage is unavailable.
-      }
-
-      return next;
-    });
-  };
+  const expandedCategories = () =>
+    Object.entries(openCategories()).filter(([, isOpen]) => isOpen).map(([id]) => id);
 
   return (
     <aside class="h-full w-full overflow-y-auto border-b border-border bg-card/40 p-4 lg:h-[calc(100vh-5rem)] lg:w-80 lg:shrink-0 lg:border-b-0 lg:border-r">
@@ -101,76 +104,33 @@ function PlaygroundSidebar(props: { onNavigate: () => void }) {
         </span>
       </div>
 
-      <label class="mt-4 block text-sm">
-        <span class="sr-only">Search components</span>
-        <input
+      <div class="mt-4">
+        <InputField
           type="search"
+          aria-label="Search components"
           value={query()}
           onInput={(event) => setQuery(event.currentTarget.value)}
           placeholder="Search components…"
-          class="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
         />
-      </label>
-
-      <div class="mt-4 space-y-2">
-        <p class="px-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Tokens</p>
-        <A
-          href="/tokens"
-          class="block rounded-md border border-transparent px-3 py-2 text-sm transition hover:border-border hover:bg-accent"
-          activeClass="border-border bg-accent text-foreground shadow-sm"
-          end
-          onClick={props.onNavigate}
-        >
-          Tokens
-        </A>
       </div>
 
-      <div class="mt-4 space-y-4">
-        <For each={grouped()}>
-          {(category) => (
-            <div class="space-y-2">
-              <button
-                type="button"
-                class="flex w-full items-center justify-between rounded-md px-2 py-1 text-left text-sm font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground"
-                aria-expanded={openCategories()[category.id]}
-                onClick={() => toggleCategory(category.id)}
-              >
-                <span>{category.title}</span>
-                <svg
-                  aria-hidden="true"
-                  class={`h-4 w-4 shrink-0 transition-transform duration-150 ${openCategories()[category.id] ? "rotate-180" : ""}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </button>
-              <Show when={openCategories()[category.id]}>
-                <ul class="space-y-1">
-                  <For each={category.components}>
-                    {(entry) => (
-                      <li>
-                        <A
-                          href={`/${entry.slug}`}
-                          class="block rounded-md border border-transparent px-3 py-2 text-sm transition hover:border-border hover:bg-accent"
-                          activeClass="border-border bg-accent text-foreground shadow-sm"
-                          end
-                          onClick={props.onNavigate}
-                        >
-                          {entry.name}
-                        </A>
-                      </li>
-                    )}
-                  </For>
-                </ul>
-              </Show>
-            </div>
-          )}
-        </For>
+      <div class="mt-4">
+        <SidebarNav
+          ariaLabel="Playground components"
+          items={navItems()}
+          collapsible
+          expanded={expandedCategories()}
+          onExpandedChange={(expanded) => {
+            const next = Object.fromEntries(PLAYGROUND_CATEGORIES.map((category) => [category.id, expanded.includes(category.id)]));
+            setOpenCategories(next);
+            try {
+              localStorage.setItem(PLAYGROUND_CATEGORY_STORAGE_KEY, JSON.stringify(next));
+            } catch {
+              // Keep the in-memory state when browser storage is unavailable.
+            }
+          }}
+          onNavigate={props.onNavigate}
+        />
         <Show when={grouped().length === 0}>
           <p class="rounded-md border border-dashed border-border p-3 text-sm text-muted-foreground">
             No components found.
@@ -187,16 +147,17 @@ export function PlaygroundLayout(props: ParentProps) {
   return (
     <div class="flex min-h-[calc(100vh-5rem)] flex-col lg:flex-row">
       <div class="border-b border-border bg-background px-4 py-3 lg:hidden">
-        <button
+        <Button
           type="button"
-          class="flex w-full items-center justify-between rounded-md border border-border bg-card px-3 py-2 text-sm font-medium shadow-sm"
+          variant="outline"
+          class="flex h-auto w-full items-center justify-between bg-card px-3 py-2 text-sm font-medium shadow-sm"
           aria-expanded={sidebarOpen()}
           aria-controls="playground-sidebar"
           onClick={() => setSidebarOpen((open) => !open)}
         >
           <span>{sidebarOpen() ? "Close component library" : "Browse components"}</span>
           <span aria-hidden="true">{sidebarOpen() ? "×" : "☰"}</span>
-        </button>
+        </Button>
       </div>
       <Show when={sidebarOpen()}>
         <div class="fixed inset-0 z-30 bg-background/70 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} />
@@ -400,13 +361,15 @@ function PropsEditor(props: {
           <h3 class="font-semibold">Props</h3>
           <p class="mt-1 text-xs text-muted-foreground">Tune the live preview</p>
         </div>
-        <button
+        <Button
           type="button"
-          class="rounded-md border border-border px-2 py-1 text-xs hover:bg-accent"
+          variant="outline"
+          size="sm"
+          class="h-auto px-2 py-1 text-xs"
           onClick={props.onReset}
         >
           {props.resetVersion > 0 ? "Reset ✓" : "Reset"}
-        </button>
+        </Button>
       </div>
 
       <Show
@@ -598,13 +561,15 @@ export function PlaygroundComponentPage() {
                   <h2 class="font-semibold">Generated JSX</h2>
                   <p class="mt-1 text-xs text-muted-foreground">Only non-default props are shown.</p>
                 </div>
-                <button
+                <Button
                   type="button"
-                  class="rounded-md border border-border px-2 py-1 text-xs font-medium transition hover:bg-accent"
+                  variant="outline"
+                  size="sm"
+                  class="h-auto px-2 py-1 text-xs"
                   onClick={copyGeneratedCode}
                 >
                   {copied() ? "Copied ✓" : "Copy"}
-                </button>
+                </Button>
               </div>
               <pre class="overflow-x-auto rounded-md border border-border bg-muted p-3 text-sm leading-6">
                 <code class="tokenized-code" innerHTML={highlightedCode()} />

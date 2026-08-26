@@ -9,6 +9,7 @@ import {
 } from "@solidjs/router";
 import {
 	Badge,
+	AppShell,
 	Button,
 	Card,
 	CardContent,
@@ -83,11 +84,12 @@ function Shell(props: ParentProps & { lang: Locale }) {
 	];
 
 	return (
-		<div class="min-h-screen flex flex-col">
-			<Header title="regenfass" navItems={navItems()} />
-			<main class="flex-1">{props.children}</main>
-			<Footer />
-		</div>
+		<AppShell
+			header={<Header title="regenfass" navItems={navItems()} />}
+			footer={<Footer />}
+		>
+			{props.children}
+		</AppShell>
 	);
 }
 

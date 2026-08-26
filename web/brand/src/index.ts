@@ -49,11 +49,15 @@ export {
 export { StepPaginator } from "./components/molecules/StepPaginator.tsx";
 
 // Organisms
+export { AppShell } from "./components/organisms/AppShell.tsx";
+export type { AppShellProps } from "./components/organisms/AppShell.tsx";
 export { default as Header } from "./components/organisms/Header.tsx";
 export type { HeaderNavItem, HeaderProps } from "./components/organisms/Header.tsx";
 export { default as Footer } from "./components/organisms/Footer.tsx";
 export { default as Newsletter } from "./components/organisms/Newsletter.tsx";
 export type { NewsletterProps } from "./components/organisms/Newsletter.tsx";
+export { SidebarNav } from "./components/organisms/SidebarNav.tsx";
+export type { SidebarNavItem, SidebarNavProps } from "./components/organisms/SidebarNav.tsx";
 
 export { APP_VERSION } from "./version.ts";
 

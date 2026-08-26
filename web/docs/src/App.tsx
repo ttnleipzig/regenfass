@@ -1,16 +1,18 @@
 import type { ParentProps } from "solid-js";
 import { Router, Route } from "@solidjs/router";
-import { Footer, Header } from "@regenfass/brand";
+import { AppShell, Footer, Header } from "@regenfass/brand";
 import { DocPage } from "./components/DocPage";
 import { HEADER_NAV } from "./lib/nav";
 
 function Shell(props: ParentProps) {
   return (
-    <div class="min-h-screen flex flex-col">
-      <Header title="regenfass" titleSuffix="Docs" navItems={HEADER_NAV} />
-      <main class="flex-1 flex flex-col">{props.children}</main>
-      <Footer />
-    </div>
+    <AppShell
+      header={<Header title="regenfass" titleSuffix="Docs" navItems={HEADER_NAV} />}
+      footer={<Footer />}
+      mainClass="flex flex-col"
+    >
+      {props.children}
+    </AppShell>
   );
 }
 

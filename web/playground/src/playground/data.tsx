@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertInline,
+  AppShell,
   TextFieldHex,
   Badge,
   Button,
@@ -42,6 +43,7 @@ import {
   SelectField,
   SelectTrigger,
   SelectValue,
+  SidebarNav,
   Spinner,
   SpinnerConfetti,
   Status,
@@ -735,6 +737,54 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     <OTPFieldSlot index={5} />
   </OTPFieldGroup>
 </OTPField>`,
+  },
+  {
+    slug: "app-shell",
+    name: "AppShell",
+    category: "organisms",
+    description: "Shared page frame with header, content, and optional footer.",
+    controls: [],
+    render: () => (
+      <AppShell
+        header={<Header title="regenfass" titleSuffix="App" navItems={[]} />}
+        footer={<Footer />}
+      >
+        <div class="p-6 text-center text-sm text-muted-foreground">Page content</div>
+      </AppShell>
+    ),
+    code: () => `<AppShell
+  header={<Header title="regenfass" titleSuffix="App" navItems={[]} />}
+  footer={<Footer />}
+>
+  Page content
+</AppShell>`,
+  },
+  {
+    slug: "sidebar-nav",
+    name: "SidebarNav",
+    category: "organisms",
+    description: "Nested navigation with active links and optional collapsible groups.",
+    controls: [],
+    render: () => (
+      <div class="max-w-sm">
+        <SidebarNav
+          ariaLabel="Example navigation"
+          items={[
+            { label: "Overview", href: "/" },
+            { label: "Guides", children: [{ label: "Button example", href: "/button" }] },
+          ]}
+          collapsible
+        />
+      </div>
+    ),
+    code: () => `<SidebarNav
+  ariaLabel="Example navigation"
+  items={[
+    { label: "Overview", href: "/" },
+    { label: "Guides", children: [{ label: "Button example", href: "/button" }] },
+  ]}
+  collapsible
+/>`,
   },
   {
     slug: "header",

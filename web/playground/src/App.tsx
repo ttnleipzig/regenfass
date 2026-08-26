@@ -1,5 +1,5 @@
 import { Route, Router } from "@solidjs/router";
-import { ButtonToggleSound, Header } from "@regenfass/brand";
+import { AppShell, ButtonToggleSound, Header } from "@regenfass/brand";
 import type { ParentProps } from "solid-js";
 import {
   PlaygroundComponentPage,
@@ -11,8 +11,8 @@ import {
 
 function Shell(props: ParentProps) {
   return (
-    <div class="min-h-screen flex flex-col">
-      <Header
+    <AppShell
+      header={<Header
 		title="regenfass"
         titleSuffix="Playground"
         fullWidth
@@ -31,10 +31,11 @@ function Shell(props: ParentProps) {
           },
         ]}
         trailing={<ButtonToggleSound />}
-      />
-
-      <div class="flex-1">{props.children}</div>
-    </div>
+	      />}
+      mainClass="flex flex-col"
+    >
+      {props.children}
+    </AppShell>
   );
 }
 
