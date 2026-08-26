@@ -7,12 +7,14 @@ self-hosted Listmonk instance at `news.regenfass.eu`.
 
 | Terraform resource | Listmonk template | Live ID |
 | --- | --- | ---: |
-| `listmonk_template.campaign` | Default campaign template | 1 |
-| `listmonk_template.archive` | Default archive template | 2 |
-| `listmonk_template.transactional` | Sample transactional template | 3 |
+| `listmonk_template.campaign` | Regenfass Newsletter (DE/EN) | 1 |
+| `listmonk_template.archive` | Regenfass Archive (DE/EN) | 2 |
+| `listmonk_template.transactional` | Regenfass Transactional (DE/EN) | 3 |
 
-The resource bodies are loaded from `../web/templates/email/`. Keep those
-repository copies synchronized with the active Listmonk templates.
+The resource bodies are loaded from `../web/templates/email/`. Each template
+contains German and English branches selected by
+`.Subscriber.Attribs.language`; keep those repository copies synchronized with
+the active Listmonk templates.
 
 ## Provider limitation
 

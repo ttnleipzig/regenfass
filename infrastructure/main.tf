@@ -1,19 +1,19 @@
 resource "listmonk_template" "campaign" {
-  name    = "Default campaign template"
+  name    = "Regenfass Newsletter (DE/EN)"
   type    = "campaign"
   subject = ""
   body    = file("${path.module}/../web/templates/email/campaign.html")
 }
 
 resource "listmonk_template" "archive" {
-  name    = "Default archive template"
+  name    = "Regenfass Archive (DE/EN)"
   type    = "campaign"
   subject = ""
   body    = file("${path.module}/../web/templates/email/archive.html")
 }
 
 resource "listmonk_template" "transactional" {
-  name    = "Sample transactional template"
+  name    = "Regenfass Transactional (DE/EN)"
   type    = "tx"
   subject = "regenfass Nachricht"
   body    = file("${path.module}/../web/templates/email/transactional.html")
