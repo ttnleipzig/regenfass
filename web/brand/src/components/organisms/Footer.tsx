@@ -41,6 +41,23 @@ export default function Footer() {
 				<div class="site-container relative flex flex-col gap-8 py-8 sm:py-10 md:flex-row md:items-end md:justify-between">
 					<div class="max-w-xl space-y-4">
 						<div>
+							<picture>
+								<img
+									src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-light.svg"
+									alt="regenfass"
+									width="208"
+									height="48"
+									class="h-10 w-auto max-w-full dark:hidden"
+								/>
+								<img
+									src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-dark.svg"
+									alt=""
+									aria-hidden="true"
+									width="208"
+									height="48"
+									class="hidden h-10 w-auto max-w-full dark:block"
+								/>
+							</picture>
 							<p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
 								regenfass · Open-source IoT
 							</p>

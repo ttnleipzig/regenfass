@@ -15,7 +15,6 @@
         .wrap { background:#fff; border:1px solid #cfe9ee; border-radius:22px; box-shadow:0 18px 50px rgba(16,86,101,.14); margin:0 auto; max-width:620px; overflow:hidden; }
         .brand { background:#123f4a; color:#fff; padding:30px 38px 0; }
         .brand-top { font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
-        .brand-name { display:block; font-size:32px; font-weight:800; letter-spacing:-.06em; line-height:1.1; margin-top:11px; }
         .brand-tagline { color:#b9edf0; font-size:14px; margin:8px 0 30px; }
         .waterline { background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1); height:7px; margin:0 -38px; }
         .content { padding:42px 42px 36px; }
@@ -44,7 +43,7 @@
     <div class="wrap" style="background:#fff;border:1px solid #cfe9ee;border-radius:22px;margin:0 auto;max-width:620px;overflow:hidden;">
         <div class="brand" style="background:#123f4a;color:#fff;padding:30px 38px 0;">
             <div class="brand-top" style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">Regenfass News</div>
-            <div class="brand-name" style="display:block;font-size:32px;font-weight:800;letter-spacing:-.06em;line-height:1.1;margin-top:11px;white-space:nowrap;">regenfass <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/beta-testers{{ else }}https://regenfass.eu/de/beta-testers{{ end }}" style="background:#f6d04d;border:1px solid #f9e39a;color:#173640;display:inline-block;font-size:9px;font-weight:800;letter-spacing:.16em;line-height:1;padding:3px 6px;text-decoration:none;vertical-align:middle;">ALPHA</a></div>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:11px;"><tr><td style="vertical-align:middle;"><img src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-dark.svg" alt="regenfass" width="208" height="48" style="display:block;height:48px;max-width:100%;width:208px;"></td><td style="padding-left:8px;vertical-align:middle;"><a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/beta-testers{{ else }}https://regenfass.eu/de/beta-testers{{ end }}" style="background:#f6d04d;border:1px solid #f9e39a;color:#173640;display:inline-block;font-size:9px;font-weight:800;letter-spacing:.16em;line-height:1;padding:3px 6px;text-decoration:none;">ALPHA</a></td></tr></table>
             <div class="brand-tagline" style="color:#b9edf0;font-size:14px;margin:8px 0 30px;">Wasser im Blick. Zukunft im Blick.</div>
             <div class="waterline" style="background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1);height:7px;margin:0 -38px;">&nbsp;</div>
         </div>
