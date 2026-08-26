@@ -217,7 +217,7 @@ function Home() {
 											<img
 												src={item.src}
 												alt=""
-												class="h-24 w-auto object-contain"
+														class="mx-auto h-24 w-auto object-contain"
 												loading="lazy"
 											/>
 											<CardTitle>{item.title}</CardTitle>
