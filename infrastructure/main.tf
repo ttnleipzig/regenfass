@@ -1,14 +1,14 @@
 resource "listmonk_template" "campaign" {
   name    = "Regenfass Newsletter (DE/EN)"
   type    = "campaign"
-  subject = ""
+  subject = "Default campaign template"
   body    = file("${path.module}/../web/templates/email/campaign.html")
 }
 
 resource "listmonk_template" "archive" {
   name    = "Regenfass Archive (DE/EN)"
   type    = "campaign"
-  subject = ""
+  subject = "Default archive template"
   body    = file("${path.module}/../web/templates/email/archive.html")
 }
 
