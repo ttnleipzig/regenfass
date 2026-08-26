@@ -166,7 +166,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
               aria-label={t("header.alphaLabel")}
               aria-expanded={alphaOpen()}
               aria-controls="alpha-tooltip"
-              class="absolute bottom-1 right-0 translate-y-1/2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              class="absolute bottom-1 right-0 translate-y-1/2 cursor-help rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               onClick={() => setAlphaOpen((open) => !open)}
             >
               <span

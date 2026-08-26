@@ -52,7 +52,7 @@ describe("Header", () => {
 
 		expect(badge).toHaveTextContent("ALPHA");
 		expect(badge).toHaveAttribute("role", "status");
-		expect(badge?.closest("button")).toHaveClass("absolute", "bottom-1", "right-0");
+		expect(badge?.closest("button")).toHaveClass("absolute", "bottom-1", "right-0", "cursor-help");
 	});
 
 	it("connects the alpha badge to an accessible beta tester tooltip", () => {
