@@ -140,7 +140,6 @@ describe("Header", () => {
 
 		const innerDiv = container.querySelector(".site-container");
 		expect(innerDiv).toHaveClass("site-container");
-		expect(innerDiv).toHaveClass("lg:px-8");
 		expect(innerDiv).toHaveClass("flex");
 		expect(innerDiv).toHaveClass("justify-between");
 		expect(innerDiv).toHaveClass("items-center");

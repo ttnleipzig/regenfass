@@ -62,8 +62,10 @@ describe("Footer", () => {
 	it("applies correct container classes", () => {
 		const { container } = render(() => <Footer />);
 		const footer = container.querySelector("footer");
-		expect(footer).toHaveClass("site-container");
-		expect(footer).toHaveClass("py-8");
+		expect(footer).toHaveClass("w-full");
+		const innerContainer = container.querySelector(".site-container");
+		expect(innerContainer).toHaveClass("site-container");
+		expect(innerContainer).toHaveClass("py-8");
 	});
 
 	it("renders navigation icons", () => {
