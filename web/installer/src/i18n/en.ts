@@ -17,6 +17,10 @@ export type InstallerDictionary = {
 		introAfterLorawan: string;
 		alertTitle: string;
 		alertDescription: string;
+		helpText: string;
+		helpDocs: string;
+		helpHomepage: string;
+		helpMatrix: string;
 		next: string;
 	};
 	connectConnecting: { title: string; description: string };
@@ -82,7 +86,7 @@ export type InstallerDictionary = {
 export const installerDictEn: InstallerDictionary = {
 	installationSteps: {
 		connect:
-			"Confirm to start, connect your board over USB, choose the device type, then read the firmware version from the device.",
+			"First connect your controller over USB, choose the device type, then read the firmware version from the device.",
 		chooseMethod:
 			"Pick a firmware version from the list, then choose Install or Configure.",
 		flash: "Wait while the installer flashes firmware to your device.",
@@ -105,13 +109,17 @@ export const installerDictEn: InstallerDictionary = {
 	startWaitingForUser: {
 		heading: "Hi there! 👋",
 		introBeforeTtn:
-			"This project is about a smart water tank. It measures the water level and sends the data to a server. The server can be used to control the water pump. The pump can be controlled via a web interface or via a telegram bot. It uses an HC-SR04 ultrasonic sensor to measure the water level. The data is sent to",
+			"This project measures water levels in tanks and barrels and sends the readings to a server. An ultrasonic sensor such as the HC-SR04 can be used for level measurement; we support different sensors and show their data in a dashboard. The data is sent to",
 		brandTheThingsNetwork: "The Things Network",
 		introVia: "via a",
 		brandLoRaWAN: "LoRaWAN",
 		introAfterLorawan: "gateway.",
-		alertTitle: "Waiting for your confirmation",
-		alertDescription: "Please confirm to continue.",
+		alertTitle: "To get started, confirm the connection",
+		alertDescription: "Connect your controller over USB, then confirm to continue.",
+		helpText: "Need help? Find more information here:",
+		helpDocs: "documentation",
+		helpHomepage: "homepage",
+		helpMatrix: "Matrix channel",
 		next: "Next",
 	},
 	connectConnecting: {

@@ -17,14 +17,14 @@ describe("StepStartWaitingForUser", () => {
     render(() => (
       <StepStartWaitingForUser state={mockState} emitEvent={mockEmitEvent} />
     ));
-    expect(screen.getByText("Waiting for your confirmation")).toBeInTheDocument();
+		expect(screen.getByText("To get started, confirm the connection")).toBeInTheDocument();
   });
 
   it("renders alert with description", () => {
     render(() => (
       <StepStartWaitingForUser state={mockState} emitEvent={mockEmitEvent} />
     ));
-    expect(screen.getByText("Please confirm to continue.")).toBeInTheDocument();
+		expect(screen.getByText("Connect your controller over USB, then confirm to continue.")).toBeInTheDocument();
   });
 
   it("renders next button", () => {
@@ -32,6 +32,25 @@ describe("StepStartWaitingForUser", () => {
       <StepStartWaitingForUser state={mockState} emitEvent={mockEmitEvent} />
     ));
     expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
+  });
+
+  it("renders help links for documentation, homepage, and Matrix", () => {
+    render(() => (
+      <StepStartWaitingForUser state={mockState} emitEvent={mockEmitEvent} />
+    ));
+
+    expect(screen.getByRole("link", { name: "documentation" })).toHaveAttribute(
+      "href",
+      "https://docs.regenfass.eu/",
+    );
+    expect(screen.getByRole("link", { name: "homepage" })).toHaveAttribute(
+      "href",
+      "https://regenfass.eu/",
+    );
+    expect(screen.getByRole("link", { name: "Matrix channel" })).toHaveAttribute(
+      "href",
+      "https://matrix.to/#/#ttn-leipzig:matrix.org",
+    );
   });
 
   it("calls emitEvent when next button is clicked", () => {

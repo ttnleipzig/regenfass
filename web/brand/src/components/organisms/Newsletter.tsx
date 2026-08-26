@@ -26,7 +26,7 @@ export default function Newsletter() {
 						action="https://news.regenfass.eu/subscription/form"
 						class={cn(
 							"listmonk-form",
-							"flex w-full flex-col gap-3 px-4 py-4 bg-background rounded-2xl",
+							"flex w-full flex-col gap-3 px-4 py-4 bg-background rounded-2xl sm:flex-row sm:items-center",
 							"focus-within:ring-2 focus-within:ring-ring",
 							"hover:ring-2 hover:ring-ring/50",
 							"border border-input",

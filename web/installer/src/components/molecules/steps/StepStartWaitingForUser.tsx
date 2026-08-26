@@ -5,6 +5,7 @@ import {
 	Button,
 	StepPaginator,
 } from "@regenfass/brand";
+import Usb from "lucide-solid/icons/usb";
 import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
 import { useInstallerT } from "@/i18n/index.ts";
 import {
@@ -42,12 +43,40 @@ export default function StepStartWaitingForUser({ state, emitEvent }: StepProps)
 				</p>
 			</section>
 
-			<AlertInline variant="info">
+			<AlertInline variant="info" icon={<Usb size={16} aria-hidden="true" />}>
 				<AlertTitle>{t("startWaitingForUser.alertTitle")}</AlertTitle>
 				<AlertDescription>
 					{t("startWaitingForUser.alertDescription")}
 				</AlertDescription>
 			</AlertInline>
+
+			<p class="text-sm text-muted-foreground">
+				{t("startWaitingForUser.helpText")} {" "}
+				<a
+					href="https://docs.regenfass.eu/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-primary underline underline-offset-4 hover:text-primary/80"
+				>
+					{t("startWaitingForUser.helpDocs")}
+				</a>{" · "}
+				<a
+					href="https://regenfass.eu/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-primary underline underline-offset-4 hover:text-primary/80"
+				>
+					{t("startWaitingForUser.helpHomepage")}
+				</a>{" · "}
+				<a
+					href="https://matrix.to/#/#ttn-leipzig:matrix.org"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="ml-1 text-primary underline underline-offset-4 hover:text-primary/80"
+				>
+					{t("startWaitingForUser.helpMatrix")}
+				</a>
+			</p>
 
 			<div class="space-y-6">
 				<StepPaginator

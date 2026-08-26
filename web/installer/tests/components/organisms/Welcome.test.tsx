@@ -13,17 +13,17 @@ describe("Welcome", () => {
 		expect(paragraph).toBeInTheDocument();
 	});
 
-	it("renders description about smart water tank", () => {
+	it("renders description about tank and barrel water levels", () => {
 		render(() => <Welcome />);
 		expect(
-			screen.getByText(/This project is about a smart water tank/),
+			screen.getByText(/This project measures water levels in tanks and barrels/),
 		).toBeInTheDocument();
 	});
 
 	it("renders text about water level measurement", () => {
 		render(() => <Welcome />);
 		expect(
-			screen.getByText(/It measures the water level and sends the data/),
+			screen.getByText(/the readings to a server/),
 		).toBeInTheDocument();
 	});
 
@@ -62,18 +62,18 @@ describe("Welcome", () => {
 		expect(screen.getByText(/HC-SR04 ultrasonic sensor/)).toBeInTheDocument();
 	});
 
-	it("mentions web interface and telegram bot", () => {
+	it("mentions connected sensors and dashboard", () => {
 		render(() => <Welcome />);
 		expect(
-			screen.getByText(/controlled via a web interface or via a telegram bot/),
+			screen.getByText(/connect different sensors and view their data in a dashboard/),
 		).toBeInTheDocument();
 	});
 
 	it("renders complete welcome message", () => {
 		render(() => <Welcome />);
-		const paragraph = screen.getByText(/This project is about/);
+		const paragraph = screen.getByText(/This project measures/);
 		expect(paragraph).toBeInTheDocument();
-		expect(paragraph.textContent).toContain("smart water tank");
+		expect(paragraph.textContent).toContain("water levels in tanks and barrels");
 		expect(paragraph.textContent).toContain("The Things Network");
 		expect(paragraph.textContent).toContain("LoRaWAN");
 	});

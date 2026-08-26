@@ -63,8 +63,12 @@ describe("Newsletter", () => {
 	it("keeps the responsive newsletter layout", () => {
 		const { container } = render(() => <Newsletter />);
 		const flexContainer = container.querySelector("div.flex");
+		const form = container.querySelector("form#form-newsletter");
 
 		expect(flexContainer).toHaveClass("flex-col");
 		expect(flexContainer).toHaveClass("gap-6");
+		expect(form).toHaveClass("flex-col");
+		expect(form).toHaveClass("sm:flex-row");
+		expect(form).toHaveClass("sm:items-center");
 	});
 });

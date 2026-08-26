@@ -3,7 +3,7 @@ import type { InstallerDictionary } from "./en.ts";
 export const installerDictDe: InstallerDictionary = {
 	installationSteps: {
 		connect:
-			"Bestätige den Start, verbinde dein Board per USB, wähle den Gerätetyp und lies dann die Firmware-Version vom Gerät.",
+			"Verbinde zuerst deinen Controller per USB, wähle den Gerätetyp und lies anschließend die Firmware-Version vom Gerät aus.",
 		chooseMethod:
 			"Wähle eine Firmware-Version aus der Liste und danach Installieren oder Konfigurieren.",
 		flash: "Warte, während der Installer die Firmware auf dein Gerät schreibt.",
@@ -25,13 +25,17 @@ export const installerDictDe: InstallerDictionary = {
 	startWaitingForUser: {
 		heading: "Hi! 👋",
 		introBeforeTtn:
-			"Dieses Projekt dreht sich um einen smarten Wassertank. Er misst den Wasserstand und sendet die Daten an einen Server. Über den Server kann die Wasserpumpe gesteuert werden — per Weboberfläche oder Telegram-Bot. Zur Messung dient ein HC-SR04-Ultraschallsensor. Die Daten gehen an",
+			"Dieses Projekt misst Wasserstände in Tanks und Fässern und sendet die Messwerte an einen Server. Zur Füllstandsmessung kann zum Beispiel ein HC-SR04-Ultraschallsensor verwendet werden; wir unterstützen verschiedene Sensoren und zeigen ihre Daten in einem Dashboard an. Die Daten gehen an",
 		brandTheThingsNetwork: "The Things Network",
 		introVia: "über ein",
 		brandLoRaWAN: "LoRaWAN",
 		introAfterLorawan: "Gateway.",
-		alertTitle: "Warten auf deine Bestätigung",
-		alertDescription: "Bitte bestätige, um fortzufahren.",
+		alertTitle: "Um zu beginnen, bestätige die Verbindung",
+		alertDescription: "Verbinde deinen Controller per USB und bestätige anschließend, um fortzufahren.",
+		helpText: "Brauchst du Hilfe? Weitere Informationen findest du hier:",
+		helpDocs: "Dokumentation",
+		helpHomepage: "Homepage",
+		helpMatrix: "Matrix-Channel",
 		next: "Weiter",
 	},
 	connectConnecting: {

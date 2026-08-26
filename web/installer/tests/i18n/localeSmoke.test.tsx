@@ -36,7 +36,7 @@ describe("installer locale smoke", () => {
 			</LocaleProvider>
 		));
 
-		expect(screen.getByText("Waiting for your confirmation")).toBeInTheDocument();
+	expect(screen.getByText("To get started, confirm the connection")).toBeInTheDocument();
 
 		screen.getByRole("button", { name: "to-de" }).click();
 

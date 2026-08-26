@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@solidjs/testing-library";
 import { AlertInline, AlertTitle, AlertDescription } from "@regenfass/brand";
+import Usb from "lucide-solid/icons/usb";
 
 describe("AlertInline", () => {
   afterEach(() => {
@@ -67,6 +68,11 @@ describe("AlertInline", () => {
     ));
     const svg = container.querySelector("svg");
     expect(svg).not.toBeInTheDocument();
+  });
+
+  it("renders a custom icon", () => {
+    render(() => <AlertInline icon={<Usb data-testid="usb-icon" />}>USB</AlertInline>);
+    expect(screen.getByTestId("usb-icon")).toBeInTheDocument();
   });
 
   it("merges custom classes", () => {

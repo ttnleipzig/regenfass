@@ -4,7 +4,7 @@ import { Alert as AlertPrimitive } from "@kobalte/core/alert";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import type { ComponentProps, ParentProps, ValidComponent } from "solid-js";
+import type { ComponentProps, ParentProps, ValidComponent, JSX } from "solid-js";
 import { Show, splitProps } from "solid-js";
 import AlertTriangle from "lucide-solid/icons/alert-triangle";
 import CircleCheck from "lucide-solid/icons/circle-check";
@@ -37,12 +37,13 @@ type alertProps<T extends ValidComponent = "div"> = ParentProps<AlertRootProps<T
 	VariantProps<typeof alertVariants> & {
 		class?: string;
 		showIcon?: boolean;
+		icon?: JSX.Element;
 	};
 
 export const AlertInline = <T extends ValidComponent = "div">(
 	props: PolymorphicProps<T, alertProps<T>>,
 ) => {
-	const [local, rest] = splitProps(props as Required<Pick<alertProps, "class" | "variant" | "showIcon">> & { children: any }, ["class", "variant", "showIcon", "children"]);
+	const [local, rest] = splitProps(props as Required<Pick<alertProps, "class" | "variant" | "showIcon">> & { children: any; icon?: JSX.Element }, ["class", "variant", "showIcon", "icon", "children"]);
 
 	const iconForVariant = () => {
 		switch (local.variant) {
@@ -64,6 +65,7 @@ export const AlertInline = <T extends ValidComponent = "div">(
 				return null;
 		}
 	};
+	const currentIcon = () => local.icon ?? iconForVariant();
 
 	return (
 		<AlertPrimitive
@@ -75,8 +77,8 @@ export const AlertInline = <T extends ValidComponent = "div">(
 			)}
 			{...rest}
 		>
-			<Show when={(local.showIcon ?? true) && iconForVariant()}>
-				{iconForVariant()}
+			<Show when={(local.showIcon ?? true) && currentIcon()}>
+				{currentIcon()}
 			</Show>
 			<div>{local.children}</div>
 		</AlertPrimitive>
@@ -98,5 +100,4 @@ export const AlertDescription = (props: ComponentProps<"div">) => {
 		<div class={cn("text-sm [&_p]:leading-relaxed", local.class)} {...rest} />
 	);
 };
-
 
