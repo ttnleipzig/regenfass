@@ -1,5 +1,7 @@
 # Regenfass Installer
 
+![Regenfass Installer](https://raw.githubusercontent.com/ttnleipzig/regenfass-brand/main/examples/github/sample-readme-header-regenfass-installer.svg)
+
 A modern installer for the Regenfass project, built with SolidJS and Vite.
 
 ## 🚀 Features

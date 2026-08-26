@@ -7,43 +7,20 @@
     <meta name="supported-color-schemes" content="light dark">
     <base target="_blank">
     <style>
-        body { background:#eaf8fb; color:#173640; font:16px/1.65 "Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif; margin:0; }
-        a { color:#087f99; font-weight:600; }
-        code { background:#effbfd; border-radius:4px; color:#087f99; padding:2px 5px; }
-        .gutter { padding:8px 18px; }
-        .wrap { background:#fff; border:1px solid #cfe9ee; border-radius:22px; box-shadow:0 18px 50px rgba(16,86,101,.14); margin:0 auto; max-width:620px; overflow:hidden; }
-        .brand { background:#123f4a; color:#fff; padding:30px 38px 0; }
-        .brand-top { font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
-        .brand-tagline { color:#b9edf0; font-size:14px; margin:8px 0 30px; }
-        .waterline { background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1); height:7px; margin:0 -38px; }
-        .content { padding:42px 42px 36px; }
-        .content h1,.content h2,.content h3 { color:#123f4a; font-weight:750; letter-spacing:-.035em; line-height:1.2; }
+        body { background:#ffffff; color:#1E2A45; font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; margin:0; }
+        a { color:#006B5F; font-weight:600; }
+        code { background:#f4f6fa; border-radius:4px; color:#006B5F; padding:2px 5px; }
+        .content { padding:32px 0 40px; }
+        .content h1,.content h2,.content h3 { color:#1E2A45; font-weight:750; letter-spacing:-.035em; line-height:1.2; }
         .content h2 { font-size:25px; margin:28px 0 14px; }
         .content p { margin:0 0 18px; }
-        .footer { color:#6c8991; font-size:12px; line-height:1.6; padding:0 28px 34px; text-align:center; }
-        .footer a { color:#6c8991; margin:0 5px; }
-        .footer-nav { font-size:12px; margin:0 0 10px; }
-        @media (prefers-color-scheme:dark) {
-            body { background:#071c22 !important; color:#d8f1f3 !important; }
-            .wrap { background:#102c34 !important; border-color:#2a5962 !important; box-shadow:0 18px 50px rgba(0,0,0,.3) !important; }
-            .content,.content p { color:#d8f1f3 !important; }
-            .content h1,.content h2,.content h3,.content strong { color:#efffff !important; }
-            code { background:#173d46 !important; color:#8ae5ef !important; }
-            .footer,.footer a { color:#9dc4ca !important; }
-        }
-        @media screen and (max-width:600px) { .gutter{padding:12px 0}.wrap{border-radius:0;width:100%!important}.brand{padding:26px 24px 0!important}.waterline{margin:0 -24px}.content{padding:32px 24px 28px!important} }
+        @media (prefers-color-scheme:dark) { body { background:#ffffff !important; color:#1E2A45 !important; } .content h1,.content h2,.content h3,.content strong { color:#1E2A45 !important; } }
+        @media screen and (max-width:600px) { .content { padding:24px 0 32px!important; } }
     </style>
 </head>
-<body style="background:#eaf8fb;color:#173640;font:16px/1.65 'Helvetica Neue','Segoe UI',Helvetica,Arial,sans-serif;margin:0;">
-    <div class="gutter" style="padding:8px 18px;">&nbsp;</div>
-    <div class="wrap" style="background:#fff;border:1px solid #cfe9ee;border-radius:22px;margin:0 auto;max-width:620px;overflow:hidden;">
-        <div class="brand" style="background:#123f4a;color:#fff;padding:30px 38px 0;">
-            <div class="brand-top" style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">Regenfass News</div>
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:11px;"><tr><td style="vertical-align:middle;"><img src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-dark.svg" alt="regenfass" width="208" height="48" style="display:block;height:48px;max-width:100%;width:208px;"></td><td style="padding-left:8px;vertical-align:middle;"><a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/beta-testers{{ else }}https://regenfass.eu/de/beta-testers{{ end }}" style="background:#f6d04d;border:1px solid #f9e39a;color:#173640;display:inline-block;font-size:9px;font-weight:800;letter-spacing:.16em;line-height:1;padding:3px 6px;text-decoration:none;">ALPHA</a></td></tr></table>
-            <div class="brand-tagline" style="color:#b9edf0;font-size:14px;margin:8px 0 30px;">Wasser im Blick. Zukunft im Blick.</div>
-            <div class="waterline" style="background:linear-gradient(90deg,#10a9e6,#08b39f 56%,#9ce8d1);height:7px;margin:0 -38px;">&nbsp;</div>
-        </div>
-        <div class="content" style="padding:42px 42px 36px;">
+<body style="background:#ffffff;color:#1E2A45;font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;margin:0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;margin:0;padding:0;">
+    <tr><td align="center" style="padding:32px 20px 40px;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;"><tr><td class="content" style="padding:32px 0 40px;">
             {{ if eq .Subscriber.Attribs.language "en" }}
             <p>Hello {{ .Subscriber.Name }}</p>
             <p><strong>Order number:</strong> {{ .Tx.Data.order_id }}<br><strong>Shipping date:</strong> {{ .Tx.Data.shipping_date }}</p>
@@ -57,8 +34,15 @@
             <p>Transaktionale Templates können beliebige Parameter verwenden. Du kannst sie beispielsweise mit <code>.Tx.Data.order_id</code> ausgeben.</p>
             <p>Weitere Informationen findest du in der <a href="https://listmonk.app/docs/transactional">Listmonk-Dokumentation</a>.</p>
             {{ end }}
-        </div>
-    </div>
-    <div class="footer" style="color:#6c8991;font-size:12px;line-height:1.6;padding:0 28px 34px;text-align:center;"><p class="footer-nav" style="font-size:12px;margin:0 0 10px;"><a href="https://regenfass.eu" style="color:#6c8991;">Projektseite</a> · <a href="https://docs.regenfass.eu" style="color:#6c8991;">Doku</a> · <a href="https://install.regenfass.eu" style="color:#6c8991;">Installer</a> · <a href="https://dashboard.regenfass.eu" style="color:#6c8991;">Dashboard</a></p><p>Automatisch versendet von <a href="https://regenfass.eu" target="_blank" rel="noreferrer" style="color:#6c8991;">regenfass</a></p></div>
+        </td></tr></table></td></tr>
+    <tr><td align="center" bgcolor="#1E2A45" style="background:#1E2A45;padding:40px 20px 0;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+        <tr><td align="left" style="padding-bottom:25px;"><img src="https://brand.regenfass.eu/logos/horizontal/regenfass-horizontal-dark.svg" alt="Regenfass" width="128" height="32" style="display:block;height:32px;width:auto;border:0;"></td></tr>
+        <tr><td align="left" style="padding-bottom:15px;color:#FFFFFF;font-size:14px;line-height:1.6;"><strong style="color:#FFFFFF;">Kontakt</strong><br>Hardenbergstraße 48<br>04275 Leipzig, Deutschland<br>E-Mail: <a href="mailto:kontakt@ttn-leipzig.de" style="color:#FFFFFF;text-decoration:underline;">kontakt@ttn-leipzig.de</a><br>Tel: <a href="tel:+491707353067" style="color:#FFFFFF;text-decoration:underline;">+49 170 7353 067</a></td></tr>
+        <tr><td style="border-top:1px solid #5A6B8C;padding:20px 0;color:#FFFFFF;font-size:12px;line-height:1.5;">Vertreten durch André Lademann</td></tr>
+        <tr><td style="padding:0 0 24px;color:#FFFFFF;font-size:12px;line-height:1.6;"><a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en{{ else }}https://regenfass.eu/de{{ end }}" style="color:#FFFFFF;text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Project site{{ else }}Projektseite{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://docs.regenfass.eu/en{{ else }}https://docs.regenfass.eu/de{{ end }}" style="color:#FFFFFF;text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Docs{{ else }}Doku{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/imprint{{ else }}https://regenfass.eu/de/imprint{{ end }}" style="color:#FFFFFF;text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Imprint{{ else }}Impressum{{ end }}</a> · <a href="{{ if eq .Subscriber.Attribs.language "en" }}https://regenfass.eu/en/beta-testers{{ else }}https://regenfass.eu/de/beta-testers{{ end }}" style="color:#FFFFFF;text-decoration:underline;">{{ if eq .Subscriber.Attribs.language "en" }}Beta testers{{ else }}Beta-Tester{{ end }}</a></td></tr>
+    </table></td></tr>
+    <tr><td style="background:#1E2A45;line-height:0;font-size:0;"><img src="https://brand.regenfass.eu/backgrounds/waterline-strip-wide.svg" alt="" width="3072" height="56" style="display:block;width:100%;height:56px;border:0;line-height:0;font-size:0;"></td></tr>
+    <tr><td align="center" style="background:#ffffff;color:#666666;font-size:12px;line-height:1.6;padding:20px;"><a href="https://regenfass.eu" style="color:#666666;">regenfass</a></td></tr>
+</table>
 </body>
 </html>

@@ -1,5 +1,7 @@
 # regenfass
 
+![regenfass IoT Platform](https://raw.githubusercontent.com/ttnleipzig/regenfass-brand/main/examples/github/sample-readme-header-regenfass-project.svg)
+
 [![Build Environments](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml/badge.svg)](https://github.com/ttnleipzig/regenfass/actions/workflows/sketch-release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ttnleipzig/regenfass)](https://github.com/ttnleipzig/regenfass/issues)
