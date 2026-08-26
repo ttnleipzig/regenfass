@@ -5,6 +5,7 @@
 - [Hardware Support](Hardware-Support)
 - [Architecture](Architecture)
 - [Newsletter Architecture](Newsletter-Architecture)
+- [Listmonk with Terraform](Listmonk-Terraform)
 - [Development Environment](Development-Environment)
 - [Local Development](Local-Development)
 - [Build Process](Build-Process)
