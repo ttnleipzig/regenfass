@@ -70,8 +70,8 @@ test("TextInput exposes and applies the disabled prop", async ({ page }) => {
   await expect(page.locator("pre")).toContainText("disabled={true}");
 });
 
-test("AppKeyHexField shows actions, sound control, and selected props", async ({ page }) => {
-  await page.goto("/app-key-hex-field");
+test("TextFieldHex shows actions, sound control, and selected props", async ({ page }) => {
+  await page.goto("/text-field-hex");
   await expect(page.getByRole("button", { name: /(?:Unmute|Mute) sounds/ })).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy appKey to clipboard" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Clear appKey" })).toBeVisible();

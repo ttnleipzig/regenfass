@@ -31,10 +31,10 @@ export default function Footer() {
 	});
 
 	return (
-		<footer class="site-container px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-			<div class="relative overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-card via-card/80 to-primary/5 px-5 py-6 shadow-sm ring-1 ring-border/30 sm:px-7 sm:py-7">
+		<footer class="w-full overflow-hidden border-t-4 border-primary bg-gradient-to-br from-card via-card/80 to-primary/5">
+			<div class="relative">
 				<div aria-hidden="true" class="pointer-events-none absolute -right-20 -top-24 size-56 rounded-full bg-primary/10 blur-3xl" />
-				<div class="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+				<div class="site-container relative flex flex-col gap-8 py-8 sm:py-10 md:flex-row md:items-end md:justify-between">
 					<div class="max-w-xl space-y-4">
 						<div>
 							<p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">

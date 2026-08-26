@@ -16,7 +16,7 @@ import {
 	AlertDescription,
 	AlertInline,
 	AlertTitle,
-	AppKeyHexField,
+	TextFieldHex,
 	Button,
 	TextFieldRoot,
 } from "@regenfass/brand";
@@ -224,7 +224,7 @@ export default function StepConfigEditing({ state, emitEvent }: StepProps) {
 						</span>
 					</label>
 					<div class="mt-2">
-						<AppKeyHexField
+						<TextFieldHex
 							id="appKey-input"
 							name="appKey"
 							value={state.context.deviceInfo.config.appKey ?? ""}

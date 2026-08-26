@@ -20,7 +20,7 @@ import type { Component } from "solid-js";
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { useBrandT } from "../../i18n/LocaleProvider.tsx";
 
-export interface AppKeyHexFieldProps {
+export interface TextFieldHexProps {
 	id: string;
 	name: string;
 	value: string;
@@ -109,7 +109,7 @@ const SlotPairReel: Component<{
 const APP_KEY_HEX_COLUMNS_CLASS = "w-full";
 
 /** Single-line AppKey editor: bullet mask + vertical reel columns (wheel spin + overshoot) on reveal + chime. */
-export const AppKeyHexField: Component<AppKeyHexFieldProps> = (props) => {
+export const TextFieldHex: Component<TextFieldHexProps> = (props) => {
 	const t = useBrandT();
 	const [revealed, setRevealed] = createSignal(false);
 	const [spinning, setSpinning] = createSignal(false);

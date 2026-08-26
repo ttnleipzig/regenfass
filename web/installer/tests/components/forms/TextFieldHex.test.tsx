@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup, waitFor } from "@solidjs/testing-library";
-import { AppKeyHexField } from "@regenfass/brand";
+import { TextFieldHex } from "@regenfass/brand";
 import { formatAppKeyHexPairs } from "@/libs/hexKeyDisplay.ts";
 
 const warmUpSlotAudio = vi.fn();
@@ -11,7 +11,7 @@ vi.mock("../../../../brand/src/libs/slotRevealSound.ts", () => ({
 	playSlotRevealFinishSound: (...args: unknown[]) => playSlotRevealFinishSound(...args),
 }));
 
-describe("AppKeyHexField", () => {
+describe("TextFieldHex", () => {
 	const key32 = "0123456789ABCDEF0123456789ABCDEF";
 	const onChange = vi.fn();
 
@@ -26,7 +26,7 @@ describe("AppKeyHexField", () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
-				<AppKeyHexField
+				<TextFieldHex
 					id="ak"
 					name="appKey"
 					value={key32}
@@ -43,7 +43,7 @@ describe("AppKeyHexField", () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
-				<AppKeyHexField
+				<TextFieldHex
 					id="ak"
 					name="appKey"
 					value={key32}
@@ -67,7 +67,7 @@ describe("AppKeyHexField", () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
-				<AppKeyHexField id="ak" name="appKey" value="" onCanonicalChange={onChange} />
+				<TextFieldHex id="ak" name="appKey" value="" onCanonicalChange={onChange} />
 			</>
 		));
 		fireEvent.click(screen.getByRole("button", { name: "Show app key" }));
@@ -78,7 +78,7 @@ describe("AppKeyHexField", () => {
 
 	it("emits canonical hex without spaces on input", () => {
 		render(() => (
-			<AppKeyHexField id="ak" name="appKey" value="" onCanonicalChange={onChange} />
+			<TextFieldHex id="ak" name="appKey" value="" onCanonicalChange={onChange} />
 		));
 		const input = document.getElementById("ak") as HTMLInputElement;
 		fireEvent.input(input, { target: { value: "AB CD" } });
@@ -89,7 +89,7 @@ describe("AppKeyHexField", () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
-				<AppKeyHexField
+				<TextFieldHex
 					id="ak"
 					name="appKey"
 					value={key32}
@@ -108,7 +108,7 @@ describe("AppKeyHexField", () => {
 		Object.assign(navigator, { clipboard: { writeText } });
 
 		render(() => (
-			<AppKeyHexField
+			<TextFieldHex
 				id="ak"
 				name="appKey"
 				value={key32}
@@ -125,7 +125,7 @@ describe("AppKeyHexField", () => {
 
 	it("disables copy button when value is empty", () => {
 		render(() => (
-			<AppKeyHexField
+			<TextFieldHex
 				id="ak"
 				name="appKey"
 				value=""
@@ -140,7 +140,7 @@ describe("AppKeyHexField", () => {
 
 	it("renders reset button when showResetButton is set and value is non-empty", () => {
 		render(() => (
-			<AppKeyHexField
+			<TextFieldHex
 				id="ak"
 				name="appKey"
 				value={key32}
@@ -155,7 +155,7 @@ describe("AppKeyHexField", () => {
 
 	it("hides reset button when value is empty", () => {
 		render(() => (
-			<AppKeyHexField
+			<TextFieldHex
 				id="ak"
 				name="appKey"
 				value=""
@@ -170,7 +170,7 @@ describe("AppKeyHexField", () => {
 
 	it("clears value when reset button is clicked", () => {
 		render(() => (
-			<AppKeyHexField
+			<TextFieldHex
 				id="ak"
 				name="appKey"
 				value={key32}
@@ -186,7 +186,7 @@ describe("AppKeyHexField", () => {
 		render(() => (
 			<>
 				<label for="ak">appKey</label>
-				<AppKeyHexField
+				<TextFieldHex
 					id="ak"
 					name="appKey"
 					value={key32}

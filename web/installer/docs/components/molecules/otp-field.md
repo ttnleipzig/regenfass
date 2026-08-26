@@ -4,7 +4,7 @@ This is the installer’s styled wrapper around [corvu’s OTP Field](https://co
 
 ## When to use it
 
-Use it when a value is a **fixed length** and should feel easy to type or paste—like **16-character hexadecimal AppEUI and DevEUI** in the configuration step. The **AppKey** (32 hex characters) uses the separate [`AppKeyHexField`](./app-key-hex-field.md) with custom masking, not this OTP control.
+Use it when a value is a **fixed length** and should feel easy to type or paste—like **16-character hexadecimal AppEUI and DevEUI** in the configuration step. The **AppKey** (32 hex characters) uses the separate [`TextFieldHex`](./text-field-hex.md) with custom masking, not this OTP control.
 
 ## Import
 

@@ -18,12 +18,12 @@ This document contains automatically generated documentation for all components 
 - [Organisms](#organisms)
   - [Header](#header)
 - [Forms](#forms)
-  - [AppKeyHexField](#appkeyhexfield)
   - [Checkbox](#checkbox)
   - [FileUploader](#fileuploader)
   - [FormField](#formfield)
   - [FormLayout](#formlayout)
   - [InputField](#inputfield)
+  - [TextFieldHex](#textfieldhex)
   - [TextInput](#textinput)
 
 ## Atoms
@@ -164,23 +164,6 @@ import { Header } from '@regenfass/brand';
 
 ## Forms
 
-### AppKeyHexField
-
-**Path**: `forms/AppKeyHexField.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `lucide-solid`
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { AppKeyHexField } from '@regenfass/brand';
-```
-
 ### Checkbox
 
 **Path**: `forms/Checkbox.tsx`
@@ -261,6 +244,23 @@ import { FormLayout } from '@regenfass/brand';
 import { InputField } from '@regenfass/brand';
 ```
 
+### TextFieldHex
+
+**Path**: `forms/TextFieldHex.tsx`
+
+**Dependencies:**
+
+*External:*
+
+- `lucide-solid`
+- `solid-js`
+
+**Import:**
+
+```typescript
+import { TextFieldHex } from '@regenfass/brand';
+```
+
 ### TextInput
 
 **Path**: `forms/TextInput.tsx`
@@ -279,4 +279,4 @@ import { TextInput } from '@regenfass/brand';
 
 ---
 
-Generated on August 26, 2026 at 10:36 AM
+Generated on August 26, 2026 at 11:12 AM

@@ -1,4 +1,4 @@
-# AppKeyHexField
+# TextFieldHex
 
 Friendly English summary for contributors: this is the **AppKey** editor used on the configuration step. It is **not** a native `type="password"` field.
 
@@ -27,7 +27,7 @@ Friendly English summary for contributors: this is the **AppKey** editor used on
 ## Import
 
 ```tsx
-import { AppKeyHexField } from "@/components/forms/AppKeyHexField.tsx";
+import { TextFieldHex } from "@/components/forms/TextFieldHex.tsx";
 ```
 
 ## Design notes

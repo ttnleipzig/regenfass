@@ -10,7 +10,7 @@ if (typeof globalThis.ResizeObserver === "undefined") {
 	};
 }
 
-// Web Animations API (slot reels in AppKeyHexField; jsdom has no Element.animate)
+// Web Animations API (slot reels in TextFieldHex; jsdom has no Element.animate)
 if (typeof HTMLElement !== "undefined" && !HTMLElement.prototype.animate) {
 	HTMLElement.prototype.animate = function () {
 		let cancelled = false;

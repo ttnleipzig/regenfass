@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertInline,
-  AppKeyHexField,
+  TextFieldHex,
   Badge,
   Button,
   ButtonToggleMode,
@@ -411,8 +411,8 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     render: () => <SpinnerConfetti />,
   },
   {
-    slug: "app-key-hex-field",
-    name: "AppKeyHexField",
+    slug: "text-field-hex",
+    name: "TextFieldHex",
     category: "forms",
     description: "Masked AppKey editor with reveal, copy, and reset actions.",
     controls: [
@@ -421,7 +421,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
       { key: "showResetButton", label: "Show reset", type: "boolean", defaultValue: true },
     ],
     render: (values) => (
-      <AppKeyHexField
+      <TextFieldHex
         id="playground-app-key"
         name="appKey"
         value={String(values.value)}
@@ -430,7 +430,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         showResetButton={Boolean(values.showResetButton)}
       />
     ),
-    code: (values) => `<AppKeyHexField\n  id="playground-app-key"\n  name="appKey"\n  value="${escapeJsxAttribute(String(values.value))}"\n  showCopyButton={${Boolean(values.showCopyButton)}}\n  showResetButton={${Boolean(values.showResetButton)}}\n/>`,
+    code: (values) => `<TextFieldHex\n  id="playground-app-key"\n  name="appKey"\n  value="${escapeJsxAttribute(String(values.value))}"\n  showCopyButton={${Boolean(values.showCopyButton)}}\n  showResetButton={${Boolean(values.showResetButton)}}\n/>`,
   },
   {
     slug: "file-uploader",

@@ -89,8 +89,8 @@ export type {
 } from "./i18n/index.ts";
 
 // Forms
-export { AppKeyHexField } from "./components/forms/AppKeyHexField.tsx";
-export type { AppKeyHexFieldProps } from "./components/forms/AppKeyHexField.tsx";
+export { TextFieldHex } from "./components/forms/TextFieldHex.tsx";
+export type { TextFieldHexProps } from "./components/forms/TextFieldHex.tsx";
 export { Checkbox } from "./components/forms/Checkbox.tsx";
 export { FileUploader } from "./components/forms/FileUploader.tsx";
 export { FormField } from "./components/forms/FormField.tsx";
