@@ -92,7 +92,7 @@ function Shell(props: ParentProps & { lang: Locale }) {
 
 	return (
 		<div class="min-h-screen flex flex-col">
-			<Header title="Regenfass" navItems={navItems()} />
+			<Header title="regenfass" navItems={navItems()} />
 			<main class="flex-1">{props.children}</main>
 			<Footer />
 		</div>
@@ -143,7 +143,7 @@ function Home() {
 						/>
 						<div class="site-container relative py-20 sm:py-28 lg:py-32">
 							<p class="inline-block pb-1 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight text-transparent bg-gradient-to-br from-sky-600 to-cyan-400 bg-clip-text">
-								Regenfass
+								regenfass
 							</p>
 							<h1 class="mt-4 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground">
 								{t("hero.headline")}

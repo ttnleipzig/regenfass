@@ -61,7 +61,7 @@ export const brandDictEn: BrandDictionary = {
 		body: "If you would like to be informed about software updates, you can subscribe to this newsletter.",
 		placeholder: "your@email-address.iot",
 		namePlaceholder: "Name (optional)",
-		listLabel: "Regenfass News",
+		listLabel: "regenfass News",
 		subscribe: "Subscribe",
 		successTitle: "Almost done",
 		successBodyBefore:

@@ -2,9 +2,9 @@ import type { HomepageDictionary } from "./en.ts";
 
 export const homepageDictDe: HomepageDictionary = {
 	meta: {
-		title: "Regenfass – smarte Regenfass-Überwachung",
+		title: "regenfass – smarte Regenfass-Überwachung",
 		description:
-			"Regenfass misst den Wasserstand in Regenfassern und Tanks und sendet Messwerte per LoRaWAN über The Things Network. Open-Source-IoT von TTN Leipzig.",
+			"regenfass misst den Wasserstand in Regenfassern und Tanks und sendet Messwerte per LoRaWAN über The Things Network. Open-Source-IoT von TTN Leipzig.",
 	},
 	nav: {
 		home: "Home",

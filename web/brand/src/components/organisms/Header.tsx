@@ -71,7 +71,7 @@ function normalizePathname(pathname: string) {
 
 const Header: Component<HeaderProps> = (rawProps) => {
   const props = mergeProps(
-    { title: "Regenfass", navItems: DEFAULT_NAV_ITEMS, navPosition: "right" as const },
+		{ title: "regenfass", navItems: DEFAULT_NAV_ITEMS, navPosition: "right" as const },
     rawProps,
   );
   const location = useLocation();

@@ -638,7 +638,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     category: "organisms",
     description: "Responsive site header with navigation and color-mode toggle.",
     controls: [
-      { key: "title", label: "Title", type: "text", defaultValue: "Regenfass" },
+      { key: "title", label: "Title", type: "text", defaultValue: "regenfass" },
       { key: "titleSuffix", label: "Title suffix", type: "text", defaultValue: "Playground" },
     ],
     render: (values) => (

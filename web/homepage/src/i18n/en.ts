@@ -62,9 +62,9 @@ export type HomepageDictionary = {
 
 export const homepageDictEn: HomepageDictionary = {
 	meta: {
-		title: "Regenfass – smart rain barrel monitoring",
+		title: "regenfass – smart rain barrel monitoring",
 		description:
-			"Regenfass measures water level in rain barrels and tanks, and sends readings over LoRaWAN via The Things Network. Open source IoT by TTN Leipzig.",
+			"regenfass measures water level in rain barrels and tanks, and sends readings over LoRaWAN via The Things Network. Open source IoT by TTN Leipzig.",
 	},
 	nav: {
 		home: "Home",

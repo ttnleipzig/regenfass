@@ -13,7 +13,7 @@ function Shell(props: ParentProps) {
   return (
     <div class="min-h-screen flex flex-col">
       <Header
-        title="Regenfass"
+		title="regenfass"
         titleSuffix="Playground"
         fullWidth
         navPosition="left"

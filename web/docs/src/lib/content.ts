@@ -29,7 +29,7 @@ export type DocPage = {
 };
 
 export const DOC_PAGES: Record<string, DocPage> = {
-  "/": { contentPath: "README.md", title: "Regenfass documentation" },
+  "/": { contentPath: "README.md", title: "regenfass documentation" },
   "/hardware/sensors": {
     contentPath: "Hardware/Sensors.md",
     title: "Sensors",

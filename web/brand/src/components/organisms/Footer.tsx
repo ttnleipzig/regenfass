@@ -38,7 +38,7 @@ export default function Footer() {
 					<div class="max-w-xl space-y-4">
 						<div>
 							<p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-								Regenfass · Open-source IoT
+								regenfass · Open-source IoT
 							</p>
 							<address class="mt-3 not-italic text-sm leading-6 text-muted-foreground">
 								TTN Leipzig, André Lademan, Hardenbergstraße 48, 04275 Leipzig,
@@ -46,7 +46,7 @@ export default function Footer() {
 							</address>
 						</div>
 						<p class="max-w-lg text-sm leading-6 text-foreground/80">
-							Regenfass is a project by{" "}
+							regenfass is a project by{" "}
 							<a
 								href="https://ttn-leipzig.de"
 								target="_blank"

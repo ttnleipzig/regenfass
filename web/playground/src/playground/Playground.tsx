@@ -308,7 +308,7 @@ export function TokensPage() {
       <header class="space-y-2">
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Tokens · Brand system</p>
         <h1 class="text-3xl font-bold tracking-tight">Design tokens</h1>
-        <p class="max-w-3xl text-muted-foreground">The semantic colors and typography defaults that shape Regenfass interfaces. Every color is shown with its Light and Dark theme value.</p>
+        <p class="max-w-3xl text-muted-foreground">The semantic colors and typography defaults that shape regenfass interfaces. Every color is shown with its Light and Dark theme value.</p>
       </header>
 
       <section class="space-y-5" aria-labelledby="color-tokens-heading">

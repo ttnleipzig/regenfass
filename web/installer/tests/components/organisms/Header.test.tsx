@@ -39,23 +39,23 @@ describe("Header", () => {
 		expect(header).toBeInTheDocument();
 	});
 
-	it("renders Regenfass title", () => {
+	it("renders regenfass title", () => {
 		renderWithRouter(() => <Header />);
-		const title = screen.getByText("Regenfass");
+		const title = screen.getByText("regenfass");
 		expect(title).toBeInTheDocument();
 		expect(title.tagName).toBe("H1");
 	});
 
 	it("renders an optional white title suffix", () => {
 		const { container } = renderWithRouter(() => (
-			<Header title="Regenfass" titleSuffix="Playground" />
+			<Header title="regenfass" titleSuffix="Playground" />
 		));
 		const suffix = screen.getByText("Playground");
 
 		expect(suffix).toHaveClass("text-foreground/80");
 		expect(suffix).toHaveClass("dark:text-white");
 		expect(suffix).toHaveClass("font-normal");
-		expect(container.querySelector("h1")).toHaveTextContent("Regenfass Playground");
+		expect(container.querySelector("h1")).toHaveTextContent("regenfass Playground");
 	});
 
 	it("renders default navigation links", () => {

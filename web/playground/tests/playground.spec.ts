@@ -93,7 +93,7 @@ test("Header exposes an optional title suffix", async ({ page }) => {
   await page.getByLabel("Title suffix").fill("Docs");
 
   const heading = page.locator("main h1").last();
-  await expect(heading).toContainText("Regenfass");
+  await expect(heading).toContainText("regenfass");
   await expect(heading).toContainText("Docs");
   await expect(heading.locator("span")).toHaveClass(/font-normal/);
   await expect(heading.locator("span")).toHaveClass(/text-foreground\/80/);

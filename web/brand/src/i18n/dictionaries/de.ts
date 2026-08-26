@@ -18,7 +18,7 @@ export const brandDictDe: BrandDictionary = {
 		body: "Wenn du über Software-Updates informiert werden möchtest, kannst du diesen Newsletter abonnieren.",
 		placeholder: "deine@email-adresse.iot",
 		namePlaceholder: "Name (optional)",
-		listLabel: "Regenfass News",
+		listLabel: "regenfass News",
 		subscribe: "Abonnieren",
 		successTitle: "Fast fertig",
 		successBodyBefore:
