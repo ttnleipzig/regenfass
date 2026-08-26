@@ -2,6 +2,10 @@ import type { Context } from "@netlify/functions";
 
 type Subscriber = {
 	id: number;
+	email: string;
+	name: string;
+	status: "enabled" | "blocklisted";
+	attribs?: Record<string, unknown>;
 	lists?: Array<{ id: number; subscription_status: string }>;
 };
 
@@ -44,7 +48,10 @@ async function listmonkRequest<T>(path: string, init: RequestInit = {}): Promise
 			...init.headers,
 		},
 	});
-	if (!result.ok) throw new Error(`Listmonk returned ${result.status}`);
+	if (!result.ok) {
+		const responseBody = await result.text();
+		throw new Error(`Listmonk returned ${result.status}: ${responseBody.slice(0, 240)}`);
+	}
 	return (await result.json()) as T;
 }
 
@@ -53,6 +60,7 @@ function jsonResponse(status: number, body: Record<string, unknown>, origin: str
 		status,
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
+			"Cache-Control": "no-store",
 			...corsHeaders(origin),
 		},
 	});
@@ -80,8 +88,14 @@ export default async (request: Request, _context: Context) => {
 
 		if (subscriber) {
 			await listmonkRequest(`/api/subscribers/${subscriber.id}`, {
-				method: "PATCH",
-				body: JSON.stringify({ attribs: { language } }),
+				method: "PUT",
+				body: JSON.stringify({
+					email: subscriber.email,
+					name: subscriber.name,
+					status: subscriber.status,
+					lists: subscriber.lists?.map((list) => list.id) ?? [],
+					attribs: { ...subscriber.attribs, language },
+				}),
 			});
 			if (!subscriber.lists?.some((list) => list.id === settings.listId)) {
 				await listmonkRequest("/api/subscribers/lists", {
