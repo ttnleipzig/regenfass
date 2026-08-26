@@ -7,9 +7,6 @@ This document contains automatically generated documentation for all components 
 ## Table of Contents
 
 - [Atoms](#atoms)
-  - [ButtonAction](#buttonaction)
-  - [ButtonPrimary](#buttonprimary)
-  - [ButtonSecondary](#buttonsecondary)
   - [Confetti](#confetti)
   - [Link](#link)
   - [SpinnerConfetti](#spinnerconfetti)
@@ -30,54 +27,6 @@ This document contains automatically generated documentation for all components 
   - [TextInput](#textinput)
 
 ## Atoms
-
-### ButtonAction
-
-**Path**: `atoms/ButtonAction.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ButtonAction } from '@regenfass/brand';
-```
-
-### ButtonPrimary
-
-**Path**: `atoms/ButtonPrimary.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ButtonPrimary } from '@regenfass/brand';
-```
-
-### ButtonSecondary
-
-**Path**: `atoms/ButtonSecondary.tsx`
-
-**Dependencies:**
-
-*External:*
-
-- `solid-js`
-
-**Import:**
-
-```typescript
-import { ButtonSecondary } from '@regenfass/brand';
-```
 
 ### Confetti
 
@@ -330,4 +279,4 @@ import { TextInput } from '@regenfass/brand';
 
 ---
 
-Generated on August 25, 2026 at 08:41 PM
+Generated on August 26, 2026 at 08:57 AM

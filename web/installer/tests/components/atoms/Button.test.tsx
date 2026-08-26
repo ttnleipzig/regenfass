@@ -20,6 +20,13 @@ describe("Button", () => {
     expect(button).toHaveClass("bg-primary");
   });
 
+  it("applies primary action styling", () => {
+    const { container } = render(() => <Button variant="primary">Primary</Button>);
+    const button = container.querySelector("button");
+    expect(button).toHaveClass("bg-blue-600");
+    expect(button).toHaveClass("text-white");
+  });
+
   it("applies destructive variant", () => {
     const { container } = render(() => <Button variant="destructive">Delete</Button>);
     const button = container.querySelector("button");
@@ -35,7 +42,20 @@ describe("Button", () => {
   it("applies secondary variant", () => {
     const { container } = render(() => <Button variant="secondary">Secondary</Button>);
     const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-secondary");
+    expect(button).toHaveClass("border-secondary");
+    expect(button).toHaveClass("text-secondary");
+  });
+
+  it("shows a spinner and disables the button while loading", () => {
+    const { container } = render(() => <Button loading>Loading</Button>);
+    const button = screen.getByRole("button");
+    expect(button).toBeDisabled();
+    expect(container.querySelector("svg.animate-spin")).toBeInTheDocument();
+  });
+
+  it("uses the secondary spinner color while loading", () => {
+    const { container } = render(() => <Button variant="secondary" loading>Loading</Button>);
+    expect(container.querySelector("svg.animate-spin")).toHaveClass("text-secondary");
   });
 
   it("applies ghost variant", () => {
@@ -115,5 +135,17 @@ describe("Button", () => {
     expect(button).toHaveAttribute("type", "submit");
     expect(button).toHaveAttribute("aria-label", "Submit form");
     expect(button).toHaveAttribute("data-testid", "submit-btn");
+  });
+
+  it("supports native button types", () => {
+    const { container } = render(() => (
+      <>
+        <Button type="submit">Submit</Button>
+        <Button type="reset">Reset</Button>
+        <Button type="button">Button</Button>
+      </>
+    ));
+    const buttons = [...container.querySelectorAll("button")];
+    expect(buttons.map((button) => button.type)).toEqual(["submit", "reset", "button"]);
   });
 });

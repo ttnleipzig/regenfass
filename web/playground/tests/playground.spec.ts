@@ -17,9 +17,20 @@ for (const component of components) {
 
 test("component search filters the sidebar", async ({ page }) => {
   await page.goto("/button");
-  await page.getByPlaceholder("Search components…").fill("ButtonPrimary");
-  await expect(page.getByRole("link", { name: "ButtonPrimary" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "ButtonSecondary" })).not.toBeVisible();
+  await page.getByPlaceholder("Search components…").fill("Button");
+  await expect(page.getByRole("link", { name: "Button", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "ButtonModeToggle", exact: true })).toBeVisible();
+});
+
+test("Button exposes semantic variants and loading state", async ({ page }) => {
+  await page.goto("/button");
+  await page.getByLabel("Variant").selectOption("secondary");
+  await page.getByLabel("Loading").check();
+  const previewButton = page.locator("main button").filter({ hasText: "Click me" });
+  await expect(previewButton).toHaveClass(/border-secondary/);
+  await expect(previewButton).toBeDisabled();
+  await expect(page.locator("code.tokenized-code")).toContainText('variant={"secondary"}');
+  await expect(page.locator("code.tokenized-code")).toContainText("loading={true}");
 });
 
 test("tokens route shows brand colors and fonts", async ({ page }) => {

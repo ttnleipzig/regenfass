@@ -12,10 +12,7 @@ import {
   AppKeyHexField,
   Badge,
   Button,
-  ButtonAction,
   ButtonModeToggle,
-  ButtonPrimary,
-  ButtonSecondary,
   ButtonSoundToggle,
   Card,
   CardContent,
@@ -96,15 +93,15 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     slug: "button",
     name: "Button",
     category: "atoms",
-    description: "Base button with variants and sizes.",
+    description: "Button with semantic variants, sizes, and loading state.",
     controls: [
       { key: "children", label: "Text", type: "text", defaultValue: "Click me" },
       {
         key: "variant",
         label: "Variant",
         type: "select",
-        defaultValue: "default",
-        options: ["default", "secondary", "outline", "ghost", "destructive", "link"],
+        defaultValue: "primary",
+        options: ["primary", "secondary", "default", "outline", "ghost", "destructive", "link"],
       },
       {
         key: "size",
@@ -113,48 +110,18 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         defaultValue: "default",
         options: ["default", "sm", "lg", "icon"],
       },
+      { key: "loading", label: "Loading", type: "boolean", defaultValue: false },
       { key: "disabled", label: "Disabled", type: "boolean", defaultValue: false },
     ],
     render: (values) => (
       <Button
-        variant={String(values.variant) as "default" | "secondary" | "outline" | "ghost" | "destructive" | "link"}
+        variant={String(values.variant) as "primary" | "default" | "secondary" | "outline" | "ghost" | "destructive" | "link"}
         size={String(values.size) as "default" | "sm" | "lg" | "icon"}
+        loading={Boolean(values.loading)}
         disabled={Boolean(values.disabled)}
       >
         {String(values.children)}
       </Button>
-    ),
-  },
-  {
-    slug: "button-primary",
-    name: "ButtonPrimary",
-    category: "atoms",
-    description: "Primary call-to-action button.",
-    controls: [
-      { key: "children", label: "Text", type: "text", defaultValue: "Continue" },
-      { key: "loading", label: "Loading", type: "boolean", defaultValue: false },
-      { key: "disabled", label: "Disabled", type: "boolean", defaultValue: false },
-    ],
-    render: (values) => (
-      <ButtonPrimary loading={Boolean(values.loading)} disabled={Boolean(values.disabled)}>
-        {String(values.children)}
-      </ButtonPrimary>
-    ),
-  },
-  {
-    slug: "button-secondary",
-    name: "ButtonSecondary",
-    category: "atoms",
-    description: "Secondary button for less prominent actions.",
-    controls: [
-      { key: "children", label: "Text", type: "text", defaultValue: "Back" },
-      { key: "loading", label: "Loading", type: "boolean", defaultValue: false },
-      { key: "disabled", label: "Disabled", type: "boolean", defaultValue: false },
-    ],
-    render: (values) => (
-      <ButtonSecondary loading={Boolean(values.loading)} disabled={Boolean(values.disabled)}>
-        {String(values.children)}
-      </ButtonSecondary>
     ),
   },
   {
@@ -403,25 +370,6 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
     ),
   },
   {
-    slug: "button-action",
-    name: "ButtonAction",
-    category: "atoms",
-    description: "Action button with primary/secondary styles and loading state.",
-    controls: [
-      { key: "children", label: "Text", type: "text", defaultValue: "Save changes" },
-      { key: "type", label: "Style", type: "select", defaultValue: "primary", options: ["primary", "secondary"] },
-      { key: "loading", label: "Loading", type: "boolean", defaultValue: false },
-    ],
-    render: (values) => (
-      <ButtonAction
-        type={String(values.type) as "primary" | "secondary"}
-        loading={Boolean(values.loading)}
-      >
-        {String(values.children)}
-      </ButtonAction>
-    ),
-  },
-  {
     slug: "button-mode-toggle",
     name: "ButtonModeToggle",
     category: "atoms",
@@ -540,7 +488,7 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         <FormLayout
           title={String(values.title)}
           subtitle={String(values.subtitle)}
-          actions={<ButtonPrimary type="submit">Save</ButtonPrimary>}
+          actions={<Button variant="primary" type="submit">Save</Button>}
         >
           <InputField placeholder="Device name" />
           <Checkbox label="Enable notifications" />

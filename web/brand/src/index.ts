@@ -1,10 +1,7 @@
 // Atoms
 export { Badge } from "./components/atoms/Badge.tsx";
 export { Button } from "./components/atoms/Button.tsx";
-export { ButtonAction } from "./components/atoms/ButtonAction.tsx";
 export { ButtonModeToggle } from "./components/atoms/ButtonModeToggle.tsx";
-export { ButtonPrimary } from "./components/atoms/ButtonPrimary.tsx";
-export { ButtonSecondary } from "./components/atoms/ButtonSecondary.tsx";
 export { ButtonSoundToggle } from "./components/atoms/ButtonSoundToggle.tsx";
 export { default as Confetti, CONFETTI_PARTICLE_COUNT } from "./components/atoms/Confetti.tsx";
 export { playConfettiTadaSound } from "./libs/confettiSound.ts";

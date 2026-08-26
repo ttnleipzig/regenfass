@@ -9,8 +9,7 @@ import {
 } from "@solidjs/router";
 import {
 	Badge,
-	ButtonPrimary,
-	ButtonSecondary,
+	Button,
 	Card,
 	CardContent,
 	CardDescription,
@@ -154,14 +153,14 @@ function Home() {
 							</p>
 							<div class="mt-8 flex flex-wrap items-center gap-3">
 								<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
-									<ButtonPrimary class="px-5 py-2.5 text-base">
+									<Button variant="primary" class="px-5 py-2.5 text-base">
 										{t("hero.ctaStart")}
-									</ButtonPrimary>
+									</Button>
 								</a>
 								<a href={DOCS_URL} onClick={trackNavigateToDocs}>
-									<ButtonSecondary class="px-5 py-2.5 text-base">
+									<Button variant="secondary" class="px-5 py-2.5 text-base">
 										{t("hero.ctaDocs")}
-									</ButtonSecondary>
+									</Button>
 								</a>
 							</div>
 						</div>
@@ -242,7 +241,7 @@ function Home() {
 								<p class="text-muted-foreground max-w-prose">{t("software.body")}</p>
 								<div class="flex flex-wrap gap-3 pt-2">
 									<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
-										<ButtonPrimary>{t("software.openInstaller")}</ButtonPrimary>
+										<Button variant="primary">{t("software.openInstaller")}</Button>
 									</a>
 									<Link
 										href="https://github.com/ttnleipzig/regenfass"
@@ -296,12 +295,12 @@ function Home() {
 							</p>
 							<div class="flex flex-wrap justify-center gap-3">
 								<a href={INSTALLER_URL} onClick={trackNavigateToInstaller}>
-									<ButtonPrimary class="px-5 py-2.5">{t("cta.ctaStart")}</ButtonPrimary>
+									<Button variant="primary" class="px-5 py-2.5">{t("cta.ctaStart")}</Button>
 								</a>
 								<a href={DOCS_URL} onClick={trackNavigateToDocs}>
-									<ButtonSecondary class="px-5 py-2.5">
+									<Button variant="secondary" class="px-5 py-2.5">
 										{t("cta.ctaDocs")}
-									</ButtonSecondary>
+									</Button>
 								</a>
 							</div>
 							<div class="max-w-lg mx-auto pt-4">

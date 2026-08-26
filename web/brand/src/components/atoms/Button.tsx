@@ -4,14 +4,17 @@ import { Button as ButtonPrimitive } from "@kobalte/core/button";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import type { ValidComponent } from "solid-js";
+import type { JSX, ValidComponent } from "solid-js";
 import { splitProps } from "solid-js";
+import { Spinner } from "./Spinner.tsx";
 
 export const buttonVariants = cva(
 	"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
 	{
 		variants: {
 			variant: {
+				primary:
+					"bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-700 data-[pressed]:bg-blue-700",
 				default:
 					"bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/80 data-[pressed]:bg-primary/80",
 				destructive:
@@ -19,7 +22,7 @@ export const buttonVariants = cva(
 				outline:
 					"border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground active:bg-accent/90 data-[pressed]:bg-accent/90",
 				secondary:
-					"bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/70 data-[pressed]:bg-secondary/70",
+					"border-secondary bg-background text-secondary hover:bg-secondary/10 hover:text-secondary active:bg-secondary/15 data-[pressed]:bg-secondary/15",
 				ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80 data-[pressed]:bg-accent/80",
 				link: "text-primary underline-offset-4 hover:underline active:underline",
 			},
@@ -40,6 +43,8 @@ export const buttonVariants = cva(
 type buttonProps<T extends ValidComponent = "button"> = ButtonRootProps<T> &
 	VariantProps<typeof buttonVariants> & {
 		class?: string;
+		children?: JSX.Element;
+		loading?: boolean;
 	};
 
 export const Button = <T extends ValidComponent = "button">(
@@ -49,10 +54,16 @@ export const Button = <T extends ValidComponent = "button">(
 		"class",
 		"variant",
 		"size",
+		"loading",
+		"children",
+		"disabled",
 	]);
+	const isSecondary = () => local.variant === "secondary";
 
 	return (
 		<ButtonPrimitive
+			{...rest}
+			disabled={local.loading || local.disabled}
 			class={cn(
 				buttonVariants({
 					size: local.size,
@@ -60,7 +71,14 @@ export const Button = <T extends ValidComponent = "button">(
 				}),
 				local.class,
 			)}
-			{...rest}
-		/>
+		>
+			{local.loading && (
+				<Spinner
+					size="sm"
+					class={cn("-ml-1 mr-3", isSecondary() ? "text-secondary" : "text-white")}
+				/>
+			)}
+			{local.children}
+		</ButtonPrimitive>
 	);
 };
