@@ -86,3 +86,11 @@ test("AlertDialog exposes content props and opens with the configured text", asy
   await expect(page.getByRole("alertdialog")).toBeVisible();
   await expect(page.getByRole("alertdialog")).toContainText("Remove this device?");
 });
+
+test("ErrorList shows its title and errors in generated JSX", async ({ page }) => {
+  await page.goto("/error-list");
+  const code = page.locator("code.tokenized-code");
+
+  await expect(code).toContainText('title="Please fix these issues"');
+  await expect(code).toContainText('errors={["AppKey is required","Device is not connected"]}');
+});

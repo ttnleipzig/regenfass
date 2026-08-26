@@ -655,6 +655,11 @@ export const PLAYGROUND_COMPONENTS: PlaygroundComponent[] = [
         />
       </div>
     ),
+    code: (values) => {
+      const errors = String(values.errors).split(";").filter(Boolean);
+
+      return `<ErrorList\n  title="${escapeJsxAttribute(String(values.title))}"\n  errors={${JSON.stringify(errors)}}\n/>`;
+    },
   },
   {
     slug: "otp-field",
