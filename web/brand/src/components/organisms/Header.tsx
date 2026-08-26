@@ -141,7 +141,7 @@ const Header: Component<HeaderProps> = (rawProps) => {
     <header class="w-full py-6 border-b border-border">
       <div
         class={cn(
-			"site-container px-4 sm:px-6 lg:px-8 flex items-center",
+			"site-container flex items-center",
 			props.fullWidth && "max-w-none",
           props.navPosition === "left" ? "justify-start" : "justify-between",
         )}

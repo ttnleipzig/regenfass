@@ -7,7 +7,7 @@ import { HEADER_NAV } from "./lib/nav";
 function Shell(props: ParentProps) {
   return (
     <div class="min-h-screen flex flex-col">
-      <Header title="regenfass Docs" navItems={HEADER_NAV} />
+      <Header title="regenfass" titleSuffix="Docs" navItems={HEADER_NAV} />
       <main class="flex-1 flex flex-col">{props.children}</main>
       <Footer />
     </div>
