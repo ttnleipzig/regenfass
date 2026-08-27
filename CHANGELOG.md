@@ -1,5 +1,79 @@
 # Changelog
 
+## [0.0.3](https://github.com/ttnleipzig/regenfass/compare/0.0.2...0.0.3) (2026-08-27)
+
+
+### Features
+
+* add Regenfass web application updates ([4e3f110](https://github.com/ttnleipzig/regenfass/commit/4e3f110dfcadd36bbbb3ac5552f5210faec33644))
+* **brand:** refresh footer design and attribution ([05cdaac](https://github.com/ttnleipzig/regenfass/commit/05cdaac7b877a34b409f6f6c65bd3d8248227091))
+* **brand:** unify buttons with variants and loading state ([a0f3a11](https://github.com/ttnleipzig/regenfass/commit/a0f3a11b44813b441b5840799f001c4d85336fdf))
+* **email:** add alpha badge to newsletter templates ([d2d4581](https://github.com/ttnleipzig/regenfass/commit/d2d4581ea180c8fcbfa4394eb642580cd503f1ce))
+* **email:** add bilingual Listmonk templates ([0baa599](https://github.com/ttnleipzig/regenfass/commit/0baa599f4cd8ad34772d8d1391c752ad35a37310))
+* **email:** improve template theming and navigation ([b549cb7](https://github.com/ttnleipzig/regenfass/commit/b549cb704c8cb8e287ba7246c7759ab660de6765))
+* **homepage:** add hero container illustration ([42a288a](https://github.com/ttnleipzig/regenfass/commit/42a288a702742b2277ea3e4cccfc904507f99cae))
+* **installer:** improve connection guidance and alerts ([47ccf22](https://github.com/ttnleipzig/regenfass/commit/47ccf223c81b82e2f90bca66e9112074604206b1))
+* **playground:** persist categories and customize header ([8329c10](https://github.com/ttnleipzig/regenfass/commit/8329c10fbdde3d13d5ceae9b80e968ba9ddda616))
+* update branding and email templates ([0ca49d9](https://github.com/ttnleipzig/regenfass/commit/0ca49d990077b8cfa72a354cdb8539a005fd8ee0))
+* use shared regenfass branding assets ([c4f6ca7](https://github.com/ttnleipzig/regenfass/commit/c4f6ca73b5fb0619886654a770448e8f2784e583))
+* **web:** add beta tester signup experience ([1b19824](https://github.com/ttnleipzig/regenfass/commit/1b1982461750cd0a0bc5e2df6d634460b8a938f4))
+* **web:** add localized privacy and imprint pages ([5428026](https://github.com/ttnleipzig/regenfass/commit/54280265056b1eb48738d225eb684f1ad9331ee5))
+* **web:** route subscriptions to locale lists ([67528de](https://github.com/ttnleipzig/regenfass/commit/67528dedd177879ca2ee8a47a6053480a08d1050))
+
+
+### Bug Fixes
+
+* **brand:** add help cursor to alpha badge ([91732c4](https://github.com/ttnleipzig/regenfass/commit/91732c4546d75bb8294ef6fc91e7038d7448285f))
+* **brand:** align header container and docs title ([72c6ec3](https://github.com/ttnleipzig/regenfass/commit/72c6ec3fbe730bc03cf01272a0d9b983be624c43))
+* **ci:** align installer layout tests ([251d8c7](https://github.com/ttnleipzig/regenfass/commit/251d8c752ae880b433bef7c95b505070a217e6a9))
+* **ci:** stabilize newsletter build ([9512ed6](https://github.com/ttnleipzig/regenfass/commit/9512ed63b203fe1a36fd335062dd2fd304723abc))
+* **email:** add dark mode support to templates ([7f69916](https://github.com/ttnleipzig/regenfass/commit/7f69916acc1dfb2ac359c275e9d67c60acbf5f17))
+* **email:** improve dark mode backgrounds ([c249939](https://github.com/ttnleipzig/regenfass/commit/c2499397a781a07f4e4f83ab10bd060597f9c22b))
+* **email:** improve template defaults and dark mode ([f5f7d92](https://github.com/ttnleipzig/regenfass/commit/f5f7d92f6b7167b60755ecb480490241f81bd85c))
+* **email:** make template images responsive ([f68d11d](https://github.com/ttnleipzig/regenfass/commit/f68d11d3ef21d7d54f978d2af358d03c3a9b8b78))
+* **homepage:** support legacy Listmonk updates ([2fb764e](https://github.com/ttnleipzig/regenfass/commit/2fb764e742ad96c23997d6ef865e60b6408e1571))
+* **installer:** add installer title suffix ([7feb04e](https://github.com/ttnleipzig/regenfass/commit/7feb04e2c4fdcac10b604bf94585f47b49c6b27f))
+* **installer:** improve USB error handling and step display ([08865d8](https://github.com/ttnleipzig/regenfass/commit/08865d8bab432741218852a73ce7206940f0fe15))
+* **playground:** generate ErrorList JSX props ([973e5ad](https://github.com/ttnleipzig/regenfass/commit/973e5ad859ef503c60e2fc129b33d763f001b1b5))
+
+
+### Documentation
+
+* add Listmonk Terraform guide to sidebar ([bcf3f25](https://github.com/ttnleipzig/regenfass/commit/bcf3f258be5733bf9bdf2ca2faf813e641ef6d7f))
+* add newsletter architecture navigation ([0a7ebed](https://github.com/ttnleipzig/regenfass/commit/0a7ebed1f59ef7657142bf48a5c53c8766d26feb))
+* add Regenfass banners and project guidance ([69e04c4](https://github.com/ttnleipzig/regenfass/commit/69e04c4ff5b157ed531447f334911f3ffa57e4b1))
+* update generated component docs timestamp ([342cb9b](https://github.com/ttnleipzig/regenfass/commit/342cb9be9ed1004511d625773ca33c738ae52920))
+
+
+### Refactoring
+
+* **brand:** lowercase regenfass branding ([7980e2d](https://github.com/ttnleipzig/regenfass/commit/7980e2df852261c886e5373fe1dc535f96803c76))
+* **brand:** rename toggle button components ([389d408](https://github.com/ttnleipzig/regenfass/commit/389d408ff42233036d10f687119f7f555eebe90b))
+* **brand:** replace AppKeyHexField with TextFieldHex ([6419265](https://github.com/ttnleipzig/regenfass/commit/6419265694ebead1c6bf308291897c1861e07c21))
+* **web:** extract shared app shell and sidebar navigation ([fa3629a](https://github.com/ttnleipzig/regenfass/commit/fa3629a94d10b7e837a0e0802d33d24636e6b532))
+
+
+### Continuous Integration
+
+* **homepage:** configure Netlify Node and pnpm versions ([dd2717e](https://github.com/ttnleipzig/regenfass/commit/dd2717ee55bc0652548f66a65f7356837ee54181))
+
+
+### Chores
+
+* **ci:** remove GitHub Pages deployment ([7fabf6c](https://github.com/ttnleipzig/regenfass/commit/7fabf6c2fd49a008078eaa4ae24517e6d4ede4f2))
+* track infrastructure files ([8b8a30b](https://github.com/ttnleipzig/regenfass/commit/8b8a30b26b298dffb2041c80e9ded6c3c4f85ad8))
+
+
+### Styles
+
+* **brand:** separate newsletter section ([1294cf8](https://github.com/ttnleipzig/regenfass/commit/1294cf85d5d37b1c3e77aa1d016dc1cec3d4b574))
+* **brand:** show newsletter success alert ([2399d6f](https://github.com/ttnleipzig/regenfass/commit/2399d6f52849e0665a95df4f32a8c548b41e52cb))
+* **email:** refresh campaign and transactional templates ([aa599ca](https://github.com/ttnleipzig/regenfass/commit/aa599ca2b05876d73ee89bc8fdf17927c7323271))
+* **homepage:** center hardware graphics ([e499499](https://github.com/ttnleipzig/regenfass/commit/e499499e8d2216f72ac1c106a4557519eff0aab1))
+* **installer:** enlarge USB alert icon ([1e8981b](https://github.com/ttnleipzig/regenfass/commit/1e8981b85b63d501f83ebc13f72f75c08a3d5bbc))
+* **installer:** flatten step paginator and container ([e0b4177](https://github.com/ttnleipzig/regenfass/commit/e0b417735070e5000cf2f57fcd25d18df1d7b853))
+* **installer:** improve USB alert spacing ([4a9a27d](https://github.com/ttnleipzig/regenfass/commit/4a9a27d7b97010474307683dd1183a1ce497c803))
+
 ## [0.0.2](https://github.com/ttnleipzig/regenfass/compare/0.0.1...0.0.2) (2026-08-25)
 
 
