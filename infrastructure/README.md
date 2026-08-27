@@ -1,7 +1,13 @@
 # Listmonk infrastructure
 
+![Regenfass Infrastructure](https://raw.githubusercontent.com/ttnleipzig/regenfass-brand/main/examples/github/sample-readme-header-regenfass-project.svg)
+
 This directory manages the three versioned email templates used by the
 self-hosted Listmonk instance at `news.regenfass.eu`.
+
+Terraform is intentionally limited to the resources supported by the selected
+Listmonk provider. This directory does not provision servers or manage
+subscriber data.
 
 ## Managed resources
 

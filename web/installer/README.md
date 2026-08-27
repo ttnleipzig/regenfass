@@ -4,6 +4,8 @@
 
 A modern installer for the Regenfass project, built with SolidJS and Vite.
 
+The installer runs in a supported browser and guides users through flashing and configuring Regenfass hardware.
+
 ## 🚀 Features
 
 - **Modern UI**: Built with SolidJS and Tailwind CSS
@@ -69,6 +71,14 @@ pnpm run docs:components:watch
 ```bash
 pnpm build
 ```
+
+## Requirements
+
+- Node.js 20 or newer
+- pnpm (use the version configured by the repository)
+- A Chromium-based browser and USB access for hardware flashing
+
+Run commands from the repository root or from this directory. The shared UI components come from [`@regenfass/brand`](../brand/README.md).
 
 ## 🎨 Styling
 

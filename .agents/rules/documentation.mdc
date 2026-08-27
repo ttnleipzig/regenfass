@@ -6,3 +6,4 @@ alwaysApply: true
 
 1. Schreibe alle Dokumentation in einem freundlichen englisch. Zielgruppe sind nicht Techniker.
 2. Lege Dokumentation für UI Komponenten des Installers unter web/installer/docs ab. Achte dabei auf die bestehende Verzeichnisstruktur
+3. Jede neue oder geänderte Projekt-README.md muss oben ein passendes offizielles Regenfass-Banner enthalten. Erzeuge oder wähle das Banner aus dem Brand-Repository, bevor die Dokumentationsänderung abgeschlossen wird.
