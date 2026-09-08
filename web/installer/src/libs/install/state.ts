@@ -1,22 +1,26 @@
+import { installerMessage } from "@/i18n/index.ts";
+import { playErrorSound } from "@/libs/errorSound.ts";
 import {
 	Config,
 	CONFIG_VERSIONS,
-	DeviceInfo,
 	ConfigField,
+	DeviceInfo,
 	getLatestConfigVersion,
 } from "@/libs/install/config.ts";
 import { readField, SCPAdapter, writeField } from "@/libs/install/scp";
+import { startModemSound, stopModemSound } from "@/libs/modemSound.ts";
 import EncLatin1 from "crypto-js/enc-latin1.js";
 import MD5 from "crypto-js/md5.js";
 import { ESPLoader, LoaderOptions, Transport } from "esptool-js";
 import JSZip from "jszip";
-import { playErrorSound } from "@/libs/errorSound.ts";
-import { startModemSound, stopModemSound } from "@/libs/modemSound.ts";
-import { installerMessage } from "@/i18n/index.ts";
 import { assign, fromCallback, fromPromise, setup } from "xstate";
 
-const url =
-	"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip";
+const URLS = {
+	"0.0.1":
+		"https://s3.devminer.xyz/archive/firmware-heltec_wifi_lora_32_V3_HCSR04.zip",
+	"0.0.1-vl53l0x":
+		"https://s3.devminer.xyz/archive/firmware-0.0.2-heltec_wifi_lora_32_V3_VL53L0X.zip",
+};
 // const REGENFASS_BTLE_SVC_CLASS_ID = "6f48ffcd-ee40-41c3-a6c1-5c2f022ef528";
 
 const sleep = (ms: number) =>
@@ -45,7 +49,7 @@ const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 	console.log("Config version:", configVersion);
 
 	const applicableConfig = CONFIG_VERSIONS.find(
-		(v) => v.version === configVersion
+		(v) => v.version === configVersion,
 	);
 	if (!applicableConfig) {
 		throw new Error(
@@ -56,7 +60,7 @@ const loadDeviceInfo = async (connection: SCPAdapter): Promise<DeviceInfo> => {
 	}
 
 	const config = await applicableConfig.load((field) =>
-		readField(connection, field)
+		readField(connection, field),
 	);
 
 	const info: DeviceInfo = {
@@ -88,7 +92,7 @@ const writeConfigFieldsToDevice = async (
 
 const migrateConfiguration = async (
 	connection: SCPAdapter,
-	desiredVersion: number
+	desiredVersion: number,
 ): Promise<DeviceInfo> => {
 	let info = await loadDeviceInfo(connection);
 
@@ -96,7 +100,7 @@ const migrateConfiguration = async (
 		const nextVersion = info.configVersion + 1;
 
 		let nextConfigVersion = CONFIG_VERSIONS.find(
-			(v) => v.version === nextVersion
+			(v) => v.version === nextVersion,
 		);
 		if (!nextConfigVersion) {
 			throw new Error(
@@ -168,11 +172,11 @@ export const setupStateMachine = setup({
 	},
 	actors: {
 		checkIfWebSerialIsSupported: fromPromise(
-			async () => navigator.serial !== undefined
+			async () => navigator.serial !== undefined,
 		),
 		fetchUpstreamVersions: fromPromise(() => {
 			// TODO: Download versions from GitHub releases
-			return Promise.resolve(["0.0.1"]);
+			return Promise.resolve(Object.keys(URLS));
 		}),
 		requestConnection: fromPromise(async () => {
 			const port = await navigator.serial.requestPort({
@@ -182,7 +186,10 @@ export const setupStateMachine = setup({
 			console.log("opening!");
 			await port.open({ baudRate: 115200 });
 
-			const result: [SerialPort, SCPAdapter] = [port, SCPAdapter.forSerialPort(port)];
+			const result: [SerialPort, SCPAdapter] = [
+				port,
+				SCPAdapter.forSerialPort(port),
+			];
 			return result;
 		}),
 		installFirmware: fromCallback<
@@ -194,6 +201,14 @@ export const setupStateMachine = setup({
 			void (async () => {
 				const { connection: port, version } = input;
 				const z = new JSZip();
+
+				const url = URLS[input.version as keyof typeof URLS];
+				if (!url) {
+					return sendBack({
+						type: "installFlash.error",
+						error: new Error("Unknown version"),
+					});
+				}
 
 				const res = await fetch(url);
 				const zipBuf = res.arrayBuffer();
@@ -258,27 +273,27 @@ export const setupStateMachine = setup({
 							data: bootloaderBin,
 							address: parseInt(
 								firmwareMetadata.flash_images.find((i) =>
-									i.path.endsWith("/bootloader.bin")
+									i.path.endsWith("/bootloader.bin"),
 								)!.offset,
-								16
+								16,
 							),
 						},
 						{
 							data: partitionsBin,
 							address: parseInt(
 								firmwareMetadata.flash_images.find((i) =>
-									i.path.endsWith("/partitions.bin")
+									i.path.endsWith("/partitions.bin"),
 								)!.offset,
-								16
+								16,
 							),
 						},
 						{
 							data: bootApp0Bin,
 							address: parseInt(
 								firmwareMetadata.flash_images.find((i) =>
-									i.path.endsWith("/boot_app0.bin")
+									i.path.endsWith("/boot_app0.bin"),
 								)!.offset,
-								16
+								16,
 							),
 						},
 						{
@@ -339,13 +354,13 @@ export const setupStateMachine = setup({
 			return () => {};
 		}),
 		loadDeviceInfo: fromPromise<DeviceInfo, { connection: SCPAdapter }>(
-			({ input: { connection } }) => loadDeviceInfo(connection)
+			({ input: { connection } }) => loadDeviceInfo(connection),
 		),
 		migrateConfiguration: fromPromise<
 			DeviceInfo,
 			{ connection: SCPAdapter; desiredVersion: number }
 		>(({ input: { connection, desiredVersion } }) =>
-			migrateConfiguration(connection, desiredVersion)
+			migrateConfiguration(connection, desiredVersion),
 		),
 		writeConfiguration: fromCallback<
 			{ type: string },
@@ -417,8 +432,7 @@ export const setupStateMachine = setup({
 						target: "Finish_ShowingError",
 						guard: "webSerialNotSupported",
 						actions: assign({
-							error: () =>
-								installerMessage("stateErrors.unsupportedBrowser"),
+							error: () => installerMessage("stateErrors.unsupportedBrowser"),
 						}),
 					},
 				],
@@ -554,8 +568,7 @@ export const setupStateMachine = setup({
 									deviceInfo.config ??
 									getLatestConfigVersion().getDefaultValues(),
 								configVersion:
-									deviceInfo.configVersion ??
-									getLatestConfigVersion().version,
+									deviceInfo.configVersion ?? getLatestConfigVersion().version,
 								firmwareVersion: output[0],
 							};
 						},
@@ -617,7 +630,7 @@ export const setupStateMachine = setup({
 					actions: assign({
 						deviceInfo: ({ context: { deviceInfo } }) => {
 							const applicableConfig = CONFIG_VERSIONS.find(
-								(v) => v.version === deviceInfo.configVersion
+								(v) => v.version === deviceInfo.configVersion,
 							);
 							if (!applicableConfig) throw new Error("should never happen");
 
