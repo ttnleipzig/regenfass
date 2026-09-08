@@ -68,6 +68,7 @@ Binary releases exist for many combinations of microcontroller, LoRaWAN module, 
 | Sensor  | Status |
 | ------- | ------ |
 | HC-SR04 | ✅      |
+| VL53L0X | ✅      |
 | VL53L1X | ⏳      |
 | DS18B20 | ⏳      |
 

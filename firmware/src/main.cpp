@@ -20,6 +20,10 @@
 // #include "sensors/sensor-vl53l1x.h"
 // #endif
 
+#if FEATURE_SENSOR_VL53L0X
+#include "sensors/sensor-vl53l0x.h"
+#endif
+
 #if FEATURE_SENSOR_DS18B20
 #include "sensors/sensor-ds18b20.h"
 #endif
@@ -101,6 +105,10 @@ void setup()
 //    Sensor::VL53L1X::setup();
 #endif
 
+#if FEATURE_SENSOR_VL53L0X
+    Sensor::VL53L0X::setup();
+#endif
+
 // Button
 #ifdef BUTTON_PIN
     Button::setup();
@@ -144,6 +152,18 @@ void loop()
         });
 #endif
 
+#if FEATURE_SENSOR_VL53L0X
+        const float vl53l0x_distance = Sensor::VL53L0X::measureDistanceCm();
+        if (!isnan(vl53l0x_distance))
+        {
+            data_points.push_back(Lora::Protocol::DataPoint{
+                .measurement_type = Lora::Protocol::MeasurementType::Distance,
+                .channel_id = Lora::Protocol::ChannelID::_3,
+                .value = vl53l0x_distance,
+            });
+        }
+#endif
+
         Lora::Wan::publish2TTN(data_points);
         last_print_time = current_time;
     }
@@ -156,6 +176,10 @@ void loop()
 // #if FEATURE_SENSOR_VL53L1X
 //     Sensor::VL53L1X::loop();
 // #endif
+
+#if FEATURE_SENSOR_VL53L0X
+    Sensor::VL53L0X::loop();
+#endif
 
 // Button
 #ifdef BUTTON_PIN

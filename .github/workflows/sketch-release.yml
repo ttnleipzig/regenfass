@@ -26,6 +26,7 @@ jobs:
           - heltec_wifi_lora_32_V3_HCSR04
           - heltec_wifi_lora_32_V3_VL53L1X
           - heltec_wifi_lora_32_V3_DS18B20
+          - heltec_wifi_lora_32_V3_VL53L0X
           - az-delivery-devkit-v4_VL53L1X
           - az-delivery-devkit-v4_HCSR04
     steps:
@@ -117,6 +118,7 @@ jobs:
           - heltec_wifi_lora_32_V3_HCSR04
           - heltec_wifi_lora_32_V3_VL53L1X
           - heltec_wifi_lora_32_V3_DS18B20
+          - heltec_wifi_lora_32_V3_VL53L0X
           - az-delivery-devkit-v4_VL53L1X
           - az-delivery-devkit-v4_HCSR04
     steps:

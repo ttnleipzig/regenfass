@@ -3,8 +3,9 @@
 // Library for the sensor VL53L3X
 
 #if FEATURE_SENSOR_VL53L1X
-#include <Wire.h>
 #include <VL53L1X.h>
+
+#include "../i2c/i2c.h"
 
 
 // Create the sensor object
@@ -29,8 +30,8 @@ namespace Sensor
         void setup()
         {
             log_i("Setup sensor VL53L1X");
-            Wire.begin();
-            Wire.setClock(400000); // use 400 kHz I2C
+
+            ::I2C::setup();
 
             sensor.setTimeout(500);
             if (!sensor.init())
@@ -46,7 +47,6 @@ namespace Sensor
 
         void loop()
         {
-            log_v("VL53L1X");
         }
 
     } // namespace VL53L1X

@@ -12,7 +12,7 @@ environments cover the supported board and sensor combinations.
 - ESP32 boards
 - PlatformIO
 - LoRaWAN and The Things Network
-- HCSR04, VL53L1X, and DS18B20 sensor support where configured
+- HCSR04, VL53L0X, VL53L1X, and DS18B20 sensor support where configured
 
 ## Development
 
