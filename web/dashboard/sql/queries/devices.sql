@@ -15,9 +15,30 @@ JOIN device d ON d.ro_token = t.token OR d.rw_token = t.token;
 INSERT INTO device (device_eui) VALUES (UPPER($1)) RETURNING id, rw_token, ro_token;
 
 -- name: EnsureDeviceChannelMapping :exec
-INSERT INTO device_channel_mapping (device_id, channel_id, name)
-VALUES ($1, $2, 'Unmapped')
+-- Ingest sees a channel for the first time. The row has to exist before a
+-- measurement can reference it, but nobody has described the channel yet, so it
+-- gets no name and no declared type.
+INSERT INTO device_channel_mapping (device_id, channel_id)
+VALUES ($1, $2)
 ON CONFLICT (device_id, channel_id) DO NOTHING;
+
+-- name: UpsertDeviceChannelMapping :exec
+-- Writes the description the user gave a channel in the dashboard's slot
+-- editor. The row may not exist yet: a channel can be described before the
+-- device has ever reported on it, which is the point of the editor.
+INSERT INTO device_channel_mapping (device_id, channel_id, name, measurement_type)
+VALUES ($1, $2, sqlc.narg('name')::TEXT, sqlc.narg('measurement_type')::SMALLINT)
+ON CONFLICT (device_id, channel_id) DO UPDATE
+SET name = EXCLUDED.name, measurement_type = EXCLUDED.measurement_type;
+
+-- name: GetChannelMappingsForDeviceIDs :many
+-- Every described channel of the given devices, including channels that have
+-- never carried a measurement. Lets the dashboard show a declared slot as an
+-- empty labelled card until the device starts reporting on it.
+SELECT device_id, channel_id, name, measurement_type
+FROM device_channel_mapping
+WHERE device_id = ANY(@device_ids::UUID[])
+ORDER BY device_id, channel_id;
 
 -- name: UpdateDeviceName :exec
 UPDATE device SET name = $2 WHERE id = $1;

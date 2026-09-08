@@ -25,6 +25,17 @@ const (
 	SoundLevel  MeasurementType = 0b1011
 )
 
+// Valid reports whether t is one of the types the protocol defines. Used to
+// reject a measurement type that was supplied by a client (rather than decoded
+// out of an uplink) before it is stored.
+func (t MeasurementType) Valid() bool {
+	return t <= SoundLevel
+}
+
+// MaxChannelID is the highest channel a device can report on: a data point
+// encodes its channel in the high nibble of its first byte.
+const MaxChannelID = 0x0F
+
 type DataPoint struct {
 	Type      MeasurementType
 	ChannelID uint8
@@ -64,7 +75,7 @@ func DecodeOne(data []byte) (DataPoint, []byte, error) {
 	}, leftOver, nil
 }
 
-func decodeValue(type_ MeasurementType, data []byte) (interface{}, []byte, error) {
+func decodeValue(type_ MeasurementType, data []byte) (any, []byte, error) {
 	switch type_ {
 	case Boolean:
 		if len(data) < 1 {
