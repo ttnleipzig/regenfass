@@ -1,5 +1,7 @@
 // Libraries
 #include <Arduino.h>
+
+#if FEATURE_DISPLAY_SD1306
 #include <SPI.h>
 #include <U8g2lib.h>
 
@@ -30,3 +32,5 @@ namespace Display
         }
     }
 }
+
+#endif

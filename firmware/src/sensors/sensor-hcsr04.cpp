@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#if FEATURE_SENSOR_HCSR04
+
 // Library for HCSR04 sensor
 #include <HCSR04.h>
 
@@ -35,3 +37,5 @@ namespace Sensor
         }
     }
 } // namespace Sensor
+
+#endif
