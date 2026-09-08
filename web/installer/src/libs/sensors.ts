@@ -4,8 +4,9 @@ import {
   getLatestMeasurements,
   getOverview,
   type BackendDeviceChannel,
-  type BackendDeviceMeasurement,
   type BackendLatestDevice,
+  type BackendMeasurementSample,
+  type BackendRangedDeviceChannel,
 } from "./api";
 import { useSubscriptions } from "./subscriptions";
 
@@ -46,17 +47,21 @@ export function channelDisplayName(name?: string | null): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-// How a channel of a device has been described. Present for every channel the
-// user set up as well as every channel that has carried a measurement, so a
-// slot prepared before the device ever reported on it is listed here too.
+// A channel of a device and how it has been described. The backend lists every
+// channel the user set up as well as every channel that has carried a
+// measurement, so a slot prepared before the device ever reported on it is
+// here too, with nothing but its number.
 export type ChannelMapping = {
   channel: number;
   // Undefined while the channel is still unnamed (see channelDisplayName).
   name?: string;
   // The type the user declared for the slot. It decides how the channel is
-  // labelled and which unit its readings render in; the type a reading was
-  // *decoded* with always comes from the uplink payload.
+  // labelled and which unit its readings render in.
   declaredType?: SensorType;
+  // The type the channel's newest reading was decoded with, from the uplink
+  // payload. What a reading renders as when nothing has been declared.
+  // Undefined while the channel has no readings in the response.
+  reportedType?: SensorType;
   // Hidden channels are listed so they can be restored, but carry no readings —
   // the backend leaves their measurements out of every response.
   hidden: boolean;
@@ -80,8 +85,8 @@ export type Sensor = {
   // Whether the token this device was resolved through grants read-only access.
   // Undefined when access is not token-scoped (e.g. mock/sample sensors).
   isReadonly?: boolean;
-  // Every described channel, including ones that have never reported. Empty for
-  // sample sensors and for a backend that predates channel descriptions.
+  // Every channel of the device: described ones, including any that have never
+  // reported, and ones only known from their data. Empty for sample sensors.
   channels: ChannelMapping[];
   readings: SensorReadingWithChannel[];
 };
@@ -103,14 +108,15 @@ export type SensorWithHistory = Omit<Sensor, "readings"> & {
 // web/dashboard/internal/lora_protocol/decoder.go.
 //
 // `type_` is the type to render the value *as*: a channel's declared type where
-// it has one, otherwise the type the reading arrived with. Because every value
+// it has one, otherwise the type its readings arrived with. Because every value
 // is stored as a plain number, any type can render any value — declaring a
 // Boolean channel as a Distance plots it as 0s and 1s rather than refusing.
 function readingFromBackend(
-  type_: number,
+  type_: number | undefined,
   value: number,
 ): SensorReading | null {
   if (!Number.isFinite(value)) return null;
+  if (type_ === undefined) return null;
   switch (type_ as SensorType) {
     case SensorType.Boolean:
       return { type: SensorType.Boolean, value: value !== 0 };
@@ -230,21 +236,22 @@ export function useOverview(): LatestOverviewResult {
 export function deviceToSensor(device: BackendLatestDevice): Sensor {
   const hasLocation =
     typeof device.longitude === "number" && typeof device.latitude === "number";
-  const channels = (device.channels ?? []).map(channelFromBackend);
-  const declaredTypes = declaredTypesByChannel(channels);
+  const backendChannels = device.channels ?? [];
+  const channels = backendChannels.map(channelFromBackend);
 
+  // One reading per channel that has reported. The channel's declared type, if
+  // any, decides how its value renders, else the type it reported.
   const readings: SensorReadingWithChannel[] = [];
-  for (const m of device.measurements) {
-    const reading = readingFromBackend(
-      declaredTypes.get(m.channel_id) ?? m.measurement_type,
-      m.value,
-    );
+  for (const [i, ch] of backendChannels.entries()) {
+    const latest = ch.latest;
+    if (!latest) continue;
+    const reading = readingFromBackend(renderType(channels[i]), latest.value);
     if (!reading) continue;
-    const at = Date.parse(m.received_at);
+    const at = Date.parse(latest.received_at);
     readings.push({
       ...reading,
-      channel: m.channel_id,
-      channelName: channelDisplayName(m.channel_name),
+      channel: ch.channel_id,
+      channelName: channels[i].name,
       latestAt: Number.isNaN(at) ? undefined : at,
     });
   }
@@ -258,30 +265,27 @@ export function deviceToSensor(device: BackendLatestDevice): Sensor {
   };
 }
 
-// Indexes the types users declared, for rendering readings as what the channel
-// was said to be rather than as whatever the payload happened to carry.
-export function declaredTypesByChannel(
-  channels: ChannelMapping[],
-): Map<number, SensorType> {
-  const map = new Map<number, SensorType>();
-  for (const c of channels) {
-    if (c.declaredType !== undefined) map.set(c.channel, c.declaredType);
-  }
-  return map;
+// The type a channel's readings render as: what the user declared, else what
+// the payload carried. Undefined only for a channel with nothing to render.
+function renderType(channel: ChannelMapping): SensorType | undefined {
+  return channel.declaredType ?? channel.reportedType;
+}
+
+// Guard against a type the frontend doesn't know: an unrecognized value would
+// otherwise select an empty label in the editor, or render nothing.
+function knownSensorType(type_: number | null | undefined): SensorType | undefined {
+  return type_ !== undefined && type_ !== null && ALL_SENSOR_TYPES.includes(type_ as SensorType)
+    ? (type_ as SensorType)
+    : undefined;
 }
 
 function channelFromBackend(channel: BackendDeviceChannel): ChannelMapping {
-  const declared = channel.measurement_type;
   return {
     channel: channel.channel_id,
     name: channelDisplayName(channel.name),
     hidden: channel.hidden ?? false,
-    // Guard against a type the frontend doesn't know: an unrecognized value
-    // would otherwise select an empty label in the editor.
-    declaredType:
-      declared !== undefined && declared !== null && ALL_SENSOR_TYPES.includes(declared as SensorType)
-        ? (declared as SensorType)
-        : undefined,
+    declaredType: knownSensorType(channel.measurement_type),
+    reportedType: knownSensorType(channel.reported_type),
   };
 }
 
@@ -366,15 +370,17 @@ export function isValidPeriod(period: HistoryPeriod): boolean {
 
 const EMPTY_WINDOW_RESULT: {
   window: HistoryWindow;
-  rows: BackendDeviceMeasurement[];
-} = { window: { start: 0, end: 0 }, rows: [] };
+  channels: BackendRangedDeviceChannel[];
+} = { window: { start: 0, end: 0 }, channels: [] };
 
+// Fetch the given period of a device's history. The ranged endpoint is
+// self-contained: it lists every channel of the device with its description
+// attached and its in-range readings nested under it, so a channel that was
+// just described shows up here before it has any data, and readings render as
+// the type the user declared without a second lookup.
 export function useDeviceMeasurements(
   deviceToken: () => string | null | undefined,
   period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
-  // The channels of the device being fetched, so readings render as the type
-  // the user declared rather than the one the payload carried.
-  channels: () => ChannelMapping[] = () => [],
 ) {
   const [result, { refetch }] = createResource(
     () => {
@@ -388,16 +394,20 @@ export function useDeviceMeasurements(
     },
     async ({ token, period: p }) => {
       const window = periodToWindow(p);
-      const rows = await getDeviceMeasurements(token, {
+      const channels = await getDeviceMeasurements(token, {
         start: new Date(window.start),
         end: new Date(window.end),
       });
-      return { window, rows };
+      return { window, channels };
     },
     { initialValue: EMPTY_WINDOW_RESULT },
   );
 
-  const measurements = createMemo(() => result()?.rows ?? []);
+  // Every channel the backend listed, whether or not it has data in the window.
+  // Empty until the first fetch lands.
+  const channels = createMemo<ChannelMapping[]>(() =>
+    (result()?.channels ?? []).map(channelFromBackend),
+  );
 
   // Falls back to the requested period so a graph rendered before the first
   // fetch resolves still has a sane axis instead of the 1970 epoch.
@@ -408,19 +418,15 @@ export function useDeviceMeasurements(
   });
 
   const readings = createMemo<SensorReadingWithHistory[]>(() => {
-    const rows = result()?.rows;
-    if (!rows || rows.length === 0) return [];
+    const fetched = result()?.channels;
+    if (!fetched || fetched.length === 0) return [];
     // Clip to the requested window: the backend is the source of truth for the
     // range, but clipping here means a stale or unbounded response can never
     // put out-of-period points on the graph.
-    return reduceMeasurementsToReadings(
-      rows,
-      window().start,
-      declaredTypesByChannel(channels()),
-    );
+    return readingsFromChannels(fetched, window().start);
   });
 
-  return { result, measurements, readings, window, refetch: () => void refetch() };
+  return { result, channels, readings, window, refetch: () => void refetch() };
 }
 
 // Fetch the given period of measurements for a single channel of a device and
@@ -430,7 +436,6 @@ export function useChannelHistory(
   deviceToken: () => string | null | undefined,
   channel: () => number | null,
   period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
-  channels: () => ChannelMapping[] = () => [],
 ) {
   const [result, { refetch }] = createResource(
     () => {
@@ -439,22 +444,16 @@ export function useChannelHistory(
       if (!token || ch === null) return null;
       const p = period();
       if (!isValidPeriod(p)) return null;
-      return { token, channel: ch, period: p, declared: channels() };
+      return { token, channel: ch, period: p };
     },
-    async ({ token, channel: ch, period: p, declared }) => {
+    async ({ token, channel: ch, period: p }) => {
       const window = periodToWindow(p);
-      const rows = await getDeviceMeasurements(token, {
+      const channels = await getDeviceMeasurements(token, {
         start: new Date(window.start),
         end: new Date(window.end),
         channel: ch,
       });
-      if (rows.length === 0) return { window, reading: null };
-      const reading =
-        reduceMeasurementsToReadings(
-          rows,
-          window.start,
-          declaredTypesByChannel(declared),
-        )[0] ?? null;
+      const reading = readingsFromChannels(channels, window.start)[0] ?? null;
       return { window, reading };
     },
     { initialValue: null },
@@ -470,57 +469,49 @@ export function useChannelHistory(
   return { result, reading, window, refetch: () => void refetch() };
 }
 
-// `since` (epoch ms) clips the result to the graph window: rows older than it
-// are dropped, and a channel whose only rows fall outside the window is left
-// out entirely rather than reported as a current reading.
-export function reduceMeasurementsToReadings(
-  rows: BackendDeviceMeasurement[],
+// Reduces the channels of a ranged response to one reading-with-history per
+// channel that has data in the window. `since` (epoch ms) clips to the graph
+// window: samples older than it are dropped, and a channel whose only samples
+// fall outside the window is left out entirely rather than reported as a
+// current reading. A channel with no samples at all is left out too — the
+// caller lists those from the channel list, not from here.
+export function readingsFromChannels(
+  channels: BackendRangedDeviceChannel[],
   since?: number,
-  declaredTypes?: Map<number, SensorType>,
 ): SensorReadingWithHistory[] {
-  // Rows arrive grouped by channel, ascending in time within each channel.
-  // Build history per channel and keep the most recent reading as the headline
-  // value (compared by timestamp so ordering assumptions can't silently break).
-  type Acc = {
-    latest: BackendDeviceMeasurement;
-    latestAt: number;
-    history: { t: number; value: number }[];
-  };
-  const byChannel = new Map<number, Acc>();
-  for (const row of rows) {
-    const t = Date.parse(row.received_at);
-    // Unparseable timestamps can't be placed on a time axis, and can't be
-    // checked against the window either — skip them.
-    if (Number.isNaN(t)) continue;
-    if (since !== undefined && t < since) continue;
-    let acc = byChannel.get(row.channel_id);
-    if (!acc) {
-      acc = { latest: row, latestAt: t, history: [] };
-      byChannel.set(row.channel_id, acc);
-    }
-    if (t >= acc.latestAt) {
-      acc.latest = row;
-      acc.latestAt = t;
-    }
-    if (Number.isFinite(row.value)) acc.history.push({ t, value: row.value });
-  }
-
   const out: SensorReadingWithHistory[] = [];
-  for (const acc of byChannel.values()) {
-    // The graph needs chronological history; rows are already ascending per
-    // channel, but sort defensively in case channels interleave.
-    acc.history.sort((a, b) => a.t - b.t);
-    const reading = readingFromBackend(
-      declaredTypes?.get(acc.latest.channel_id) ?? acc.latest.measurement_type,
-      acc.latest.value,
-    );
+  for (const ch of channels) {
+    // Samples arrive ascending in time. Keep the most recent as the headline
+    // value, compared by timestamp so ordering assumptions can't silently break.
+    let latest: BackendMeasurementSample | null = null;
+    let latestAt = Number.NEGATIVE_INFINITY;
+    const history: { t: number; value: number }[] = [];
+    for (const sample of ch.measurements ?? []) {
+      const t = Date.parse(sample.received_at);
+      // Unparseable timestamps can't be placed on a time axis, and can't be
+      // checked against the window either — skip them.
+      if (Number.isNaN(t)) continue;
+      if (since !== undefined && t < since) continue;
+      if (t >= latestAt) {
+        latest = sample;
+        latestAt = t;
+      }
+      if (Number.isFinite(sample.value)) history.push({ t, value: sample.value });
+    }
+    if (!latest) continue;
+
+    // The graph needs chronological history; sort defensively in case the
+    // backend's ordering ever changes.
+    history.sort((a, b) => a.t - b.t);
+    const mapping = channelFromBackend(ch);
+    const reading = readingFromBackend(renderType(mapping), latest.value);
     if (!reading) continue;
     out.push({
       ...reading,
-      history: acc.history,
-      latestAt: acc.latestAt,
-      channel: acc.latest.channel_id,
-      channelName: channelDisplayName(acc.latest.channel_name),
+      history,
+      latestAt,
+      channel: mapping.channel,
+      channelName: mapping.name,
     });
   }
   return out;

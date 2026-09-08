@@ -9,10 +9,11 @@ INSERT INTO device_measurement (device_id, measurement_type, channel_id, "value"
 -- time buckets and the newest reading in each bucket (per channel) is kept as
 -- the representative data point. The caller picks @bucket_seconds to control
 -- the resolution. Results are ordered chronologically within each channel.
+-- Hidden channels are left out; how a channel is described is not repeated
+-- per row — the API attaches it once per channel from the mapping table.
 SELECT DISTINCT ON (m.channel_id, m.bucket)
 	m.received_at,
 	m.channel_id,
-	m.channel_name,
 	m.measurement_type,
 	m.value
 FROM (
@@ -20,7 +21,6 @@ FROM (
 		time_bucket(make_interval(secs => @bucket_seconds::DOUBLE PRECISION), dm.received_at) AS bucket,
 		dm.received_at,
 		dm.channel_id,
-		dcm.name AS channel_name,
 		dm.measurement_type,
 		dm.value
 	FROM device_measurement dm
@@ -47,11 +47,12 @@ WHERE d.id IN (
 );
 
 -- name: GetLatestMeasurementsForDeviceIDs :many
+-- Newest reading per channel of each device, hidden channels left out. The
+-- channel's description is attached once per channel by the API, not here.
 SELECT DISTINCT ON (dm.device_id, dm.channel_id)
 	dm.device_id,
 	dm.received_at,
 	dm.channel_id,
-	dcm.name AS channel_name,
 	dm.measurement_type,
 	dm.value
 FROM device_measurement dm

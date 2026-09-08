@@ -320,7 +320,7 @@
         },
         "/device/{deviceToken}/measurements": {
             "get": {
-                "description": "Retrieve a device's measurement history between `start` and `end`, downsampled to a resolution that scales with the span. The endpoint aims for roughly 2000 data points per channel: wider ranges are bucketed more coarsely (never coarser than three points per day) and narrower ranges more finely (never finer than one point per minute). Each bucket is represented by its newest reading. Optionally restrict to a single channel. Authenticated by either the read-write or read-only device token.",
+                "description": "Retrieve a device's channels with their measurement history between `start` and `end`, downsampled to a resolution that scales with the span. The endpoint aims for roughly 2000 data points per channel: wider ranges are bucketed more coarsely (never coarser than three points per day) and narrower ranges more finely (never finer than one point per minute). Each bucket is represented by its newest reading. Every channel is listed, with its description attached once, whether or not it has readings in the range. Optionally restrict to a single channel. Authenticated by either the read-write or read-only device token.",
                 "consumes": [
                     "application/json"
                 ],
@@ -614,7 +614,7 @@
         },
         "/measurements/latest": {
             "post": {
-                "description": "Returns one entry per device referenced (directly via `devices` or transitively via `groups`), including its name, location, and the most recent measurement per channel. Devices with no measurements yet still appear with an empty `measurements` list.",
+                "description": "Returns one entry per device referenced (directly via `devices` or transitively via `groups`), including its name, location, and its channels each carrying their most recent reading. Devices with no measurements yet still appear, listing only the channels somebody has described.",
                 "consumes": [
                     "application/json"
                 ],
@@ -740,28 +740,6 @@
                 }
             }
         },
-        "api.DeviceChannel": {
-            "description": "How a device's channel has been described in the dashboard. A channel is listed here once somebody has named it, declared a type for it, or hidden it — including a channel set up before the device ever reported on it. `name` and `measurement_type` are absent for a channel nobody has described. `measurement_type` is the type the user declared, which labels the channel and picks the unit its readings render in; the type a reading was decoded with always comes from the uplink payload and travels on the measurement itself. A hidden channel is listed so it can be restored, but its measurements are left out of every measurement response.",
-            "type": "object",
-            "properties": {
-                "channel_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "hidden": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "measurement_type": {
-                    "type": "integer",
-                    "example": 4
-                },
-                "name": {
-                    "type": "string",
-                    "example": "Water Level"
-                }
-            }
-        },
         "api.DeviceInfoResponse": {
             "description": "Identity of a device. When authenticated with the read-write token, both tokens are returned; otherwise only the read-only token is returned. `name` is the user-set name, or a stable auto-generated nickname if none has been set.",
             "type": "object",
@@ -793,32 +771,6 @@
                 "read_write_token": {
                     "type": "string",
                     "example": "rw_token_123"
-                }
-            }
-        },
-        "api.DeviceMeasurement": {
-            "description": "A measurement reading from one of a device's channels at a point in time. `channel_name` is absent while nobody has described the channel.",
-            "type": "object",
-            "properties": {
-                "channel_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "channel_name": {
-                    "type": "string",
-                    "example": "Water Level"
-                },
-                "measurement_type": {
-                    "type": "integer",
-                    "example": 4
-                },
-                "received_at": {
-                    "type": "string",
-                    "example": "2024-01-15T10:30:00Z"
-                },
-                "value": {
-                    "type": "number",
-                    "example": 42.5
                 }
             }
         },
@@ -914,40 +866,14 @@
                 }
             }
         },
-        "api.LatestChannelMeasurement": {
-            "description": "Latest reading for a single channel of a device. `channel_name` is absent while nobody has described the channel.",
-            "type": "object",
-            "properties": {
-                "channel_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "channel_name": {
-                    "type": "string",
-                    "example": "Water Level"
-                },
-                "measurement_type": {
-                    "type": "integer",
-                    "example": 4
-                },
-                "received_at": {
-                    "type": "string",
-                    "example": "2024-01-15T10:30:00Z"
-                },
-                "value": {
-                    "type": "number",
-                    "example": 42.5
-                }
-            }
-        },
         "api.LatestDevice": {
-            "description": "Device identity, name, location, its described channels and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.",
+            "description": "Device identity, name, location and its channels, each with its latest reading. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.",
             "type": "object",
             "properties": {
                 "channels": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.DeviceChannel"
+                        "$ref": "#/definitions/api.LatestDeviceChannel"
                     }
                 },
                 "device_id": {
@@ -966,15 +892,38 @@
                     "type": "number",
                     "example": 12.3731
                 },
-                "measurements": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.LatestChannelMeasurement"
-                    }
-                },
                 "name": {
                     "type": "string",
                     "example": "Happy Barrel"
+                }
+            }
+        },
+        "api.LatestDeviceChannel": {
+            "description": "A channel and its most recent reading. `latest` is absent while the channel has never reported, and for a hidden channel.",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "hidden": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "latest": {
+                    "$ref": "#/definitions/api.MeasurementSample"
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Water Level"
+                },
+                "reported_type": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -1005,7 +954,7 @@
             }
         },
         "api.LatestMeasurementsResponse": {
-            "description": "One entry per requested device. Devices that have not reported yet still appear here, with an empty measurements list and no location.",
+            "description": "One entry per requested device. Devices that have not reported yet still appear here, with only their described channels (if any) and no location.",
             "type": "object",
             "properties": {
                 "devices": {
@@ -1013,6 +962,20 @@
                     "items": {
                         "$ref": "#/definitions/api.LatestDevice"
                     }
+                }
+            }
+        },
+        "api.MeasurementSample": {
+            "description": "One reading of a channel: when it arrived and its value. Every value is a number; a Boolean is stored as 0 or 1. How to read the value is a property of the channel (`measurement_type` if declared, else `reported_type`), so it is not repeated per sample.",
+            "type": "object",
+            "properties": {
+                "received_at": {
+                    "type": "string",
+                    "example": "2024-01-15T10:30:00Z"
+                },
+                "value": {
+                    "type": "number",
+                    "example": 42.5
                 }
             }
         },
@@ -1058,8 +1021,40 @@
                 }
             }
         },
+        "api.RangedDeviceChannel": {
+            "description": "A channel and its downsampled readings within the requested range, ordered chronologically. `measurements` is empty for a channel that has nothing in the range, has never reported, or is hidden — the channel is still listed so a slot prepared ahead of its sensor shows up.",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "hidden": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.MeasurementSample"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Water Level"
+                },
+                "reported_type": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "api.RangedMeasurementsResponse": {
-            "description": "Downsampled measurement series for a device over a time range. The resolution adapts to the span: the wider the range, the coarser the buckets (never finer than one point per minute, never coarser than three points per day). `bucket_seconds` reports the bucket width that was actually used.",
+            "description": "A device's channels, each with its downsampled readings over the requested range. Every channel of the device is listed — described ones as well as ones only known from their data — so a channel that has nothing in the range still appears, with an empty `measurements`. The resolution adapts to the span: the wider the range, the coarser the buckets (never finer than one point per minute, never coarser than three points per day). `bucket_seconds` reports the bucket width that was actually used. With `channel` given, only that channel is listed.",
             "type": "object",
             "properties": {
                 "bucket_seconds": {
@@ -1070,15 +1065,15 @@
                     "type": "integer",
                     "example": 1
                 },
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.RangedDeviceChannel"
+                    }
+                },
                 "end": {
                     "type": "string",
                     "example": "2024-01-08T00:00:00Z"
-                },
-                "measurements": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.DeviceMeasurement"
-                    }
                 },
                 "start": {
                     "type": "string",

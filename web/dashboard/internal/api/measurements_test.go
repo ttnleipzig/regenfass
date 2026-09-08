@@ -73,3 +73,62 @@ func TestRangedBucketSecondsBounds(t *testing.T) {
 		}
 	}
 }
+
+// TestMergeChannels covers how a device's channel list is assembled: described
+// channels come from the mapping table, channels that merely reported are added
+// from their data, and a channel that is both is listed once with its
+// description intact.
+func TestMergeChannels(t *testing.T) {
+	name := "Cistern"
+	declared := int16(4)
+	described := []DeviceChannel{
+		{ChannelID: 5, Name: &name, MeasurementType: &declared},
+		{ChannelID: 9, Hidden: true},
+	}
+	reported := map[int16]int16{2: 5, 5: 1}
+
+	got := mergeChannels(described, reported)
+
+	ids := make([]int16, len(got))
+	for i, ch := range got {
+		ids[i] = ch.ChannelID
+	}
+	if want := []int16{2, 5, 9}; !equalInt16s(ids, want) {
+		t.Fatalf("channel ids = %v, want %v", ids, want)
+	}
+	if got[0].Name != nil || got[0].MeasurementType != nil || got[0].Hidden {
+		t.Errorf("channel 2 should be undescribed, got %+v", got[0])
+	}
+	if got[0].ReportedType == nil || *got[0].ReportedType != 5 {
+		t.Errorf("channel 2 should carry the type it reported, got %+v", got[0])
+	}
+	if got[1].Name == nil || *got[1].Name != name || got[1].MeasurementType == nil || *got[1].MeasurementType != declared {
+		t.Errorf("channel 5 lost its description: %+v", got[1])
+	}
+	if got[1].ReportedType == nil || *got[1].ReportedType != 1 {
+		// Declared and reported types are independent: the user said Distance,
+		// the payload carried a Float, and the response says both.
+		t.Errorf("channel 5 should carry its reported type alongside the declared one, got %+v", got[1])
+	}
+	if !got[2].Hidden || got[2].ReportedType != nil {
+		t.Errorf("channel 9 should stay hidden with no reported type: %+v", got[2])
+	}
+}
+
+func TestMergeChannelsEmpty(t *testing.T) {
+	if got := mergeChannels(nil, nil); len(got) != 0 {
+		t.Fatalf("expected no channels, got %v", got)
+	}
+}
+
+func equalInt16s(a, b []int16) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}

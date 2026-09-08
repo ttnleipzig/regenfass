@@ -134,15 +134,15 @@ const Dashboard: Component = () => {
     setPeriodChoice(choice);
   };
 
+  // The ranged endpoint lists every channel of the device with its readings in
+  // the window nested under it, so one fetch drives both the graph cards and the
+  // channel list the slot editor works from.
   const {
     readings: liveReadings,
+    channels: liveChannels,
     window: historyWindow,
     refetch: refetchLiveReadings,
-  } = useDeviceMeasurements(
-    () => activeDeviceToken(),
-    period,
-    () => activeSensor()?.channels ?? [],
-  );
+  } = useDeviceMeasurements(() => activeDeviceToken(), period);
   // Readings for the channel the user is about to map, over the same period as
   // the graphs above, fetched on demand when a channel is selected.
   const {
@@ -154,7 +154,6 @@ const Dashboard: Component = () => {
     () => activeDeviceToken(),
     () => selectedChannel(),
     period,
-    () => activeSensor()?.channels ?? [],
   );
 
   const toggleGroupCollapsed = (token: string) => {
@@ -298,12 +297,21 @@ const Dashboard: Component = () => {
     return set;
   };
 
-  // Every channel the backend knows about for the open device, indexed for the
-  // editor. Includes channels the device has reported on — ingest maps those the
-  // first time it sees them — as well as slots described ahead of any data.
+  // Every channel the backend knows about for the open device: ones it has
+  // reported on as well as slots described ahead of any data. The ranged fetch
+  // is the source of truth — it is what gets refetched after a channel is
+  // written, so a slot described a moment ago is in it — and /overview stands in
+  // for devices we hold no token for, or until the first fetch lands.
+  const channelsForActiveSensor = () => {
+    const live = liveChannels();
+    if (live.length > 0) return live;
+    return activeSensor()?.channels ?? [];
+  };
+
+  // The same channels indexed for the editor.
   const channelsByID = createMemo(() => {
     const map = new Map<number, ChannelMapping>();
-    for (const c of activeSensor()?.channels ?? []) map.set(c.channel, c);
+    for (const c of channelsForActiveSensor()) map.set(c.channel, c);
     return map;
   });
 
@@ -321,7 +329,7 @@ const Dashboard: Component = () => {
   // are left out — a bare "Unmapped" placeholder card would say nothing.
   const describedEmptyChannels = createMemo(() => {
     const withReadings = assignedChannels();
-    return (activeSensor()?.channels ?? [])
+    return channelsForActiveSensor()
       .filter(
         (c) =>
           !c.hidden &&
@@ -334,7 +342,7 @@ const Dashboard: Component = () => {
   // Channels taken off the panel. Listed under the grid so hiding one is
   // reversible without hunting for it.
   const hiddenChannels = createMemo(() =>
-    (activeSensor()?.channels ?? [])
+    channelsForActiveSensor()
       .filter((c) => c.hidden)
       .sort((a, b) => a.channel - b.channel),
   );
@@ -389,9 +397,10 @@ const Dashboard: Component = () => {
     setChannelBusy(channel);
     try {
       await write(token);
-      // The graphs title themselves from the channel name the measurement
-      // endpoints hand back, so all three sources have to be refreshed for a
-      // change to show up without reopening the panel.
+      // The panel's channel list and graph titles come from the ranged fetch,
+      // the device list from /overview, and the preview from its own fetch, so
+      // all three have to be refreshed for a change to show up without
+      // reopening the panel.
       refetchSensors();
       refetchLiveReadings();
       refetchSelectedChannel();

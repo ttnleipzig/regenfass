@@ -2,12 +2,13 @@ import { describe, it, expect } from "vitest";
 import {
   channelDisplayName,
   deviceToSensor,
-  reduceMeasurementsToReadings,
+  readingsFromChannels,
   SensorType,
 } from "@/libs/sensors";
 import type {
-  BackendDeviceMeasurement,
   BackendLatestDevice,
+  BackendMeasurementSample,
+  BackendRangedDeviceChannel,
 } from "@/libs/api";
 
 function device(
@@ -16,7 +17,7 @@ function device(
   return {
     device_id: "dev-1",
     name: "Barrel",
-    measurements: [],
+    channels: [],
     ...overrides,
   };
 }
@@ -41,7 +42,12 @@ describe("deviceToSensor channels", () => {
     const sensor = deviceToSensor(
       device({
         channels: [
-          { channel_id: 5, name: "Cistern", measurement_type: SensorType.Distance },
+          {
+            channel_id: 5,
+            name: "Cistern",
+            measurement_type: SensorType.Distance,
+            hidden: false,
+          },
         ],
       }),
     );
@@ -59,9 +65,11 @@ describe("deviceToSensor channels", () => {
   });
 
   it("leaves an undescribed channel with neither a name nor a type", () => {
-    // Ingest creates the row so a measurement can reference it; nothing about
-    // the channel has been described.
-    const sensor = deviceToSensor(device({ channels: [{ channel_id: 2 }] }));
+    // The channel is listed because it has reported; nothing about it has been
+    // described.
+    const sensor = deviceToSensor(
+      device({ channels: [{ channel_id: 2, hidden: false }] }),
+    );
     expect(sensor.channels[0]).toEqual({
       channel: 2,
       name: undefined,
@@ -73,131 +81,176 @@ describe("deviceToSensor channels", () => {
   it("ignores a measurement type the frontend does not know", () => {
     // An unrecognized value would otherwise select an empty label in the editor.
     const sensor = deviceToSensor(
-      device({ channels: [{ channel_id: 3, name: "Odd", measurement_type: 99 }] }),
+      device({
+        channels: [
+          { channel_id: 3, name: "Odd", measurement_type: 99, hidden: false },
+        ],
+      }),
     );
     expect(sensor.channels[0].declaredType).toBeUndefined();
   });
 
-  it("defaults to no channels against a backend that does not send them", () => {
+  it("defaults to no channels when the backend sends none", () => {
     expect(deviceToSensor(device()).channels).toEqual([]);
   });
 
-  it("carries the channel name onto each latest reading", () => {
+  it("turns each channel's latest sample into a reading carrying the channel's name", () => {
     const sensor = deviceToSensor(
       device({
-        measurements: [
+        channels: [
           {
-            received_at: "2026-08-01T00:00:00Z",
             channel_id: 1,
-            channel_name: "Cistern",
-            measurement_type: SensorType.Distance,
-            value: 42,
+            name: "Cistern",
+            reported_type: SensorType.Distance,
+            hidden: false,
+            latest: { received_at: "2026-08-01T00:00:00Z", value: 42 },
           },
           {
-            received_at: "2026-08-01T00:00:00Z",
             channel_id: 2,
-            channel_name: undefined,
-            measurement_type: SensorType.Temperature,
-            value: 18,
+            reported_type: SensorType.Temperature,
+            hidden: false,
+            latest: { received_at: "2026-08-01T00:00:00Z", value: 18 },
+          },
+          // Described, never reported: a channel, but no reading.
+          { channel_id: 3, name: "Spare", hidden: false },
+        ],
+      }),
+    );
+    expect(sensor.readings).toEqual([
+      {
+        type: SensorType.Distance,
+        value: 42,
+        unit: "cm",
+        channel: 1,
+        channelName: "Cistern",
+        latestAt: Date.parse("2026-08-01T00:00:00Z"),
+      },
+      {
+        type: SensorType.Temperature,
+        value: 18,
+        unit: "°C",
+        channel: 2,
+        channelName: undefined,
+        latestAt: Date.parse("2026-08-01T00:00:00Z"),
+      },
+    ]);
+    expect(sensor.channels.map((c) => c.channel)).toEqual([1, 2, 3]);
+  });
+
+  it("renders a latest reading as the channel's declared type", () => {
+    const sensor = deviceToSensor(
+      device({
+        channels: [
+          {
+            channel_id: 3,
+            measurement_type: SensorType.Distance,
+            reported_type: SensorType.Float,
+            hidden: false,
+            latest: { received_at: "2026-08-01T00:00:00Z", value: 42 },
           },
         ],
       }),
     );
-    expect(sensor.readings.map((r) => r.channelName)).toEqual([
-      "Cistern",
-      undefined,
-    ]);
+    expect(sensor.readings[0]).toMatchObject({
+      type: SensorType.Distance,
+      value: 42,
+      unit: "cm",
+    });
   });
 });
 
-describe("reduceMeasurementsToReadings channel names", () => {
-  function row(channelName?: string): BackendDeviceMeasurement {
+describe("readingsFromChannels channel names", () => {
+  function channel(channelName?: string): BackendRangedDeviceChannel {
     return {
-      received_at: "2026-08-01T00:00:00Z",
       channel_id: 1,
-      channel_name: channelName,
-      measurement_type: SensorType.Distance,
-      value: 42,
+      name: channelName,
+      reported_type: SensorType.Distance,
+      hidden: false,
+      measurements: [{ received_at: "2026-08-01T00:00:00Z", value: 42 }],
     };
   }
 
   it("carries a real channel name through to the reading", () => {
-    expect(reduceMeasurementsToReadings([row("Cistern")])[0].channelName).toBe(
+    expect(readingsFromChannels([channel("Cistern")])[0].channelName).toBe(
       "Cistern",
     );
   });
 
   it("leaves an undescribed channel nameless so the graph falls back to the type", () => {
-    expect(reduceMeasurementsToReadings([row()])[0].channelName).toBeUndefined();
+    expect(readingsFromChannels([channel()])[0].channelName).toBeUndefined();
   });
 });
 
 describe("declared type as a render override", () => {
-  function row(
-    channel: number,
-    measurementType: SensorType,
-    value: number,
-  ): BackendDeviceMeasurement {
+  function sample(value: number, at = "2026-08-01T00:00:00Z"): BackendMeasurementSample {
+    return { received_at: at, value };
+  }
+
+  function channel(
+    declared: SensorType | undefined,
+    reported: SensorType,
+    measurements: BackendMeasurementSample[],
+  ): BackendRangedDeviceChannel {
     return {
-      received_at: "2026-08-01T00:00:00Z",
-      channel_id: channel,
-      measurement_type: measurementType,
-      value,
+      channel_id: 3,
+      measurement_type: declared,
+      reported_type: reported,
+      hidden: false,
+      measurements,
     };
   }
 
   it("renders a reading as the declared type, not the reported one", () => {
     // The point of the field: firmware sends a bare Float and the user says it
     // is a water level, so it renders in cm.
-    const [reading] = reduceMeasurementsToReadings(
-      [row(3, SensorType.Float, 42)],
-      undefined,
-      new Map([[3, SensorType.Distance]]),
-    );
+    const [reading] = readingsFromChannels([
+      channel(SensorType.Distance, SensorType.Float, [sample(42)]),
+    ]);
     expect(reading.type).toBe(SensorType.Distance);
     expect(reading).toMatchObject({ value: 42, unit: "cm" });
   });
 
   it("falls back to the reported type where nothing is declared", () => {
-    const [reading] = reduceMeasurementsToReadings(
-      [row(3, SensorType.Temperature, 18)],
-      undefined,
-      new Map(),
-    );
+    const [reading] = readingsFromChannels([
+      channel(undefined, SensorType.Temperature, [sample(18)]),
+    ]);
     expect(reading.type).toBe(SensorType.Temperature);
   });
 
   it("reinterprets a boolean channel under a numeric type", () => {
     // Booleans are stored as 0/1, so a declared type can never hit a value
     // shape it refuses to render — it just plots the steps.
-    const [reading] = reduceMeasurementsToReadings(
-      [row(1, SensorType.Boolean, 1), row(1, SensorType.Boolean, 0)],
-      undefined,
-      new Map([[1, SensorType.Float]]),
-    );
+    const [reading] = readingsFromChannels([
+      channel(SensorType.Float, SensorType.Boolean, [
+        sample(1, "2026-08-01T00:00:00Z"),
+        sample(0, "2026-08-01T00:01:00Z"),
+      ]),
+    ]);
     expect(reading.type).toBe(SensorType.Float);
     expect(reading.value).toBe(0);
     expect(reading.history?.map((h) => h.value)).toEqual([1, 0]);
   });
 
   it("reads a stored 0 under a Boolean type as off", () => {
-    const [reading] = reduceMeasurementsToReadings([
-      row(1, SensorType.Boolean, 0),
+    const [reading] = readingsFromChannels([
+      channel(undefined, SensorType.Boolean, [sample(0)]),
     ]);
     expect(reading).toMatchObject({ type: SensorType.Boolean, value: false });
   });
 
   it("reads a stored 1 under a Boolean type as on", () => {
-    const [reading] = reduceMeasurementsToReadings([
-      row(1, SensorType.Boolean, 1),
+    const [reading] = readingsFromChannels([
+      channel(undefined, SensorType.Boolean, [sample(1)]),
     ]);
     expect(reading).toMatchObject({ type: SensorType.Boolean, value: true });
   });
 
   it("plots booleans as their stored numbers", () => {
-    const [reading] = reduceMeasurementsToReadings([
-      row(1, SensorType.Boolean, 1),
-      row(1, SensorType.Boolean, 0),
+    const [reading] = readingsFromChannels([
+      channel(undefined, SensorType.Boolean, [
+        sample(1, "2026-08-01T00:00:00Z"),
+        sample(0, "2026-08-01T00:01:00Z"),
+      ]),
     ]);
     expect(reading.history?.map((h) => h.value)).toEqual([1, 0]);
   });

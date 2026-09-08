@@ -15,7 +15,6 @@ const getDeviceMeasurementsRanged = `-- name: GetDeviceMeasurementsRanged :many
 SELECT DISTINCT ON (m.channel_id, m.bucket)
 	m.received_at,
 	m.channel_id,
-	m.channel_name,
 	m.measurement_type,
 	m.value
 FROM (
@@ -23,7 +22,6 @@ FROM (
 		time_bucket(make_interval(secs => $1::DOUBLE PRECISION), dm.received_at) AS bucket,
 		dm.received_at,
 		dm.channel_id,
-		dcm.name AS channel_name,
 		dm.measurement_type,
 		dm.value
 	FROM device_measurement dm
@@ -49,7 +47,6 @@ type GetDeviceMeasurementsRangedParams struct {
 type GetDeviceMeasurementsRangedRow struct {
 	ReceivedAt      pgtype.Timestamptz
 	ChannelID       int16
-	ChannelName     pgtype.Text
 	MeasurementType int16
 	Value           float64
 }
@@ -58,6 +55,8 @@ type GetDeviceMeasurementsRangedRow struct {
 // time buckets and the newest reading in each bucket (per channel) is kept as
 // the representative data point. The caller picks @bucket_seconds to control
 // the resolution. Results are ordered chronologically within each channel.
+// Hidden channels are left out; how a channel is described is not repeated
+// per row — the API attaches it once per channel from the mapping table.
 func (q *Queries) GetDeviceMeasurementsRanged(ctx context.Context, arg GetDeviceMeasurementsRangedParams) ([]GetDeviceMeasurementsRangedRow, error) {
 	rows, err := q.db.Query(ctx, getDeviceMeasurementsRanged,
 		arg.BucketSeconds,
@@ -76,7 +75,6 @@ func (q *Queries) GetDeviceMeasurementsRanged(ctx context.Context, arg GetDevice
 		if err := rows.Scan(
 			&i.ReceivedAt,
 			&i.ChannelID,
-			&i.ChannelName,
 			&i.MeasurementType,
 			&i.Value,
 		); err != nil {
@@ -147,7 +145,6 @@ SELECT DISTINCT ON (dm.device_id, dm.channel_id)
 	dm.device_id,
 	dm.received_at,
 	dm.channel_id,
-	dcm.name AS channel_name,
 	dm.measurement_type,
 	dm.value
 FROM device_measurement dm
@@ -162,11 +159,12 @@ type GetLatestMeasurementsForDeviceIDsRow struct {
 	DeviceID        pgtype.UUID
 	ReceivedAt      pgtype.Timestamptz
 	ChannelID       int16
-	ChannelName     pgtype.Text
 	MeasurementType int16
 	Value           float64
 }
 
+// Newest reading per channel of each device, hidden channels left out. The
+// channel's description is attached once per channel by the API, not here.
 func (q *Queries) GetLatestMeasurementsForDeviceIDs(ctx context.Context, deviceIds []pgtype.UUID) ([]GetLatestMeasurementsForDeviceIDsRow, error) {
 	rows, err := q.db.Query(ctx, getLatestMeasurementsForDeviceIDs, deviceIds)
 	if err != nil {
@@ -180,7 +178,6 @@ func (q *Queries) GetLatestMeasurementsForDeviceIDs(ctx context.Context, deviceI
 			&i.DeviceID,
 			&i.ReceivedAt,
 			&i.ChannelID,
-			&i.ChannelName,
 			&i.MeasurementType,
 			&i.Value,
 		); err != nil {

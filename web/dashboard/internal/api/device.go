@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
@@ -346,14 +345,4 @@ func (a *API) handleSetDeviceChannelHidden(c fiber.Ctx) error {
 	}
 
 	return c.SendStatus(fiber.StatusNoContent)
-}
-
-// DeviceMeasurement represents a single measurement data point for a device
-// @Description A measurement reading from one of a device's channels at a point in time. `channel_name` is absent while nobody has described the channel.
-type DeviceMeasurement struct {
-	ReceivedAt      time.Time `json:"received_at" example:"2024-01-15T10:30:00Z"`
-	ChannelID       int16     `json:"channel_id" example:"1"`
-	ChannelName     *string   `json:"channel_name,omitempty" example:"Water Level"`
-	MeasurementType int16     `json:"measurement_type" example:"4"`
-	Value           float64   `json:"value" example:"42.5"`
 }

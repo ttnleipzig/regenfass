@@ -6,10 +6,13 @@ import {
   periodLabel,
   periodToWindow,
   deviceToSensor,
-  reduceMeasurementsToReadings,
+  readingsFromChannels,
   SensorType,
 } from "@/libs/sensors";
-import type { BackendDeviceMeasurement, BackendLatestDevice } from "@/libs/api";
+import type {
+  BackendLatestDevice,
+  BackendRangedDeviceChannel,
+} from "@/libs/api";
 import type { HistoryPeriod } from "@/libs/sensors";
 
 // ApexCharts needs a real layout engine. Stub it so the test can assert that no
@@ -36,42 +39,47 @@ const OVERVIEW_DEVICE: BackendLatestDevice = {
   latitude: 51.3376529,
   longitude: 12.3751267,
   is_readonly: true,
-  measurements: [
+  channels: [
     {
-      received_at: "2026-07-14T21:42:23.134108Z",
       channel_id: 3,
-      channel_name: undefined,
-      measurement_type: 1,
-      value: 4.1492,
+      reported_type: 1,
+      hidden: false,
+      latest: { received_at: "2026-07-14T21:42:23.134108Z", value: 4.1492 },
     },
     {
-      received_at: "2026-07-14T21:42:23.134108Z",
       channel_id: 4,
-      channel_name: undefined,
-      measurement_type: 2,
-      value: -1,
+      reported_type: 2,
+      hidden: false,
+      latest: { received_at: "2026-07-14T21:42:23.134108Z", value: -1 },
     },
   ],
 };
 
-// What GET /device/:token/measurements?start=<now-7d> actually returned: nothing.
-const RANGED_7D: BackendDeviceMeasurement[] = [];
+// What GET /device/:token/measurements?start=<now-7d> returns: nothing in
+// range. Neither channel is described, so with no data in the window the
+// backend has nothing to list them from.
+const RANGED_7D: BackendRangedDeviceChannel[] = [];
 
-// The same rows the ranged endpoint returns for a 60-day window, i.e. the only
-// two readings this device has ever produced.
-const RANGED_60D: BackendDeviceMeasurement[] = OVERVIEW_DEVICE.measurements.map(
-  (m) => ({ ...m }),
+// The same device over a 60-day window: the only two readings it has ever
+// produced, nested under their channels.
+const RANGED_60D: BackendRangedDeviceChannel[] = OVERVIEW_DEVICE.channels.map(
+  (c) => ({
+    channel_id: c.channel_id,
+    reported_type: c.reported_type,
+    hidden: c.hidden,
+    measurements: c.latest ? [{ ...c.latest }] : [],
+  }),
 );
 
 describe("device with no readings in the graph window", () => {
   it("yields no in-window readings from the 7-day ranged fetch", () => {
-    expect(reduceMeasurementsToReadings(RANGED_7D, WINDOW_START)).toEqual([]);
+    expect(readingsFromChannels(RANGED_7D, WINDOW_START)).toEqual([]);
   });
 
   it("discards the six-week-old readings even from a wider fetch", () => {
     // The clip is what stops month-old points reaching the graph, whatever
     // range the request happened to cover.
-    expect(reduceMeasurementsToReadings(RANGED_60D, WINDOW_START)).toEqual([]);
+    expect(readingsFromChannels(RANGED_60D, WINDOW_START)).toEqual([]);
   });
 
   it("still exposes the stale values via /overview, so the panel can label them", () => {
@@ -98,7 +106,7 @@ describe("device with no readings in the graph window", () => {
     // Sanity check that the clip is a real time comparison and not a blanket
     // drop: widen the window past 2026-07-14 and the rows come back.
     const wideStart = Date.parse("2026-07-01T00:00:00Z");
-    const out = reduceMeasurementsToReadings(RANGED_60D, wideStart);
+    const out = readingsFromChannels(RANGED_60D, wideStart);
     expect(out.map((r) => r.channel)).toEqual([3, 4]);
     expect(out[0].latestAt).toBe(Date.parse("2026-07-14T21:42:23.134108Z"));
   });
@@ -147,13 +155,27 @@ describe("the panel this device actually renders", () => {
 // Captured from the same device for start=2026-07-01, end=2026-07-31. The
 // finer bucket at this span reveals three readings per channel that the
 // "Last year" preset collapses into one, which is the point of the custom range.
-const CUSTOM_JULY: BackendDeviceMeasurement[] = [
-  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.0877 },
-  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.2312 },
-  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.1492 },
-  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
-  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
-  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
+const CUSTOM_JULY: BackendRangedDeviceChannel[] = [
+  {
+    channel_id: 3,
+    reported_type: 1,
+    hidden: false,
+    measurements: [
+      { received_at: "2026-07-14T21:16:03.356637Z", value: 4.0877 },
+      { received_at: "2026-07-14T21:39:03.101432Z", value: 4.2312 },
+      { received_at: "2026-07-14T21:42:23.134108Z", value: 4.1492 },
+    ],
+  },
+  {
+    channel_id: 4,
+    reported_type: 2,
+    hidden: false,
+    measurements: [
+      { received_at: "2026-07-14T21:16:03.356637Z", value: -1 },
+      { received_at: "2026-07-14T21:39:03.101432Z", value: -1 },
+      { received_at: "2026-07-14T21:42:23.134108Z", value: -1 },
+    ],
+  },
 ];
 
 describe("a custom range that does contain the data", () => {
@@ -165,7 +187,7 @@ describe("a custom range that does contain the data", () => {
   const window = periodToWindow(period);
 
   it("keeps every reading and marks the headline as in-window", () => {
-    const out = reduceMeasurementsToReadings(CUSTOM_JULY, window.start);
+    const out = readingsFromChannels(CUSTOM_JULY, window.start);
     expect(out.map((r) => r.channel)).toEqual([3, 4]);
     const ch3 = out.find((r) => r.channel === 3)!;
     expect(ch3.history?.map((h) => h.value)).toEqual([4.0877, 4.2312, 4.1492]);
@@ -175,7 +197,7 @@ describe("a custom range that does contain the data", () => {
   });
 
   it("plots the points instead of showing the empty state", () => {
-    const [ch3] = reduceMeasurementsToReadings(CUSTOM_JULY, window.start);
+    const [ch3] = readingsFromChannels(CUSTOM_JULY, window.start);
     render(() => (
       <SensorGraph
         reading={ch3}

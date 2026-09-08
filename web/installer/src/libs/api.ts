@@ -4,39 +4,46 @@ const RAW_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "h
 export const API_BASE_URL = RAW_BASE.replace(/\/+$/, "");
 
 // Every measurement is stored as a single number: the backend flattens a
-// Boolean to 0 or 1 at ingest. The row's `measurement_type` still says how the
-// value arrived, so 0 under a Boolean type is unambiguously "off".
+// Boolean to 0 or 1 at ingest. The channel's type says how to read the value,
+// so 0 on a Boolean channel is unambiguously "off".
 export type BackendMeasurementValue = number;
 
-// `channel_name` is absent while nobody has described the channel.
-export type BackendDeviceMeasurement = {
+// One reading of a channel. How to read the value is a property of the
+// channel (`measurement_type` if declared, else `reported_type`), so it is not
+// repeated per sample.
+export type BackendMeasurementSample = {
   received_at: string;
-  channel_id: number;
-  channel_name?: string;
-  measurement_type: number;
   value: BackendMeasurementValue;
 };
 
-export type BackendLatestChannelMeasurement = {
-  received_at: string;
-  channel_id: number;
-  channel_name?: string;
-  measurement_type: number;
-  value: BackendMeasurementValue;
-};
-
-// How a channel of a device has been described. Channels appear here as soon as
-// they are described or have carried a measurement, so a channel that was set up
-// before the device ever reported on it is listed too. Both fields are absent
-// for a channel nobody has described; `measurement_type` is the type the user
-// declared, while a reading's own type always comes from the uplink payload.
+// A channel of a device and how it has been described. The backend lists a
+// channel once somebody described or hid it — so a slot set up before the
+// device ever reported on it is here — and once it has carried a measurement.
+// `name` and `measurement_type` are absent for a channel nobody has described;
+// `measurement_type` is the type the user declared. `reported_type` is the type
+// the channel's newest reading in the response was decoded with, straight from
+// the uplink payload; absent for a channel with no readings in the response.
 export type BackendDeviceChannel = {
   channel_id: number;
   name?: string;
   measurement_type?: number;
-  // A hidden channel is still listed so it can be restored, but its
-  // measurements are left out of every measurement response.
+  reported_type?: number;
+  // A hidden channel is still listed so it can be restored, but carries no
+  // readings in any measurement response.
   hidden: boolean;
+};
+
+// A channel with its newest reading, as the latest/overview endpoints return
+// it. `latest` is absent while the channel has never reported, or is hidden.
+export type BackendLatestDeviceChannel = BackendDeviceChannel & {
+  latest?: BackendMeasurementSample;
+};
+
+// A channel with its downsampled readings in the requested range, ordered
+// chronologically. Empty for a channel with nothing in range — the channel is
+// still listed, which is what lets a freshly described slot show up at all.
+export type BackendRangedDeviceChannel = BackendDeviceChannel & {
+  measurements: BackendMeasurementSample[];
 };
 
 export type BackendLatestDevice = {
@@ -47,9 +54,7 @@ export type BackendLatestDevice = {
   // Only present on endpoints that resolve a device through a specific token
   // (e.g. /overview); omitted where read/write access is not token-scoped.
   is_readonly?: boolean;
-  // Absent on responses from a backend that predates channel descriptions.
-  channels?: BackendDeviceChannel[];
-  measurements: BackendLatestChannelMeasurement[];
+  channels: BackendLatestDeviceChannel[];
 };
 
 export type LatestMeasurementsRequest = {
@@ -114,20 +119,22 @@ export type DeviceMeasurementsQuery = {
   channel?: number;
 };
 
-// Ranged response wrapper. `measurements` is ordered chronologically within each
-// channel; `bucket_seconds` reports the downsample bucket width actually used.
+// Ranged response. Every channel of the device is listed, its description
+// attached once, with its readings in the range nested under it (ordered
+// chronologically). `bucket_seconds` reports the downsample bucket width
+// actually used. With `channel` given, only that channel is listed.
 export type DeviceMeasurementsResponse = {
   start: string;
   end: string;
   channel_id?: number;
   bucket_seconds: number;
-  measurements: BackendDeviceMeasurement[];
+  channels: BackendRangedDeviceChannel[];
 };
 
 export async function getDeviceMeasurements(
   deviceToken: string,
   query: DeviceMeasurementsQuery,
-): Promise<BackendDeviceMeasurement[]> {
+): Promise<BackendRangedDeviceChannel[]> {
   const toIso = (v: Date | string) => (typeof v === "string" ? v : v.toISOString());
   const params = new URLSearchParams();
   params.set("start", toIso(query.start));
@@ -135,7 +142,7 @@ export async function getDeviceMeasurements(
   if (query.channel !== undefined) params.set("channel", String(query.channel));
   const path = `/device/${encodeURIComponent(deviceToken)}/measurements?${params.toString()}`;
   const body = await request<DeviceMeasurementsResponse>(path);
-  return body.measurements ?? [];
+  return body.channels ?? [];
 }
 
 export type DeviceInfoResponse = {
