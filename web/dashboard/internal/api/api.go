@@ -42,7 +42,7 @@ func NewWithConfig(dbPool *pgxpool.Pool, config Config) *API {
 
 	api.app.Use(cors.New(cors.Config{
 		AllowOrigins:          normalizeAllowedOrigins(config.AllowedOrigins),
-		AllowMethods:          []string{"GET", "POST", "PATCH"},
+		AllowMethods:          []string{"GET", "POST", "PATCH", "PUT"},
 		AllowHeaders:          []string{},
 		ExposeHeaders:         []string{},
 		MaxAge:                0,
