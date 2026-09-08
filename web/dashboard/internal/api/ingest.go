@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/base64"
-	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -12,6 +12,28 @@ import (
 	loraprotocol "github.com/ttn-leipzig/regenfass/internal/lora_protocol"
 	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
+
+// measurementValue flattens a decoded data point to the single numeric shape
+// every measurement is stored in. A Boolean becomes 0 or 1; the row keeps its
+// own measurement_type, so nothing about the reading's meaning is lost. These
+// are the only two shapes lora_protocol.decodeValue can produce — anything else
+// is a decoder change that this has to be taught about, hence the error rather
+// than a silent zero.
+func measurementValue(value any) (float64, error) {
+	switch v := value.(type) {
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case float32:
+		return float64(v), nil
+	case float64:
+		return v, nil
+	default:
+		return 0, fmt.Errorf("unsupported measurement value type %T", value)
+	}
+}
 
 // pickLocation returns the best location from an uplink message, or nil.
 // TTN populates uplink_message.locations with device-level fixes (user-set or
@@ -135,32 +157,21 @@ func (a *API) handleIngest(c fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "could not decode payload")
 	}
 
+	// Measurements stand on their own: a channel needs no mapping row to report.
+	// One exists only where somebody described the channel or hid it.
 	pointsToInsert := make([]db.InsertDeviceMeasurementsParams, 0, len(datapoints))
-	seenChannels := make(map[int16]struct{}, len(datapoints))
 	for _, point := range datapoints {
-		v, err := json.Marshal(point.Value)
+		value, err := measurementValue(point.Value)
 		if err != nil {
-			log.Error().Err(err).Msg("could not marshal point value")
-			return fiber.NewError(fiber.StatusInternalServerError, "could not marshal point value")
-		}
-
-		channelID := int16(point.ChannelID)
-		if _, ok := seenChannels[channelID]; !ok {
-			if err := q.EnsureDeviceChannelMapping(c.Context(), db.EnsureDeviceChannelMappingParams{
-				DeviceID:  device.ID,
-				ChannelID: channelID,
-			}); err != nil {
-				log.Error().Err(err).Int16("channelID", channelID).Msg("could not ensure device channel mapping")
-				return fiber.NewError(fiber.StatusInternalServerError)
-			}
-			seenChannels[channelID] = struct{}{}
+			log.Error().Err(err).Int("channelID", int(point.ChannelID)).Msg("could not store point value")
+			return fiber.NewError(fiber.StatusInternalServerError, "could not store point value")
 		}
 
 		pointsToInsert = append(pointsToInsert, db.InsertDeviceMeasurementsParams{
 			DeviceID:        device.ID,
 			MeasurementType: int16(point.Type),
-			ChannelID:       channelID,
-			Value:           v,
+			ChannelID:       int16(point.ChannelID),
+			Value:           value,
 			ReceivedAt:      utils.TimeToPG(body.UplinkMessage.ReceivedAt),
 		})
 	}

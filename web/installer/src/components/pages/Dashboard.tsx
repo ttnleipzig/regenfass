@@ -27,6 +27,7 @@ import {
   useChannelHistory,
   useDeviceMeasurements,
   useOverview,
+  type ChannelMapping,
   type HistoryPeriod,
   type HistoryPreset,
   type Sensor,
@@ -38,7 +39,13 @@ import {
   removeGroupToken,
   useSubscriptions,
 } from "../../libs/subscriptions";
-import { resolveToken, updateDeviceName } from "../../libs/api";
+import {
+  ApiError,
+  resolveToken,
+  setDeviceChannelHidden,
+  updateDeviceName,
+  upsertDeviceChannel,
+} from "../../libs/api";
 import { fromDateTimeInput, toDateTimeInput } from "../../libs/dateTimeInput";
 import SensorGraph from "../molecules/SensorGraph";
 import {
@@ -83,9 +90,10 @@ const Dashboard: Component = () => {
   const subscriptions = useSubscriptions();
   const [activeSensorId, setActiveSensorId] = createSignal<string | null>(null);
   const [activeDeviceToken, setActiveDeviceToken] = createSignal<string | null>(null);
-  const [slotType, setSlotType] = createSignal<SensorType>(SensorType.Distance);
+  const [slotType, setSlotType] = createSignal<SensorType | null>(null);
   const [slotDescription, setSlotDescription] = createSignal("");
   const [selectedChannel, setSelectedChannel] = createSignal<number | null>(null);
+  const [slotError, setSlotError] = createSignal<string | null>(null);
   const [detailsOpen, setDetailsOpen] = createSignal(false);
   const [tokenInput, setTokenInput] = createSignal("");
 
@@ -129,17 +137,24 @@ const Dashboard: Component = () => {
   const {
     readings: liveReadings,
     window: historyWindow,
-  } = useDeviceMeasurements(() => activeDeviceToken(), period);
+    refetch: refetchLiveReadings,
+  } = useDeviceMeasurements(
+    () => activeDeviceToken(),
+    period,
+    () => activeSensor()?.channels ?? [],
+  );
   // Readings for the channel the user is about to map, over the same period as
   // the graphs above, fetched on demand when a channel is selected.
   const {
     result: selectedChannelResult,
     reading: selectedChannelReading,
     window: selectedChannelWindow,
+    refetch: refetchSelectedChannel,
   } = useChannelHistory(
     () => activeDeviceToken(),
     () => selectedChannel(),
     period,
+    () => activeSensor()?.channels ?? [],
   );
 
   const toggleGroupCollapsed = (token: string) => {
@@ -274,7 +289,7 @@ const Dashboard: Component = () => {
   };
 
   // Channels that already carry a reading (and therefore a type) for the active
-  // device. These are shown grayed out and can't be re-selected in the editor.
+  // device.
   const assignedChannels = () => {
     const set = new Set<number>();
     for (const r of readingsForActiveSensor()) {
@@ -283,11 +298,153 @@ const Dashboard: Component = () => {
     return set;
   };
 
-  // Clear the pending channel selection whenever the user opens a different
-  // device so a stale slot isn't left highlighted.
+  // Every channel the backend knows about for the open device, indexed for the
+  // editor. Includes channels the device has reported on — ingest maps those the
+  // first time it sees them — as well as slots described ahead of any data.
+  const channelsByID = createMemo(() => {
+    const map = new Map<number, ChannelMapping>();
+    for (const c of activeSensor()?.channels ?? []) map.set(c.channel, c);
+    return map;
+  });
+
+  // Channels that are spoken for, either by a reading or by a description. They
+  // stay selectable: ingest names a channel "Unmapped" the first time it sees
+  // one, so describing a channel that already has data is the common case.
+  const usedChannels = createMemo(() => {
+    const set = new Set<number>(assignedChannels());
+    for (const channel of channelsByID().keys()) set.add(channel);
+    return set;
+  });
+
+  // A described channel with no reading in the current view: the device hasn't
+  // reported on it yet, or not within the chosen period. Undescribed channels
+  // are left out — a bare "Unmapped" placeholder card would say nothing.
+  const describedEmptyChannels = createMemo(() => {
+    const withReadings = assignedChannels();
+    return (activeSensor()?.channels ?? [])
+      .filter(
+        (c) =>
+          !c.hidden &&
+          !withReadings.has(c.channel) &&
+          (c.name !== undefined || c.declaredType !== undefined),
+      )
+      .sort((a, b) => a.channel - b.channel);
+  });
+
+  // Channels taken off the panel. Listed under the grid so hiding one is
+  // reversible without hunting for it.
+  const hiddenChannels = createMemo(() =>
+    (activeSensor()?.channels ?? [])
+      .filter((c) => c.hidden)
+      .sort((a, b) => a.channel - b.channel),
+  );
+
+  // Selecting a channel loads whatever it is already called and typed, so the
+  // editor edits the slot rather than silently overwriting it with defaults.
+  // Only the declared type is loaded: prefilling the type a channel happens to
+  // report would declare it on the next save without the user picking it.
+  const selectChannel = (channel: number) => {
+    setSelectedChannel(channel);
+    setSlotError(null);
+    const existing = channelsByID().get(channel);
+    setSlotDescription(existing?.name ?? "");
+    setSlotType(existing?.declaredType ?? null);
+  };
+
+  // Nothing filled in. Saving that is only meaningful for a channel that has a
+  // description to clear.
+  const slotIsEmpty = () =>
+    slotDescription().trim() === "" && slotType() === null;
+
+  // Whether the selected channel has already been described, which is the
+  // difference between adding a slot and editing one.
+  const slotIsUpdate = () => {
+    const channel = selectedChannel();
+    if (channel === null) return false;
+    const existing = channelsByID().get(channel);
+    return existing?.name !== undefined || existing?.declaredType !== undefined;
+  };
+
+  // The channel currently being written to, so only that card's controls lock
+  // up rather than every card in the panel.
+  const [channelBusy, setChannelBusy] = createSignal<number | null>(null);
+
+  // Both the slot editor and each graph card write through here. `write` does
+  // the call; everything around it is the token check, the error mapping and
+  // the refetches all channel writes need.
+  const writeChannel = async (
+    channel: number,
+    write: (token: string) => Promise<void>,
+  ) => {
+    const sensor = activeSensor();
+    if (!sensor || channelBusy() !== null) return;
+    const token = subscriptions().deviceTokenByID[sensor.id];
+    if (!token) {
+      setSlotError(
+        "Add this device by its read-write token to describe its channels.",
+      );
+      return;
+    }
+    setSlotError(null);
+    setChannelBusy(channel);
+    try {
+      await write(token);
+      // The graphs title themselves from the channel name the measurement
+      // endpoints hand back, so all three sources have to be refreshed for a
+      // change to show up without reopening the panel.
+      refetchSensors();
+      refetchLiveReadings();
+      refetchSelectedChannel();
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 403) {
+        setSlotError(
+          "This token is read-only — use the RW token to describe channels.",
+        );
+      } else {
+        setSlotError(
+          err instanceof Error ? err.message : "Could not save the channel",
+        );
+      }
+    } finally {
+      setChannelBusy(null);
+    }
+  };
+
+  // writeChannel serializes writes, so any one in flight locks the editor.
+  const slotBusy = () => channelBusy() !== null;
+
+  const handleChannelEdit = (
+    channel: number,
+    update: { name: string; type: SensorType | null },
+  ) =>
+    void writeChannel(channel, (token) =>
+      upsertDeviceChannel(token, channel, {
+        name: update.name === "" ? null : update.name,
+        measurement_type: update.type,
+      }),
+    );
+
+  const handleChannelHidden = (channel: number, hidden: boolean) =>
+    void writeChannel(channel, (token) =>
+      setDeviceChannelHidden(token, channel, hidden),
+    );
+
+  const handleSaveSlot = () => {
+    const channel = selectedChannel();
+    if (channel === null) return;
+    handleChannelEdit(channel, {
+      name: slotDescription().trim(),
+      type: slotType(),
+    });
+  };
+
+  // Clear the pending slot whenever the user opens a different device so a stale
+  // selection isn't left highlighted or a stale description left in the field.
   createEffect(() => {
     activeSensorId();
     setSelectedChannel(null);
+    setSlotDescription("");
+    setSlotError(null);
   });
 
   // A single device entry in the right-hand list. Group members render indented
@@ -513,8 +670,42 @@ const Dashboard: Component = () => {
               {(reading) => (
                 <SensorGraph
                   reading={reading}
+                  name={reading.channelName}
+                  declaredType={
+                    reading.channel === undefined
+                      ? null
+                      : channelsByID().get(reading.channel)?.declaredType ?? null
+                  }
+                  onEdit={
+                    reading.channel === undefined
+                      ? undefined
+                      : (update) => handleChannelEdit(reading.channel!, update)
+                  }
+                  onHide={
+                    reading.channel === undefined
+                      ? undefined
+                      : () => handleChannelHidden(reading.channel!, true)
+                  }
+                  busy={channelBusy() === reading.channel}
                   history={reading.history}
                   latestAt={reading.latestAt}
+                  window={historyWindow()}
+                  periodLabel={periodText()}
+                />
+              )}
+            </For>
+
+            {/* A slot that has been described but has nothing to plot. It still
+                gets a card so a channel prepared ahead of the sensor is visible
+                instead of silently missing from the panel. */}
+            <For each={describedEmptyChannels()}>
+              {(channel) => (
+                <SensorGraph
+                  name={channel.name}
+                  declaredType={channel.declaredType ?? null}
+                  onEdit={(update) => handleChannelEdit(channel.channel, update)}
+                  onHide={() => handleChannelHidden(channel.channel, true)}
+                  busy={channelBusy() === channel.channel}
                   window={historyWindow()}
                   periodLabel={periodText()}
                 />
@@ -534,49 +725,49 @@ const Dashboard: Component = () => {
                 <div class="flex-1 min-h-0 flex flex-col gap-1.5 w-full overflow-hidden">
                   <TextFieldRoot
                     value={slotDescription()}
-                    onChange={setSlotDescription}
+                    onChange={(v) => {
+                      setSlotDescription(v);
+                      if (slotError()) setSlotError(null);
+                    }}
                     class="w-full"
                   >
                     <TextField
                       placeholder="Description"
                       class="text-white placeholder:text-white/50"
                       style={{ "border-color": INACTIVE }}
+                      disabled={slotBusy()}
                     />
                   </TextFieldRoot>
 
                   <div class="grid grid-cols-8 gap-1 w-full">
                     <For each={CHANNELS}>
                       {(channel) => {
-                        const isAssigned = () => assignedChannels().has(channel);
+                        const isUsed = () => usedChannels().has(channel);
                         const isSelected = () => selectedChannel() === channel;
                         const bg = () =>
-                          isSelected()
-                            ? SELECTED
-                            : isAssigned()
-                            ? DISABLED
-                            : INACTIVE;
+                          isSelected() ? SELECTED : isUsed() ? DISABLED : INACTIVE;
                         const fg = () =>
                           isSelected()
                             ? "#000000"
-                            : isAssigned()
+                            : isUsed()
                             ? "rgba(255,255,255,0.35)"
                             : "#ffffff";
                         return (
                           <button
                             type="button"
-                            disabled={isAssigned()}
+                            disabled={slotBusy()}
                             aria-pressed={isSelected()}
                             aria-label={
-                              isAssigned()
-                                ? `Channel ${channel} (type already assigned)`
-                                : `Map type to channel ${channel}`
+                              isUsed()
+                                ? `Edit channel ${channel}`
+                                : `Describe channel ${channel}`
                             }
                             class="size-6 rounded flex items-center justify-center text-sm font-semibold transition-opacity enabled:hover:opacity-80 disabled:cursor-not-allowed"
                             style={{
                               "background-color": bg(),
                               color: fg(),
                             }}
-                            onClick={() => setSelectedChannel(channel)}
+                            onClick={() => selectChannel(channel)}
                           >
                             {channel}
                           </button>
@@ -585,10 +776,34 @@ const Dashboard: Component = () => {
                     </For>
                   </div>
 
+                  <Show when={hiddenChannels().length > 0}>
+                    <div class="flex items-center gap-1 flex-wrap text-[10px]">
+                      <span class="opacity-60">Hidden:</span>
+                      <For each={hiddenChannels()}>
+                        {(channel) => (
+                          <button
+                            type="button"
+                            class="px-1.5 py-0.5 rounded font-semibold enabled:hover:opacity-80 disabled:opacity-50"
+                            style={{ "background-color": DISABLED }}
+                            disabled={slotBusy()}
+                            aria-label={`Restore ${channel.name ?? `channel ${channel.channel}`}`}
+                            onClick={() =>
+                              handleChannelHidden(channel.channel, false)
+                            }
+                          >
+                            {channel.name ?? `Channel ${channel.channel}`}
+                          </button>
+                        )}
+                      </For>
+                    </div>
+                  </Show>
+
                   <Select<SensorType>
                     options={ALL_SENSOR_TYPES}
                     value={slotType()}
-                    onChange={(v) => v !== null && setSlotType(v)}
+                    onChange={setSlotType}
+                    disabled={slotBusy()}
+                    placeholder="No sensor type"
                     itemComponent={(itemProps) => (
                       <SelectItem
                         item={itemProps.item}
@@ -610,13 +825,26 @@ const Dashboard: Component = () => {
                     <SelectContent class="bg-[#020817] border-[#061846] text-white" />
                   </Select>
                 </div>
-                <button
-                  type="button"
-                  class="px-3 py-2 rounded text-xs font-bold text-white hover:opacity-80"
-                  style={{ "background-color": INACTIVE }}
-                >
-                  Add
-                </button>
+                <div class="flex items-center gap-2 w-full justify-end">
+                  <Show when={slotError()}>
+                    <p class="text-[10px] text-red-400 flex-1 min-w-0 text-left">
+                      {slotError()}
+                    </p>
+                  </Show>
+                  <button
+                    type="button"
+                    class="px-3 py-2 rounded text-xs font-bold text-white shrink-0 enabled:hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ "background-color": INACTIVE }}
+                    disabled={
+                      selectedChannel() === null ||
+                      slotBusy() ||
+                      (slotIsEmpty() && !slotIsUpdate())
+                    }
+                    onClick={handleSaveSlot}
+                  >
+                    {slotBusy() ? "Saving…" : slotIsUpdate() ? "Save" : "Add"}
+                  </button>
+                </div>
               </div>
 
               {/* Preview — prompts to pick a channel until one is selected;
@@ -650,6 +878,7 @@ const Dashboard: Component = () => {
                       {(reading) => (
                         <SensorGraph
                           reading={reading()}
+                          name={reading().channelName}
                           history={reading().history}
                           latestAt={reading().latestAt}
                           window={selectedChannelWindow()}

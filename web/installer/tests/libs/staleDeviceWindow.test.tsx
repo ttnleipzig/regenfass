@@ -40,14 +40,14 @@ const OVERVIEW_DEVICE: BackendLatestDevice = {
     {
       received_at: "2026-07-14T21:42:23.134108Z",
       channel_id: 3,
-      channel_name: "Unmapped",
+      channel_name: undefined,
       measurement_type: 1,
       value: 4.1492,
     },
     {
       received_at: "2026-07-14T21:42:23.134108Z",
       channel_id: 4,
-      channel_name: "Unmapped",
+      channel_name: undefined,
       measurement_type: 2,
       value: -1,
     },
@@ -148,12 +148,12 @@ describe("the panel this device actually renders", () => {
 // finer bucket at this span reveals three readings per channel that the
 // "Last year" preset collapses into one, which is the point of the custom range.
 const CUSTOM_JULY: BackendDeviceMeasurement[] = [
-  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 3, channel_name: "Unmapped", measurement_type: 1, value: 4.0877 },
-  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 3, channel_name: "Unmapped", measurement_type: 1, value: 4.2312 },
-  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 3, channel_name: "Unmapped", measurement_type: 1, value: 4.1492 },
-  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 4, channel_name: "Unmapped", measurement_type: 2, value: -1 },
-  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 4, channel_name: "Unmapped", measurement_type: 2, value: -1 },
-  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 4, channel_name: "Unmapped", measurement_type: 2, value: -1 },
+  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.0877 },
+  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.2312 },
+  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 3, channel_name: undefined, measurement_type: 1, value: 4.1492 },
+  { received_at: "2026-07-14T21:16:03.356637Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
+  { received_at: "2026-07-14T21:39:03.101432Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
+  { received_at: "2026-07-14T21:42:23.134108Z", channel_id: 4, channel_name: undefined, measurement_type: 2, value: -1 },
 ];
 
 describe("a custom range that does contain the data", () => {

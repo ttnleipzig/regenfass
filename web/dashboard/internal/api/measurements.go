@@ -1,7 +1,7 @@
 package api
 
 import (
-	"encoding/json"
+	"context"
 	"errors"
 	"strconv"
 	"time"
@@ -42,23 +42,63 @@ func rangedBucketSeconds(span time.Duration) float64 {
 }
 
 // LatestChannelMeasurement represents the latest reading for a single channel of a device
-// @Description Latest reading for a single channel of a device
+// @Description Latest reading for a single channel of a device. `channel_name` is absent while nobody has described the channel.
 type LatestChannelMeasurement struct {
-	ReceivedAt      time.Time       `json:"received_at" example:"2024-01-15T10:30:00Z"`
-	ChannelID       int16           `json:"channel_id" example:"1"`
-	ChannelName     string          `json:"channel_name" example:"Water Level"`
-	MeasurementType int16           `json:"measurement_type" example:"4"`
-	Value           json.RawMessage `json:"value" swaggertype:"object"`
+	ReceivedAt      time.Time `json:"received_at" example:"2024-01-15T10:30:00Z"`
+	ChannelID       int16     `json:"channel_id" example:"1"`
+	ChannelName     *string   `json:"channel_name,omitempty" example:"Water Level"`
+	MeasurementType int16     `json:"measurement_type" example:"4"`
+	Value           float64   `json:"value" example:"42.5"`
+}
+
+// DeviceChannel is a described channel of a device
+// @Description How a device's channel has been described in the dashboard. A channel is listed here once somebody has named it, declared a type for it, or hidden it — including a channel set up before the device ever reported on it. `name` and `measurement_type` are absent for a channel nobody has described. `measurement_type` is the type the user declared, which labels the channel and picks the unit its readings render in; the type a reading was decoded with always comes from the uplink payload and travels on the measurement itself. A hidden channel is listed so it can be restored, but its measurements are left out of every measurement response.
+type DeviceChannel struct {
+	ChannelID       int16   `json:"channel_id" example:"1"`
+	Name            *string `json:"name,omitempty" example:"Water Level"`
+	MeasurementType *int16  `json:"measurement_type,omitempty" example:"4"`
+	Hidden          bool    `json:"hidden" example:"false"`
+}
+
+// channelsForDevices loads every described channel of the given devices, keyed
+// by device UUID and ready to hand to buildLatestDevice.
+func (a *API) channelsForDevices(ctx context.Context, deviceIDs []pgtype.UUID) (map[uuid.UUID][]DeviceChannel, error) {
+	byDevice := make(map[uuid.UUID][]DeviceChannel, len(deviceIDs))
+	if len(deviceIDs) == 0 {
+		return byDevice, nil
+	}
+
+	rows, err := a.db.GetChannelMappingsForDeviceIDs(ctx, deviceIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, r := range rows {
+		channel := DeviceChannel{
+			ChannelID: r.ChannelID,
+			Name:      utils.PGTextToPtr(r.Name),
+			Hidden:    r.Hidden,
+		}
+		if r.MeasurementType.Valid {
+			declared := r.MeasurementType.Int16
+			channel.MeasurementType = &declared
+		}
+		id := utils.PGToUUID(r.DeviceID)
+		byDevice[id] = append(byDevice[id], channel)
+	}
+
+	return byDevice, nil
 }
 
 // LatestDevice represents a device with its latest measurements
-// @Description Device identity, name, location and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.
+// @Description Device identity, name, location, its described channels and its latest reading per channel. `name` is the user-set name, or a stable auto-generated nickname if none has been set. `is_readonly` is only set on endpoints that resolve a device through a specific token (e.g. `/overview`); it is omitted where read/write access is not token-scoped.
 type LatestDevice struct {
 	DeviceID     uuid.UUID                  `json:"device_id" example:"550e8400-e29b-41d4-a716-446655440000"`
 	Name         string                     `json:"name" example:"Happy Barrel"`
 	Latitude     *float64                   `json:"latitude,omitempty" example:"51.3397"`
 	Longitude    *float64                   `json:"longitude,omitempty" example:"12.3731"`
 	IsReadonly   *bool                      `json:"is_readonly,omitempty" example:"false"`
+	Channels     []DeviceChannel            `json:"channels"`
 	Measurements []LatestChannelMeasurement `json:"measurements"`
 }
 
@@ -139,15 +179,21 @@ func (a *API) handleLatestMeasurements(c fiber.Ctx) error {
 		measurementsByDevice[id] = append(measurementsByDevice[id], LatestChannelMeasurement{
 			ReceivedAt:      r.ReceivedAt.Time,
 			ChannelID:       r.ChannelID,
-			ChannelName:     r.ChannelName,
+			ChannelName:     utils.PGTextToPtr(r.ChannelName),
 			MeasurementType: r.MeasurementType,
-			Value:           json.RawMessage(r.Value),
+			Value:           r.Value,
 		})
+	}
+
+	channelsByDevice, err := a.channelsForDevices(c.Context(), deviceIDs)
+	if err != nil {
+		log.Error().Err(err).Msg("could not load device channels")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not load device channels")
 	}
 
 	out := make([]LatestDevice, len(devices))
 	for i, d := range devices {
-		out[i] = buildLatestDevice(d.ID, d.Name, d.Latitude, d.Longitude, nil, measurementsByDevice)
+		out[i] = buildLatestDevice(d.ID, d.Name, d.Latitude, d.Longitude, nil, channelsByDevice, measurementsByDevice)
 	}
 
 	return c.JSON(LatestMeasurementsResponse{Devices: out})
@@ -249,9 +295,9 @@ func (a *API) handleDeviceMeasurements(c fiber.Ctx) error {
 		measurements[i] = DeviceMeasurement{
 			ReceivedAt:      r.ReceivedAt.Time,
 			ChannelID:       r.ChannelID,
-			ChannelName:     r.ChannelName,
+			ChannelName:     utils.PGTextToPtr(r.ChannelName),
 			MeasurementType: r.MeasurementType,
-			Value:           json.RawMessage(r.Value),
+			Value:           r.Value,
 		}
 	}
 

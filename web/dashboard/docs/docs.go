@@ -180,6 +180,150 @@ const docTemplate = `{
                 }
             }
         },
+        "/device/{deviceToken}/channels/{channelID}": {
+            "put": {
+                "description": "Set the name and declared measurement type of one of a device's channels. The channel does not have to have reported anything yet — describing it up front is how a slot is prepared for a sensor. Requires the read-write token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Describe a device channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device read-write token",
+                        "name": "deviceToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Channel id (0–15)",
+                        "name": "channelID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "How to describe the channel",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.UpsertDeviceChannelPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token, channel id or payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "403": {
+                        "description": "Device token is read-only",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/{deviceToken}/channels/{channelID}/hidden": {
+            "put": {
+                "description": "Takes a channel off the dashboard, or puts it back. Nothing is deleted: the channel's measurements stay and new ones keep arriving, they are simply not returned by the measurement endpoints while it is hidden. A hidden channel still appears in a device's ` + "`" + `channels` + "`" + ` so it can be restored. Requires the read-write token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Hide or restore a device channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device read-write token",
+                        "name": "deviceToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Channel id (0–15)",
+                        "name": "channelID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Whether to hide the channel",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SetDeviceChannelHiddenPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token, channel id or payload",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "403": {
+                        "description": "Device token is read-only",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/device/{deviceToken}/measurements": {
             "get": {
                 "description": "Retrieve a device's measurement history between ` + "`" + `start` + "`" + ` and ` + "`" + `end` + "`" + `, downsampled to a resolution that scales with the span. The endpoint aims for roughly 2000 data points per channel: wider ranges are bucketed more coarsely (never coarser than three points per day) and narrower ranges more finely (never finer than one point per minute). Each bucket is represented by its newest reading. Optionally restrict to a single channel. Authenticated by either the read-write or read-only device token.",
@@ -602,6 +746,28 @@ const docTemplate = `{
                 }
             }
         },
+        "api.DeviceChannel": {
+            "description": "How a device's channel has been described in the dashboard. A channel is listed here once somebody has named it, declared a type for it, or hidden it — including a channel set up before the device ever reported on it. ` + "`" + `name` + "`" + ` and ` + "`" + `measurement_type` + "`" + ` are absent for a channel nobody has described. ` + "`" + `measurement_type` + "`" + ` is the type the user declared, which labels the channel and picks the unit its readings render in; the type a reading was decoded with always comes from the uplink payload and travels on the measurement itself. A hidden channel is listed so it can be restored, but its measurements are left out of every measurement response.",
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "hidden": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Water Level"
+                }
+            }
+        },
         "api.DeviceInfoResponse": {
             "description": "Identity of a device. When authenticated with the read-write token, both tokens are returned; otherwise only the read-only token is returned. ` + "`" + `name` + "`" + ` is the user-set name, or a stable auto-generated nickname if none has been set.",
             "type": "object",
@@ -637,7 +803,7 @@ const docTemplate = `{
             }
         },
         "api.DeviceMeasurement": {
-            "description": "A measurement reading from one of a device's channels at a point in time",
+            "description": "A measurement reading from one of a device's channels at a point in time. ` + "`" + `channel_name` + "`" + ` is absent while nobody has described the channel.",
             "type": "object",
             "properties": {
                 "channel_id": {
@@ -657,7 +823,8 @@ const docTemplate = `{
                     "example": "2024-01-15T10:30:00Z"
                 },
                 "value": {
-                    "type": "object"
+                    "type": "number",
+                    "example": 42.5
                 }
             }
         },
@@ -754,7 +921,7 @@ const docTemplate = `{
             }
         },
         "api.LatestChannelMeasurement": {
-            "description": "Latest reading for a single channel of a device",
+            "description": "Latest reading for a single channel of a device. ` + "`" + `channel_name` + "`" + ` is absent while nobody has described the channel.",
             "type": "object",
             "properties": {
                 "channel_id": {
@@ -774,14 +941,21 @@ const docTemplate = `{
                     "example": "2024-01-15T10:30:00Z"
                 },
                 "value": {
-                    "type": "object"
+                    "type": "number",
+                    "example": 42.5
                 }
             }
         },
         "api.LatestDevice": {
-            "description": "Device identity, name, location and its latest reading per channel. ` + "`" + `name` + "`" + ` is the user-set name, or a stable auto-generated nickname if none has been set. ` + "`" + `is_readonly` + "`" + ` is only set on endpoints that resolve a device through a specific token (e.g. ` + "`" + `/overview` + "`" + `); it is omitted where read/write access is not token-scoped.",
+            "description": "Device identity, name, location, its described channels and its latest reading per channel. ` + "`" + `name` + "`" + ` is the user-set name, or a stable auto-generated nickname if none has been set. ` + "`" + `is_readonly` + "`" + ` is only set on endpoints that resolve a device through a specific token (e.g. ` + "`" + `/overview` + "`" + `); it is omitted where read/write access is not token-scoped.",
             "type": "object",
             "properties": {
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.DeviceChannel"
+                    }
+                },
                 "device_id": {
                     "type": "string",
                     "example": "550e8400-e29b-41d4-a716-446655440000"
@@ -940,6 +1114,16 @@ const docTemplate = `{
                 }
             }
         },
+        "api.SetDeviceChannelHiddenPayload": {
+            "description": "Whether the channel should be shown on the dashboard.",
+            "type": "object",
+            "properties": {
+                "hidden": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
         "api.TTNLocation": {
             "description": "A geo point sent by The Things Network (device locations map or gateway metadata)",
             "type": "object",
@@ -969,6 +1153,20 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "Rain barrel by the shed"
+                }
+            }
+        },
+        "api.UpsertDeviceChannelPayload": {
+            "description": "How a device's channel should be described. ` + "`" + `measurement_type` + "`" + ` is the type the user picked in the dashboard. Send either field as null (or the name as empty) to clear it, which returns the channel to being undescribed.",
+            "type": "object",
+            "properties": {
+                "measurement_type": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Water Level"
                 }
             }
         }

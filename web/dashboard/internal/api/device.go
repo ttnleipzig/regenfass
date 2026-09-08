@@ -1,14 +1,17 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/ttn-leipzig/regenfass/internal/db"
+	loraprotocol "github.com/ttn-leipzig/regenfass/internal/lora_protocol"
 	"github.com/ttn-leipzig/regenfass/internal/utils"
 )
 
@@ -193,12 +196,164 @@ func (a *API) handleUpdateDevice(c fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
+// UpsertDeviceChannelPayload represents the request body for describing a channel
+// @Description How a device's channel should be described. `measurement_type` is the type the user picked in the dashboard. Send either field as null (or the name as empty) to clear it, which returns the channel to being undescribed.
+type UpsertDeviceChannelPayload struct {
+	Name            *string `json:"name,omitempty" example:"Water Level"`
+	MeasurementType *int16  `json:"measurement_type,omitempty" example:"4"`
+}
+
+// UpsertDeviceChannel godoc
+//
+//	@Summary		Describe a device channel
+//	@Description	Set the name and declared measurement type of one of a device's channels. The channel does not have to have reported anything yet — describing it up front is how a slot is prepared for a sensor. Requires the read-write token.
+//	@Tags			devices
+//	@Accept			json
+//	@Produce		json
+//	@Param			deviceToken	path		string						true	"Device read-write token"
+//	@Param			channelID	path		int							true	"Channel id (0–15)"
+//	@Param			body		body		UpsertDeviceChannelPayload	true	"How to describe the channel"
+//	@Success		204			{string}	string						"No Content"
+//	@Failure		400			{object}	HTTPError					"Invalid token, channel id or payload"
+//	@Failure		403			{object}	HTTPError					"Device token is read-only"
+//	@Failure		404			{object}	HTTPError					"Device not found"
+//	@Failure		500			{object}	HTTPError					"Internal server error"
+//	@Router			/device/{deviceToken}/channels/{channelID} [put]
+//
+// resolveWritableChannel validates the path parameters shared by the channel
+// endpoints and resolves the device behind the token, rejecting a read-only one.
+// Describing and clearing a channel both need exactly this much.
+func (a *API) resolveWritableChannel(c fiber.Ctx) (db.GetDeviceByEitherTokenRow, int16, error) {
+	log := a.getRequestLogger(c)
+
+	deviceToken := c.Params("deviceToken")
+	if deviceToken == "" {
+		log.Error().Msg("invalid device token")
+		return db.GetDeviceByEitherTokenRow{}, 0, fiber.NewError(fiber.StatusBadRequest, "invalid device token")
+	}
+
+	rawChannel := c.Params("channelID")
+	parsed, err := strconv.ParseInt(rawChannel, 10, 16)
+	if err != nil || parsed < 0 || parsed > loraprotocol.MaxChannelID {
+		log.Error().Str("channelID", rawChannel).Msg("invalid channel id")
+		return db.GetDeviceByEitherTokenRow{}, 0, fiber.NewError(fiber.StatusBadRequest, "invalid channel id (expected 0–15)")
+	}
+
+	device, err := a.db.GetDeviceByEitherToken(c.Context(), deviceToken)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return db.GetDeviceByEitherTokenRow{}, 0, fiber.NewError(fiber.StatusNotFound, "device not found")
+		}
+		log.Error().Err(err).Msg("could not load device from database")
+		return db.GetDeviceByEitherTokenRow{}, 0, fiber.NewError(fiber.StatusInternalServerError, "could not load device from database")
+	}
+
+	if device.IsReadonly {
+		return db.GetDeviceByEitherTokenRow{}, 0, fiber.NewError(fiber.StatusForbidden, "device token is read-only")
+	}
+
+	return device, int16(parsed), nil
+}
+
+func (a *API) handleUpsertDeviceChannel(c fiber.Ctx) error {
+	log := a.getRequestLogger(c)
+
+	device, channelID, err := a.resolveWritableChannel(c)
+	if err != nil {
+		return err
+	}
+
+	var payload UpsertDeviceChannelPayload
+	if err := c.Bind().Body(&payload); err != nil {
+		log.Error().Err(err).Msg("could not parse message payload")
+		return fiber.NewError(fiber.StatusBadRequest, "could not parse message payload")
+	}
+
+	measurementType := pgtype.Int2{}
+	if payload.MeasurementType != nil {
+		if !loraprotocol.MeasurementType(*payload.MeasurementType).Valid() {
+			log.Error().Int16("measurementType", *payload.MeasurementType).Msg("unknown measurement type")
+			return fiber.NewError(fiber.StatusBadRequest, "unknown measurement type")
+		}
+		measurementType = pgtype.Int2{Int16: *payload.MeasurementType, Valid: true}
+	}
+
+	// An empty name is a cleared name, not the string "": a channel nobody has
+	// described carries no name at all.
+	name := pgtype.Text{}
+	if payload.Name != nil {
+		if trimmed := strings.TrimSpace(*payload.Name); trimmed != "" {
+			name = pgtype.Text{String: trimmed, Valid: true}
+		}
+	}
+
+	if err := a.db.UpsertDeviceChannelMapping(c.Context(), db.UpsertDeviceChannelMappingParams{
+		DeviceID:        device.ID,
+		ChannelID:       channelID,
+		Name:            name,
+		MeasurementType: measurementType,
+	}); err != nil {
+		log.Error().Err(err).Int16("channelID", channelID).Msg("could not save device channel")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not save device channel")
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
+}
+
+// SetDeviceChannelHiddenPayload represents the request body for hiding a channel
+// @Description Whether the channel should be shown on the dashboard.
+type SetDeviceChannelHiddenPayload struct {
+	Hidden bool `json:"hidden" example:"true"`
+}
+
+// SetDeviceChannelHidden godoc
+//
+//	@Summary		Hide or restore a device channel
+//	@Description	Takes a channel off the dashboard, or puts it back. Nothing is deleted: the channel's measurements stay and new ones keep arriving, they are simply not returned by the measurement endpoints while it is hidden. A hidden channel still appears in a device's `channels` so it can be restored. Requires the read-write token.
+//	@Tags			devices
+//	@Accept			json
+//	@Produce		json
+//	@Param			deviceToken	path		string							true	"Device read-write token"
+//	@Param			channelID	path		int								true	"Channel id (0–15)"
+//	@Param			body		body		SetDeviceChannelHiddenPayload	true	"Whether to hide the channel"
+//	@Success		204			{string}	string							"No Content"
+//	@Failure		400			{object}	HTTPError						"Invalid token, channel id or payload"
+//	@Failure		403			{object}	HTTPError						"Device token is read-only"
+//	@Failure		404			{object}	HTTPError						"Device not found"
+//	@Failure		500			{object}	HTTPError						"Internal server error"
+//	@Router			/device/{deviceToken}/channels/{channelID}/hidden [put]
+func (a *API) handleSetDeviceChannelHidden(c fiber.Ctx) error {
+	log := a.getRequestLogger(c)
+
+	device, channelID, err := a.resolveWritableChannel(c)
+	if err != nil {
+		return err
+	}
+
+	var payload SetDeviceChannelHiddenPayload
+	if err := c.Bind().Body(&payload); err != nil {
+		log.Error().Err(err).Msg("could not parse message payload")
+		return fiber.NewError(fiber.StatusBadRequest, "could not parse message payload")
+	}
+
+	if err := a.db.SetDeviceChannelHidden(c.Context(), db.SetDeviceChannelHiddenParams{
+		DeviceID:  device.ID,
+		ChannelID: channelID,
+		Hidden:    payload.Hidden,
+	}); err != nil {
+		log.Error().Err(err).Int16("channelID", channelID).Msg("could not set device channel visibility")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not set device channel visibility")
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
+}
+
 // DeviceMeasurement represents a single measurement data point for a device
-// @Description A measurement reading from one of a device's channels at a point in time
+// @Description A measurement reading from one of a device's channels at a point in time. `channel_name` is absent while nobody has described the channel.
 type DeviceMeasurement struct {
-	ReceivedAt      time.Time       `json:"received_at" example:"2024-01-15T10:30:00Z"`
-	ChannelID       int16           `json:"channel_id" example:"1"`
-	ChannelName     string          `json:"channel_name" example:"Water Level"`
-	MeasurementType int16           `json:"measurement_type" example:"4"`
-	Value           json.RawMessage `json:"value" swaggertype:"object"`
+	ReceivedAt      time.Time `json:"received_at" example:"2024-01-15T10:30:00Z"`
+	ChannelID       int16     `json:"channel_id" example:"1"`
+	ChannelName     *string   `json:"channel_name,omitempty" example:"Water Level"`
+	MeasurementType int16     `json:"measurement_type" example:"4"`
+	Value           float64   `json:"value" example:"42.5"`
 }

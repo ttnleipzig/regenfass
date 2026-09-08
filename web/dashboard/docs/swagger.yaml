@@ -24,6 +24,30 @@ definitions:
         example: rw_group_token_123
         type: string
     type: object
+  api.DeviceChannel:
+    description: How a device's channel has been described in the dashboard. A channel
+      is listed here once somebody has named it, declared a type for it, or hidden
+      it — including a channel set up before the device ever reported on it. `name`
+      and `measurement_type` are absent for a channel nobody has described. `measurement_type`
+      is the type the user declared, which labels the channel and picks the unit its
+      readings render in; the type a reading was decoded with always comes from the
+      uplink payload and travels on the measurement itself. A hidden channel is listed
+      so it can be restored, but its measurements are left out of every measurement
+      response.
+    properties:
+      channel_id:
+        example: 1
+        type: integer
+      hidden:
+        example: false
+        type: boolean
+      measurement_type:
+        example: 4
+        type: integer
+      name:
+        example: Water Level
+        type: string
+    type: object
   api.DeviceInfoResponse:
     description: Identity of a device. When authenticated with the read-write token,
       both tokens are returned; otherwise only the read-only token is returned. `name`
@@ -53,7 +77,7 @@ definitions:
     type: object
   api.DeviceMeasurement:
     description: A measurement reading from one of a device's channels at a point
-      in time
+      in time. `channel_name` is absent while nobody has described the channel.
     properties:
       channel_id:
         example: 1
@@ -68,7 +92,8 @@ definitions:
         example: "2024-01-15T10:30:00Z"
         type: string
       value:
-        type: object
+        example: 42.5
+        type: number
     type: object
   api.GroupInfoDevice:
     description: Device information within a group
@@ -135,7 +160,8 @@ definitions:
         type: object
     type: object
   api.LatestChannelMeasurement:
-    description: Latest reading for a single channel of a device
+    description: Latest reading for a single channel of a device. `channel_name` is
+      absent while nobody has described the channel.
     properties:
       channel_id:
         example: 1
@@ -150,15 +176,20 @@ definitions:
         example: "2024-01-15T10:30:00Z"
         type: string
       value:
-        type: object
+        example: 42.5
+        type: number
     type: object
   api.LatestDevice:
-    description: Device identity, name, location and its latest reading per channel.
-      `name` is the user-set name, or a stable auto-generated nickname if none has
-      been set. `is_readonly` is only set on endpoints that resolve a device through
-      a specific token (e.g. `/overview`); it is omitted where read/write access is
-      not token-scoped.
+    description: Device identity, name, location, its described channels and its latest
+      reading per channel. `name` is the user-set name, or a stable auto-generated
+      nickname if none has been set. `is_readonly` is only set on endpoints that resolve
+      a device through a specific token (e.g. `/overview`); it is omitted where read/write
+      access is not token-scoped.
     properties:
+      channels:
+        items:
+          $ref: '#/definitions/api.DeviceChannel'
+        type: array
       device_id:
         example: 550e8400-e29b-41d4-a716-446655440000
         type: string
@@ -279,6 +310,13 @@ definitions:
         example: rw_token_123
         type: string
     type: object
+  api.SetDeviceChannelHiddenPayload:
+    description: Whether the channel should be shown on the dashboard.
+    properties:
+      hidden:
+        example: true
+        type: boolean
+    type: object
   api.TTNLocation:
     description: A geo point sent by The Things Network (device locations map or gateway
       metadata)
@@ -301,6 +339,18 @@ definitions:
     properties:
       name:
         example: Rain barrel by the shed
+        type: string
+    type: object
+  api.UpsertDeviceChannelPayload:
+    description: How a device's channel should be described. `measurement_type` is
+      the type the user picked in the dashboard. Send either field as null (or the
+      name as empty) to clear it, which returns the channel to being undescribed.
+    properties:
+      measurement_type:
+        example: 4
+        type: integer
+      name:
+        example: Water Level
         type: string
     type: object
 host: localhost:64000
@@ -418,6 +468,109 @@ paths:
           schema:
             $ref: '#/definitions/api.HTTPError'
       summary: Update device fields
+      tags:
+      - devices
+  /device/{deviceToken}/channels/{channelID}:
+    put:
+      consumes:
+      - application/json
+      description: Set the name and declared measurement type of one of a device's
+        channels. The channel does not have to have reported anything yet — describing
+        it up front is how a slot is prepared for a sensor. Requires the read-write
+        token.
+      parameters:
+      - description: Device read-write token
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Channel id (0–15)
+        in: path
+        name: channelID
+        required: true
+        type: integer
+      - description: How to describe the channel
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpsertDeviceChannelPayload'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid token, channel id or payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Device token is read-only
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Describe a device channel
+      tags:
+      - devices
+  /device/{deviceToken}/channels/{channelID}/hidden:
+    put:
+      consumes:
+      - application/json
+      description: 'Takes a channel off the dashboard, or puts it back. Nothing is
+        deleted: the channel''s measurements stay and new ones keep arriving, they
+        are simply not returned by the measurement endpoints while it is hidden. A
+        hidden channel still appears in a device''s `channels` so it can be restored.
+        Requires the read-write token.'
+      parameters:
+      - description: Device read-write token
+        in: path
+        name: deviceToken
+        required: true
+        type: string
+      - description: Channel id (0–15)
+        in: path
+        name: channelID
+        required: true
+        type: integer
+      - description: Whether to hide the channel
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.SetDeviceChannelHiddenPayload'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid token, channel id or payload
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Device token is read-only
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Device not found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Hide or restore a device channel
       tags:
       - devices
   /device/{deviceToken}/measurements:

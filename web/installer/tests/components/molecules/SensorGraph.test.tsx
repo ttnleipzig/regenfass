@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { render, screen, cleanup } from "@solidjs/testing-library";
+import { render, screen, cleanup, fireEvent } from "@solidjs/testing-library";
 import SensorGraph from "@/components/molecules/SensorGraph";
 import { SensorType, type HistoryWindow } from "@/libs/sensors";
 
@@ -23,6 +23,35 @@ describe("SensorGraph", () => {
   afterEach(() => {
     cleanup();
     chartCalls.length = 0;
+  });
+
+  it("titles the card with the sensor type when the channel has no name", () => {
+    render(() => <SensorGraph reading={distance} history={[]} window={WINDOW} />);
+    expect(screen.getByText("Water Level")).toBeInTheDocument();
+  });
+
+  it("leads with the channel name and keeps the type as the qualifier", () => {
+    // Two channels of the same type have to stay tellable apart.
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    expect(screen.getByText("Cistern · Water Level")).toBeInTheDocument();
+  });
+
+  it("titles a boolean card the same way", () => {
+    render(() => (
+      <SensorGraph
+        reading={{ type: SensorType.Boolean, value: true }}
+        name="Lid"
+        window={WINDOW}
+      />
+    ));
+    expect(screen.getByText("Lid · Status")).toBeInTheDocument();
   });
 
   it("renders no chart and says so when there is no history", () => {
@@ -117,5 +146,184 @@ describe("SensorGraph", () => {
     ));
     const badge = screen.getByText(/^On ·/);
     expect(badge).toHaveClass("opacity-60");
+  });
+});
+
+describe("SensorGraph channel editing", () => {
+  afterEach(() => {
+    cleanup();
+    chartCalls.length = 0;
+  });
+
+  it("titles the card statically when it is not editable", () => {
+    render(() => (
+      <SensorGraph reading={distance} name="Cistern" history={[]} window={WINDOW} />
+    ));
+    expect(screen.getByText("Cistern · Water Level")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Channel name")).not.toBeInTheDocument();
+  });
+
+  it("replaces the title with a name input and a type select when editable", () => {
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        onEdit={() => {}}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    const input = screen.getByLabelText("Channel name") as HTMLInputElement;
+    expect(input.value).toBe("Cistern");
+    expect(screen.getByLabelText("Sensor type")).toBeInTheDocument();
+    expect(screen.queryByText("Cistern · Water Level")).not.toBeInTheDocument();
+  });
+
+  it("commits a renamed channel on blur", () => {
+    const edits: { name: string; type: SensorType | null }[] = [];
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        declaredType={SensorType.Distance}
+        onEdit={(update) => edits.push(update)}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    const input = screen.getByLabelText("Channel name");
+    fireEvent.input(input, { target: { value: "Rain barrel" } });
+    fireEvent.blur(input);
+    expect(edits).toEqual([
+      { name: "Rain barrel", type: SensorType.Distance },
+    ]);
+  });
+
+  it("shows no type in the select when nothing has been declared", () => {
+    // Regression: the select used to fall back to the type the channel reports.
+    // Clearing a description then looked like it had half-failed — the name
+    // went blank while the select carried on showing a type.
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        declaredType={null}
+        onEdit={() => {}}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    expect(screen.getByLabelText("Sensor type")).toHaveTextContent(
+      "No sensor type",
+    );
+  });
+
+  it("shows a cleared channel as fully undescribed", () => {
+    // What a card looks like straight after its mapping is removed: the row has
+    // to stay because measurements reference it, so the card stays too — but
+    // nothing about it should still read as described.
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name={undefined}
+        declaredType={null}
+        onEdit={() => {}}
+        onHide={() => {}}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    expect((screen.getByLabelText("Channel name") as HTMLInputElement).value).toBe(
+      "",
+    );
+    expect(screen.getByLabelText("Sensor type")).toHaveTextContent(
+      "No sensor type",
+    );
+  });
+
+  it("does not declare the reported type when only the name is edited", () => {
+    const edits: { name: string; type: SensorType | null }[] = [];
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        onEdit={(update) => edits.push(update)}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    const input = screen.getByLabelText("Channel name");
+    fireEvent.input(input, { target: { value: "Cistern" } });
+    fireEvent.blur(input);
+    expect(edits).toEqual([{ name: "Cistern", type: null }]);
+  });
+
+  it("does not commit when the name is unchanged", () => {
+    const edits: unknown[] = [];
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        onEdit={(update) => edits.push(update)}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    fireEvent.blur(screen.getByLabelText("Channel name"));
+    expect(edits).toEqual([]);
+  });
+
+  it("offers a hide control only when hiding is possible", () => {
+    const { unmount } = render(() => (
+      <SensorGraph reading={distance} name="Cistern" history={[]} window={WINDOW} />
+    ));
+    expect(screen.queryByLabelText("Hide Cistern")).not.toBeInTheDocument();
+    unmount();
+
+    let hidden = 0;
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        onHide={() => (hidden += 1)}
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    fireEvent.click(screen.getByLabelText("Hide Cistern"));
+    expect(hidden).toBe(1);
+  });
+
+  it("locks the controls while a write is in flight", () => {
+    render(() => (
+      <SensorGraph
+        reading={distance}
+        name="Cistern"
+        onEdit={() => {}}
+        onHide={() => {}}
+        busy
+        history={[]}
+        window={WINDOW}
+      />
+    ));
+    expect(screen.getByLabelText("Channel name")).toBeDisabled();
+    expect(screen.getByLabelText("Hide Cistern")).toBeDisabled();
+  });
+
+  it("renders a described channel that has never reported", () => {
+    // No reading at all: the slot was prepared before the device sent anything.
+    render(() => (
+      <SensorGraph
+        name="Cistern"
+        declaredType={SensorType.Distance}
+        onEdit={() => {}}
+        window={WINDOW}
+        periodLabel="the last 7 days"
+      />
+    ));
+    expect(screen.getByText("No data in the last 7 days")).toBeInTheDocument();
+    expect(chartCalls).toHaveLength(0);
+    expect(
+      (screen.getByLabelText("Channel name") as HTMLInputElement).value,
+    ).toBe("Cistern");
   });
 });

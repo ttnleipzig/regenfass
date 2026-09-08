@@ -24,9 +24,10 @@ FROM (
 		dm.measurement_type,
 		dm.value
 	FROM device_measurement dm
-	JOIN device_channel_mapping dcm
+	LEFT JOIN device_channel_mapping dcm
 		ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
 	WHERE dm.device_id = @device_id
+		AND COALESCE(dcm.hidden, FALSE) = FALSE
 		AND dm.received_at >= @start_time
 		AND dm.received_at <= @end_time
 		AND (sqlc.narg('channel_id')::SMALLINT IS NULL OR dm.channel_id = sqlc.narg('channel_id'))
@@ -54,7 +55,8 @@ SELECT DISTINCT ON (dm.device_id, dm.channel_id)
 	dm.measurement_type,
 	dm.value
 FROM device_measurement dm
-JOIN device_channel_mapping dcm
+LEFT JOIN device_channel_mapping dcm
 	ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
 WHERE dm.device_id = ANY(@device_ids::UUID[])
+	AND COALESCE(dcm.hidden, FALSE) = FALSE
 ORDER BY dm.device_id, dm.channel_id, dm.received_at DESC;

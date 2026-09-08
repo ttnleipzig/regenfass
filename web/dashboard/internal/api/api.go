@@ -58,6 +58,7 @@ func NewWithConfig(dbPool *pgxpool.Pool, config Config) *API {
 	api.app.Patch("/device/:deviceToken", api.handleUpdateDevice)
 	api.app.Get("/device/:deviceToken/measurements", api.handleDeviceMeasurements)
 	api.app.Put("/device/:deviceToken/channels/:channelID", api.handleUpsertDeviceChannel)
+	api.app.Put("/device/:deviceToken/channels/:channelID/hidden", api.handleSetDeviceChannelHidden)
 	api.app.Post("/group", api.handleCreateGroup)
 	api.app.Get("/group/:groupToken", api.handleGroupInfoByToken)
 	api.app.Post("/group/:groupToken/devices", api.handleAddDeviceToGroup)

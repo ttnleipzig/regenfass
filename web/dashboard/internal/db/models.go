@@ -19,9 +19,11 @@ type Device struct {
 }
 
 type DeviceChannelMapping struct {
-	DeviceID  pgtype.UUID
-	ChannelID int16
-	Name      string
+	DeviceID        pgtype.UUID
+	ChannelID       int16
+	Name            pgtype.Text
+	MeasurementType pgtype.Int2
+	Hidden          bool
 }
 
 type DeviceGroup struct {
@@ -34,7 +36,7 @@ type DeviceMeasurement struct {
 	ReceivedAt      pgtype.Timestamptz
 	DeviceID        pgtype.UUID
 	ChannelID       int16
-	Value           []byte
+	Value           float64
 	MeasurementType int16
 }
 

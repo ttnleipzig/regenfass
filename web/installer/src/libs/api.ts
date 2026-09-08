@@ -3,12 +3,16 @@
 const RAW_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:64000";
 export const API_BASE_URL = RAW_BASE.replace(/\/+$/, "");
 
-export type BackendMeasurementValue = number | boolean | null;
+// Every measurement is stored as a single number: the backend flattens a
+// Boolean to 0 or 1 at ingest. The row's `measurement_type` still says how the
+// value arrived, so 0 under a Boolean type is unambiguously "off".
+export type BackendMeasurementValue = number;
 
+// `channel_name` is absent while nobody has described the channel.
 export type BackendDeviceMeasurement = {
   received_at: string;
   channel_id: number;
-  channel_name: string;
+  channel_name?: string;
   measurement_type: number;
   value: BackendMeasurementValue;
 };
@@ -16,9 +20,23 @@ export type BackendDeviceMeasurement = {
 export type BackendLatestChannelMeasurement = {
   received_at: string;
   channel_id: number;
-  channel_name: string;
+  channel_name?: string;
   measurement_type: number;
   value: BackendMeasurementValue;
+};
+
+// How a channel of a device has been described. Channels appear here as soon as
+// they are described or have carried a measurement, so a channel that was set up
+// before the device ever reported on it is listed too. Both fields are absent
+// for a channel nobody has described; `measurement_type` is the type the user
+// declared, while a reading's own type always comes from the uplink payload.
+export type BackendDeviceChannel = {
+  channel_id: number;
+  name?: string;
+  measurement_type?: number;
+  // A hidden channel is still listed so it can be restored, but its
+  // measurements are left out of every measurement response.
+  hidden: boolean;
 };
 
 export type BackendLatestDevice = {
@@ -29,6 +47,8 @@ export type BackendLatestDevice = {
   // Only present on endpoints that resolve a device through a specific token
   // (e.g. /overview); omitted where read/write access is not token-scoped.
   is_readonly?: boolean;
+  // Absent on responses from a backend that predates channel descriptions.
+  channels?: BackendDeviceChannel[];
   measurements: BackendLatestChannelMeasurement[];
 };
 
@@ -49,7 +69,10 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+// Sends the request and throws an ApiError carrying the status on any non-2xx
+// response. Returns the raw response so callers can decide whether there is a
+// body to read — the write endpoints answer 204 with none.
+async function send(path: string, init?: RequestInit): Promise<Response> {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     headers: {
@@ -70,7 +93,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       `API ${init?.method ?? "GET"} ${path} failed: ${res.status} ${res.statusText}${detail ? ` — ${detail}` : ""}`,
     );
   }
+  return res;
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await send(path, init);
   return (await res.json()) as T;
+}
+
+async function requestNoContent(path: string, init?: RequestInit): Promise<void> {
+  await send(path, init);
 }
 
 // The measurements endpoint is a downsampled ranged query: `start` and `end`
@@ -143,26 +175,52 @@ export async function updateDeviceName(
   deviceToken: string,
   name: string,
 ): Promise<void> {
-  const res = await fetch(
-    `${API_BASE_URL}/device/${encodeURIComponent(deviceToken)}`,
+  await requestNoContent(`/device/${encodeURIComponent(deviceToken)}`, {
+    method: "PATCH",
+    body: JSON.stringify({ name }),
+  });
+}
+
+// Passing either field as null (or the name as empty) clears it, returning the
+// channel to being undescribed.
+export type DeviceChannelUpdate = {
+  name?: string | null;
+  measurement_type?: number | null;
+};
+
+// Describes one of a device's channels: its name and the sensor type the user
+// declared for it. The channel need not have reported anything yet — describing
+// it up front is how a slot is prepared for a sensor. Requires the RW token; a
+// read-only token comes back as 403.
+export async function upsertDeviceChannel(
+  deviceToken: string,
+  channel: number,
+  update: DeviceChannelUpdate,
+): Promise<void> {
+  await requestNoContent(
+    `/device/${encodeURIComponent(deviceToken)}/channels/${channel}`,
     {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
+      method: "PUT",
+      body: JSON.stringify({
+        name: update.name ?? null,
+        measurement_type: update.measurement_type ?? null,
+      }),
     },
   );
-  if (!res.ok) {
-    let detail = "";
-    try {
-      const body = await res.json();
-      detail = body?.message ?? JSON.stringify(body);
-    } catch {
-      detail = await res.text().catch(() => "");
-    }
-    throw new Error(
-      `API PATCH /device/${deviceToken} failed: ${res.status} ${res.statusText}${detail ? ` — ${detail}` : ""}`,
-    );
-  }
+}
+
+// Takes a channel off the dashboard, or puts it back. Nothing is deleted: the
+// measurements stay and keep arriving, they are just not returned while the
+// channel is hidden. Requires the RW token; a read-only token comes back as 403.
+export async function setDeviceChannelHidden(
+  deviceToken: string,
+  channel: number,
+  hidden: boolean,
+): Promise<void> {
+  await requestNoContent(
+    `/device/${encodeURIComponent(deviceToken)}/channels/${channel}/hidden`,
+    { method: "PUT", body: JSON.stringify({ hidden }) },
+  );
 }
 
 export type GroupInfoResponse = {

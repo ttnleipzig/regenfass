@@ -3,6 +3,7 @@ import {
   getDeviceMeasurements,
   getLatestMeasurements,
   getOverview,
+  type BackendDeviceChannel,
   type BackendDeviceMeasurement,
   type BackendLatestDevice,
 } from "./api";
@@ -37,12 +38,38 @@ export type SensorReading =
   | { type: SensorType.pH; value: number }
   | { type: SensorType.SoundLevel; value: number; unit: "dB" };
 
+// Narrows a backend channel name to one worth showing. The backend omits the
+// name of a channel nobody has described; this also folds away a name that is
+// only whitespace, so the UI has a single "unnamed" case to fall back from.
+export function channelDisplayName(name?: string | null): string | undefined {
+  const trimmed = name?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+// How a channel of a device has been described. Present for every channel the
+// user set up as well as every channel that has carried a measurement, so a
+// slot prepared before the device ever reported on it is listed here too.
+export type ChannelMapping = {
+  channel: number;
+  // Undefined while the channel is still unnamed (see channelDisplayName).
+  name?: string;
+  // The type the user declared for the slot. It decides how the channel is
+  // labelled and which unit its readings render in; the type a reading was
+  // *decoded* with always comes from the uplink payload.
+  declaredType?: SensorType;
+  // Hidden channels are listed so they can be restored, but carry no readings —
+  // the backend leaves their measurements out of every response.
+  hidden: boolean;
+};
+
 // `channel` is the device channel (0–15) the reading arrived on. It's optional
-// because sample/preview readings aren't tied to a real channel. `latestAt` is
-// when the reading arrived — the latest endpoints are unbounded in time, so
-// without it a months-old value is indistinguishable from a current one.
+// because sample/preview readings aren't tied to a real channel. `channelName`
+// is the name that channel was given, if any. `latestAt` is when the reading
+// arrived — the latest endpoints are unbounded in time, so without it a
+// months-old value is indistinguishable from a current one.
 export type SensorReadingWithChannel = SensorReading & {
   channel?: number;
+  channelName?: string;
   latestAt?: number;
 };
 
@@ -53,6 +80,9 @@ export type Sensor = {
   // Whether the token this device was resolved through grants read-only access.
   // Undefined when access is not token-scoped (e.g. mock/sample sensors).
   isReadonly?: boolean;
+  // Every described channel, including ones that have never reported. Empty for
+  // sample sensors and for a backend that predates channel descriptions.
+  channels: ChannelMapping[];
   readings: SensorReadingWithChannel[];
 };
 
@@ -62,6 +92,7 @@ export type SensorReadingWithHistory = SensorReading & {
   // headline value apart from one that is only the newest thing on record.
   latestAt?: number;
   channel?: number;
+  channelName?: string;
 };
 
 export type SensorWithHistory = Omit<Sensor, "readings"> & {
@@ -70,14 +101,19 @@ export type SensorWithHistory = Omit<Sensor, "readings"> & {
 
 // Backend measurement_type values map 1:1 to SensorType — see
 // web/dashboard/internal/lora_protocol/decoder.go.
+//
+// `type_` is the type to render the value *as*: a channel's declared type where
+// it has one, otherwise the type the reading arrived with. Because every value
+// is stored as a plain number, any type can render any value — declaring a
+// Boolean channel as a Distance plots it as 0s and 1s rather than refusing.
 function readingFromBackend(
   type_: number,
-  value: number | boolean | null,
+  value: number,
 ): SensorReading | null {
-  if (value === null) return null;
+  if (!Number.isFinite(value)) return null;
   switch (type_ as SensorType) {
     case SensorType.Boolean:
-      return { type: SensorType.Boolean, value: Boolean(value) };
+      return { type: SensorType.Boolean, value: value !== 0 };
     case SensorType.Float:
       return { type: SensorType.Float, value: Number(value) };
     case SensorType.Pressure:
@@ -194,14 +230,21 @@ export function useOverview(): LatestOverviewResult {
 export function deviceToSensor(device: BackendLatestDevice): Sensor {
   const hasLocation =
     typeof device.longitude === "number" && typeof device.latitude === "number";
+  const channels = (device.channels ?? []).map(channelFromBackend);
+  const declaredTypes = declaredTypesByChannel(channels);
+
   const readings: SensorReadingWithChannel[] = [];
   for (const m of device.measurements) {
-    const reading = readingFromBackend(m.measurement_type, m.value);
+    const reading = readingFromBackend(
+      declaredTypes.get(m.channel_id) ?? m.measurement_type,
+      m.value,
+    );
     if (!reading) continue;
     const at = Date.parse(m.received_at);
     readings.push({
       ...reading,
       channel: m.channel_id,
+      channelName: channelDisplayName(m.channel_name),
       latestAt: Number.isNaN(at) ? undefined : at,
     });
   }
@@ -210,7 +253,35 @@ export function deviceToSensor(device: BackendLatestDevice): Sensor {
     name: device.name,
     lngLat: hasLocation ? [device.longitude!, device.latitude!] : LEIPZIG_CENTER,
     isReadonly: device.is_readonly,
+    channels,
     readings,
+  };
+}
+
+// Indexes the types users declared, for rendering readings as what the channel
+// was said to be rather than as whatever the payload happened to carry.
+export function declaredTypesByChannel(
+  channels: ChannelMapping[],
+): Map<number, SensorType> {
+  const map = new Map<number, SensorType>();
+  for (const c of channels) {
+    if (c.declaredType !== undefined) map.set(c.channel, c.declaredType);
+  }
+  return map;
+}
+
+function channelFromBackend(channel: BackendDeviceChannel): ChannelMapping {
+  const declared = channel.measurement_type;
+  return {
+    channel: channel.channel_id,
+    name: channelDisplayName(channel.name),
+    hidden: channel.hidden ?? false,
+    // Guard against a type the frontend doesn't know: an unrecognized value
+    // would otherwise select an empty label in the editor.
+    declaredType:
+      declared !== undefined && declared !== null && ALL_SENSOR_TYPES.includes(declared as SensorType)
+        ? (declared as SensorType)
+        : undefined,
   };
 }
 
@@ -301,6 +372,9 @@ const EMPTY_WINDOW_RESULT: {
 export function useDeviceMeasurements(
   deviceToken: () => string | null | undefined,
   period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
+  // The channels of the device being fetched, so readings render as the type
+  // the user declared rather than the one the payload carried.
+  channels: () => ChannelMapping[] = () => [],
 ) {
   const [result, { refetch }] = createResource(
     () => {
@@ -339,7 +413,11 @@ export function useDeviceMeasurements(
     // Clip to the requested window: the backend is the source of truth for the
     // range, but clipping here means a stale or unbounded response can never
     // put out-of-period points on the graph.
-    return reduceMeasurementsToReadings(rows, window().start);
+    return reduceMeasurementsToReadings(
+      rows,
+      window().start,
+      declaredTypesByChannel(channels()),
+    );
   });
 
   return { result, measurements, readings, window, refetch: () => void refetch() };
@@ -352,6 +430,7 @@ export function useChannelHistory(
   deviceToken: () => string | null | undefined,
   channel: () => number | null,
   period: () => HistoryPeriod = () => DEFAULT_HISTORY_PERIOD,
+  channels: () => ChannelMapping[] = () => [],
 ) {
   const [result, { refetch }] = createResource(
     () => {
@@ -360,9 +439,9 @@ export function useChannelHistory(
       if (!token || ch === null) return null;
       const p = period();
       if (!isValidPeriod(p)) return null;
-      return { token, channel: ch, period: p };
+      return { token, channel: ch, period: p, declared: channels() };
     },
-    async ({ token, channel: ch, period: p }) => {
+    async ({ token, channel: ch, period: p, declared }) => {
       const window = periodToWindow(p);
       const rows = await getDeviceMeasurements(token, {
         start: new Date(window.start),
@@ -370,7 +449,12 @@ export function useChannelHistory(
         channel: ch,
       });
       if (rows.length === 0) return { window, reading: null };
-      const reading = reduceMeasurementsToReadings(rows, window.start)[0] ?? null;
+      const reading =
+        reduceMeasurementsToReadings(
+          rows,
+          window.start,
+          declaredTypesByChannel(declared),
+        )[0] ?? null;
       return { window, reading };
     },
     { initialValue: null },
@@ -392,6 +476,7 @@ export function useChannelHistory(
 export function reduceMeasurementsToReadings(
   rows: BackendDeviceMeasurement[],
   since?: number,
+  declaredTypes?: Map<number, SensorType>,
 ): SensorReadingWithHistory[] {
   // Rows arrive grouped by channel, ascending in time within each channel.
   // Build history per channel and keep the most recent reading as the headline
@@ -417,11 +502,7 @@ export function reduceMeasurementsToReadings(
       acc.latest = row;
       acc.latestAt = t;
     }
-    if (typeof row.value === "number") {
-      acc.history.push({ t, value: row.value });
-    } else if (typeof row.value === "boolean") {
-      acc.history.push({ t, value: row.value ? 1 : 0 });
-    }
+    if (Number.isFinite(row.value)) acc.history.push({ t, value: row.value });
   }
 
   const out: SensorReadingWithHistory[] = [];
@@ -429,13 +510,17 @@ export function reduceMeasurementsToReadings(
     // The graph needs chronological history; rows are already ascending per
     // channel, but sort defensively in case channels interleave.
     acc.history.sort((a, b) => a.t - b.t);
-    const reading = readingFromBackend(acc.latest.measurement_type, acc.latest.value);
+    const reading = readingFromBackend(
+      declaredTypes?.get(acc.latest.channel_id) ?? acc.latest.measurement_type,
+      acc.latest.value,
+    );
     if (!reading) continue;
     out.push({
       ...reading,
       history: acc.history,
       latestAt: acc.latestAt,
       channel: acc.latest.channel_id,
+      channelName: channelDisplayName(acc.latest.channel_name),
     });
   }
   return out;
@@ -446,6 +531,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "hbf",
     name: "Hauptbahnhof",
     lngLat: [12.3815, 51.345],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 42, unit: "cm" },
       { type: SensorType.Temperature, value: 18.4, unit: "°C" },
@@ -456,6 +542,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "plagwitz",
     name: "Plagwitz",
     lngLat: [12.327, 51.332],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 31, unit: "cm" },
       { type: SensorType.Humidity, value: 64, unit: "%" },
@@ -466,6 +553,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "connewitz",
     name: "Connewitz",
     lngLat: [12.37, 51.305],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 55, unit: "cm" },
       { type: SensorType.pH, value: 7.2 },
@@ -476,6 +564,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "gohlis",
     name: "Gohlis",
     lngLat: [12.365, 51.365],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 19, unit: "cm" },
       { type: SensorType.Temperature, value: 17.1, unit: "°C" },
@@ -486,6 +575,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "stoetteritz",
     name: "Stötteritz",
     lngLat: [12.415, 51.323],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 27, unit: "cm" },
       { type: SensorType.Humidity, value: 71, unit: "%" },
@@ -496,6 +586,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "reudnitz",
     name: "Reudnitz",
     lngLat: [12.397, 51.337],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 36, unit: "cm" },
       { type: SensorType.PPx, value: 460, unit: "ppm" },
@@ -507,6 +598,7 @@ const MOCK_SENSORS: Sensor[] = [
     id: "binmitte",
     name: "BinMitte",
     lngLat: [12.3731, 51.3397],
+    channels: [],
     readings: [
       { type: SensorType.Distance, value: 48, unit: "cm" },
       { type: SensorType.Temperature, value: 19.2, unit: "°C" },

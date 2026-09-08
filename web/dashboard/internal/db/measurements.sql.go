@@ -27,9 +27,10 @@ FROM (
 		dm.measurement_type,
 		dm.value
 	FROM device_measurement dm
-	JOIN device_channel_mapping dcm
+	LEFT JOIN device_channel_mapping dcm
 		ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
 	WHERE dm.device_id = $2
+		AND COALESCE(dcm.hidden, FALSE) = FALSE
 		AND dm.received_at >= $3
 		AND dm.received_at <= $4
 		AND ($5::SMALLINT IS NULL OR dm.channel_id = $5)
@@ -48,9 +49,9 @@ type GetDeviceMeasurementsRangedParams struct {
 type GetDeviceMeasurementsRangedRow struct {
 	ReceivedAt      pgtype.Timestamptz
 	ChannelID       int16
-	ChannelName     string
+	ChannelName     pgtype.Text
 	MeasurementType int16
-	Value           []byte
+	Value           float64
 }
 
 // Ranged, downsampled measurement fetch. Rows are grouped into fixed-width
@@ -150,9 +151,10 @@ SELECT DISTINCT ON (dm.device_id, dm.channel_id)
 	dm.measurement_type,
 	dm.value
 FROM device_measurement dm
-JOIN device_channel_mapping dcm
+LEFT JOIN device_channel_mapping dcm
 	ON dcm.device_id = dm.device_id AND dcm.channel_id = dm.channel_id
 WHERE dm.device_id = ANY($1::UUID[])
+	AND COALESCE(dcm.hidden, FALSE) = FALSE
 ORDER BY dm.device_id, dm.channel_id, dm.received_at DESC
 `
 
@@ -160,9 +162,9 @@ type GetLatestMeasurementsForDeviceIDsRow struct {
 	DeviceID        pgtype.UUID
 	ReceivedAt      pgtype.Timestamptz
 	ChannelID       int16
-	ChannelName     string
+	ChannelName     pgtype.Text
 	MeasurementType int16
-	Value           []byte
+	Value           float64
 }
 
 func (q *Queries) GetLatestMeasurementsForDeviceIDs(ctx context.Context, deviceIds []pgtype.UUID) ([]GetLatestMeasurementsForDeviceIDsRow, error) {
@@ -200,7 +202,7 @@ type InsertDeviceMeasurementParams struct {
 	DeviceID        pgtype.UUID
 	MeasurementType int16
 	ChannelID       int16
-	Value           []byte
+	Value           float64
 	ReceivedAt      pgtype.Timestamptz
 }
 
@@ -219,6 +221,6 @@ type InsertDeviceMeasurementsParams struct {
 	DeviceID        pgtype.UUID
 	MeasurementType int16
 	ChannelID       int16
-	Value           []byte
+	Value           float64
 	ReceivedAt      pgtype.Timestamptz
 }

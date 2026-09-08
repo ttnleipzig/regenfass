@@ -1,8 +1,6 @@
 package api
 
 import (
-	"encoding/json"
-
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -92,12 +90,13 @@ func (a *API) handleOverview(c fiber.Ctx) error {
 		idByUUID[utils.PGToUUID(d.ID)] = d.ID
 	}
 
+	deviceIDs := make([]pgtype.UUID, 0, len(idByUUID))
+	for _, id := range idByUUID {
+		deviceIDs = append(deviceIDs, id)
+	}
+
 	measurementsByDevice := make(map[uuid.UUID][]LatestChannelMeasurement, len(idByUUID))
-	if len(idByUUID) > 0 {
-		deviceIDs := make([]pgtype.UUID, 0, len(idByUUID))
-		for _, id := range idByUUID {
-			deviceIDs = append(deviceIDs, id)
-		}
+	if len(deviceIDs) > 0 {
 		rows, err := a.db.GetLatestMeasurementsForDeviceIDs(c.Context(), deviceIDs)
 		if err != nil {
 			log.Error().Err(err).Msg("could not load latest device measurements")
@@ -108,11 +107,20 @@ func (a *API) handleOverview(c fiber.Ctx) error {
 			measurementsByDevice[id] = append(measurementsByDevice[id], LatestChannelMeasurement{
 				ReceivedAt:      r.ReceivedAt.Time,
 				ChannelID:       r.ChannelID,
-				ChannelName:     r.ChannelName,
+				ChannelName:     utils.PGTextToPtr(r.ChannelName),
 				MeasurementType: r.MeasurementType,
-				Value:           json.RawMessage(r.Value),
+				Value:           r.Value,
 			})
 		}
+	}
+
+	// Described channels come from the mapping table rather than the
+	// measurements, so a channel that was set up before the device ever reported
+	// on it still reaches the dashboard.
+	channelsByDevice, err := a.channelsForDevices(c.Context(), deviceIDs)
+	if err != nil {
+		log.Error().Err(err).Msg("could not load device channels")
+		return fiber.NewError(fiber.StatusInternalServerError, "could not load device channels")
 	}
 
 	// Index members by their group. A device that is both a group member and
@@ -131,7 +139,7 @@ func (a *API) handleOverview(c fiber.Ctx) error {
 			// A member is read-only if the membership is marked read-only or the
 			// group was resolved through its read-only token.
 			ro := m.IsReadonly || g.IsReadonly
-			devices[j] = buildLatestDevice(m.ID, m.Name, m.Latitude, m.Longitude, &ro, measurementsByDevice)
+			devices[j] = buildLatestDevice(m.ID, m.Name, m.Latitude, m.Longitude, &ro, channelsByDevice, measurementsByDevice)
 		}
 		groups[i] = OverviewGroup{
 			Token:      g.Token,
@@ -153,24 +161,25 @@ func (a *API) handleOverview(c fiber.Ctx) error {
 		}
 		seen[id] = true
 		ro := d.IsReadonly
-		standalone = append(standalone, buildLatestDevice(d.ID, d.Name, d.Latitude, d.Longitude, &ro, measurementsByDevice))
+		standalone = append(standalone, buildLatestDevice(d.ID, d.Name, d.Latitude, d.Longitude, &ro, channelsByDevice, measurementsByDevice))
 	}
 
 	return c.JSON(OverviewResponse{Groups: groups, Devices: standalone})
 }
 
 // buildLatestDevice assembles a LatestDevice from a device's identity/location
-// fields and the pre-fetched map of latest measurements keyed by device UUID.
-// Devices with no user-set name get a stable auto-generated nickname, and a nil
-// measurement slice is normalized to an empty one so JSON callers always see a
-// list. isReadonly is copied through as-is: pass nil where read/write access is
-// not token-scoped (it is then omitted from the JSON).
+// fields and the pre-fetched maps of described channels and latest measurements,
+// both keyed by device UUID. Devices with no user-set name get a stable
+// auto-generated nickname, and nil slices are normalized to empty ones so JSON
+// callers always see a list. isReadonly is copied through as-is: pass nil where
+// read/write access is not token-scoped (it is then omitted from the JSON).
 func buildLatestDevice(
 	id pgtype.UUID,
 	name string,
 	latitude pgtype.Float8,
 	longitude pgtype.Float8,
 	isReadonly *bool,
+	channelsByDevice map[uuid.UUID][]DeviceChannel,
 	measurementsByDevice map[uuid.UUID][]LatestChannelMeasurement,
 ) LatestDevice {
 	uid := utils.PGToUUID(id)
@@ -181,7 +190,11 @@ func buildLatestDevice(
 		DeviceID:     uid,
 		Name:         name,
 		IsReadonly:   isReadonly,
+		Channels:     channelsByDevice[uid],
 		Measurements: measurementsByDevice[uid],
+	}
+	if entry.Channels == nil {
+		entry.Channels = []DeviceChannel{}
 	}
 	if entry.Measurements == nil {
 		entry.Measurements = []LatestChannelMeasurement{}

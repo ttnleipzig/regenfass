@@ -28,20 +28,41 @@ func (q *Queries) CreateDevice(ctx context.Context, upper interface{}) (CreateDe
 	return i, err
 }
 
-const ensureDeviceChannelMapping = `-- name: EnsureDeviceChannelMapping :exec
-INSERT INTO device_channel_mapping (device_id, channel_id, name)
-VALUES ($1, $2, 'Unmapped')
-ON CONFLICT (device_id, channel_id) DO NOTHING
+const getChannelMappingsForDeviceIDs = `-- name: GetChannelMappingsForDeviceIDs :many
+SELECT device_id, channel_id, name, measurement_type, hidden
+FROM device_channel_mapping
+WHERE device_id = ANY($1::UUID[])
+ORDER BY device_id, channel_id
 `
 
-type EnsureDeviceChannelMappingParams struct {
-	DeviceID  pgtype.UUID
-	ChannelID int16
-}
-
-func (q *Queries) EnsureDeviceChannelMapping(ctx context.Context, arg EnsureDeviceChannelMappingParams) error {
-	_, err := q.db.Exec(ctx, ensureDeviceChannelMapping, arg.DeviceID, arg.ChannelID)
-	return err
+// Every channel of the given devices that someone has described or hidden,
+// including channels that have never carried a measurement. Lets the dashboard
+// show a declared slot as an empty labelled card until the device starts
+// reporting on it, and know which channels are hidden so they can be restored.
+func (q *Queries) GetChannelMappingsForDeviceIDs(ctx context.Context, deviceIds []pgtype.UUID) ([]DeviceChannelMapping, error) {
+	rows, err := q.db.Query(ctx, getChannelMappingsForDeviceIDs, deviceIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []DeviceChannelMapping
+	for rows.Next() {
+		var i DeviceChannelMapping
+		if err := rows.Scan(
+			&i.DeviceID,
+			&i.ChannelID,
+			&i.Name,
+			&i.MeasurementType,
+			&i.Hidden,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getDeviceByEUI = `-- name: GetDeviceByEUI :one
@@ -138,6 +159,27 @@ func (q *Queries) GetDevicesForDeviceTokens(ctx context.Context, deviceTokens []
 	return items, nil
 }
 
+const setDeviceChannelHidden = `-- name: SetDeviceChannelHidden :exec
+INSERT INTO device_channel_mapping (device_id, channel_id, hidden)
+VALUES ($1, $2, $3)
+ON CONFLICT (device_id, channel_id) DO UPDATE
+SET hidden = EXCLUDED.hidden
+`
+
+type SetDeviceChannelHiddenParams struct {
+	DeviceID  pgtype.UUID
+	ChannelID int16
+	Hidden    bool
+}
+
+// Takes a channel off the dashboard, or puts it back. Nothing is deleted: the
+// measurements stay and keep arriving, they are just not rendered. Hiding a
+// channel nobody has described creates the row for the flag alone.
+func (q *Queries) SetDeviceChannelHidden(ctx context.Context, arg SetDeviceChannelHiddenParams) error {
+	_, err := q.db.Exec(ctx, setDeviceChannelHidden, arg.DeviceID, arg.ChannelID, arg.Hidden)
+	return err
+}
+
 const updateDeviceLocation = `-- name: UpdateDeviceLocation :exec
 UPDATE device SET latitude = $2, longitude = $3 WHERE id = $1
 `
@@ -164,5 +206,32 @@ type UpdateDeviceNameParams struct {
 
 func (q *Queries) UpdateDeviceName(ctx context.Context, arg UpdateDeviceNameParams) error {
 	_, err := q.db.Exec(ctx, updateDeviceName, arg.ID, arg.Name)
+	return err
+}
+
+const upsertDeviceChannelMapping = `-- name: UpsertDeviceChannelMapping :exec
+INSERT INTO device_channel_mapping (device_id, channel_id, name, measurement_type)
+VALUES ($1, $2, $3::TEXT, $4::SMALLINT)
+ON CONFLICT (device_id, channel_id) DO UPDATE
+SET name = EXCLUDED.name, measurement_type = EXCLUDED.measurement_type
+`
+
+type UpsertDeviceChannelMappingParams struct {
+	DeviceID        pgtype.UUID
+	ChannelID       int16
+	Name            pgtype.Text
+	MeasurementType pgtype.Int2
+}
+
+// Writes the description the user gave a channel in the dashboard's slot
+// editor. The row may not exist yet: a channel can be described before the
+// device has ever reported on it, which is the point of the editor.
+func (q *Queries) UpsertDeviceChannelMapping(ctx context.Context, arg UpsertDeviceChannelMappingParams) error {
+	_, err := q.db.Exec(ctx, upsertDeviceChannelMapping,
+		arg.DeviceID,
+		arg.ChannelID,
+		arg.Name,
+		arg.MeasurementType,
+	)
 	return err
 }
