@@ -6,6 +6,11 @@
 
 #define SCP_IMPLEMENTATION
 
+// Lora32 Battery Voltage
+#if FEATURE_LORA32_VBAT
+#include "sensors/sensor-lora32battery.h"
+#endif
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
 #include "sensors/sensor-hcsr04.h"
@@ -35,6 +40,7 @@
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
 #include "lora/lora-wan.h"
+#include "lora/protocol.h"
 #endif
 
 // Default publish interval (seconds) used when `publishInterval` is not set in
@@ -81,6 +87,11 @@ void setup()
     // Configuration
     Configuration::Configurator::setup();
 
+// Lora32 Battery Voltage
+#if FEATURE_LORA32_VBAT
+    Sensor::Lora32Battery::setup();
+#endif
+
 // Sensors
 #if FEATURE_SENSOR_HCSR04
     Sensor::HCSR04::setup();
@@ -103,7 +114,7 @@ void setup()
 // LoRaWAN
 #ifdef FEATURE_LORAWAN_ENABLED
     Lora::Wan::setup();
-    Lora::Wan::publish2TTN(); // Initial Send to Trigger OTAA Join
+    Lora::Wan::publish2TTN({}); // Initial Send to Trigger OTAA Join
 #endif
 }
 
@@ -115,7 +126,25 @@ void loop()
     unsigned long current_time = millis();
     if (current_time - last_print_time >= publishIntervalMs())
     {
-        Lora::Wan::publish2TTN();
+        std::vector<Lora::Protocol::DataPoint> data_points;
+
+#if FEATURE_LORA32_VBAT
+        data_points.push_back(Lora::Protocol::DataPoint{
+            .measurement_type = Lora::Protocol::MeasurementType::Voltage,
+            .channel_id = Lora::Protocol::ChannelID::_1,
+            .value = Sensor::Lora32Battery::readBattery(),
+        });
+#endif
+
+#if FEATURE_SENSOR_HCSR04
+        data_points.push_back(Lora::Protocol::DataPoint{
+            .measurement_type = Lora::Protocol::MeasurementType::Distance,
+            .channel_id = Lora::Protocol::ChannelID::_2,
+            .value = Sensor::HCSR04::measureDistanceCm(),
+        });
+#endif
+
+        Lora::Wan::publish2TTN(data_points);
         last_print_time = current_time;
     }
 

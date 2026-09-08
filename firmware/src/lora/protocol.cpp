@@ -10,7 +10,7 @@ std::vector<uint8_t> Lora::Protocol::packDataPoints(const std::vector<DataPoint>
 
     for (const auto &dp : data_points)
     {
-        uint8_t first = static_cast<uint8_t>(dp.measurement_type) << 4 | static_cast<uint8_t>(dp.channel_id);
+        uint8_t first = static_cast<uint8_t>(dp.channel_id) << 4 | static_cast<uint8_t>(dp.measurement_type);
 
         packed_data.push_back(first);
 
