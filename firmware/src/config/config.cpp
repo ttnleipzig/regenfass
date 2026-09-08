@@ -56,6 +56,13 @@ namespace Configuration
                     return;
                 }
 
+                if (strcmp(l->as.k, "configVersion") == 0)
+                {
+                    const auto outputLine = scp_line_new(SCPLineType::SET, "configVersion", REGENFASS_CONFIG_VERSION);
+                    Serial.println(scp_line_to_string(outputLine));
+                    return;
+                }
+
                 auto outputLine = _config.applyGet(l);
                 if (outputLine == nullptr)
                 {
