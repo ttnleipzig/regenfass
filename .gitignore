@@ -12,6 +12,7 @@
 !/docs
 !/CONTRIBUTING.md
 !/.gitignore
+!/.gitattributes
 !/.editorconfig
 !/.env.example
 !/.releaserc.yml

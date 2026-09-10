@@ -1,0 +1,14 @@
+# CAD interchange formats: treat as binary to avoid line-ending rewrites
+# corrupting byte-for-byte fidelity of engineering data.
+*.step binary
+*.stp binary
+*.STEP binary
+*.stl binary
+*.STL binary
+*.dwg binary
+*.dxf binary
+*.iges binary
+*.igs binary
+*.x_t binary
+*.sldprt binary
+*.sldasm binary
