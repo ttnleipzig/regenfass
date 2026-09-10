@@ -36,6 +36,9 @@
 !/infrastructure
 !/infrastructure/**
 
+!/hardware
+!/hardware/**
+
 !/web
 /web/**/node_modules
 /web/**/dist
