@@ -6,6 +6,15 @@
   publish = "web/installer/dist"
   ignore = "exit 0"
 
+[functions]
+  directory = "web/installer/netlify/functions"
+
+[[redirects]]
+  from = "/firmware/:version/:environment"
+  to = "/.netlify/functions/firmware?version=:version&environment=:environment"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

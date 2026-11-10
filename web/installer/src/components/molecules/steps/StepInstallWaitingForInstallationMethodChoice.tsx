@@ -12,6 +12,8 @@ import {
 } from "@regenfass/brand";
 import { getInstallationActiveStep } from "@/libs/install/installationActiveStep.ts";
 import { useInstallerT } from "@/i18n/index.ts";
+import { Show } from "solid-js";
+import { firmwareEnvironments } from "@/libs/install/firmware.ts";
 import { installationSteps } from "@/i18n/installationSteps.ts";
 
 interface StepProps {
@@ -59,7 +61,47 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 				</Button>
 			</div>
 
-			<SelectField
+			<SelectField<string>
+				value={state.context.targetEnvironment}
+				options={[...firmwareEnvironments]}
+				placeholder={t(
+					"installWaitingForInstallationMethodChoice.environmentSelectPlaceholder",
+				)}
+				onChange={(environment) =>
+					emitEvent({ type: "install.environment_selected", environment })
+				}
+				itemComponent={(props) => (
+					<SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+				)}
+			>
+				<SelectTrigger
+					aria-label={t(
+						"installWaitingForInstallationMethodChoice.environmentSelectPlaceholder",
+					)}
+					class="w-full"
+				>
+					<SelectValue<string>>
+						{(selection) => selection.selectedOption()}
+					</SelectValue>
+				</SelectTrigger>
+				<SelectContent />
+			</SelectField>
+			<Show
+				when={
+					state.context.targetEnvironment &&
+					state.context.upstreamVersions.length === 0
+				}
+			>
+				<p role="status">
+					{t("installWaitingForInstallationMethodChoice.noFirmwareAvailable")}
+				</p>
+			</Show>
+
+			<SelectField<string>
+				disabled={
+					!state.context.targetEnvironment ||
+					state.context.upstreamVersions.length === 0
+				}
 				value={state.context.targetFirmwareVersion}
 				options={state.context.upstreamVersions}
 				placeholder={t(
@@ -75,7 +117,12 @@ export default function StepInstallWaitingForInstallationMethodChoice({
 					<SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
 				)}
 			>
-				<SelectTrigger class="w-[180px]">
+				<SelectTrigger
+					aria-label={t(
+						"installWaitingForInstallationMethodChoice.versionSelectPlaceholder",
+					)}
+					class="w-[180px]"
+				>
 					<SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
 				</SelectTrigger>
 				<SelectContent />

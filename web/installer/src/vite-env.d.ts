@@ -8,3 +8,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** Names read from PlatformIO at build time. */
+declare const __FIRMWARE_ENVIRONMENTS__: readonly string[];

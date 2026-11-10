@@ -31,6 +31,8 @@ export type InstallerDictionary = {
 		install: string;
 		configure: string;
 		versionSelectPlaceholder: string;
+		environmentSelectPlaceholder: string;
+		noFirmwareAvailable: string;
 	};
 	installInstalling: {
 		titleInProgress: string;
@@ -141,6 +143,8 @@ export const installerDictEn: InstallerDictionary = {
 		install: "Install",
 		configure: "Configure",
 		versionSelectPlaceholder: "Select a version",
+		environmentSelectPlaceholder: "Select board and sensor",
+		noFirmwareAvailable: "No firmware release is available for this board and sensor yet.",
 	},
 	installInstalling: {
 		titleInProgress: "Installing firmware",
