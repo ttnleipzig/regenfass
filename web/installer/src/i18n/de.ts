@@ -52,6 +52,8 @@ export const installerDictDe: InstallerDictionary = {
 		install: "Installieren",
 		configure: "Konfigurieren",
 		versionSelectPlaceholder: "Version auswählen",
+		environmentSelectPlaceholder: "Board und Sensor auswählen",
+		noFirmwareAvailable: "Für dieses Board mit diesem Sensor ist noch keine Firmware veröffentlicht.",
 	},
 	installInstalling: {
 		titleInProgress: "Firmware wird installiert",

@@ -12,23 +12,41 @@ permissions:
   pull-requests: write
 
 jobs:
+  environments:
+    name: Discover PlatformIO environments
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.environments.outputs.environments }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read PlatformIO environments
+        id: environments
+        run: |
+          python3 - <<'PYTHON'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          environments = re.findall(r"^\[env:([^\]]+)\]", Path("firmware/platformio.ini").read_text(), re.MULTILINE)
+          if not environments:
+              raise SystemExit("No PlatformIO environments found")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"environments={json.dumps(environments)}\n")
+          PYTHON
+
   # ─────────────────────────────────────────────────────────────────────────
   # Build all firmware environments in parallel.
   # fail-fast: false keeps other boards building even if one fails.
   # ─────────────────────────────────────────────────────────────────────────
   build:
+    needs: environments
     name: 🏗️ Build [${{ matrix.environment }}]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        environment:
-          - heltec_wifi_lora_32_V3_HCSR04
-          - heltec_wifi_lora_32_V3_VL53L1X
-          - heltec_wifi_lora_32_V3_DS18B20
-          - heltec_wifi_lora_32_V3_VL53L0X
-          - az-delivery-devkit-v4_VL53L1X
-          - az-delivery-devkit-v4_HCSR04
+        environment: ${{ fromJSON(needs.environments.outputs.environments) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -57,13 +75,25 @@ jobs:
         working-directory: firmware
         run: ls -lR .pio/build/${{ matrix.environment }}/
 
+      - name: Package firmware archive
+        env:
+          SKIP_BUILD: "1"
+          BASENAME_PATHS: "1"
+          OUT_DIR: dist
+        run: |
+          bash firmware/scripts/package_firmware.sh "${{ matrix.environment }}"
+          cp "firmware/.pio/build/${{ matrix.environment }}/firmware.bin" firmware/dist/firmware.bin
+          test -s "firmware/dist/firmware-${{ matrix.environment }}.zip"
+          test -s firmware/dist/firmware.bin
+
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.environment }}
-          # firmware.bin  — main application image
-          # bootloader.bin and partitions.bin — needed for a full flash
-          path: firmware/.pio/build/${{ matrix.environment }}/*.bin
-          if-no-files-found: warn
+          # Keep both files in one directory so downloads have a flat layout.
+          path: |
+            firmware/dist/firmware-${{ matrix.environment }}.zip
+            firmware/dist/firmware.bin
+          if-no-files-found: error
           compression-level: 8
 
   # ─────────────────────────────────────────────────────────────────────────
@@ -105,7 +135,7 @@ jobs:
   upload:
     name: 💾 Upload [${{ matrix.environment }}]
     runs-on: ubuntu-latest
-    needs: [build, release]
+    needs: [environments, build, release]
     # Run whenever a release was created, even if some build matrix items failed.
     if: >-
       always() &&
@@ -114,13 +144,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment:
-          - heltec_wifi_lora_32_V3_HCSR04
-          - heltec_wifi_lora_32_V3_VL53L1X
-          - heltec_wifi_lora_32_V3_DS18B20
-          - heltec_wifi_lora_32_V3_VL53L0X
-          - az-delivery-devkit-v4_VL53L1X
-          - az-delivery-devkit-v4_HCSR04
+        environment: ${{ fromJSON(needs.environments.outputs.environments) }}
     steps:
       - name: Download firmware artifact
         id: download
@@ -130,12 +154,11 @@ jobs:
           name: firmware-${{ matrix.environment }}
           path: firmware-dist
 
-      - name: Package firmware archive
+      - name: Rename firmware archive
         if: steps.download.outcome == 'success'
         run: |
-          zip -j \
-            regenfass-${{ needs.release.outputs.tag_name }}-${{ matrix.environment }}.zip \
-            firmware-dist/*.bin
+          mv "firmware-dist/firmware-${{ matrix.environment }}.zip" \
+            "regenfass-${{ needs.release.outputs.tag_name }}-${{ matrix.environment }}.zip"
 
       - name: Upload assets to GitHub Release
         if: steps.download.outcome == 'success'
@@ -151,7 +174,7 @@ jobs:
             FILES+=("firmware-dist/firmware.bin#regenfass-${TAG}-${ENV}.bin")
           fi
 
-          # Always include the zip (contains all .bin files for a full flash).
+          # Include the full-flash ZIP with binaries and firmware_metadata.json.
           FILES+=("regenfass-${TAG}-${ENV}.zip")
 
           gh release upload "${TAG}" \

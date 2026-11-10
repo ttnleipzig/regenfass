@@ -15,12 +15,12 @@ import { Button } from '@regenfass/brand';
 
 ## Props
 
-| Name    | Type                                                                 | Default   | Description                              |
-| ------- | -------------------------------------------------------------------- | --------- | ---------------------------------------- |
-| variant | 'primary' \| 'secondary' \| 'default' \| 'destructive' \| 'outline' \| 'ghost' \| 'link' | 'default' | Visual style variant                     |
-| size    | 'default' \| 'sm' \| 'lg' \| 'icon'                              | 'default' | Size variant                              |
-| loading | boolean                                                              | false     | Shows spinner and disables the button    |
-| ...     | Kobalte ButtonRootProps                                             | -         | All native button attributes             |
+| Name    | Type                                                                                     | Default   | Description                           |
+| ------- | ---------------------------------------------------------------------------------------- | --------- | ------------------------------------- |
+| variant | 'primary' \| 'secondary' \| 'default' \| 'destructive' \| 'outline' \| 'ghost' \| 'link' | 'default' | Visual style variant                  |
+| size    | 'default' \| 'sm' \| 'lg' \| 'icon'                                                      | 'default' | Size variant                          |
+| loading | boolean                                                                                  | false     | Shows spinner and disables the button |
+| ...     | Kobalte ButtonRootProps                                                                  | -         | All native button attributes          |
 
 ## Design notes
 

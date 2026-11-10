@@ -1,10 +1,21 @@
 /// <reference types="vitest/config" />
 import path from "path";
+import { readFileSync } from "node:fs";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
 
 export default defineConfig({
 	plugins: [solid()],
+	define: {
+		__FIRMWARE_ENVIRONMENTS__: JSON.stringify(
+			[
+				...readFileSync(
+					path.resolve(__dirname, "../../firmware/platformio.ini"),
+					"utf8",
+				).matchAll(/^\[env:([^\]]+)\]/gm),
+			].map((match) => match[1]),
+		),
+	},
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
@@ -23,6 +34,19 @@ export default defineConfig({
 		include: [],
 	},
 	server: {
+		proxy: {
+			"/firmware/": {
+				target: "https://github.com",
+				changeOrigin: true,
+				followRedirects: true,
+				rewrite: (requestPath) => {
+					const [tag, environment] = requestPath
+						.slice("/firmware/".length)
+						.split("/");
+					return `/ttnleipzig/regenfass/releases/download/${tag}/regenfass-${tag}-${environment}.zip`;
+				},
+			},
+		},
 		fs: {
 			allow: [path.resolve(__dirname, "..")],
 		},
